@@ -3,8 +3,7 @@ import { DataFlowExecutionService } from 'src/app/services/data-flow-execution.s
 
 @Component({
   selector: 'app-dataflow-definition',
-  templateUrl: './dataflow-definition.component.html',
-  styleUrls: ['./dataflow-definition.component.css'],
+  templateUrl: './dataflow-definition.component.html'
 })
 export class DataflowDefinitionComponent implements OnInit {
   constructor(private dataFlowExecutionService: DataFlowExecutionService) {}
