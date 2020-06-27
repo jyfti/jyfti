@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { DataFlowExecutionService } from 'src/app/services/data-flow-execution.service';
 import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
+import { HttpRequest } from '@angular/common/http';
+
+const createHttpRequest = (json) => new HttpRequest(json.method, json.url);
 
 @Component({
   selector: 'app-dataflow-definition',
@@ -8,7 +11,7 @@ import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
 })
 export class DataflowDefinitionComponent implements OnInit {
   formGroup: FormGroup = this.fb.group({
-    apiCalls: this.fb.array([
+    httpRequests: this.fb.array([
       this.fb.group({
         method: ['GET'],
         url: ['http://swapi.dev/api/planets/1/'],
@@ -16,8 +19,8 @@ export class DataflowDefinitionComponent implements OnInit {
     ]),
   });
 
-  get apiCalls() {
-    return this.formGroup.get('apiCalls') as FormArray;
+  get httpRequests() {
+    return this.formGroup.get('httpRequests') as FormArray;
   }
 
   constructor(
@@ -29,12 +32,12 @@ export class DataflowDefinitionComponent implements OnInit {
 
   execute() {
     this.dataFlowExecutionService
-      .execute(this.formGroup.value['apiCalls'])
+      .execute(this.formGroup.value['httpRequests'].map(createHttpRequest))
       .subscribe();
   }
 
-  addApiCall() {
-    this.apiCalls.push(
+  addHttpRequest() {
+    this.httpRequests.push(
       this.fb.group({
         method: ['GET'],
         url: ['http://swapi.dev/api/planets/1/'],

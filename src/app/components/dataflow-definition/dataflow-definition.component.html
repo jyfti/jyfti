@@ -1,12 +1,17 @@
 <div [formGroup]="formGroup">
-  <div class="flex flex-col gap-2" formArrayName="apiCalls">
+  <div class="flex flex-col gap-2" formArrayName="httpRequests">
     <app-api-call
-      *ngFor="let apiCall of apiCalls.controls"
-      [formGroup]="apiCall"
+      *ngFor="let httpRequest of httpRequests.controls"
+      [formGroup]="httpRequest"
     ></app-api-call>
   </div>
   <div>
-    <button class="w-full mt-2 p-4 bg-gray-300 hover:bg-gray-400" (click)="addApiCall()">Add another API call</button>
+    <button
+      class="w-full mt-2 p-4 bg-gray-300 hover:bg-gray-400"
+      (click)="addHttpRequest()"
+    >
+      Add another API call
+    </button>
   </div>
   <div class="flex justify-end">
     <button
