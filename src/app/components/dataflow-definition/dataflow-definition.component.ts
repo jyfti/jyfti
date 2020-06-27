@@ -32,4 +32,13 @@ export class DataflowDefinitionComponent implements OnInit {
       .execute(this.formGroup.value['apiCalls'][0].url)
       .subscribe();
   }
+
+  addApiCall() {
+    this.apiCalls.push(
+      this.fb.group({
+        method: ['GET'],
+        url: ['http://swapi.dev/api/planets/1/'],
+      })
+    );
+  }
 }
