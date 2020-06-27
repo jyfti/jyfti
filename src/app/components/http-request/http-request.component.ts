@@ -2,10 +2,10 @@ import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
 @Component({
-  selector: 'app-api-call',
-  templateUrl: './api-call.component.html',
+  selector: 'app-http-request',
+  templateUrl: './http-request.component.html',
 })
-export class ApiCallComponent implements OnInit {
+export class HttpRequestComponent implements OnInit {
   @Input() formGroup: FormGroup;
   constructor() {}
 

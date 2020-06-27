@@ -6,11 +6,14 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './components/app/app.component';
 import { DataflowDefinitionComponent } from './components/dataflow-definition/dataflow-definition.component';
-import { ApiCallComponent } from './components/api-call/api-call.component';
-import { from } from 'rxjs';
+import { HttpRequestComponent } from './components/http-request/http-request.component';
 
 @NgModule({
-  declarations: [AppComponent, DataflowDefinitionComponent, ApiCallComponent],
+  declarations: [
+    AppComponent,
+    DataflowDefinitionComponent,
+    HttpRequestComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
