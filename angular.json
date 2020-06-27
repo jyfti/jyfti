@@ -5,7 +5,11 @@
   "projects": {
     "dataflow": {
       "projectType": "application",
-      "schematics": {},
+      "schematics": {
+        "@schematics/angular:component": {
+          "inlineStyle": true
+        }
+      },
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
@@ -126,6 +130,7 @@
           }
         }
       }
-    }},
+    }
+  },
   "defaultProject": "dataflow"
 }
