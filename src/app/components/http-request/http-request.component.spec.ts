@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { HttpRequestComponent } from './api-call.component';
+import { HttpRequestComponent } from './http-request.component';
 
 describe('HttpRequestComponent', () => {
   let component: HttpRequestComponent;
