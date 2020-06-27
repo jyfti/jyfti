@@ -29,7 +29,7 @@ export class DataflowDefinitionComponent implements OnInit {
 
   execute() {
     this.dataFlowExecutionService
-      .execute(this.formGroup.value['apiCalls'][0].url)
+      .execute(this.formGroup.value['apiCalls'])
       .subscribe();
   }
 
