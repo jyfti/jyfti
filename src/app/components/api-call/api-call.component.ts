@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ApiCallComponent implements OnInit {
   method: string = 'GET';
-  url: string = 'https://wordsapiv1.p.mashape.com/words/example/synonyms';
+  url: string = 'http://swapi.dev/api/planets/1/';
 
   constructor() {}
 
