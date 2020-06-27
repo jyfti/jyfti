@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { DataFlowExecutionService } from 'src/app/services/data-flow-execution.service';
 import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
 import { HttpRequest } from '@angular/common/http';
+import { Subject, Observable } from 'rxjs';
+import { exhaustMap } from 'rxjs/operators';
 
 const createHttpRequest = (json) => new HttpRequest(json.method, json.url);
 
@@ -19,6 +21,9 @@ export class DataflowDefinitionComponent implements OnInit {
     ]),
   });
 
+  execution$ = new Subject<HttpRequest<any>[]>();
+  executionResult$: Observable<any>;
+
   get httpRequests() {
     return this.formGroup.get('httpRequests') as FormArray;
   }
@@ -28,12 +33,18 @@ export class DataflowDefinitionComponent implements OnInit {
     private fb: FormBuilder
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit() {
+    this.executionResult$ = this.execution$.pipe(
+      exhaustMap((requests) => this.dataFlowExecutionService.execute(requests))
+    );
+    this.executionResult$.subscribe();
+  }
 
   execute() {
-    this.dataFlowExecutionService
-      .execute(this.formGroup.value['httpRequests'].map(createHttpRequest))
-      .subscribe();
+    const requests = this.formGroup.value['httpRequests'].map(
+      createHttpRequest
+    );
+    this.execution$.next(requests);
   }
 
   addHttpRequest() {
