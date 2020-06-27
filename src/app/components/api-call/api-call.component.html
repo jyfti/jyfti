@@ -1,4 +1,4 @@
-<div class="flex py-4 px-6 bg-gray-400">
-  <p class="w-20">{{ method }}</p>
-  <p>{{ url }}</p>
+<div class="flex py-4 px-6 bg-gray-400" [formGroup]="formGroup">
+  <input type="text" class="w-20 bg-gray-400" formControlName="method" />
+  <input type="text" class="w-full bg-gray-400" formControlName="url" />
 </div>
