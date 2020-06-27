@@ -7,7 +7,6 @@ import { FormGroup } from '@angular/forms';
 })
 export class ApiCallComponent implements OnInit {
   @Input() formGroup: FormGroup;
-
   constructor() {}
 
   ngOnInit(): void {}

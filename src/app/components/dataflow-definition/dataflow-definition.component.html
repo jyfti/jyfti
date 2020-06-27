@@ -1,9 +1,16 @@
-<app-api-call [formGroup]="formGroup"></app-api-call>
-<div class="flex justify-end">
-  <button
-    class="mt-2 p-4 bg-blue-600 hover:bg-blue-700 text-white"
-    (click)="execute()"
-  >
-    Execute
-  </button>
+<div [formGroup]="formGroup">
+  <div formArrayName="apiCalls">
+    <app-api-call
+      *ngFor="let apiCall of apiCalls.controls"
+      [formGroup]="apiCall"
+    ></app-api-call>
+  </div>
+  <div class="flex justify-end">
+    <button
+      class="mt-2 p-4 bg-blue-600 hover:bg-blue-700 text-white"
+      (click)="execute()"
+    >
+      Execute
+    </button>
+  </div>
 </div>

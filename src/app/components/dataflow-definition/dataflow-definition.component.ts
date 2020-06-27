@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DataFlowExecutionService } from 'src/app/services/data-flow-execution.service';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
 
 @Component({
   selector: 'app-dataflow-definition',
@@ -8,9 +8,17 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 })
 export class DataflowDefinitionComponent implements OnInit {
   formGroup: FormGroup = this.fb.group({
-    method: ['GET'],
-    url: ['http://swapi.dev/api/planets/1/'],
+    apiCalls: this.fb.array([
+      this.fb.group({
+        method: ['GET'],
+        url: ['http://swapi.dev/api/planets/1/'],
+      }),
+    ]),
   });
+
+  get apiCalls() {
+    return this.formGroup.get('apiCalls') as FormArray;
+  }
 
   constructor(
     private dataFlowExecutionService: DataFlowExecutionService,
@@ -21,7 +29,7 @@ export class DataflowDefinitionComponent implements OnInit {
 
   execute() {
     this.dataFlowExecutionService
-      .execute(this.formGroup.controls.url.value)
+      .execute(this.formGroup.value['apiCalls'][0].url)
       .subscribe();
   }
 }
