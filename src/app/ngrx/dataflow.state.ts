@@ -1,11 +1,11 @@
-import { HttpRequestStep } from '../types/step.type';
+import { Step } from '../types/step.type';
 
 export class GlobalState {
   dataflow: DataFlowState;
 }
 
 export class DataFlowState {
-  steps: HttpRequestStep[];
+  steps: Step[];
   execution: {
     stepIndex: number;
     evaluations: { [stepIndex: number]: any };

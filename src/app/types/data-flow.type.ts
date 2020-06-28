@@ -1,5 +1,5 @@
-import { HttpRequestStep } from './step.type';
+import { Step } from './step.type';
 
 export interface DataFlow {
-  steps: HttpRequestStep[];
+  steps: Step[];
 }

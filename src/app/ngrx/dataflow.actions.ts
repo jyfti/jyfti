@@ -1,18 +1,18 @@
 import { createAction, props } from '@ngrx/store';
 
-import { HttpRequestStep } from '../types/step.type';
+import { Step } from '../types/step.type';
 import { VariableMap } from '../types/variabe-map.type';
 
 export const startExecution = createAction(
   '[Execution] Start',
-  props<{ steps: HttpRequestStep[] }>()
+  props<{ steps: Step[] }>()
 );
 
 export const finishExecution = createAction('[Execution] Finish');
 
 export const startStepExecution = createAction(
   '[Execution] Start step',
-  props<{ stepIndex: number; steps: HttpRequestStep[]; variables: VariableMap }>()
+  props<{ stepIndex: number; steps: Step[]; variables: VariableMap }>()
 );
 
 export const finishStepExecution = createAction(
@@ -20,7 +20,7 @@ export const finishStepExecution = createAction(
   props<{
     stepIndex: number;
     evaluation: any;
-    steps: HttpRequestStep[];
+    steps: Step[];
     variables: VariableMap;
   }>()
 );

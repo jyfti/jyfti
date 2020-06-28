@@ -6,7 +6,7 @@ import { map } from 'rxjs/operators';
 import { startExecution } from 'src/app/ngrx/dataflow.actions';
 import { GlobalState } from 'src/app/ngrx/dataflow.state';
 import planets from 'src/assets/dataflows/planets.json';
-import { HttpRequestStep } from 'src/app/types/step.type';
+import { Step } from 'src/app/types/step.type';
 import { HttpRequestTemplate } from 'src/app/types/http-request-template.type';
 import { DataFlow } from 'src/app/types/data-flow.type';
 import { selectVariables } from 'src/app/ngrx/selectors/variable.selectors';
@@ -62,11 +62,11 @@ export class DataflowDefinitionComponent implements OnInit {
     });
   }
 
-  createSteps(steps: HttpRequestStep[]): FormArray {
+  createSteps(steps: Step[]): FormArray {
     return this.fb.array(steps.map((step) => this.createStep(step)));
   }
 
-  createStep(step: HttpRequestStep): FormGroup {
+  createStep(step: Step): FormGroup {
     return this.fb.group({
       assignTo: [step.assignTo],
       httpRequestTemplate: this.createHttpRequestTemplate(
