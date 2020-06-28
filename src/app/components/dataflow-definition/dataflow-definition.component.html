@@ -6,6 +6,7 @@
       [evaluation]="(evaluations$ | async)[stepIndex]"
       [stepIndex]="stepIndex"
       (removed)="removeStep(stepIndex)"
+      (editRequested)="editStep(stepIndex)"
     ></app-step>
   </div>
   <div>

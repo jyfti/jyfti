@@ -12,12 +12,9 @@ export class StepComponent implements OnInit {
   @Input() stepIndex: number;
 
   @Output() removed = new EventEmitter<any>();
+  @Output() editRequested = new EventEmitter<any>();
 
-  constructor(private router: Router) {}
-
-  edit() {
-    this.router.navigate(['/step', this.stepIndex]);
-  }
+  constructor() {}
 
   ngOnInit(): void {}
 }

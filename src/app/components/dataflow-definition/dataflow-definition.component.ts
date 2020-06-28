@@ -9,6 +9,7 @@ import { DataFlow } from 'src/app/types/data-flow.type';
 import { HttpRequestTemplate } from 'src/app/types/http-request-template.type';
 import { Step } from 'src/app/types/step.type';
 import planets from 'src/assets/dataflows/planets.json';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dataflow-definition',
@@ -24,7 +25,7 @@ export class DataflowDefinitionComponent implements OnInit {
   execution$: Observable<any>;
   evaluations$: Observable<any>;
 
-  constructor(private store: Store<GlobalState>, private fb: FormBuilder) {}
+  constructor(private store: Store<GlobalState>, private fb: FormBuilder, private router: Router) {}
 
   ngOnInit() {
     this.execution$ = this.store.pipe(select('dataflow', 'execution'));
@@ -40,6 +41,10 @@ export class DataflowDefinitionComponent implements OnInit {
 
   clearExecution() {
     this.store.dispatch(resetExecution());
+  }
+
+  editStep(stepIndex: number) {
+    this.router.navigate(['/step', stepIndex]);
   }
 
   removeStep(stepIndex: number) {
