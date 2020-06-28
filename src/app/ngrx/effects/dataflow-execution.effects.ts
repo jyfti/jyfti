@@ -12,6 +12,7 @@ import {
   startStepExecution,
 } from '../dataflow.actions';
 import { HttpRequestTemplate } from 'src/app/types/http-request-template.type';
+import { VariableMap } from 'src/app/types/variabe-map.type';
 
 const interpolate = (variables) => (str: string) => {
   const identifiers = Object.keys(variables);
@@ -19,8 +20,11 @@ const interpolate = (variables) => (str: string) => {
   return new Function(...identifiers, `return \`${str}\`;`)(...values);
 };
 
-const createHttpRequest = (template: HttpRequestTemplate) =>
-  new HttpRequest(template.method as any, interpolate({})(template.url));
+const createHttpRequest = (
+  template: HttpRequestTemplate,
+  variables: VariableMap
+) =>
+  new HttpRequest(template.method as any, interpolate(variables)(template.url));
 
 @Injectable()
 export class DataFlowExecutionEffects {
@@ -32,7 +36,9 @@ export class DataFlowExecutionEffects {
   startExecution$ = createEffect(() =>
     this.actions$.pipe(
       ofType(startExecution),
-      map((action) => startStepExecution({ steps: action.steps, stepIndex: 0 }))
+      map((action) =>
+        startStepExecution({ steps: action.steps, stepIndex: 0, variables: {} })
+      )
     )
   );
 
@@ -43,7 +49,8 @@ export class DataFlowExecutionEffects {
         this.dataflowExecutionService
           .request(
             createHttpRequest(
-              action.steps[action.stepIndex].httpRequestTemplate
+              action.steps[action.stepIndex].httpRequestTemplate,
+              action.variables
             )
           )
           .pipe(
@@ -60,6 +67,10 @@ export class DataFlowExecutionEffects {
                   : startStepExecution({
                       steps: action.steps,
                       stepIndex: action.stepIndex + 1,
+                      variables: {
+                        ...action.variables,
+                        [action.steps[action.stepIndex].assignTo]: httpResponse,
+                      },
                     })
               )
             )

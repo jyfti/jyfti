@@ -2,6 +2,7 @@ import { createAction, props } from '@ngrx/store';
 
 import { Step } from '../types/step.type';
 import { StepExecution } from '../types/step-execution.type';
+import { VariableMap } from '../types/variabe-map.type';
 
 export const startExecution = createAction(
   '[Execution] Start',
@@ -12,7 +13,7 @@ export const finishExecution = createAction('[Execution] Finish');
 
 export const startStepExecution = createAction(
   '[Execution] Start step',
-  props<{ stepIndex: number; steps: Step[] }>()
+  props<{ stepIndex: number; steps: Step[]; variables: VariableMap }>()
 );
 
 export const finishStepExecution = createAction(
