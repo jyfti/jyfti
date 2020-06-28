@@ -1,9 +1,19 @@
 <div [formGroup]="formGroup">
   <div class="flex flex-col gap-2" formArrayName="steps">
-    <app-http-request
-      *ngFor="let step of steps.controls"
-      [formGroup]="step.get('httpRequest')"
-    ></app-http-request>
+    <div
+      class="flex gap-2"
+      *ngFor="let step of steps.controls; let stepIndex = index"
+      [formGroupName]="stepIndex"
+    >
+      <div class="flex justify-end w-48 py-4 px-6">
+        <input class="w-32" formControlName="assignTo" />
+        &#8592;
+      </div>
+      <app-http-request
+        class="w-full"
+        [formGroup]="step.get('httpRequest')"
+      ></app-http-request>
+    </div>
   </div>
   <div>
     <button

@@ -15,6 +15,7 @@ export class DataflowDefinitionComponent {
   formGroup: FormGroup = this.fb.group({
     steps: this.fb.array([
       this.fb.group({
+        assignTo: ['my_variable'],
         httpRequest: this.fb.group({
           method: ['GET'],
           url: ['http://swapi.dev/api/planets/1/'],
@@ -39,6 +40,7 @@ export class DataflowDefinitionComponent {
   addHttpRequest() {
     this.steps.push(
       this.fb.group({
+        assignTo: ['my_variable'],
         httpRequest: this.fb.group({
           method: ['GET'],
           url: ['http://swapi.dev/api/planets/1/'],
