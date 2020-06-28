@@ -1,6 +1,5 @@
-import { selectVariables } from './variable.selectors';
-import { HttpRequest } from '@angular/common/http';
 import { DataFlowState } from '../dataflow.state';
+import { selectVariables } from './variable.selectors';
 
 describe('selectVariables', () => {
   it('should select a variable with value', () => {
@@ -8,11 +7,11 @@ describe('selectVariables', () => {
       steps: [
         {
           assignTo: 'my_variable_1',
-          httpRequest: new HttpRequest<any>('GET', 'http://url.io'),
+          httpRequestTemplate: { method: 'GET', url: 'http://url.io' },
         },
         {
           assignTo: 'my_variable_2',
-          httpRequest: new HttpRequest<any>('GET', 'http://url.io'),
+          httpRequestTemplate: { method: 'GET', url: 'http://url.io' },
         },
       ],
       execution: { stepIndex: 1, evaluations: { 0: 'my_value', 1: 'my_other_value' } },

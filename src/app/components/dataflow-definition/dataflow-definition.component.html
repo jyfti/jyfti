@@ -11,7 +11,7 @@
       </div>
       <app-http-request
         class="w-full"
-        [formGroup]="step.get('httpRequest')"
+        [formGroup]="step.get('httpRequestTemplate')"
         [evaluation]="(evaluations$ | async)[stepIndex]"
       ></app-http-request>
     </div>

@@ -1,15 +1,13 @@
+import { HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
 import { concatMap, map } from 'rxjs/operators';
 import { DataFlowExecutionService } from 'src/app/services/data-flow-execution.service';
 
-import {
-  finishExecution,
-  finishStepExecution,
-  startExecution,
-  startStepExecution,
-} from '../dataflow.actions';
+import { finishExecution, finishStepExecution, startExecution, startStepExecution } from '../dataflow.actions';
+
+const createHttpRequest = (json) => new HttpRequest(json.method, json.url);
 
 @Injectable()
 export class DataFlowExecutionEffects {
@@ -30,7 +28,11 @@ export class DataFlowExecutionEffects {
       ofType(startStepExecution),
       concatMap((action) =>
         this.dataflowExecutionService
-          .request(action.steps[action.stepIndex].httpRequest)
+          .request(
+            createHttpRequest(
+              action.steps[action.stepIndex].httpRequestTemplate
+            )
+          )
           .pipe(
             concatMap((httpResponse) =>
               of(

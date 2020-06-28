@@ -1,13 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
-import { HttpRequest } from '@angular/common/http';
-import { GlobalState } from 'src/app/ngrx/dataflow.state';
-import { Store, select } from '@ngrx/store';
-import { startExecution } from 'src/app/ngrx/dataflow.actions';
+import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-
-const createHttpRequest = (json) => new HttpRequest(json.method, json.url);
+import { startExecution } from 'src/app/ngrx/dataflow.actions';
+import { GlobalState } from 'src/app/ngrx/dataflow.state';
 
 @Component({
   selector: 'app-dataflow-definition',
@@ -34,10 +31,7 @@ export class DataflowDefinitionComponent implements OnInit {
   }
 
   execute() {
-    const steps = this.formGroup.value['steps'].map((step) => ({
-      ...step,
-      httpRequest: createHttpRequest(step.httpRequest),
-    }));
+    const steps = this.formGroup.value['steps'];
     this.store.dispatch(startExecution({ steps }));
   }
 
@@ -48,7 +42,7 @@ export class DataflowDefinitionComponent implements OnInit {
   createStep() {
     return this.fb.group({
       assignTo: ['my_variable'],
-      httpRequest: this.fb.group({
+      httpRequestTemplate: this.fb.group({
         method: ['GET'],
         url: ['http://swapi.dev/api/planets/1/'],
       }),
