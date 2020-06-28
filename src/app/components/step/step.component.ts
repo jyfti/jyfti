@@ -8,6 +8,7 @@ import { FormGroup } from '@angular/forms';
 export class StepComponent implements OnInit {
   @Input() formGroup: FormGroup;
   @Input() evaluation: any;
+  @Input() stepIndex: number;
 
   @Output() removed = new EventEmitter<any>();
 
