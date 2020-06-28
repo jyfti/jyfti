@@ -5,9 +5,22 @@ import { of } from 'rxjs';
 import { concatMap, map } from 'rxjs/operators';
 import { DataFlowExecutionService } from 'src/app/services/data-flow-execution.service';
 
-import { finishExecution, finishStepExecution, startExecution, startStepExecution } from '../dataflow.actions';
+import {
+  finishExecution,
+  finishStepExecution,
+  startExecution,
+  startStepExecution,
+} from '../dataflow.actions';
+import { HttpRequestTemplate } from 'src/app/types/http-request-template.type';
 
-const createHttpRequest = (json) => new HttpRequest(json.method, json.url);
+const interpolate = (variables) => (str: string) => {
+  const identifiers = Object.keys(variables);
+  const values = Object.values(variables);
+  return new Function(...identifiers, `return \`${str}\`;`)(...values);
+};
+
+const createHttpRequest = (template: HttpRequestTemplate) =>
+  new HttpRequest(template.method as any, interpolate({})(template.url));
 
 @Injectable()
 export class DataFlowExecutionEffects {

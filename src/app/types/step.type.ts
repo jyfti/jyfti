@@ -1,7 +1,6 @@
-export class Step {
+import { HttpRequestTemplate } from './http-request-template.type';
+
+export interface Step {
   assignTo: string;
-  httpRequestTemplate: {
-    method: string;
-    url: string;
-  }
+  httpRequestTemplate: HttpRequestTemplate;
 }
