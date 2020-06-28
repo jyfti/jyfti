@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { exhaustMap, map } from 'rxjs/operators';
+import { endWith, exhaustMap, map } from 'rxjs/operators';
 import { DataFlowExecutionService } from 'src/app/services/data-flow-execution.service';
 
-import { finishExecution, startExecution } from '../dataflow.actions';
+import { finishExecution, finishStepExecution, startExecution } from '../dataflow.actions';
 
 @Injectable()
 export class DataFlowExecutionEffects {
@@ -16,9 +16,10 @@ export class DataFlowExecutionEffects {
     this.actions$.pipe(
       ofType(startExecution),
       exhaustMap((action) =>
-        this.dataflowExecutionService
-          .execute(action.steps)
-          .pipe(map(() => finishExecution()))
+        this.dataflowExecutionService.execute(action.steps).pipe(
+          map(stepExecution => finishStepExecution({ stepExecution })),
+          endWith(finishExecution())
+        )
       )
     )
   );

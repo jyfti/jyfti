@@ -1,5 +1,7 @@
 import { createAction, props } from '@ngrx/store';
+
 import { Step } from '../types/step.type';
+import { StepExecution } from '../types/step-execution.type';
 
 export const startExecution = createAction(
   '[Execution] Start',
@@ -7,3 +9,8 @@ export const startExecution = createAction(
 );
 
 export const finishExecution = createAction('[Execution] Finish');
+
+export const finishStepExecution = createAction(
+  '[Execution] Finish step',
+  props<{ stepExecution: StepExecution }>()
+);
