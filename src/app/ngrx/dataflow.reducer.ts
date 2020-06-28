@@ -1,6 +1,7 @@
 import { createReducer, on } from '@ngrx/store';
+
+import { startExecution, startStepExecution } from './dataflow.actions';
 import { initialState } from './dataflow.state';
-import { startExecution, finishStepExecution } from './dataflow.actions';
 
 const dataflowReducer = createReducer(
   initialState,
@@ -11,10 +12,11 @@ const dataflowReducer = createReducer(
       stepIndex: null,
     },
   })),
-  on(finishStepExecution, (state, { stepExecution }) => ({
+  on(startStepExecution, (state, { stepIndex }) => ({
     ...state,
     execution: {
-      stepIndex: stepExecution.stepIndex,
+      ...state.execution,
+      stepIndex,
     },
   }))
 );

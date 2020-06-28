@@ -1,9 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { endWith, exhaustMap, map } from 'rxjs/operators';
+import { of } from 'rxjs';
+import { concatMap, map } from 'rxjs/operators';
 import { DataFlowExecutionService } from 'src/app/services/data-flow-execution.service';
 
-import { finishExecution, finishStepExecution, startExecution } from '../dataflow.actions';
+import {
+  finishExecution,
+  finishStepExecution,
+  startExecution,
+  startStepExecution,
+} from '../dataflow.actions';
 
 @Injectable()
 export class DataFlowExecutionEffects {
@@ -15,11 +21,34 @@ export class DataFlowExecutionEffects {
   startExecution$ = createEffect(() =>
     this.actions$.pipe(
       ofType(startExecution),
-      exhaustMap((action) =>
-        this.dataflowExecutionService.execute(action.steps).pipe(
-          map(stepExecution => finishStepExecution({ stepExecution })),
-          endWith(finishExecution())
-        )
+      map((action) => startStepExecution({ steps: action.steps, stepIndex: 0 }))
+    )
+  );
+
+  stepExecution$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(startStepExecution),
+      concatMap((action) =>
+        this.dataflowExecutionService
+          .request(action.steps[action.stepIndex].httpRequest)
+          .pipe(
+            concatMap((httpResponse) =>
+              of(
+                finishStepExecution({
+                  stepExecution: {
+                    stepIndex: action.stepIndex,
+                    httpResponse,
+                  },
+                }),
+                action.stepIndex + 1 === action.steps.length
+                  ? finishExecution()
+                  : startStepExecution({
+                      steps: action.steps,
+                      stepIndex: action.stepIndex + 1,
+                    })
+              )
+            )
+          )
       )
     )
   );
