@@ -13,15 +13,7 @@ const createHttpRequest = (json) => new HttpRequest(json.method, json.url);
 })
 export class DataflowDefinitionComponent {
   formGroup: FormGroup = this.fb.group({
-    steps: this.fb.array([
-      this.fb.group({
-        assignTo: ['my_variable'],
-        httpRequest: this.fb.group({
-          method: ['GET'],
-          url: ['http://swapi.dev/api/planets/1/'],
-        }),
-      }),
-    ]),
+    steps: this.fb.array([this.createStep()]),
   });
 
   get steps() {
@@ -37,15 +29,17 @@ export class DataflowDefinitionComponent {
     this.store.dispatch(startExecution({ httpRequests }));
   }
 
-  addHttpRequest() {
-    this.steps.push(
-      this.fb.group({
-        assignTo: ['my_variable'],
-        httpRequest: this.fb.group({
-          method: ['GET'],
-          url: ['http://swapi.dev/api/planets/1/'],
-        }),
-      })
-    );
+  addStep() {
+    this.steps.push(this.createStep());
+  }
+
+  createStep() {
+    return this.fb.group({
+      assignTo: ['my_variable'],
+      httpRequest: this.fb.group({
+        method: ['GET'],
+        url: ['http://swapi.dev/api/planets/1/'],
+      }),
+    });
   }
 }
