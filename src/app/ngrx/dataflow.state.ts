@@ -8,6 +8,7 @@ export class DataFlowState {
   steps: Step[];
   execution: {
     stepIndex: number;
+    evaluations: { [stepIndex: number]: any };
   };
 }
 
