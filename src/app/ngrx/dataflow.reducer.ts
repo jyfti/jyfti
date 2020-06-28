@@ -6,8 +6,10 @@ import {
   finishStepExecution,
   resetExecution,
   saveDataflow,
+  saveStep,
 } from './dataflow.actions';
 import { initialState } from './dataflow.state';
+import { set } from 'lodash/fp';
 
 const dataflowReducer = createReducer(
   initialState,
@@ -43,6 +45,10 @@ const dataflowReducer = createReducer(
   on(saveDataflow, (state, { steps }) => ({
     ...state,
     steps,
+  })),
+  on(saveStep, (state, { stepIndex, step }) => ({
+    ...state,
+    steps: set(stepIndex, step)(state.steps),
   }))
 );
 

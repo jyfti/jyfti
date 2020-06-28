@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { map, withLatestFrom, filter, tap } from 'rxjs/operators';
 import { GlobalState } from 'src/app/ngrx/dataflow.state';
 import { HttpRequestStep } from 'src/app/types/step.type';
+import { saveStep } from 'src/app/ngrx/dataflow.actions';
 
 @Component({
   selector: 'app-http-request-detail-page',

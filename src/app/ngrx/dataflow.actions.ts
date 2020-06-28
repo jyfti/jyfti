@@ -31,3 +31,8 @@ export const saveDataflow = createAction(
   '[Data Flow] Save',
   props<{ steps: Step[] }>()
 );
+
+export const saveStep = createAction(
+  '[Data Flow] Save step',
+  props<{ stepIndex: number; step: Step }>()
+);

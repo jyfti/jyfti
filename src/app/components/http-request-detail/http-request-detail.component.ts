@@ -1,7 +1,16 @@
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
-import { HttpRequestStep } from 'src/app/types/step.type';
-import { DataFlowFormService } from 'src/app/services/data-flow-form.service';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+} from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { DataFlowFormService } from 'src/app/services/data-flow-form.service';
+import { HttpRequestStep } from 'src/app/types/step.type';
+import { GlobalState } from 'src/app/ngrx/dataflow.state';
+import { Store } from '@ngrx/store';
+import { saveStep } from 'src/app/ngrx/dataflow.actions';
 
 @Component({
   selector: 'app-http-request-detail',
@@ -14,7 +23,10 @@ export class HttpRequestDetailComponent implements OnChanges {
 
   formGroup: FormGroup;
 
-  constructor(private dataflowFormService: DataFlowFormService) {}
+  constructor(
+    private store: Store<GlobalState>,
+    private dataflowFormService: DataFlowFormService
+  ) {}
 
   ngOnChanges() {
     if (this.step?.httpRequestTemplate) {
@@ -22,5 +34,14 @@ export class HttpRequestDetailComponent implements OnChanges {
         this.step?.httpRequestTemplate
       );
     }
+  }
+
+  save() {
+    this.store.dispatch(
+      saveStep({
+        stepIndex: this.stepIndex,
+        step: { ...this.step, httpRequestTemplate: this.formGroup.value },
+      })
+    );
   }
 }
