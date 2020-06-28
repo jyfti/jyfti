@@ -1,12 +1,13 @@
 import { HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { concatMap, map } from 'rxjs/operators';
+import { concatMap, map, catchError } from 'rxjs/operators';
 import { DataFlowExecutionService } from 'src/app/services/data-flow-execution.service';
 import { HttpRequestTemplate } from 'src/app/types/http-request-template.type';
 import { VariableMap } from 'src/app/types/variabe-map.type';
 
 import { finishExecution, finishStepExecution, startExecution, startStepExecution } from '../dataflow.actions';
+import { of } from 'rxjs';
 
 const interpolate = (variables) => (str: string) => {
   const identifiers = Object.keys(variables);
@@ -48,6 +49,7 @@ export class DataFlowExecutionEffects {
             )
           )
           .pipe(
+            catchError(response => of(response)),
             map((httpResponse) =>
               finishStepExecution({
                 stepIndex: action.stepIndex,
