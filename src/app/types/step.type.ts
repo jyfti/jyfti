@@ -1,6 +1,6 @@
 import { HttpRequestTemplate } from './http-request-template.type';
 
-export interface Step {
+export interface HttpRequestStep {
   assignTo: string;
   httpRequestTemplate: HttpRequestTemplate;
 }
