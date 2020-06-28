@@ -6,8 +6,12 @@ export class GlobalState {
 
 export class DataFlowState {
   steps: Step[];
+  execution: {
+    stepIndex: number;
+  };
 }
 
-export const initialState = {
+export const initialState: DataFlowState = {
   steps: null,
+  execution: null,
 };
