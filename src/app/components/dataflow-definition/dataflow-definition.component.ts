@@ -3,14 +3,12 @@ import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { startExecution, resetExecution } from 'src/app/ngrx/dataflow.actions';
+import { resetExecution, startExecution } from 'src/app/ngrx/dataflow.actions';
 import { GlobalState } from 'src/app/ngrx/dataflow.state';
-import planets from 'src/assets/dataflows/planets.json';
-import { Step } from 'src/app/types/step.type';
-import { HttpRequestTemplate } from 'src/app/types/http-request-template.type';
 import { DataFlow } from 'src/app/types/data-flow.type';
-import { selectVariables } from 'src/app/ngrx/selectors/variable.selectors';
-import { VariableMap } from 'src/app/types/variabe-map.type';
+import { HttpRequestTemplate } from 'src/app/types/http-request-template.type';
+import { Step } from 'src/app/types/step.type';
+import planets from 'src/assets/dataflows/planets.json';
 
 @Component({
   selector: 'app-dataflow-definition',
