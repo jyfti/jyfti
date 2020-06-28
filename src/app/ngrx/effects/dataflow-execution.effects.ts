@@ -51,7 +51,7 @@ export class DataFlowExecutionEffects {
             map((httpResponse) =>
               finishStepExecution({
                 stepIndex: action.stepIndex,
-                httpResponse,
+                evaluation: httpResponse,
                 steps: action.steps,
                 variables: {
                   ...action.variables,

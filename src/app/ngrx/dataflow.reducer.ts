@@ -24,13 +24,13 @@ const dataflowReducer = createReducer(
       stepIndex,
     },
   })),
-  on(finishStepExecution, (state, { stepIndex, httpResponse }) => ({
+  on(finishStepExecution, (state, { stepIndex, evaluation }) => ({
     ...state,
     execution: {
       ...state.execution,
       evaluations: {
         ...state.execution.evaluations,
-        [stepIndex]: httpResponse,
+        [stepIndex]: evaluation,
       },
     },
   }))

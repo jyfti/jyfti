@@ -20,7 +20,7 @@ export const finishStepExecution = createAction(
   '[Execution] Finish step',
   props<{
     stepIndex: number;
-    httpResponse: HttpResponse<any>;
+    evaluation: any;
     steps: Step[];
     variables: VariableMap;
   }>()
