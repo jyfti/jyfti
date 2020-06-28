@@ -11,6 +11,7 @@ import { HttpRequestStep } from 'src/app/types/step.type';
 import { GlobalState } from 'src/app/ngrx/dataflow.state';
 import { Store } from '@ngrx/store';
 import { saveStep } from 'src/app/ngrx/dataflow.actions';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-http-request-detail',
@@ -25,6 +26,7 @@ export class HttpRequestDetailComponent implements OnChanges {
 
   constructor(
     private store: Store<GlobalState>,
+    private router: Router,
     private dataflowFormService: DataFlowFormService
   ) {}
 
@@ -43,5 +45,6 @@ export class HttpRequestDetailComponent implements OnChanges {
         step: { ...this.step, httpRequestTemplate: this.formGroup.value },
       })
     );
+    this.router.navigate(['/']);
   }
 }
