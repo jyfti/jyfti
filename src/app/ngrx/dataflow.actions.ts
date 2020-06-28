@@ -1,7 +1,7 @@
+import { HttpResponse } from '@angular/common/http';
 import { createAction, props } from '@ngrx/store';
 
 import { Step } from '../types/step.type';
-import { StepExecution } from '../types/step-execution.type';
 import { VariableMap } from '../types/variabe-map.type';
 
 export const startExecution = createAction(
@@ -18,5 +18,10 @@ export const startStepExecution = createAction(
 
 export const finishStepExecution = createAction(
   '[Execution] Finish step',
-  props<{ stepExecution: StepExecution }>()
+  props<{
+    stepIndex: number;
+    httpResponse: HttpResponse<any>;
+    steps: Step[];
+    variables: VariableMap;
+  }>()
 );
