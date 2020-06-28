@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-step',
@@ -12,7 +13,11 @@ export class StepComponent implements OnInit {
 
   @Output() removed = new EventEmitter<any>();
 
-  constructor() {}
+  constructor(private router: Router) {}
+
+  edit() {
+    this.router.navigate(['/step', this.stepIndex]);
+  }
 
   ngOnInit(): void {}
 }
