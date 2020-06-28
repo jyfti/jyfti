@@ -12,13 +12,13 @@ export class DataFlowExecutionService {
   constructor(private http: HttpClient) {}
 
   execute(steps: Step[]): Observable<HttpResponse<any>> {
-    return from(steps).pipe(
-      concatMap((step) =>
-        this.http.request(step.httpRequest).pipe(
-          filter((httpEvent) => httpEvent instanceof HttpResponse),
-          map((httpEvent) => httpEvent as HttpResponse<any>)
-        )
-      )
+    return from(steps).pipe(concatMap((step) => this.request(step)));
+  }
+
+  private request(step: Step): Observable<HttpResponse<any>> {
+    return this.http.request(step.httpRequest).pipe(
+      filter((httpEvent) => httpEvent instanceof HttpResponse),
+      map((httpEvent) => httpEvent as HttpResponse<any>)
     );
   }
 }
