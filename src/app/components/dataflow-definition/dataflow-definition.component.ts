@@ -1,20 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import {
-  resetExecution,
-  startExecution,
-  saveDataflow,
-} from 'src/app/ngrx/dataflow.actions';
+import { resetExecution, saveDataflow, startExecution } from 'src/app/ngrx/dataflow.actions';
 import { GlobalState } from 'src/app/ngrx/dataflow.state';
-import { DataFlow } from 'src/app/types/data-flow.type';
-import { HttpRequestTemplate } from 'src/app/types/http-request-template.type';
-import { Step } from 'src/app/types/step.type';
-import planets from 'src/assets/dataflows/planets.json';
-import { Router } from '@angular/router';
 import { DataFlowFormService } from 'src/app/services/data-flow-form.service';
+import planets from 'src/assets/dataflows/planets.json';
 
 @Component({
   selector: 'app-dataflow-definition',

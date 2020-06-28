@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { map, withLatestFrom } from 'rxjs/operators';
+import { map, withLatestFrom, filter, tap } from 'rxjs/operators';
 import { GlobalState } from 'src/app/ngrx/dataflow.state';
 import { HttpRequestStep } from 'src/app/types/step.type';
 
@@ -23,11 +23,12 @@ export class HttpRequestDetailPageComponent implements OnInit {
   ngOnInit() {
     this.stepIndex$ = this.route.paramMap.pipe(
       map((params) => params.get('index')),
+      filter((index) => !!index),
       map(Number)
     );
-    this.step$ = this.store.pipe(
-      select('dataflow', 'steps'),
-      withLatestFrom(this.stepIndex$, (steps, stepIndex) => steps[stepIndex])
+    const steps$ = this.store.pipe(select('dataflow', 'steps'));
+    this.step$ = this.stepIndex$.pipe(
+      withLatestFrom(steps$, (stepIndex, steps) => steps[stepIndex])
     );
   }
 }
