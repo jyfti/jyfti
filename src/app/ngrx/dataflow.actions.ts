@@ -10,6 +10,8 @@ export const startExecution = createAction(
 
 export const finishExecution = createAction('[Execution] Finish');
 
+export const resetExecution = createAction('[Execution] Reset');
+
 export const startStepExecution = createAction(
   '[Execution] Start step',
   props<{ stepIndex: number; steps: Step[]; variables: VariableMap }>()

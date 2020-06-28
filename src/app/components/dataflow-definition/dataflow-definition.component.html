@@ -14,7 +14,14 @@
       Add another API call
     </button>
   </div>
-  <div class="flex justify-end">
+  <div class="flex gap-2 justify-end">
+    <button
+      class="mt-2 p-4 bg-red-500 hover:bg-red-600 text-white"
+      *ngIf="execution$ | async"
+      (click)="clearExecution()"
+    >
+      Clear execution
+    </button>
     <button
       class="mt-2 p-4 bg-blue-600 hover:bg-blue-700 text-white"
       (click)="execute()"
