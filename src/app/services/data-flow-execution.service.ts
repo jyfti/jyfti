@@ -1,7 +1,8 @@
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, from } from 'rxjs';
-import { concatMap } from 'rxjs/operators';
-import { HttpClient, HttpEvent } from '@angular/common/http';
+import { from, Observable } from 'rxjs';
+import { concatMap, map, filter } from 'rxjs/operators';
+
 import { Step } from '../types/step.type';
 
 @Injectable({
@@ -10,9 +11,14 @@ import { Step } from '../types/step.type';
 export class DataFlowExecutionService {
   constructor(private http: HttpClient) {}
 
-  execute(steps: Step[]): Observable<HttpEvent<any>> {
+  execute(steps: Step[]): Observable<HttpResponse<any>> {
     return from(steps).pipe(
-      concatMap((step) => this.http.request(step.httpRequest))
+      concatMap((step) =>
+        this.http.request(step.httpRequest).pipe(
+          filter((httpEvent) => httpEvent instanceof HttpResponse),
+          map((httpEvent) => httpEvent as HttpResponse<any>)
+        )
+      )
     );
   }
 }
