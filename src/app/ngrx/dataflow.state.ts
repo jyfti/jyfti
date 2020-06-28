@@ -1,4 +1,5 @@
 import { Step } from '../types/step.type';
+import planets from 'src/assets/dataflows/planets.json';
 
 export class GlobalState {
   dataflow: DataFlowState;
@@ -13,6 +14,6 @@ export class DataFlowState {
 }
 
 export const initialState: DataFlowState = {
-  steps: null,
+  steps: planets.steps,
   execution: null,
 };
