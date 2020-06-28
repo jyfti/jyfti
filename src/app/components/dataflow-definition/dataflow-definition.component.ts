@@ -14,13 +14,14 @@ import { HttpRequestTemplate } from 'src/app/types/http-request-template.type';
 import { Step } from 'src/app/types/step.type';
 import planets from 'src/assets/dataflows/planets.json';
 import { Router } from '@angular/router';
+import { DataFlowFormService } from 'src/app/services/data-flow-form.service';
 
 @Component({
   selector: 'app-dataflow-definition',
   templateUrl: './dataflow-definition.component.html',
 })
 export class DataflowDefinitionComponent implements OnInit {
-  formGroup: FormGroup = this.createDataFlow(planets);
+  formGroup: FormGroup = this.dataflowFormService.createDataFlow(planets);
 
   get steps() {
     return this.formGroup.get('steps') as FormArray;
@@ -31,7 +32,7 @@ export class DataflowDefinitionComponent implements OnInit {
 
   constructor(
     private store: Store<GlobalState>,
-    private fb: FormBuilder,
+    private dataflowFormService: DataFlowFormService,
     private router: Router
   ) {}
 
@@ -63,7 +64,7 @@ export class DataflowDefinitionComponent implements OnInit {
 
   addStep() {
     this.steps.push(
-      this.createStep({
+      this.dataflowFormService.createStep({
         assignTo: 'my_variable',
         httpRequestTemplate: {
           method: 'GET',
@@ -71,33 +72,5 @@ export class DataflowDefinitionComponent implements OnInit {
         },
       })
     );
-  }
-
-  createDataFlow(dataflow: DataFlow): FormGroup {
-    return this.fb.group({
-      steps: this.createSteps(dataflow.steps),
-    });
-  }
-
-  createSteps(steps: Step[]): FormArray {
-    return this.fb.array(steps.map((step) => this.createStep(step)));
-  }
-
-  createStep(step: Step): FormGroup {
-    return this.fb.group({
-      assignTo: [step.assignTo],
-      httpRequestTemplate: this.createHttpRequestTemplate(
-        step.httpRequestTemplate
-      ),
-    });
-  }
-
-  createHttpRequestTemplate(
-    httpRequestTemplate: HttpRequestTemplate
-  ): FormGroup {
-    return this.fb.group({
-      method: [httpRequestTemplate.method],
-      url: [httpRequestTemplate.url],
-    });
   }
 }
