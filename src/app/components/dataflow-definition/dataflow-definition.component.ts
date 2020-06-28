@@ -13,32 +13,36 @@ const createHttpRequest = (json) => new HttpRequest(json.method, json.url);
 })
 export class DataflowDefinitionComponent {
   formGroup: FormGroup = this.fb.group({
-    httpRequests: this.fb.array([
+    steps: this.fb.array([
       this.fb.group({
-        method: ['GET'],
-        url: ['http://swapi.dev/api/planets/1/'],
+        httpRequest: this.fb.group({
+          method: ['GET'],
+          url: ['http://swapi.dev/api/planets/1/'],
+        }),
       }),
     ]),
   });
 
-  get httpRequests() {
-    return this.formGroup.get('httpRequests') as FormArray;
+  get steps() {
+    return this.formGroup.get('steps') as FormArray;
   }
 
   constructor(private store: Store<GlobalState>, private fb: FormBuilder) {}
 
   execute() {
-    const httpRequests = this.formGroup.value['httpRequests'].map(
-      createHttpRequest
-    );
+    const httpRequests = this.formGroup.value['steps']
+      .map((step) => step.httpRequest)
+      .map(createHttpRequest);
     this.store.dispatch(startExecution({ httpRequests }));
   }
 
   addHttpRequest() {
-    this.httpRequests.push(
+    this.steps.push(
       this.fb.group({
-        method: ['GET'],
-        url: ['http://swapi.dev/api/planets/1/'],
+        httpRequest: this.fb.group({
+          method: ['GET'],
+          url: ['http://swapi.dev/api/planets/1/'],
+        }),
       })
     );
   }

@@ -1,8 +1,8 @@
 <div [formGroup]="formGroup">
-  <div class="flex flex-col gap-2" formArrayName="httpRequests">
+  <div class="flex flex-col gap-2" formArrayName="steps">
     <app-http-request
-      *ngFor="let httpRequest of httpRequests.controls"
-      [formGroup]="httpRequest"
+      *ngFor="let step of steps.controls"
+      [formGroup]="step.get('httpRequest')"
     ></app-http-request>
   </div>
   <div>
