@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { flatMap, filter } from 'rxjs/operators';
-import { HttpClient, HttpRequest, HttpEventType } from '@angular/common/http';
+import { Observable, from } from 'rxjs';
+import { concatMap } from 'rxjs/operators';
+import { HttpClient, HttpRequest, HttpEvent } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -9,19 +9,9 @@ import { HttpClient, HttpRequest, HttpEventType } from '@angular/common/http';
 export class DataFlowExecutionService {
   constructor(private http: HttpClient) {}
 
-  execute(httpRequests: HttpRequest<any>[]): Observable<any> {
-    return httpRequests.reduce(
-      (observable, httpRequest) =>
-        observable.pipe(
-          flatMap(() =>
-            this.http
-              .request(httpRequest)
-              .pipe(
-                filter((httpEvent) => httpEvent.type === HttpEventType.Response)
-              )
-          )
-        ),
-      of({})
+  execute(httpRequests: HttpRequest<any>[]): Observable<HttpEvent<any>> {
+    return from(httpRequests).pipe(
+      concatMap((httpRequest) => this.http.request(httpRequest))
     );
   }
 }
