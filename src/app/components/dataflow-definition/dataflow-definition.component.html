@@ -1,24 +1,10 @@
 <div [formGroup]="formGroup">
-  <div class="flex flex-col gap-2" formArrayName="steps">
-    <div
-      class="flex gap-2"
+  <div class="flex flex-col gap-2">
+    <app-step
       *ngFor="let step of steps.controls; let stepIndex = index"
-      [formGroupName]="stepIndex"
-    >
-      <div class="flex justify-end w-48 py-4 px-6">
-        <input
-          class="w-32 px-2 mx-2 border border-transparent hover:border-blue-400"
-          formControlName="assignTo"
-          [title]="(variables$ | async)[step.get('assignTo').value] | json"
-        />
-        <span class="self-center">=</span>
-      </div>
-      <app-http-request
-        class="w-full"
-        [formGroup]="step.get('httpRequestTemplate')"
-        [evaluation]="(evaluations$ | async)[stepIndex]"
-      ></app-http-request>
-    </div>
+      [formGroup]="step"
+      [evaluation]="(evaluations$ | async)[stepIndex]"
+    ></app-step>
   </div>
   <div>
     <button

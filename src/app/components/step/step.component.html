@@ -1,0 +1,15 @@
+<div class="flex gap-2">
+  <div class="flex justify-end w-48 py-4 px-6" [formGroup]="formGroup">
+    <input
+      class="w-32 px-2 mx-2 border border-transparent hover:border-blue-400"
+      formControlName="assignTo"
+      [title]="evaluation | json"
+    />
+    <span class="self-center">=</span>
+  </div>
+  <app-http-request
+    class="w-full"
+    [formGroup]="formGroup.get('httpRequestTemplate')"
+    [evaluation]="evaluation"
+  ></app-http-request>
+</div>

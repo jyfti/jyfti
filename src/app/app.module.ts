@@ -13,12 +13,14 @@ import { HttpRequestComponent } from './components/http-request/http-request.com
 import { reducer } from './ngrx/dataflow.reducer';
 import { EffectsModule } from '@ngrx/effects';
 import { DataFlowExecutionEffects } from './ngrx/effects/dataflow-execution.effects';
+import { StepComponent } from './components/step/step.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     DataflowDefinitionComponent,
     HttpRequestComponent,
+    StepComponent,
   ],
   imports: [
     BrowserModule,
