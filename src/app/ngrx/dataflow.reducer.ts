@@ -5,6 +5,7 @@ import {
   startStepExecution,
   finishStepExecution,
   resetExecution,
+  saveDataflow,
 } from './dataflow.actions';
 import { initialState } from './dataflow.state';
 
@@ -38,6 +39,10 @@ const dataflowReducer = createReducer(
         [stepIndex]: evaluation,
       },
     },
+  })),
+  on(saveDataflow, (state, { steps }) => ({
+    ...state,
+    steps,
   }))
 );
 

@@ -26,3 +26,8 @@ export const finishStepExecution = createAction(
     variables: VariableMap;
   }>()
 );
+
+export const saveDataflow = createAction(
+  '[Data Flow] Save',
+  props<{ steps: Step[] }>()
+);

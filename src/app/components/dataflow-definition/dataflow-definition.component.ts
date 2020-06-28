@@ -3,7 +3,11 @@ import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { resetExecution, startExecution } from 'src/app/ngrx/dataflow.actions';
+import {
+  resetExecution,
+  startExecution,
+  saveDataflow,
+} from 'src/app/ngrx/dataflow.actions';
 import { GlobalState } from 'src/app/ngrx/dataflow.state';
 import { DataFlow } from 'src/app/types/data-flow.type';
 import { HttpRequestTemplate } from 'src/app/types/http-request-template.type';
@@ -25,7 +29,11 @@ export class DataflowDefinitionComponent implements OnInit {
   execution$: Observable<any>;
   evaluations$: Observable<any>;
 
-  constructor(private store: Store<GlobalState>, private fb: FormBuilder, private router: Router) {}
+  constructor(
+    private store: Store<GlobalState>,
+    private fb: FormBuilder,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.execution$ = this.store.pipe(select('dataflow', 'execution'));
@@ -44,6 +52,8 @@ export class DataflowDefinitionComponent implements OnInit {
   }
 
   editStep(stepIndex: number) {
+    const steps = this.formGroup.value['steps'];
+    this.store.dispatch(saveDataflow({ steps }));
     this.router.navigate(['/step', stepIndex]);
   }
 
