@@ -16,7 +16,7 @@ export class DataFlowExecutionEffects {
     this.actions$.pipe(
       ofType(startExecution),
       exhaustMap((action) =>
-        this.dataflowExecutionService.execute(action.httpRequests).pipe(
+        this.dataflowExecutionService.execute(action.steps).pipe(
           last(),
           map(() => finishExecution())
         )

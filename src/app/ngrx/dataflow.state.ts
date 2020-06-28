@@ -1,13 +1,13 @@
-import { HttpRequest } from '@angular/common/http';
+import { Step } from '../types/step.type';
 
 export class GlobalState {
   dataflow: DataFlowState;
 }
 
 export class DataFlowState {
-  httpRequests: HttpRequest<any>[];
+  steps: Step[];
 }
 
 export const initialState = {
-  httpRequests: null,
+  steps: null,
 };

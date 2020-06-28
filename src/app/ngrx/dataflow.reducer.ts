@@ -4,9 +4,9 @@ import { startExecution } from './dataflow.actions';
 
 const dataflowReducer = createReducer(
   initialState,
-  on(startExecution, (state, { httpRequests }) => ({
+  on(startExecution, (state, { steps }) => ({
     ...state,
-    httpRequests,
+    steps,
   }))
 );
 

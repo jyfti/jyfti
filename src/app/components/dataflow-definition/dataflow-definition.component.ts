@@ -23,10 +23,11 @@ export class DataflowDefinitionComponent {
   constructor(private store: Store<GlobalState>, private fb: FormBuilder) {}
 
   execute() {
-    const httpRequests = this.formGroup.value['steps']
-      .map((step) => step.httpRequest)
-      .map(createHttpRequest);
-    this.store.dispatch(startExecution({ httpRequests }));
+    const steps = this.formGroup.value['steps'].map((step) => ({
+      ...step,
+      httpRequest: createHttpRequest(step.httpRequest),
+    }));
+    this.store.dispatch(startExecution({ steps }));
   }
 
   addStep() {
