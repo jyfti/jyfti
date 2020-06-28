@@ -44,6 +44,10 @@ export class DataflowDefinitionComponent implements OnInit {
     this.store.dispatch(resetExecution());
   }
 
+  removeStep(stepIndex: number) {
+    this.steps.removeAt(stepIndex);
+  }
+
   addStep() {
     this.steps.push(
       this.createStep({

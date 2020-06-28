@@ -12,4 +12,5 @@
     [formGroup]="formGroup.get('httpRequestTemplate')"
     [evaluation]="evaluation"
   ></app-http-request>
+  <button class="px-4 bg-red-500 hover:bg-red-600 text-white" (click)="removed.emit()">Remove</button>
 </div>

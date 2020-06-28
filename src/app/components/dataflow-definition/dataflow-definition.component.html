@@ -4,6 +4,7 @@
       *ngFor="let step of steps.controls; let stepIndex = index"
       [formGroup]="step"
       [evaluation]="(evaluations$ | async)[stepIndex]"
+      (removed)="removeStep(stepIndex)"
     ></app-step>
   </div>
   <div>
