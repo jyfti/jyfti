@@ -1,4 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { HttpResponse } from '@angular/common/http';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
 @Component({
@@ -7,6 +8,8 @@ import { FormGroup } from '@angular/forms';
 })
 export class HttpRequestComponent implements OnInit {
   @Input() formGroup: FormGroup;
+  @Input() evaluation: HttpResponse<any>;
+
   constructor() {}
 
   ngOnInit(): void {}

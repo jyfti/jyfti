@@ -1,4 +1,5 @@
 <div class="flex py-4 px-6 bg-gray-400" [formGroup]="formGroup">
-  <input type="text" class="w-20 bg-gray-400" formControlName="method" />
-  <input type="text" class="w-full bg-gray-400" formControlName="url" />
+  <input type="text" class="w-20 py-1 bg-gray-400" formControlName="method" />
+  <input type="text" class="w-full py-1 bg-gray-400" formControlName="url" />
+  <p class="bg-green-600 text-white rounded-lg px-2 py-1" *ngIf="evaluation">{{ evaluation.status }}</p>
 </div>
