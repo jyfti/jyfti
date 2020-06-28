@@ -11,7 +11,7 @@
           formControlName="assignTo"
           [title]="(variables$ | async)[step.get('assignTo').value] | json"
         />
-        =
+        <span class="self-center">=</span>
       </div>
       <app-http-request
         class="w-full"
