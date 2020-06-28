@@ -1,0 +1,18 @@
+{
+  "steps": [
+    {
+      "assignTo": "planet1",
+      "httpRequestTemplate": {
+        "method": "GET",
+        "url": "http://swapi.dev/api/planets/1/"
+      }
+    },
+    {
+      "assignTo": "planet2",
+      "httpRequestTemplate": {
+        "method": "GET",
+        "url": "http://swapi.dev/api/planets/2/"
+      }
+    }
+  ]
+}
