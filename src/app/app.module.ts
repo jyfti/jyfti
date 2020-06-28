@@ -14,6 +14,7 @@ import { reducer } from './ngrx/dataflow.reducer';
 import { EffectsModule } from '@ngrx/effects';
 import { DataFlowExecutionEffects } from './ngrx/effects/dataflow-execution.effects';
 import { StepComponent } from './components/step/step.component';
+import { HttpStatusBadgeComponent } from './components/http-status-badge/http-status-badge.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { StepComponent } from './components/step/step.component';
     DataflowDefinitionComponent,
     HttpRequestComponent,
     StepComponent,
+    HttpStatusBadgeComponent,
   ],
   imports: [
     BrowserModule,
