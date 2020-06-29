@@ -1,25 +1,10 @@
-import { HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { concatMap, map, catchError } from 'rxjs/operators';
+import { of } from 'rxjs';
+import { catchError, concatMap, map } from 'rxjs/operators';
 import { DataFlowExecutionService } from 'src/app/services/data-flow-execution.service';
-import { HttpRequestTemplate } from 'src/app/types/http-request-template.type';
-import { VariableMap } from 'src/app/types/variabe-map.type';
 
 import { finishExecution, finishStepExecution, startExecution, startStepExecution } from '../dataflow.actions';
-import { of } from 'rxjs';
-
-const interpolate = (variables) => (str: string) => {
-  const identifiers = Object.keys(variables);
-  const values = Object.values(variables);
-  return new Function(...identifiers, `return \`${str}\`;`)(...values);
-};
-
-const createHttpRequest = (
-  template: HttpRequestTemplate,
-  variables: VariableMap
-) =>
-  new HttpRequest(template.method as any, interpolate(variables)(template.url));
 
 @Injectable()
 export class DataFlowExecutionEffects {
@@ -43,13 +28,13 @@ export class DataFlowExecutionEffects {
       concatMap((action) =>
         this.dataflowExecutionService
           .request(
-            createHttpRequest(
+            this.dataflowExecutionService.createHttpRequest(
               action.steps[action.stepIndex].httpRequestTemplate,
               action.variables
             )
           )
           .pipe(
-            catchError(response => of(response)),
+            catchError((response) => of(response)),
             map((httpResponse) =>
               finishStepExecution({
                 stepIndex: action.stepIndex,
