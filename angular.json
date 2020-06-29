@@ -28,12 +28,14 @@
             "aot": true,
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              {
+                "glob": "**/*",
+                "input": "node_modules/ngx-monaco-editor/assets/monaco",
+                "output": "./assets/monaco/"
+              }
             ],
-            "styles": [
-              "src/tailwind.css",
-              "src/styles.css"
-            ],
+            "styles": ["src/tailwind.css", "src/styles.css"],
             "scripts": []
           },
           "configurations": {
@@ -95,9 +97,7 @@
               "tsconfig.spec.json",
               "e2e/tsconfig.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         },
         "e2e": {

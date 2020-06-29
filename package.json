@@ -32,6 +32,7 @@
     "@ngrx/store-devtools": "^9.2.0",
     "json-e": "^4.1.0",
     "lodash": "^4.17.15",
+    "ngx-monaco-editor": "^9.0.0",
     "rxjs": "~6.5.4",
     "tailwindcss": "^1.4.6",
     "tslib": "^1.10.0",

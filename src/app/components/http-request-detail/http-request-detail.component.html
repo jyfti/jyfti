@@ -1,7 +1,7 @@
 <app-http-request [formGroup]="formGroup"></app-http-request>
 
-<div *ngIf="formGroup.get('method').value != 'GET'" class="py-4 px-6 bg-gray-400" [formGroup]="formGroup">
-  <textarea class="w-full h-32" type="text" formControlName="body"></textarea>
+<div *ngIf="formGroup.get('method').value != 'GET'" class="my-4 border border-gray-400" [formGroup]="formGroup">
+  <ngx-monaco-editor [options]="{ language: 'json' }" formControlName="body"></ngx-monaco-editor>
 </div>
 
 <div class="flex justify-end mt-2">
