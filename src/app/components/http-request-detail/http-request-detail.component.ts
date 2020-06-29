@@ -1,17 +1,11 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnChanges,
-  Output,
-} from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { DataFlowFormService } from 'src/app/services/data-flow-form.service';
-import { HttpRequestStep } from 'src/app/types/step.type';
-import { GlobalState } from 'src/app/ngrx/dataflow.state';
+import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { saveStep } from 'src/app/ngrx/dataflow.actions';
-import { Router } from '@angular/router';
+import { GlobalState } from 'src/app/ngrx/dataflow.state';
+import { DataFlowFormService } from 'src/app/services/data-flow-form.service';
+import { HttpRequestStep } from 'src/app/types/step.type';
 
 @Component({
   selector: 'app-http-request-detail',

@@ -1,7 +1,7 @@
 <app-http-request [formGroup]="formGroup"></app-http-request>
 
-<div class="py-4 px-6 bg-gray-400">
-  <p>{{ stepIndex }}</p>
+<div *ngIf="formGroup.get('method').value != 'GET'" class="py-4 px-6 bg-gray-400" [formGroup]="formGroup">
+  <textarea class="w-full h-32" type="text" formControlName="body"></textarea>
 </div>
 
 <div class="flex justify-end mt-2">

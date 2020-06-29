@@ -1,14 +1,10 @@
-import { Component, OnInit, OnChanges } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import {
-  resetExecution,
-  saveDataflow,
-  startExecution,
-} from 'src/app/ngrx/dataflow.actions';
+import { resetExecution, saveDataflow, startExecution } from 'src/app/ngrx/dataflow.actions';
 import { GlobalState } from 'src/app/ngrx/dataflow.state';
 import { DataFlowFormService } from 'src/app/services/data-flow-form.service';
 

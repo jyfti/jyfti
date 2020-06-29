@@ -35,6 +35,7 @@ export class DataFlowFormService {
     return this.fb.group({
       method: [httpRequestTemplate.method],
       url: [httpRequestTemplate.url],
+      body: [httpRequestTemplate.body],
     });
   }
 }
