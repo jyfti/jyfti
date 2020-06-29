@@ -1,5 +1,8 @@
 <div class="flex py-4 px-6 bg-gray-400" [formGroup]="formGroup">
-  <select class="bg-gray-400 border border-transparent hover:border-blue-400" formControlName="method">
+  <select
+    class="bg-gray-400 border border-transparent hover:border-blue-400"
+    formControlName="method"
+  >
     <option *ngFor="let method of httpMethods" [ngValue]="method">{{
       method
     }}</option>

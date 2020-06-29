@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { HttpRequestTemplate } from '../types/http-request-template.type';
 import { VariableMap } from '../types/variabe-map.type';
+import jsone from 'json-e';
 
 @Injectable({
   providedIn: 'root',
@@ -21,7 +22,7 @@ export class DataFlowExecutionService {
     return new HttpRequest(
       template.method as any,
       this.interpolate(variables, template.url),
-      template.body
+      jsone(JSON.parse(template.body), variables)
     );
   }
 
