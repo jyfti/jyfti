@@ -20,7 +20,8 @@ export class DataFlowExecutionService {
   createHttpRequest(template: HttpRequestTemplate, variables: VariableMap) {
     return new HttpRequest(
       template.method as any,
-      this.interpolate(variables, template.url)
+      this.interpolate(variables, template.url),
+      template.body
     );
   }
 
