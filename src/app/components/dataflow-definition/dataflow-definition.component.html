@@ -1,4 +1,7 @@
 <div [formGroup]="formGroup">
+  <div class="w-full mb-2 p-4 bg-gray-300">
+    <input class="w-full px-2 bg-gray-300 box-border border border-transparent hover:border-blue-400" type="text" formControlName="name" />
+  </div>
   <div class="flex flex-col gap-2">
     <app-step
       *ngFor="let step of steps.controls; let stepIndex = index"

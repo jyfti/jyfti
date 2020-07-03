@@ -12,6 +12,7 @@ export class DataFlowFormService {
 
   createDataFlow(dataflow: DataFlow): FormGroup {
     return this.fb.group({
+      name: [dataflow.name],
       steps: this.createSteps(dataflow.steps),
     });
   }

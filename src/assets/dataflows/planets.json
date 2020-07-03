@@ -1,4 +1,5 @@
 {
+  "name": "Get some Star Wars planets",
   "steps": [
     {
       "assignTo": "planet",
