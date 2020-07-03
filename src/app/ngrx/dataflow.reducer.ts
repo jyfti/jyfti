@@ -13,9 +13,9 @@ import { set } from 'lodash/fp';
 
 const dataflowReducer = createReducer(
   initialState,
-  on(startExecution, (state, { steps }) => ({
+  on(startExecution, (state, { dataflow }) => ({
     ...state,
-    steps,
+    dataflow,
     execution: {
       stepIndex: null,
       evaluations: {},
@@ -44,7 +44,10 @@ const dataflowReducer = createReducer(
   })),
   on(saveDataflow, (state, { steps }) => ({
     ...state,
-    steps,
+    dataflow: {
+      ...state.dataflow,
+      steps
+    }
   })),
   on(saveStep, (state, { stepIndex, step }) => ({
     ...state,

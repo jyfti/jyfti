@@ -2,10 +2,11 @@ import { createAction, props } from '@ngrx/store';
 
 import { Step } from '../types/step.type';
 import { VariableMap } from '../types/variabe-map.type';
+import { DataFlow } from '../types/data-flow.type';
 
 export const startExecution = createAction(
   '[Execution] Start',
-  props<{ steps: Step[] }>()
+  props<{ dataflow: DataFlow }>()
 );
 
 export const finishExecution = createAction('[Execution] Finish');

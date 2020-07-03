@@ -4,7 +4,12 @@ import { of } from 'rxjs';
 import { catchError, concatMap, map } from 'rxjs/operators';
 import { DataFlowExecutionService } from 'src/app/services/data-flow-execution.service';
 
-import { finishExecution, finishStepExecution, startExecution, startStepExecution } from '../dataflow.actions';
+import {
+  finishExecution,
+  finishStepExecution,
+  startExecution,
+  startStepExecution,
+} from '../dataflow.actions';
 
 @Injectable()
 export class DataFlowExecutionEffects {
@@ -17,7 +22,11 @@ export class DataFlowExecutionEffects {
     this.actions$.pipe(
       ofType(startExecution),
       map((action) =>
-        startStepExecution({ steps: action.steps, stepIndex: 0, variables: {} })
+        startStepExecution({
+          steps: action.dataflow.steps,
+          stepIndex: 0,
+          variables: {},
+        })
       )
     )
   );
