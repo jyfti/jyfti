@@ -18,6 +18,7 @@ import { HttpStatusBadgeComponent } from './components/http-status-badge/http-st
 import { HttpRequestDetailComponent } from './components/http-request-detail/http-request-detail.component';
 import { HttpRequestDetailPageComponent } from './components/http-request-detail-page/http-request-detail-page.component';
 import { MonacoEditorModule } from 'ngx-monaco-editor';
+import { DataflowSelectionComponent } from './components/dataflow-selection/dataflow-selection.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { MonacoEditorModule } from 'ngx-monaco-editor';
     HttpStatusBadgeComponent,
     HttpRequestDetailComponent,
     HttpRequestDetailPageComponent,
+    DataflowSelectionComponent,
   ],
   imports: [
     BrowserModule,

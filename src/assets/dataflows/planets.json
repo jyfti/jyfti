@@ -1,4 +1,5 @@
 {
+  "id": "star-wars",
   "name": "Get some Star Wars planets",
   "steps": [
     {

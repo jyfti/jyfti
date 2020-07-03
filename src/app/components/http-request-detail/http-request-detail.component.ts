@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { saveStep } from 'src/app/ngrx/dataflow.actions';
 import { GlobalState } from 'src/app/ngrx/dataflow.state';
@@ -21,6 +21,7 @@ export class HttpRequestDetailComponent implements OnChanges {
   constructor(
     private store: Store<GlobalState>,
     private router: Router,
+    private route: ActivatedRoute,
     private dataflowFormService: DataFlowFormService
   ) {}
 
@@ -39,6 +40,6 @@ export class HttpRequestDetailComponent implements OnChanges {
         step: { ...this.step, request: this.formGroup.value },
       })
     );
-    this.router.navigate(['/']);
+    this.router.navigate(['../../'], { relativeTo: this.route });
   }
 }

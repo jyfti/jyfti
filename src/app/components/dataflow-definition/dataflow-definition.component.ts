@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -29,7 +29,8 @@ export class DataflowDefinitionComponent implements OnInit {
   constructor(
     private store: Store<GlobalState>,
     private dataflowFormService: DataFlowFormService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit() {
@@ -55,7 +56,7 @@ export class DataflowDefinitionComponent implements OnInit {
 
   editStep(stepIndex: number) {
     this.store.dispatch(saveDataflow({ dataflow: this.formGroup.value }));
-    this.router.navigate(['/step', stepIndex]);
+    this.router.navigate(['step', stepIndex], { relativeTo: this.route });
   }
 
   removeStep(stepIndex: number) {
