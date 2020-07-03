@@ -19,6 +19,7 @@ import { HttpRequestDetailComponent } from './components/http-request-detail/htt
 import { HttpRequestDetailPageComponent } from './components/http-request-detail-page/http-request-detail-page.component';
 import { MonacoEditorModule } from 'ngx-monaco-editor';
 import { DataflowSelectionComponent } from './components/dataflow-selection/dataflow-selection.component';
+import { DataflowPageComponent } from './components/dataflow-page/dataflow-page.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { DataflowSelectionComponent } from './components/dataflow-selection/data
     HttpRequestDetailComponent,
     HttpRequestDetailPageComponent,
     DataflowSelectionComponent,
+    DataflowPageComponent,
   ],
   imports: [
     BrowserModule,

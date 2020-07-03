@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { select, Store } from '@ngrx/store';
@@ -17,14 +17,13 @@ import { DataFlowFormService } from 'src/app/services/data-flow-form.service';
   templateUrl: './dataflow-definition.component.html',
 })
 export class DataflowDefinitionComponent implements OnInit {
-  formGroup: FormGroup;
+  @Input() formGroup: FormGroup;
+  @Input() execution: any;
+  @Input() evaluations: any;
 
   get steps() {
     return this.formGroup.get('steps') as FormArray;
   }
-
-  execution$: Observable<any>;
-  evaluations$: Observable<any>;
 
   constructor(
     private store: Store<GlobalState>,
@@ -33,18 +32,7 @@ export class DataflowDefinitionComponent implements OnInit {
     private route: ActivatedRoute
   ) {}
 
-  ngOnInit() {
-    this.execution$ = this.store.pipe(select('dataflow', 'execution'));
-    this.store
-      .pipe(
-        select('dataflow', 'dataflow'),
-        map((dataflow) => this.dataflowFormService.createDataFlow(dataflow))
-      )
-      .subscribe((formGroup) => (this.formGroup = formGroup));
-    this.evaluations$ = this.execution$.pipe(
-      map((execution) => execution?.evaluations || {})
-    );
-  }
+  ngOnInit() {}
 
   execute() {
     this.store.dispatch(startExecution({ dataflow: this.formGroup.value }));
