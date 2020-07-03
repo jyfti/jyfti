@@ -42,12 +42,9 @@ const dataflowReducer = createReducer(
       },
     },
   })),
-  on(saveDataflow, (state, { steps }) => ({
+  on(saveDataflow, (state, { dataflow }) => ({
     ...state,
-    dataflow: {
-      ...state.dataflow,
-      steps
-    }
+    dataflow,
   })),
   on(saveStep, (state, { stepIndex, step }) => ({
     ...state,

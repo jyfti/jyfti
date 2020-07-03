@@ -30,7 +30,7 @@ export const finishStepExecution = createAction(
 
 export const saveDataflow = createAction(
   '[Data Flow] Save',
-  props<{ steps: Step[] }>()
+  props<{ dataflow: DataFlow }>()
 );
 
 export const saveStep = createAction(

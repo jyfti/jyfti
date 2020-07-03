@@ -54,8 +54,7 @@ export class DataflowDefinitionComponent implements OnInit {
   }
 
   editStep(stepIndex: number) {
-    const steps = this.formGroup.value['steps'];
-    this.store.dispatch(saveDataflow({ steps }));
+    this.store.dispatch(saveDataflow({ dataflow: this.formGroup.value }));
     this.router.navigate(['/step', stepIndex]);
   }
 
