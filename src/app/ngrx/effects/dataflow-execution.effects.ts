@@ -29,7 +29,7 @@ export class DataFlowExecutionEffects {
         this.dataflowExecutionService
           .request(
             this.dataflowExecutionService.createHttpRequest(
-              action.steps[action.stepIndex].httpRequestTemplate,
+              action.steps[action.stepIndex].request,
               action.variables
             )
           )

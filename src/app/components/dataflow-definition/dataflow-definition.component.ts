@@ -64,7 +64,7 @@ export class DataflowDefinitionComponent implements OnInit {
     this.steps.push(
       this.dataflowFormService.createStep({
         assignTo: 'my_variable',
-        httpRequestTemplate: {
+        request: {
           method: 'GET',
           url: 'http://swapi.dev/api/planets/1/',
         },

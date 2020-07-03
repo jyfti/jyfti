@@ -2,14 +2,14 @@
   "steps": [
     {
       "assignTo": "planet",
-      "httpRequestTemplate": {
+      "request": {
         "method": "GET",
         "url": "http://swapi.dev/api/planets/1/"
       }
     },
     {
       "assignTo": "resident0",
-      "httpRequestTemplate": {
+      "request": {
         "method": "GET",
         "url": "${planet.body.residents[0]}"
       }

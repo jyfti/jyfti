@@ -23,19 +23,19 @@ export class DataFlowFormService {
   createStep(step: Step): FormGroup {
     return this.fb.group({
       assignTo: [step.assignTo],
-      httpRequestTemplate: this.createHttpRequestTemplate(
-        step.httpRequestTemplate
+      request: this.createHttpRequestTemplate(
+        step.request
       ),
     });
   }
 
   createHttpRequestTemplate(
-    httpRequestTemplate: HttpRequestTemplate
+    request: HttpRequestTemplate
   ): FormGroup {
     return this.fb.group({
-      method: [httpRequestTemplate.method],
-      url: [httpRequestTemplate.url],
-      body: [httpRequestTemplate.body],
+      method: [request.method],
+      url: [request.url],
+      body: [request.body],
     });
   }
 }

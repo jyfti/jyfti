@@ -25,9 +25,9 @@ export class HttpRequestDetailComponent implements OnChanges {
   ) {}
 
   ngOnChanges() {
-    if (this.step?.httpRequestTemplate) {
+    if (this.step?.request) {
       this.formGroup = this.dataflowFormService.createHttpRequestTemplate(
-        this.step?.httpRequestTemplate
+        this.step?.request
       );
     }
   }
@@ -36,7 +36,7 @@ export class HttpRequestDetailComponent implements OnChanges {
     this.store.dispatch(
       saveStep({
         stepIndex: this.stepIndex,
-        step: { ...this.step, httpRequestTemplate: this.formGroup.value },
+        step: { ...this.step, request: this.formGroup.value },
       })
     );
     this.router.navigate(['/']);
