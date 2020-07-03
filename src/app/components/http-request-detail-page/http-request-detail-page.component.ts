@@ -5,7 +5,6 @@ import { Observable } from 'rxjs';
 import { map, withLatestFrom, filter, tap } from 'rxjs/operators';
 import { GlobalState } from 'src/app/ngrx/dataflow.state';
 import { HttpRequestStep } from 'src/app/types/step.type';
-import { saveStep } from 'src/app/ngrx/dataflow.actions';
 
 @Component({
   selector: 'app-http-request-detail-page',
@@ -27,7 +26,7 @@ export class HttpRequestDetailPageComponent implements OnInit {
       filter((index) => !!index),
       map(Number)
     );
-    const steps$ = this.store.pipe(select('dataflow', 'steps'));
+    const steps$ = this.store.pipe(select('dataflow', 'dataflow', 'steps'));
     this.step$ = this.stepIndex$.pipe(
       withLatestFrom(steps$, (stepIndex, steps) => steps[stepIndex])
     );

@@ -32,8 +32,8 @@ export class DataflowDefinitionComponent implements OnInit {
     this.execution$ = this.store.pipe(select('dataflow', 'execution'));
     this.store
       .pipe(
-        select('dataflow', 'steps'),
-        map((steps) => this.dataflowFormService.createDataFlow({ steps }))
+        select('dataflow', 'dataflow'),
+        map((dataflow) => this.dataflowFormService.createDataFlow(dataflow))
       )
       .subscribe((formGroup) => (this.formGroup = formGroup));
     this.evaluations$ = this.execution$.pipe(
