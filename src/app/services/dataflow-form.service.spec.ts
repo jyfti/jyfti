@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { DataFlowFormService } from './data-flow-form.service';
+import { DataflowFormService } from './dataflow-form.service';
 
-describe('DataFlowFormService', () => {
-  let service: DataFlowFormService;
+describe('DataflowFormService', () => {
+  let service: DataflowFormService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(DataFlowFormService);
+    service = TestBed.inject(DataflowFormService);
   });
 
   it('should be created', () => {

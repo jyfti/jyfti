@@ -4,7 +4,7 @@ import { ROUTER_NAVIGATION, RouterNavigationAction } from '@ngrx/router-store';
 import { filter, map, switchMap } from 'rxjs/operators';
 import { loadDataflow, saveDataflow } from '../dataflow.actions';
 import { HttpClient } from '@angular/common/http';
-import { DataFlow } from 'src/app/types/data-flow.type';
+import { Dataflow } from 'src/app/types/dataflow.type';
 import {
   loadDataflowPreviews,
   loadedDataflowPreviews,
@@ -32,7 +32,7 @@ export class DataflowRouterEffects {
       switchMap((action) =>
         this.http
           .get(`/assets/dataflows/${action.id}.json`)
-          .pipe(map((dataflow: DataFlow) => saveDataflow({ dataflow })))
+          .pipe(map((dataflow: Dataflow) => saveDataflow({ dataflow })))
       )
     )
   );

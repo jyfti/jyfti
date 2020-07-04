@@ -3,7 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { GlobalState } from 'src/app/ngrx/dataflow.state';
-import { DataFlowFormService } from 'src/app/services/data-flow-form.service';
+import { DataflowFormService } from 'src/app/services/dataflow-form.service';
 import { map } from 'rxjs/operators';
 
 @Component({
@@ -18,7 +18,7 @@ export class DataflowPageComponent implements OnInit {
 
   constructor(
     private store: Store<GlobalState>,
-    private dataflowFormService: DataFlowFormService
+    private dataflowFormService: DataflowFormService
   ) {}
 
   ngOnInit() {

@@ -8,7 +8,7 @@ import {
   startExecution
 } from 'src/app/ngrx/dataflow.actions';
 import { GlobalState } from 'src/app/ngrx/dataflow.state';
-import { DataFlowFormService } from 'src/app/services/data-flow-form.service';
+import { DataflowFormService } from 'src/app/services/dataflow-form.service';
 
 @Component({
   selector: 'app-dataflow-definition',
@@ -25,7 +25,7 @@ export class DataflowDefinitionComponent implements OnInit {
 
   constructor(
     private store: Store<GlobalState>,
-    private dataflowFormService: DataFlowFormService,
+    private dataflowFormService: DataflowFormService,
     private router: Router,
     private route: ActivatedRoute
   ) {}

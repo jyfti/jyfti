@@ -18,7 +18,7 @@ import { HttpRequestComponent } from './components/http-request/http-request.com
 import { HttpStatusBadgeComponent } from './components/http-status-badge/http-status-badge.component';
 import { StepComponent } from './components/step/step.component';
 import { reducer } from './ngrx/dataflow.reducer';
-import { DataFlowExecutionEffects } from './ngrx/effects/dataflow-execution.effects';
+import { DataflowExecutionEffects } from './ngrx/effects/dataflow-execution.effects';
 import { DataflowRouterEffects } from './ngrx/effects/dataflow-router.effects';
 
 @NgModule({
@@ -39,7 +39,7 @@ import { DataflowRouterEffects } from './ngrx/effects/dataflow-router.effects';
     HttpClientModule,
     ReactiveFormsModule,
     StoreModule.forRoot({ dataflow: reducer, router: routerReducer }),
-    EffectsModule.forRoot([DataFlowExecutionEffects, DataflowRouterEffects]),
+    EffectsModule.forRoot([DataflowExecutionEffects, DataflowRouterEffects]),
     StoreDevtoolsModule.instrument({
       maxAge: 25,
     }),

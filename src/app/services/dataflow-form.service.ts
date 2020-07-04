@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
-import { DataFlow } from '../types/data-flow.type';
+import { Dataflow } from '../types/dataflow.type';
 import { Step } from '../types/step.type';
 import { HttpRequestTemplate } from '../types/http-request-template.type';
 
 @Injectable({
   providedIn: 'root',
 })
-export class DataFlowFormService {
+export class DataflowFormService {
   constructor(private fb: FormBuilder) {}
 
-  createDataFlow(dataflow: DataFlow): FormGroup {
+  createDataFlow(dataflow: Dataflow): FormGroup {
     return this.fb.group({
       id: [dataflow.id],
       name: [dataflow.name],

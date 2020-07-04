@@ -1,22 +1,22 @@
-import { DataFlow } from '../types/data-flow.type';
+import { Dataflow } from '../types/dataflow.type';
 import { DataflowPreview } from '../types/dataflow-preview.type';
 import { RouterReducerState } from '@ngrx/router-store';
 
 export class GlobalState {
-  dataflow: DataFlowState;
+  dataflow: DataflowState;
   router: RouterReducerState<any>;
 }
 
-export class DataFlowState {
+export class DataflowState {
   dataflowPreviews: DataflowPreview[];
-  dataflow: DataFlow;
+  dataflow: Dataflow;
   execution: {
     stepIndex: number;
     evaluations: { [stepIndex: number]: any };
   };
 }
 
-export const initialState: DataFlowState = {
+export const initialState: DataflowState = {
   dataflowPreviews: [],
   dataflow: {
     id: '',

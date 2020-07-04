@@ -4,7 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { saveStep } from 'src/app/ngrx/dataflow.actions';
 import { GlobalState } from 'src/app/ngrx/dataflow.state';
-import { DataFlowFormService } from 'src/app/services/data-flow-form.service';
+import { DataflowFormService } from 'src/app/services/dataflow-form.service';
 import { HttpRequestStep } from 'src/app/types/step.type';
 
 @Component({
@@ -22,7 +22,7 @@ export class HttpRequestDetailComponent implements OnChanges {
     private store: Store<GlobalState>,
     private router: Router,
     private route: ActivatedRoute,
-    private dataflowFormService: DataFlowFormService
+    private dataflowFormService: DataflowFormService
   ) {}
 
   ngOnChanges() {

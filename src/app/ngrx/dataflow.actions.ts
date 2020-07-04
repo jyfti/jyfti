@@ -2,11 +2,11 @@ import { createAction, props } from '@ngrx/store';
 
 import { Step } from '../types/step.type';
 import { VariableMap } from '../types/variabe-map.type';
-import { DataFlow } from '../types/data-flow.type';
+import { Dataflow } from '../types/dataflow.type';
 
 export const startExecution = createAction(
   '[Execution] Start',
-  props<{ dataflow: DataFlow }>()
+  props<{ dataflow: Dataflow }>()
 );
 
 export const finishExecution = createAction('[Execution] Finish');
@@ -30,7 +30,7 @@ export const finishStepExecution = createAction(
 
 export const saveDataflow = createAction(
   '[Data Flow] Save',
-  props<{ dataflow: DataFlow }>()
+  props<{ dataflow: Dataflow }>()
 );
 
 export const loadDataflow = createAction(

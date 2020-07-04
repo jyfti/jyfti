@@ -2,20 +2,15 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
 import { catchError, concatMap, map } from 'rxjs/operators';
-import { DataFlowExecutionService } from 'src/app/services/data-flow-execution.service';
+import { DataflowExecutionService } from 'src/app/services/dataflow-execution.service';
 
-import {
-  finishExecution,
-  finishStepExecution,
-  startExecution,
-  startStepExecution,
-} from '../dataflow.actions';
+import { finishExecution, finishStepExecution, startExecution, startStepExecution } from '../dataflow.actions';
 
 @Injectable()
-export class DataFlowExecutionEffects {
+export class DataflowExecutionEffects {
   constructor(
     private actions$: Actions,
-    private dataflowExecutionService: DataFlowExecutionService
+    private dataflowExecutionService: DataflowExecutionService
   ) {}
 
   startExecution$ = createEffect(() =>
