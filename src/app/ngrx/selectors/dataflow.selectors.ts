@@ -12,10 +12,8 @@ export const selectCachedDataflowId = (state: GlobalState): string =>
 export const selectActiveDataflowId = (state: GlobalState): string =>
   state.dataflow.dataflowId;
 
-export const selectStepIndex = createSelector(
-  selectRouteParam('index'),
-  (index) => Number(index)
-);
+export const selectStepIndex = (state: GlobalState): number =>
+  state.dataflow.stepIndex;
 
 export const selectStep = createSelector(
   selectSteps,
