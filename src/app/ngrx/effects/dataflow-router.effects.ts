@@ -1,25 +1,40 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { ROUTER_NAVIGATION, RouterNavigationAction } from '@ngrx/router-store';
-import { filter, map, switchMap, flatMap } from 'rxjs/operators';
+import { RouterNavigationAction, ROUTER_NAVIGATION } from '@ngrx/router-store';
+import { select, Store } from '@ngrx/store';
+import { of } from 'rxjs';
+import {
+  filter,
+
+
+  flatMap, map,
+  switchMap,
+
+  withLatestFrom
+} from 'rxjs/operators';
+import { DataflowPreview } from 'src/app/types/dataflow-preview.type';
+import { Dataflow } from 'src/app/types/dataflow.type';
+import {
+  loadDataflowPreviews,
+  loadedDataflowPreviews
+} from '../dataflow-preview.actions';
 import {
   loadDataflow,
   loadedDataflow,
   loadStep,
-  showDataflow,
+  showDataflow
 } from '../dataflow.actions';
-import { HttpClient } from '@angular/common/http';
-import { Dataflow } from 'src/app/types/dataflow.type';
-import {
-  loadDataflowPreviews,
-  loadedDataflowPreviews,
-} from '../dataflow-preview.actions';
-import { DataflowPreview } from 'src/app/types/dataflow-preview.type';
-import { of } from 'rxjs';
+import { GlobalState } from '../dataflow.state';
+import { selectCachedDataflowId } from '../selectors/dataflow.selectors';
 
 @Injectable()
 export class DataflowRouterEffects {
-  constructor(private actions$: Actions, private http: HttpClient) {}
+  constructor(
+    private actions$: Actions,
+    private store: Store<GlobalState>,
+    private http: HttpClient
+  ) {}
 
   onNavigationToDataflow$ = createEffect(() =>
     this.actions$.pipe(
@@ -37,7 +52,17 @@ export class DataflowRouterEffects {
   showDataflow$ = createEffect(() =>
     this.actions$.pipe(
       ofType(showDataflow),
-      map((action) => loadDataflow({ id: action.id }))
+      flatMap((action) =>
+        of(action.id).pipe(
+          withLatestFrom(
+            this.store.pipe(select(selectCachedDataflowId)),
+            (newDataflowId, currentDataflowId) =>
+              newDataflowId !== currentDataflowId
+          ),
+          filter((loadRequired) => loadRequired),
+          map(() => loadDataflow({ id: action.id }))
+        )
+      )
     )
   );
 
