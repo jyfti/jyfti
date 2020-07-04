@@ -7,9 +7,8 @@ import { initialState } from './dataflow.state';
 
 const dataflowReducer = createReducer(
   initialState,
-  on(startExecution, (state, { dataflow }) => ({
+  on(startExecution, (state) => ({
     ...state,
-    dataflow,
     execution: {
       stepIndex: null,
       evaluations: {},
