@@ -12,10 +12,6 @@ export class DataflowState {
   dataflow: Dataflow;
   dataflowId: string;
   stepIndex: number;
-  execution: {
-    stepIndex: number;
-    evaluations: { [stepIndex: number]: any };
-  };
 }
 
 export const initialState: DataflowState = {
@@ -27,5 +23,4 @@ export const initialState: DataflowState = {
   },
   dataflowId: '',
   stepIndex: 0,
-  execution: null,
 };
