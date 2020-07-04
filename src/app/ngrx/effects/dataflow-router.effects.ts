@@ -5,12 +5,17 @@ import { filter, map, switchMap } from 'rxjs/operators';
 import { loadDataflow, saveDataflow } from '../dataflow.actions';
 import { HttpClient } from '@angular/common/http';
 import { DataFlow } from 'src/app/types/data-flow.type';
+import {
+  loadDataflowPreviews,
+  loadedDataflowPreviews,
+} from '../dataflow-preview.actions';
+import { DataflowPreview } from 'src/app/types/dataflow-preview.type';
 
 @Injectable()
 export class DataflowRouterEffects {
   constructor(private actions$: Actions, private http: HttpClient) {}
 
-  route$ = createEffect(() =>
+  onNavigationToDataflow$ = createEffect(() =>
     this.actions$.pipe(
       ofType(ROUTER_NAVIGATION),
       filter((action: RouterNavigationAction) =>
@@ -28,6 +33,34 @@ export class DataflowRouterEffects {
         this.http
           .get(`/assets/dataflows/${action.id}.json`)
           .pipe(map((dataflow: DataFlow) => saveDataflow({ dataflow })))
+      )
+    )
+  );
+
+  onNavigationToDataflowSelection$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(ROUTER_NAVIGATION),
+      filter(
+        (action: RouterNavigationAction) =>
+          action.payload.routerState.url === '/'
+      ),
+      map(() =>
+        loadDataflowPreviews({ indexUrl: '/assets/dataflows/index.json' })
+      )
+    )
+  );
+
+  loadDataflowPreviews$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(loadDataflowPreviews),
+      switchMap((action) =>
+        this.http
+          .get(action.indexUrl)
+          .pipe(
+            map((dataflowPreviews: DataflowPreview[]) =>
+              loadedDataflowPreviews({ dataflowPreviews })
+            )
+          )
       )
     )
   );

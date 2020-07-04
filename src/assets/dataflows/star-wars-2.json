@@ -1,0 +1,20 @@
+{
+  "id": "star-wars-2",
+  "name": "Get some other Star Wars planets",
+  "steps": [
+    {
+      "assignTo": "planet",
+      "request": {
+        "method": "GET",
+        "url": "http://swapi.dev/api/planets/2/"
+      }
+    },
+    {
+      "assignTo": "resident0",
+      "request": {
+        "method": "GET",
+        "url": "${planet.body.residents[0]}"
+      }
+    }
+  ]
+}
