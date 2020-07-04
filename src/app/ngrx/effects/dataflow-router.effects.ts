@@ -4,7 +4,7 @@ import { ROUTER_NAVIGATION, RouterNavigationAction } from '@ngrx/router-store';
 import { filter, map, switchMap, flatMap } from 'rxjs/operators';
 import {
   loadDataflow,
-  saveDataflow,
+  loadedDataflow,
   loadStep,
   showDataflow,
 } from '../dataflow.actions';
@@ -47,7 +47,7 @@ export class DataflowRouterEffects {
       switchMap((action) =>
         this.http
           .get(`/assets/dataflows/${action.id}.json`)
-          .pipe(map((dataflow: Dataflow) => saveDataflow({ dataflow })))
+          .pipe(map((dataflow: Dataflow) => loadedDataflow({ dataflow })))
       )
     )
   );

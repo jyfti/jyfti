@@ -28,8 +28,8 @@ export const finishStepExecution = createAction(
   }>()
 );
 
-export const saveDataflow = createAction(
-  '[Data Flow] Save',
+export const loadedDataflow = createAction(
+  '[Data Flow] Loaded',
   props<{ dataflow: Dataflow }>()
 );
 

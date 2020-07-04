@@ -7,7 +7,7 @@ import {
 
 
   loadStep, resetExecution,
-  saveDataflow,
+  loadedDataflow,
   saveStep,
 
 
@@ -48,7 +48,7 @@ const dataflowReducer = createReducer(
       },
     },
   })),
-  on(saveDataflow, (state, { dataflow }) => ({
+  on(loadedDataflow, (state, { dataflow }) => ({
     ...state,
     dataflow,
   })),

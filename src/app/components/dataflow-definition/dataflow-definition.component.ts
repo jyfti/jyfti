@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import {
   resetExecution,
-  saveDataflow,
+  loadedDataflow,
   startExecution,
 } from 'src/app/ngrx/dataflow.actions';
 import { GlobalState } from 'src/app/ngrx/dataflow.state';
@@ -52,7 +52,7 @@ export class DataflowDefinitionComponent implements OnInit {
   }
 
   editStep(formGroup: FormGroup, stepIndex: number) {
-    this.store.dispatch(saveDataflow({ dataflow: formGroup.value }));
+    this.store.dispatch(loadedDataflow({ dataflow: formGroup.value }));
     this.router.navigate(['step', stepIndex], { relativeTo: this.route });
   }
 
