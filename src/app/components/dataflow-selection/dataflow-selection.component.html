@@ -1,5 +1,9 @@
 <div class="grid grid-cols-3 gap-4">
-  <div *ngFor="let dataflowPreview of dataflowPreviews$ | async" class="p-4 bg-gray-400">
+  <div
+    *ngFor="let dataflowPreview of dataflowPreviews$ | async"
+    class="p-4 bg-gray-400 hover:bg-gray-500 cursor-pointer"
+    (click)="navigateToDataflow(dataflowPreview.id)"
+  >
     {{ dataflowPreview.id }}
   </div>
 </div>
