@@ -1,11 +1,23 @@
-<app-http-request [formGroup]="formGroup"></app-http-request>
+<ng-container *ngIf="formGroup$ | async as formGroup">
+  <app-http-request [formGroup]="formGroup.get('request')"></app-http-request>
 
-<div *ngIf="formGroup.get('method').value != 'GET'" class="my-4 border border-gray-400" [formGroup]="formGroup">
-  <ngx-monaco-editor [options]="{ language: 'json' }" formControlName="body"></ngx-monaco-editor>
-</div>
+  <div
+    *ngIf="formGroup.get('request').get('method').value != 'GET'"
+    class="my-4 border border-gray-400"
+    [formGroup]="formGroup.get('request')"
+  >
+    <ngx-monaco-editor
+      [options]="{ language: 'json' }"
+      formControlName="body"
+    ></ngx-monaco-editor>
+  </div>
 
-<div class="flex justify-end mt-2">
-  <button class="p-4 bg-blue-500 hover:bg-blue-600 text-white" (click)="save()">
-    Save
-  </button>
-</div>
+  <div class="flex justify-end mt-2">
+    <button
+      class="p-4 bg-blue-500 hover:bg-blue-600 text-white"
+      (click)="save(formGroup)"
+    >
+      Save
+    </button>
+  </div>
+</ng-container>

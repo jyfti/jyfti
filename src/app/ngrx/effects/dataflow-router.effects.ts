@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { ROUTER_NAVIGATION, RouterNavigationAction } from '@ngrx/router-store';
-import { filter, map, switchMap } from 'rxjs/operators';
-import { loadDataflow, saveDataflow } from '../dataflow.actions';
+import { filter, map, switchMap, flatMap } from 'rxjs/operators';
+import { loadDataflow, saveDataflow, loadStep } from '../dataflow.actions';
 import { HttpClient } from '@angular/common/http';
 import { Dataflow } from 'src/app/types/dataflow.type';
 import {
@@ -10,6 +10,7 @@ import {
   loadedDataflowPreviews,
 } from '../dataflow-preview.actions';
 import { DataflowPreview } from 'src/app/types/dataflow-preview.type';
+import { of } from 'rxjs';
 
 @Injectable()
 export class DataflowRouterEffects {
@@ -18,10 +19,12 @@ export class DataflowRouterEffects {
   onNavigationToDataflow$ = createEffect(() =>
     this.actions$.pipe(
       ofType(ROUTER_NAVIGATION),
-      filter((action: RouterNavigationAction) =>
-        action.payload.routerState.url.startsWith('/dataflow')
+      map(
+        (action: RouterNavigationAction) =>
+          action.payload.routerState.root.firstChild
       ),
-      map((action) => action.payload.routerState.root.firstChild.params['id']),
+      filter((firstChild) => firstChild.routeConfig.path === 'dataflow/:id'),
+      map((firstChild) => firstChild.params['id']),
       map((id) => loadDataflow({ id }))
     )
   );
@@ -61,6 +64,27 @@ export class DataflowRouterEffects {
               loadedDataflowPreviews({ dataflowPreviews })
             )
           )
+      )
+    )
+  );
+
+  onNavigationToStep$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(ROUTER_NAVIGATION),
+      map(
+        (action: RouterNavigationAction) =>
+          action.payload.routerState.root.firstChild
+      ),
+      filter(
+        (firstChild) =>
+          firstChild.routeConfig.path === 'dataflow/:id/step/:index'
+      ),
+      map((firstChild) => firstChild.params),
+      flatMap((params) =>
+        of(
+          loadDataflow({ id: params['id'] }),
+          loadStep({ stepIndex: Number(params['index']) })
+        )
       )
     )
   );

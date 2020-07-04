@@ -11,7 +11,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './components/app/app.component';
 import { DataflowDefinitionComponent } from './components/dataflow-definition/dataflow-definition.component';
 import { DataflowSelectionComponent } from './components/dataflow-selection/dataflow-selection.component';
-import { HttpRequestDetailPageComponent } from './components/http-request-detail-page/http-request-detail-page.component';
 import { HttpRequestDetailComponent } from './components/http-request-detail/http-request-detail.component';
 import { HttpRequestComponent } from './components/http-request/http-request.component';
 import { HttpStatusBadgeComponent } from './components/http-status-badge/http-status-badge.component';
@@ -28,7 +27,6 @@ import { DataflowRouterEffects } from './ngrx/effects/dataflow-router.effects';
     StepComponent,
     HttpStatusBadgeComponent,
     HttpRequestDetailComponent,
-    HttpRequestDetailPageComponent,
     DataflowSelectionComponent,
   ],
   imports: [

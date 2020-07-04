@@ -7,13 +7,11 @@ import {
   resetExecution,
   saveDataflow,
   saveStep,
+  loadStep,
 } from './dataflow.actions';
 import { initialState } from './dataflow.state';
 import { set } from 'lodash/fp';
-import {
-  loadDataflowPreviews,
-  loadedDataflowPreviews,
-} from './dataflow-preview.actions';
+import { loadedDataflowPreviews } from './dataflow-preview.actions';
 
 const dataflowReducer = createReducer(
   initialState,
@@ -50,12 +48,16 @@ const dataflowReducer = createReducer(
     ...state,
     dataflow,
   })),
-  on(saveStep, (state, { stepIndex, step }) => ({
+  on(saveStep, (state, { step }) => ({
     ...state,
     dataflow: {
       ...state.dataflow,
-      steps: set(stepIndex, step)(state.dataflow.steps),
+      steps: set(state.stepIndex, step)(state.dataflow.steps),
     },
+  })),
+  on(loadStep, (state, { stepIndex }) => ({
+    ...state,
+    stepIndex,
   })),
   on(loadedDataflowPreviews, (state, { dataflowPreviews }) => ({
     ...state,

@@ -1,22 +1,21 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
-import { Store } from '@ngrx/store';
+import { ActivatedRoute, Router } from '@angular/router';
+import { select, Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { map, filter } from 'rxjs/operators';
 import { saveStep } from 'src/app/ngrx/dataflow.actions';
 import { GlobalState } from 'src/app/ngrx/dataflow.state';
+import { selectStep } from 'src/app/ngrx/selectors/dataflow.selectors';
 import { DataflowFormService } from 'src/app/services/dataflow-form.service';
-import { HttpRequestStep } from 'src/app/types/step.type';
 
 @Component({
   selector: 'app-http-request-detail',
   templateUrl: './http-request-detail.component.html',
   styles: [],
 })
-export class HttpRequestDetailComponent implements OnChanges {
-  @Input() stepIndex: number;
-  @Input() step: HttpRequestStep;
-
-  formGroup: FormGroup;
+export class HttpRequestDetailComponent implements OnInit {
+  formGroup$: Observable<FormGroup>;
 
   constructor(
     private store: Store<GlobalState>,
@@ -25,19 +24,18 @@ export class HttpRequestDetailComponent implements OnChanges {
     private dataflowFormService: DataflowFormService
   ) {}
 
-  ngOnChanges() {
-    if (this.step?.request) {
-      this.formGroup = this.dataflowFormService.createHttpRequestTemplate(
-        this.step?.request
-      );
-    }
+  ngOnInit() {
+    this.formGroup$ = this.store.pipe(
+      select(selectStep),
+      filter(step => !!step),
+      map((step) => this.dataflowFormService.createStep(step))
+    );
   }
 
-  save() {
+  save(formGroup: FormGroup) {
     this.store.dispatch(
       saveStep({
-        stepIndex: this.stepIndex,
-        step: { ...this.step, request: this.formGroup.value },
+        step: formGroup.value,
       })
     );
     this.router.navigate(['../../'], { relativeTo: this.route });

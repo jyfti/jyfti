@@ -40,5 +40,10 @@ export const loadDataflow = createAction(
 
 export const saveStep = createAction(
   '[Data Flow] Save step',
-  props<{ stepIndex: number; step: Step }>()
+  props<{ step: Step }>()
+);
+
+export const loadStep = createAction(
+  '[Data Flow] Load step',
+  props<{ stepIndex: number }>()
 );
