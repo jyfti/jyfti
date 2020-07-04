@@ -5,7 +5,7 @@ import { loadedDataflowPreviews } from './dataflow-preview.actions';
 import { loadedDataflow, loadStep, saveStep, showDataflow } from './dataflow.actions';
 import { initialState } from './dataflow.state';
 
-const dataflowReducer = createReducer(
+const _dataflowReducer = createReducer(
   initialState,
   on(startExecution, (state) => ({
     ...state,
@@ -60,6 +60,6 @@ const dataflowReducer = createReducer(
   }))
 );
 
-export function reducer(state, action) {
-  return dataflowReducer(state, action);
+export function dataflowReducer(state, action) {
+  return _dataflowReducer(state, action);
 }

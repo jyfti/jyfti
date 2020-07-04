@@ -15,9 +15,10 @@ import { HttpRequestDetailComponent } from './components/http-request-detail/htt
 import { HttpRequestComponent } from './components/http-request/http-request.component';
 import { HttpStatusBadgeComponent } from './components/http-status-badge/http-status-badge.component';
 import { StepComponent } from './components/step/step.component';
-import { reducer } from './ngrx/dataflow.reducer';
 import { DataflowExecutionEffects } from './ngrx/effects/dataflow-execution.effects';
 import { DataflowRouterEffects } from './ngrx/effects/dataflow-router.effects';
+import { dataflowReducer } from './ngrx/dataflow.reducer';
+import { ExecutionModule } from './execution/execution.module';
 
 @NgModule({
   declarations: [
@@ -34,13 +35,14 @@ import { DataflowRouterEffects } from './ngrx/effects/dataflow-router.effects';
     AppRoutingModule,
     HttpClientModule,
     ReactiveFormsModule,
-    StoreModule.forRoot({ dataflow: reducer, router: routerReducer }),
+    StoreModule.forRoot({ dataflow: dataflowReducer, router: routerReducer }),
     EffectsModule.forRoot([DataflowExecutionEffects, DataflowRouterEffects]),
     StoreDevtoolsModule.instrument({
       maxAge: 25,
     }),
     StoreRouterConnectingModule.forRoot(),
     MonacoEditorModule.forRoot(),
+    ExecutionModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
