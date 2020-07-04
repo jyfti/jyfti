@@ -2,7 +2,12 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { ROUTER_NAVIGATION, RouterNavigationAction } from '@ngrx/router-store';
 import { filter, map, switchMap, flatMap } from 'rxjs/operators';
-import { loadDataflow, saveDataflow, loadStep } from '../dataflow.actions';
+import {
+  loadDataflow,
+  saveDataflow,
+  loadStep,
+  showDataflow,
+} from '../dataflow.actions';
 import { HttpClient } from '@angular/common/http';
 import { Dataflow } from 'src/app/types/dataflow.type';
 import {
@@ -25,7 +30,14 @@ export class DataflowRouterEffects {
       ),
       filter((firstChild) => firstChild.routeConfig.path === 'dataflow/:id'),
       map((firstChild) => firstChild.params['id']),
-      map((id) => loadDataflow({ id }))
+      map((id) => showDataflow({ id }))
+    )
+  );
+
+  showDataflow$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(showDataflow),
+      map((action) => loadDataflow({ id: action.id }))
     )
   );
 

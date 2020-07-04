@@ -1,18 +1,21 @@
 import { createReducer, on } from '@ngrx/store';
-
-import {
-  startExecution,
-  startStepExecution,
-  finishStepExecution,
-  resetExecution,
-  saveDataflow,
-  saveStep,
-  loadStep,
-  loadDataflow,
-} from './dataflow.actions';
-import { initialState } from './dataflow.state';
 import { set } from 'lodash/fp';
 import { loadedDataflowPreviews } from './dataflow-preview.actions';
+import {
+  finishStepExecution,
+
+
+
+  loadStep, resetExecution,
+  saveDataflow,
+  saveStep,
+
+
+  showDataflow, startExecution,
+  startStepExecution
+} from './dataflow.actions';
+import { initialState } from './dataflow.state';
+
 
 const dataflowReducer = createReducer(
   initialState,
@@ -56,7 +59,7 @@ const dataflowReducer = createReducer(
       steps: set(state.stepIndex, step)(state.dataflow.steps),
     },
   })),
-  on(loadDataflow, (state, { id }) => ({
+  on(showDataflow, (state, { id }) => ({
     ...state,
     dataflowId: id,
   })),

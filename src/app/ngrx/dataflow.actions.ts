@@ -33,6 +33,11 @@ export const saveDataflow = createAction(
   props<{ dataflow: Dataflow }>()
 );
 
+export const showDataflow = createAction(
+  '[Data Flow] Show',
+  props<{ id: string }>()
+);
+
 export const loadDataflow = createAction(
   '[Data Flow] Load',
   props<{ id: string }>()
