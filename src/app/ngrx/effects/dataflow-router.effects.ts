@@ -6,11 +6,9 @@ import { select, Store } from '@ngrx/store';
 import { of } from 'rxjs';
 import {
   filter,
-
-
-  flatMap, map,
+  flatMap,
+  map,
   switchMap,
-
   withLatestFrom
 } from 'rxjs/operators';
 import { DataflowPreview } from 'src/app/types/dataflow-preview.type';

@@ -3,8 +3,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
 import { catchError, concatMap, map } from 'rxjs/operators';
 import { DataflowExecutionService } from 'src/app/services/dataflow-execution.service';
-
-import { finishExecution, finishStepExecution, startExecution, startStepExecution } from '../dataflow.actions';
+import { startExecution, startStepExecution, finishStepExecution, finishExecution } from '../dataflow-execution.actions';
 
 @Injectable()
 export class DataflowExecutionEffects {

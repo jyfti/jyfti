@@ -1,7 +1,6 @@
 import { GlobalState } from '../dataflow.state';
 import { Step } from 'src/app/types/step.type';
 import { createSelector } from '@ngrx/store';
-import { selectRouteParam } from './router.selectors';
 
 export const selectSteps = (state: GlobalState): Step[] =>
   state.dataflow.dataflow.steps;
