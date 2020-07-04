@@ -1,26 +1,28 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import {
   resetExecution,
   saveDataflow,
-  startExecution
+  startExecution,
 } from 'src/app/ngrx/dataflow.actions';
 import { GlobalState } from 'src/app/ngrx/dataflow.state';
 import { DataflowFormService } from 'src/app/services/dataflow-form.service';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-dataflow-definition',
   templateUrl: './dataflow-definition.component.html',
 })
 export class DataflowDefinitionComponent implements OnInit {
-  @Input() formGroup: FormGroup;
-  @Input() execution: any;
-  @Input() evaluations: any;
+  formGroup$: Observable<FormGroup>;
+  execution$: Observable<any>;
+  evaluations$: Observable<any>;
 
-  get steps() {
-    return this.formGroup.get('steps') as FormArray;
+  steps(formGroup) {
+    return formGroup.get('steps') as FormArray;
   }
 
   constructor(
@@ -30,27 +32,36 @@ export class DataflowDefinitionComponent implements OnInit {
     private route: ActivatedRoute
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.execution$ = this.store.pipe(select('dataflow', 'execution'));
+    this.formGroup$ = this.store.pipe(
+      select('dataflow', 'dataflow'),
+      map((dataflow) => this.dataflowFormService.createDataFlow(dataflow))
+    );
+    this.evaluations$ = this.execution$.pipe(
+      map((execution) => execution?.evaluations || {})
+    );
+  }
 
-  execute() {
-    this.store.dispatch(startExecution({ dataflow: this.formGroup.value }));
+  execute(formGroup: FormGroup) {
+    this.store.dispatch(startExecution({ dataflow: formGroup.value }));
   }
 
   clearExecution() {
     this.store.dispatch(resetExecution());
   }
 
-  editStep(stepIndex: number) {
-    this.store.dispatch(saveDataflow({ dataflow: this.formGroup.value }));
+  editStep(formGroup: FormGroup, stepIndex: number) {
+    this.store.dispatch(saveDataflow({ dataflow: formGroup.value }));
     this.router.navigate(['step', stepIndex], { relativeTo: this.route });
   }
 
-  removeStep(stepIndex: number) {
-    this.steps.removeAt(stepIndex);
+  removeStep(formGroup: FormGroup, stepIndex: number) {
+    this.steps(formGroup).removeAt(stepIndex);
   }
 
-  addStep() {
-    this.steps.push(
+  addStep(formGroup: FormGroup) {
+    this.steps(formGroup).push(
       this.dataflowFormService.createStep({
         assignTo: 'my_variable',
         request: {

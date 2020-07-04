@@ -10,7 +10,6 @@ import { MonacoEditorModule } from 'ngx-monaco-editor';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './components/app/app.component';
 import { DataflowDefinitionComponent } from './components/dataflow-definition/dataflow-definition.component';
-import { DataflowPageComponent } from './components/dataflow-page/dataflow-page.component';
 import { DataflowSelectionComponent } from './components/dataflow-selection/dataflow-selection.component';
 import { HttpRequestDetailPageComponent } from './components/http-request-detail-page/http-request-detail-page.component';
 import { HttpRequestDetailComponent } from './components/http-request-detail/http-request-detail.component';
@@ -31,7 +30,6 @@ import { DataflowRouterEffects } from './ngrx/effects/dataflow-router.effects';
     HttpRequestDetailComponent,
     HttpRequestDetailPageComponent,
     DataflowSelectionComponent,
-    DataflowPageComponent,
   ],
   imports: [
     BrowserModule,
