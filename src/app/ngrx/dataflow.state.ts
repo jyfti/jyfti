@@ -10,6 +10,7 @@ export class GlobalState {
 export class DataflowState {
   dataflowPreviews: DataflowPreview[];
   dataflow: Dataflow;
+  dataflowId: string;
   stepIndex: number;
   execution: {
     stepIndex: number;
@@ -24,6 +25,7 @@ export const initialState: DataflowState = {
     name: '',
     steps: [],
   },
+  dataflowId: '',
   stepIndex: 0,
   execution: null,
 };

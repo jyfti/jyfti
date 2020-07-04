@@ -8,6 +8,7 @@ import {
   saveDataflow,
   saveStep,
   loadStep,
+  loadDataflow,
 } from './dataflow.actions';
 import { initialState } from './dataflow.state';
 import { set } from 'lodash/fp';
@@ -54,6 +55,10 @@ const dataflowReducer = createReducer(
       ...state.dataflow,
       steps: set(state.stepIndex, step)(state.dataflow.steps),
     },
+  })),
+  on(loadDataflow, (state, { id }) => ({
+    ...state,
+    dataflowId: id,
   })),
   on(loadStep, (state, { stepIndex }) => ({
     ...state,
