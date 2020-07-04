@@ -8,6 +8,7 @@ import { GlobalState } from 'src/app/ngrx/dataflow.state';
 import { DataflowFormService } from 'src/app/services/dataflow-form.service';
 import { startExecution, resetExecution } from 'src/app/ngrx/dataflow-execution.actions';
 import { loadedDataflow } from 'src/app/ngrx/dataflow.actions';
+import { selectExecution } from 'src/app/execution/execution.reducer';
 
 @Component({
   selector: 'app-dataflow-definition',
@@ -30,7 +31,7 @@ export class DataflowDefinitionComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.execution$ = this.store.pipe(select('dataflow', 'execution'));
+    this.execution$ = this.store.pipe(select(selectExecution));
     this.formGroup$ = this.store.pipe(
       select('dataflow', 'dataflow'),
       map((dataflow) => this.dataflowFormService.createDataFlow(dataflow))

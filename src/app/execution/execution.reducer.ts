@@ -1,10 +1,12 @@
-import { createReducer, on } from '@ngrx/store';
+import { createReducer, on, createFeatureSelector } from '@ngrx/store';
 import {
   finishStepExecution,
   resetExecution,
   startExecution,
   startStepExecution,
 } from '../ngrx/dataflow-execution.actions';
+
+export const selectExecution = createFeatureSelector('execution');
 
 export class ExecutionState {
   stepIndex: number;
