@@ -9,22 +9,23 @@ import {
   flatMap,
   map,
   switchMap,
-  withLatestFrom
+  withLatestFrom,
 } from 'rxjs/operators';
 import { DataflowPreview } from 'src/app/types/dataflow-preview.type';
 import { Dataflow } from 'src/app/types/dataflow.type';
 import {
   loadDataflowPreviews,
-  loadedDataflowPreviews
+  loadedDataflowPreviews,
 } from '../dataflow-preview.actions';
 import {
   loadDataflow,
   loadedDataflow,
   loadStep,
-  showDataflow
+  showDataflow,
 } from '../dataflow.actions';
 import { GlobalState } from '../dataflow.state';
 import { selectCachedDataflowId } from '../selectors/dataflow.selectors';
+import { resetExecution } from '../dataflow-execution.actions';
 
 @Injectable()
 export class DataflowRouterEffects {
@@ -58,7 +59,7 @@ export class DataflowRouterEffects {
               newDataflowId !== currentDataflowId
           ),
           filter((loadRequired) => loadRequired),
-          map(() => loadDataflow({ id: action.id }))
+          flatMap(() => of(loadDataflow({ id: action.id }), resetExecution()))
         )
       )
     )
