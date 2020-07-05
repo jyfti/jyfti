@@ -22,17 +22,28 @@ export class DataflowFormService {
   }
 
   createStep(step: Step): FormGroup {
+    const content = this.createStepContent(step);
     return this.fb.group({
       assignTo: [step.assignTo],
-      request: this.createHttpRequestTemplate(
-        step.request
-      ),
+      [content.type]: content.formGroup,
     });
   }
 
-  createHttpRequestTemplate(
-    request: HttpRequestTemplate
-  ): FormGroup {
+  createStepContent(step: Step): { type: string; formGroup: FormGroup } {
+    if (step?.request) {
+      return {
+        type: 'request',
+        formGroup: this.createHttpRequestTemplate(step.request),
+      };
+    } else if (step?.expression) {
+      return {
+        type: 'expression',
+        formGroup: this.fb.group({}),
+      };
+    }
+  }
+
+  createHttpRequestTemplate(request: HttpRequestTemplate): FormGroup {
     return this.fb.group({
       method: [request.method],
       url: [request.url],

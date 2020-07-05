@@ -4,5 +4,6 @@ export type Step = HttpRequestStep;
 
 export interface HttpRequestStep {
   assignTo: string;
-  request: HttpRequestTemplate;
+  request?: HttpRequestTemplate;
+  expression?: any;
 }

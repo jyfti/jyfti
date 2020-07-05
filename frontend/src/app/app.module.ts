@@ -19,6 +19,7 @@ import { DataflowRouterEffects } from './ngrx/effects/dataflow-router.effects';
 import { dataflowReducer } from './ngrx/dataflow.reducer';
 import { ExecutionModule } from './execution/execution.module';
 import { DataflowPersistenceEffects } from './ngrx/effects/dataflow-persistence.effects';
+import { JsonEEvaluationComponent } from './components/json-e-evaluation/json-e-evaluation.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { DataflowPersistenceEffects } from './ngrx/effects/dataflow-persistence.
     HttpStatusBadgeComponent,
     HttpRequestDetailComponent,
     DataflowSelectionComponent,
+    JsonEEvaluationComponent,
   ],
   imports: [
     BrowserModule,
