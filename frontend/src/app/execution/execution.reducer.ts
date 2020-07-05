@@ -9,7 +9,6 @@ import {
 export const selectExecution = createFeatureSelector('execution');
 
 export class ExecutionState {
-  dataflowId: string;
   stepIndex: number;
   evaluations: { [stepIndex: number]: any };
 }
@@ -18,8 +17,7 @@ export const initialState: ExecutionState = null;
 
 const _executionReducer = createReducer(
   initialState,
-  on(startExecution, (state, { dataflow }) => ({
-    dataflowId: dataflow.id,
+  on(startExecution, (state) => ({
     stepIndex: null,
     evaluations: {},
   })),

@@ -5,9 +5,6 @@ import { createSelector } from '@ngrx/store';
 export const selectSteps = (state: GlobalState): Step[] =>
   state.dataflow.dataflow.steps;
 
-export const selectCachedDataflowId = (state: GlobalState): string =>
-  state.dataflow.dataflow.id;
-
 export const selectActiveDataflowId = (state: GlobalState): string =>
   state.dataflow.dataflowId;
 

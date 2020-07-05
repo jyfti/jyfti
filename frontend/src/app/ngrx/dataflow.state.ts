@@ -17,7 +17,6 @@ export class DataflowState {
 export const initialState: DataflowState = {
   dataflowPreviews: [],
   dataflow: {
-    id: '',
     name: '',
     steps: [],
   },

@@ -4,12 +4,12 @@ import { RouterNavigationAction, ROUTER_NAVIGATION } from '@ngrx/router-store';
 import { select, Store } from '@ngrx/store';
 import { of } from 'rxjs';
 import { filter, flatMap, map, withLatestFrom } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 import { resetExecution } from '../dataflow-execution.actions';
 import { loadDataflowPreviews } from '../dataflow-preview.actions';
 import { loadDataflow, loadStep, showDataflow } from '../dataflow.actions';
 import { GlobalState } from '../dataflow.state';
-import { selectCachedDataflowId } from '../selectors/dataflow.selectors';
-import { environment } from 'src/environments/environment';
+import { selectActiveDataflowId } from '../selectors/dataflow.selectors';
 
 @Injectable()
 export class DataflowRouterEffects {
@@ -24,22 +24,18 @@ export class DataflowRouterEffects {
       ),
       filter((firstChild) => firstChild.routeConfig.path === 'dataflow/:id'),
       map((firstChild) => firstChild.params['id']),
-      map((id) => showDataflow({ id }))
-    )
-  );
-
-  showDataflow$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(showDataflow),
-      flatMap((action) =>
-        of(action.id).pipe(
+      flatMap((id) =>
+        of(id).pipe(
           withLatestFrom(
-            this.store.pipe(select(selectCachedDataflowId)),
+            this.store.pipe(select(selectActiveDataflowId)),
             (newDataflowId, currentDataflowId) =>
               newDataflowId !== currentDataflowId
           ),
-          filter((loadRequired) => loadRequired),
-          flatMap(() => of(loadDataflow({ id: action.id }), resetExecution()))
+          flatMap((loadRequired) =>
+            loadRequired
+              ? of(loadDataflow({ id }), resetExecution())
+              : of(showDataflow({ id }))
+          )
         )
       )
     )
