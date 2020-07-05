@@ -5,14 +5,18 @@
       "assignTo": "planet",
       "request": {
         "method": "GET",
-        "url": "http://swapi.dev/api/planets/1/"
+        "url": "http://swapi.dev/api/planets/1/",
+        "body": null,
+        "headers": null
       }
     },
     {
       "assignTo": "resident0",
       "request": {
         "method": "GET",
-        "url": "${planet.body.residents[0]}"
+        "url": "${planet.body.residents[0]}",
+        "body": null,
+        "headers": null
       }
     }
   ]

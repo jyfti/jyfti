@@ -18,6 +18,7 @@ import { StepComponent } from './components/step/step.component';
 import { DataflowRouterEffects } from './ngrx/effects/dataflow-router.effects';
 import { dataflowReducer } from './ngrx/dataflow.reducer';
 import { ExecutionModule } from './execution/execution.module';
+import { DataflowPersistenceEffects } from './ngrx/effects/dataflow-persistence.effects';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,7 @@ import { ExecutionModule } from './execution/execution.module';
     HttpClientModule,
     ReactiveFormsModule,
     StoreModule.forRoot({ dataflow: dataflowReducer, router: routerReducer }),
-    EffectsModule.forRoot([DataflowRouterEffects]),
+    EffectsModule.forRoot([DataflowRouterEffects, DataflowPersistenceEffects]),
     StoreDevtoolsModule.instrument({
       maxAge: 25,
     }),
