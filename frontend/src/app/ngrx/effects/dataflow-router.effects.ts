@@ -1,39 +1,18 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { RouterNavigationAction, ROUTER_NAVIGATION } from '@ngrx/router-store';
 import { select, Store } from '@ngrx/store';
 import { of } from 'rxjs';
-import {
-  filter,
-  flatMap,
-  map,
-  switchMap,
-  withLatestFrom,
-} from 'rxjs/operators';
-import { DataflowPreview } from 'src/app/types/dataflow-preview.type';
-import { Dataflow } from 'src/app/types/dataflow.type';
-import {
-  loadDataflowPreviews,
-  loadedDataflowPreviews,
-} from '../dataflow-preview.actions';
-import {
-  loadDataflow,
-  loadedDataflow,
-  loadStep,
-  showDataflow,
-} from '../dataflow.actions';
+import { filter, flatMap, map, withLatestFrom } from 'rxjs/operators';
+import { resetExecution } from '../dataflow-execution.actions';
+import { loadDataflowPreviews } from '../dataflow-preview.actions';
+import { loadDataflow, loadStep, showDataflow } from '../dataflow.actions';
 import { GlobalState } from '../dataflow.state';
 import { selectCachedDataflowId } from '../selectors/dataflow.selectors';
-import { resetExecution } from '../dataflow-execution.actions';
 
 @Injectable()
 export class DataflowRouterEffects {
-  constructor(
-    private actions$: Actions,
-    private store: Store<GlobalState>,
-    private http: HttpClient
-  ) {}
+  constructor(private actions$: Actions, private store: Store<GlobalState>) {}
 
   onNavigationToDataflow$ = createEffect(() =>
     this.actions$.pipe(
@@ -65,17 +44,6 @@ export class DataflowRouterEffects {
     )
   );
 
-  loadDataflow$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(loadDataflow),
-      switchMap((action) =>
-        this.http
-          .get(`http://localhost:4201/${action.id}`)
-          .pipe(map((dataflow: Dataflow) => loadedDataflow({ dataflow })))
-      )
-    )
-  );
-
   onNavigationToDataflowSelection$ = createEffect(() =>
     this.actions$.pipe(
       ofType(ROUTER_NAVIGATION),
@@ -84,21 +52,6 @@ export class DataflowRouterEffects {
           action.payload.routerState.url === '/'
       ),
       map(() => loadDataflowPreviews({ indexUrl: 'http://localhost:4201/' }))
-    )
-  );
-
-  loadDataflowPreviews$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(loadDataflowPreviews),
-      switchMap((action) =>
-        this.http
-          .get(action.indexUrl)
-          .pipe(
-            map((dataflowPreviews: DataflowPreview[]) =>
-              loadedDataflowPreviews({ dataflowPreviews })
-            )
-          )
-      )
     )
   );
 
