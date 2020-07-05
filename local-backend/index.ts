@@ -1,4 +1,4 @@
-import { walk, WalkEntry } from "https://deno.land/std/fs/mod.ts";
+import { walk, WalkEntry, writeJson } from "https://deno.land/std/fs/mod.ts";
 import { Application, Router, send } from "https://deno.land/x/oak/mod.ts";
 
 const dir = Deno.args[0];
@@ -38,6 +38,16 @@ router
     await send(context, context?.params?.dataflow + ".json", {
       root: `${Deno.cwd()}/dataflows`,
     });
+  })
+  .put("/:dataflow", async (context) => {
+    const body = (await context.request.body()).value;
+    console.log(body);
+    await writeJson(
+      `${Deno.cwd()}/dataflows/${context?.params?.dataflow}.json`,
+      body,
+      { spaces: 2 }
+    );
+    context.response.body = "Success";
   });
 
 const app = new Application();
