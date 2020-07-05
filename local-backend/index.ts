@@ -33,5 +33,7 @@ console.log("Listening on http://localhost:4201/");
 for await (const req of server) {
   if (req.url === "/") {
     req.respond({ body: JSON.stringify(dataflowIds) });
+  } else {
+    req.respond({ status: 404, body: "Not found" });
   }
 }
