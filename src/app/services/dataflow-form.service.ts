@@ -38,6 +38,7 @@ export class DataflowFormService {
       method: [request.method],
       url: [request.url],
       body: [request.body],
+      headers: [request.headers],
     });
   }
 }

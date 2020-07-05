@@ -118,7 +118,7 @@ export class DataflowRouterEffects {
       map((firstChild) => firstChild.params),
       flatMap((params) =>
         of(
-          loadDataflow({ id: params['id'] }),
+          showDataflow({ id: params['id'] }),
           loadStep({ stepIndex: Number(params['index']) })
         )
       )

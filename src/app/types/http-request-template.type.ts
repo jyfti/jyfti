@@ -1,5 +1,6 @@
 export interface HttpRequestTemplate {
   method: string;
   url: string;
-  body?: any;
+  body?: string;
+  headers?: string;
 }
