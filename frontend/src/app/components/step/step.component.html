@@ -7,11 +7,7 @@
     />
     <span class="self-center">=</span>
   </div>
-  <app-http-request
-    class="w-full"
-    [formGroup]="formGroup.get('request')"
-    [evaluation]="evaluation"
-  ></app-http-request>
+  <ng-content></ng-content>
   <button class="px-4 bg-blue-500 hover:bg-blue-600 text-white" (click)="editRequested.emit()">Edit</button>
   <button class="px-4 bg-red-500 hover:bg-red-600 text-white" (click)="removed.emit()">Remove</button>
 </div>

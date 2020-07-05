@@ -15,7 +15,13 @@
       [stepIndex]="stepIndex"
       (removed)="removeStep(formGroup, stepIndex)"
       (editRequested)="editStep(formGroup, stepIndex)"
-    ></app-step>
+    >
+      <app-http-request
+        class="w-full"
+        [formGroup]="step.get('request')"
+        [evaluation]="(evaluations$ | async)[stepIndex]"
+      ></app-http-request>
+    </app-step>
   </div>
   <div>
     <button
