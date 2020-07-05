@@ -70,7 +70,7 @@ export class DataflowRouterEffects {
       ofType(loadDataflow),
       switchMap((action) =>
         this.http
-          .get(`/assets/dataflows/${action.id}.json`)
+          .get(`http://localhost:4201/${action.id}`)
           .pipe(map((dataflow: Dataflow) => loadedDataflow({ dataflow })))
       )
     )
@@ -83,9 +83,7 @@ export class DataflowRouterEffects {
         (action: RouterNavigationAction) =>
           action.payload.routerState.url === '/'
       ),
-      map(() =>
-        loadDataflowPreviews({ indexUrl: '/assets/dataflows/index.json' })
-      )
+      map(() => loadDataflowPreviews({ indexUrl: 'http://localhost:4201/' }))
     )
   );
 

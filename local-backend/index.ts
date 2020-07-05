@@ -3,7 +3,7 @@ import { Application, Router, send } from "https://deno.land/x/oak/mod.ts";
 
 const dir = Deno.args[0];
 
-async function readDataflows(): Promise<WalkEntry[]> {
+async function readFiles(): Promise<WalkEntry[]> {
   let result = [];
   for await (const entry of walk(dir, {
     maxDepth: 1,
@@ -19,19 +19,20 @@ function stripSuffix(path: string) {
   return path.substring(0, path.length - ".json".length);
 }
 
-function extractDataflowIds(dataflows: WalkEntry[]) {
-  return dataflows
+function extractDataflows(files: WalkEntry[]) {
+  return files
     .filter((entry: WalkEntry) => entry.name.endsWith(".json"))
-    .map((entry: WalkEntry) => stripSuffix(entry.name));
+    .map((entry: WalkEntry) => stripSuffix(entry.name))
+    .map((id: string) => ({ id }));
 }
 
-const dataflows = await readDataflows();
-const dataflowIds = extractDataflowIds(dataflows);
+const files = await readFiles();
+const dataflows = extractDataflows(files);
 
 const router = new Router();
 router
   .get("/", (context) => {
-    context.response.body = dataflowIds;
+    context.response.body = dataflows;
   })
   .get("/:dataflow", async (context) => {
     await send(context, context?.params?.dataflow + ".json", {
@@ -40,6 +41,10 @@ router
   });
 
 const app = new Application();
+app.use((ctx, next) => {
+  ctx.response.headers.set("Access-Control-Allow-Origin", "*");
+  return next();
+});
 app.use(router.routes());
 app.use(router.allowedMethods());
 await app.listen({ port: 4201 });
