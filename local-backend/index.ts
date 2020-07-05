@@ -31,5 +31,7 @@ const server = serve({ port: 4201 });
 console.log("Listening on http://localhost:4201/");
 
 for await (const req of server) {
-  req.respond({ body: JSON.stringify(dataflowIds) });
+  if (req.url === "/") {
+    req.respond({ body: JSON.stringify(dataflowIds) });
+  }
 }
