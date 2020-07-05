@@ -65,7 +65,8 @@ export class DataflowDefinitionComponent implements OnInit {
         request: {
           method: 'GET',
           url: 'http://swapi.dev/api/planets/1/',
-          headers: {}
+          body: null,
+          headers: null
         },
       })
     );

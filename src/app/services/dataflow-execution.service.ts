@@ -22,7 +22,8 @@ export class DataflowExecutionService {
     return new HttpRequest(
       template.method as any,
       this.interpolate(variables, template.url),
-      jsone(JSON.parse(template.body), variables)
+      jsone(JSON.parse(template.body), variables),
+      { headers: jsone(JSON.parse(template.headers), variables) }
     );
   }
 
