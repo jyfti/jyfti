@@ -47,7 +47,7 @@ router
       body,
       { spaces: 2 }
     );
-    context.response.body = "Success";
+    context.response.body = { "message": "Success" };
   });
 
 const app = new Application();
