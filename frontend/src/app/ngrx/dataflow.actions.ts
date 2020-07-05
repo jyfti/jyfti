@@ -7,6 +7,11 @@ export const loadedDataflow = createAction(
   props<{ dataflow: Dataflow }>()
 );
 
+export const persistDataflow = createAction(
+  '[Data Flow] Persist',
+  props<{ dataflow: Dataflow }>()
+);
+
 export const showDataflow = createAction(
   '[Data Flow] Show',
   props<{ id: string }>()

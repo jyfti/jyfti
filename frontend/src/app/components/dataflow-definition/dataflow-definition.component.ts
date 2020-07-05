@@ -7,7 +7,7 @@ import { map } from 'rxjs/operators';
 import { GlobalState } from 'src/app/ngrx/dataflow.state';
 import { DataflowFormService } from 'src/app/services/dataflow-form.service';
 import { startExecution, resetExecution } from 'src/app/ngrx/dataflow-execution.actions';
-import { loadedDataflow } from 'src/app/ngrx/dataflow.actions';
+import { loadedDataflow, persistDataflow } from 'src/app/ngrx/dataflow.actions';
 import { selectExecution } from 'src/app/execution/execution.reducer';
 
 @Component({
@@ -43,6 +43,10 @@ export class DataflowDefinitionComponent implements OnInit {
 
   execute(formGroup: FormGroup) {
     this.store.dispatch(startExecution({ dataflow: formGroup.value }));
+  }
+
+  persist(formGroup: FormGroup) {
+    this.store.dispatch(persistDataflow({ dataflow: formGroup.value }));
   }
 
   clearExecution() {
