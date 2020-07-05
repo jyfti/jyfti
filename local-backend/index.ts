@@ -1,5 +1,5 @@
 import { walk, WalkEntry } from "https://deno.land/std/fs/mod.ts";
-import { serve } from "https://deno.land/std/http/server.ts";
+import { Application, Router } from "https://deno.land/x/oak/mod.ts";
 
 const dir = Deno.args[0];
 
@@ -26,14 +26,12 @@ function extractDataflowIds(dataflows: WalkEntry[]) {
 const dataflows = await readDataflows();
 const dataflowIds = extractDataflowIds(dataflows);
 
-const server = serve({ port: 4201 });
+const router = new Router();
+router
+  .get("/", (context) => {
+    context.response.body = dataflowIds;
+  });
 
-console.log("Listening on http://localhost:4201/");
-
-for await (const req of server) {
-  if (req.url === "/") {
-    req.respond({ body: JSON.stringify(dataflowIds) });
-  } else {
-    req.respond({ status: 404, body: "Not found" });
-  }
-}
+const app = new Application();
+app.use(router.routes());
+await app.listen({ port: 4201 });
