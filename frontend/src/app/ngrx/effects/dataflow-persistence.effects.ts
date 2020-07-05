@@ -25,6 +25,7 @@ import {
 } from '../dataflow.actions';
 import { GlobalState } from '../dataflow.state';
 import { selectActiveDataflowId } from '../selectors/dataflow.selectors';
+import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class DataflowPersistenceEffects {
@@ -39,7 +40,7 @@ export class DataflowPersistenceEffects {
       ofType(loadDataflow),
       switchMap((action) =>
         this.http
-          .get(`http://localhost:4201/${action.id}`)
+          .get(environment.backendBaseUrl + action.id)
           .pipe(map((dataflow: Dataflow) => loadedDataflow({ dataflow })))
       )
     )
@@ -70,7 +71,7 @@ export class DataflowPersistenceEffects {
             (dataflow, id) => ({ dataflow, id })
           ),
           flatMap(({ dataflow, id }) =>
-            this.http.put(`http://localhost:4201/${id}`, dataflow)
+            this.http.put(environment.backendBaseUrl + id, dataflow)
           ),
           map(() => persistedDataflow()),
           catchError((err) => of(backendError({ err })))

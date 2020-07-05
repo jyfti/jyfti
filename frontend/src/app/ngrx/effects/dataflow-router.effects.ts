@@ -9,6 +9,7 @@ import { loadDataflowPreviews } from '../dataflow-preview.actions';
 import { loadDataflow, loadStep, showDataflow } from '../dataflow.actions';
 import { GlobalState } from '../dataflow.state';
 import { selectCachedDataflowId } from '../selectors/dataflow.selectors';
+import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class DataflowRouterEffects {
@@ -51,7 +52,7 @@ export class DataflowRouterEffects {
         (action: RouterNavigationAction) =>
           action.payload.routerState.url === '/'
       ),
-      map(() => loadDataflowPreviews({ indexUrl: 'http://localhost:4201/' }))
+      map(() => loadDataflowPreviews({ indexUrl: environment.backendBaseUrl }))
     )
   );
 
