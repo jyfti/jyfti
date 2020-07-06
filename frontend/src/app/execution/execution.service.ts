@@ -19,7 +19,10 @@ export class ExecutionService {
         catchError((response) => of(response))
       );
     } else if (step?.expression) {
-      return of(jsone(step.expression, variables));
+      return of(step.expression).pipe(
+        map((expression) => jsone(expression, variables)),
+        catchError((error) => of({ error: error.toString() }))
+      );
     }
   }
 
