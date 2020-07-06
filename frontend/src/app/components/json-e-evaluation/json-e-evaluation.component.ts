@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-json-e-evaluation',
@@ -7,6 +8,7 @@ import { Component, OnInit } from '@angular/core';
   ]
 })
 export class JsonEEvaluationComponent implements OnInit {
+  @Input() formControl: FormControl;
 
   constructor() { }
 

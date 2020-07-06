@@ -23,6 +23,8 @@
       ></app-http-request>
       <app-json-e-evaluation
         *ngIf="step.get('expression')"
+        [formControl]="step.get('expression')"
+        ngDefaultControl
       ></app-json-e-evaluation>
     </app-step>
   </div>

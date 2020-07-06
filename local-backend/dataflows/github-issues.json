@@ -5,7 +5,16 @@
       "assignTo": "issues",
       "request": {
         "method": "GET",
-        "url": "http://api.github.com/repos/fboeller/dataflow/issues"
+        "url": "http://api.github.com/repos/fboeller/dataflow/issues",
+        "body": null,
+        "headers": null
+      }
+    },
+    {
+      "assignTo": "issues",
+      "expression": {
+        "a": "d",
+        "e": "f"
       }
     }
   ]

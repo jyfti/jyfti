@@ -3,12 +3,16 @@ import { FormArray, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { GlobalState } from 'src/app/ngrx/dataflow.state';
 import { DataflowFormService } from 'src/app/services/dataflow-form.service';
-import { startExecution, resetExecution } from 'src/app/ngrx/dataflow-execution.actions';
+import {
+  startExecution,
+  resetExecution,
+} from 'src/app/ngrx/dataflow-execution.actions';
 import { loadedDataflow, persistDataflow } from 'src/app/ngrx/dataflow.actions';
 import { selectExecution } from 'src/app/execution/execution.reducer';
+import { DataflowFormValueExtractionService } from 'src/app/services/dataflow-form-value-extraction.service';
 
 @Component({
   selector: 'app-dataflow-definition',
@@ -26,6 +30,7 @@ export class DataflowDefinitionComponent implements OnInit {
   constructor(
     private store: Store<GlobalState>,
     private dataflowFormService: DataflowFormService,
+    private dataflowFormValueExtractionService: DataflowFormValueExtractionService,
     private router: Router,
     private route: ActivatedRoute
   ) {}
@@ -42,11 +47,23 @@ export class DataflowDefinitionComponent implements OnInit {
   }
 
   execute(formGroup: FormGroup) {
-    this.store.dispatch(startExecution({ dataflow: formGroup.value }));
+    this.store.dispatch(
+      startExecution({
+        dataflow: this.dataflowFormValueExtractionService.extractDataFlow(
+          formGroup.value
+        ),
+      })
+    );
   }
 
   persist(formGroup: FormGroup) {
-    this.store.dispatch(persistDataflow({ dataflow: formGroup.value }));
+    this.store.dispatch(
+      persistDataflow({
+        dataflow: this.dataflowFormValueExtractionService.extractDataFlow(
+          formGroup.value
+        ),
+      })
+    );
   }
 
   clearExecution() {
@@ -54,7 +71,13 @@ export class DataflowDefinitionComponent implements OnInit {
   }
 
   editStep(formGroup: FormGroup, stepIndex: number) {
-    this.store.dispatch(loadedDataflow({ dataflow: formGroup.value }));
+    this.store.dispatch(
+      loadedDataflow({
+        dataflow: this.dataflowFormValueExtractionService.extractDataFlow(
+          formGroup.value
+        ),
+      })
+    );
     this.router.navigate(['step', stepIndex], { relativeTo: this.route });
   }
 
@@ -70,7 +93,7 @@ export class DataflowDefinitionComponent implements OnInit {
           method: 'GET',
           url: 'http://swapi.dev/api/planets/1/',
           body: null,
-          headers: null
+          headers: null,
         },
       })
     );

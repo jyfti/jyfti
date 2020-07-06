@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
+import { FormBuilder, FormGroup, FormArray, FormControl, AbstractControl } from '@angular/forms';
 import { Dataflow } from '../types/dataflow.type';
 import { Step } from '../types/step.type';
 import { HttpRequestTemplate } from '../types/http-request-template.type';
@@ -25,20 +25,20 @@ export class DataflowFormService {
     const content = this.createStepContent(step);
     return this.fb.group({
       assignTo: [step.assignTo],
-      [content.type]: content.formGroup,
+      [content.type]: content.control,
     });
   }
 
-  createStepContent(step: Step): { type: string; formGroup: FormGroup } {
+  createStepContent(step: Step): { type: string; control: AbstractControl } {
     if (step?.request) {
       return {
         type: 'request',
-        formGroup: this.createHttpRequestTemplate(step.request),
+        control: this.createHttpRequestTemplate(step.request),
       };
     } else if (step?.expression) {
       return {
         type: 'expression',
-        formGroup: this.fb.group({}),
+        control: this.fb.control(JSON.stringify(step.expression, null, 2)),
       };
     }
   }
