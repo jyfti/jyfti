@@ -11,10 +11,13 @@
       }
     },
     {
-      "assignTo": "issues",
+      "assignTo": "titles",
       "expression": {
-        "a": {
-          "$eval": "2 + 4"
+        "$map": {
+          "$eval": "issues.body"
+        },
+        "each(x)": {
+          "$eval": "x.title"
         }
       }
     }
