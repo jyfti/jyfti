@@ -35,12 +35,7 @@ export class ExecutionEffects {
       ofType(startStepExecution),
       concatMap((action) =>
         this.executionService
-          .request(
-            this.executionService.createHttpRequest(
-              action.steps[action.stepIndex].request,
-              action.variables
-            )
-          )
+          .executeStep(action.steps[action.stepIndex], action.variables)
           .pipe(
             catchError((response) => of(response)),
             map((httpResponse) =>

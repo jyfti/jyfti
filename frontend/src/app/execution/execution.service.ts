@@ -5,12 +5,20 @@ import { filter, map } from 'rxjs/operators';
 import { HttpRequestTemplate } from '../types/http-request-template.type';
 import { VariableMap } from '../types/variabe-map.type';
 import jsone from 'json-e';
+import { Step } from '../types/step.type';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ExecutionService {
   constructor(private http: HttpClient) {}
+
+  executeStep(
+    step: Step,
+    variables: VariableMap
+  ): Observable<HttpResponse<any>> {
+    return this.request(this.createHttpRequest(step.request, variables));
+  }
 
   private interpolate(variables, str: string) {
     const identifiers = Object.keys(variables);
