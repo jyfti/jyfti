@@ -85,7 +85,7 @@ export class DataflowDefinitionComponent implements OnInit {
     this.steps(formGroup).removeAt(stepIndex);
   }
 
-  addStep(formGroup: FormGroup) {
+  addRequestStep(formGroup: FormGroup) {
     this.steps(formGroup).push(
       this.dataflowFormService.createStep({
         assignTo: 'my_variable',
@@ -95,6 +95,15 @@ export class DataflowDefinitionComponent implements OnInit {
           body: null,
           headers: null,
         },
+      })
+    );
+  }
+
+  addEvaluationStep(formGroup: FormGroup) {
+    this.steps(formGroup).push(
+      this.dataflowFormService.createStep({
+        assignTo: 'my_variable',
+        expression: {}
       })
     );
   }

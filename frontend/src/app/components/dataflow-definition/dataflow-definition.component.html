@@ -28,12 +28,18 @@
       ></app-json-e-evaluation>
     </app-step>
   </div>
-  <div>
+  <div class="grid gap-2 grid-cols-2 mt-2">
     <button
-      class="w-full mt-2 p-4 bg-gray-300 hover:bg-gray-400"
-      (click)="addStep(formGroup)"
+      class="p-4 bg-gray-300 hover:bg-gray-400"
+      (click)="addRequestStep(formGroup)"
     >
-      Add another API call
+      Add request step
+    </button>
+    <button
+      class="p-4 bg-gray-300 hover:bg-gray-400"
+      (click)="addEvaluationStep(formGroup)"
+    >
+      Add evaluation step
     </button>
   </div>
   <div class="flex gap-2 justify-end">
