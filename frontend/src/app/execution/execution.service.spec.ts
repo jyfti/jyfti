@@ -1,16 +1,16 @@
 import { TestBed } from '@angular/core/testing';
 
-import { DataflowExecutionService } from './dataflow-execution.service';
+import { ExecutionService } from './execution.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
-describe('DataflowExecutionService', () => {
-  let service: DataflowExecutionService;
+describe('ExecutionService', () => {
+  let service: ExecutionService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
     });
-    service = TestBed.inject(DataflowExecutionService);
+    service = TestBed.inject(ExecutionService);
   });
 
   it('should be created', () => {

@@ -9,7 +9,7 @@ import jsone from 'json-e';
 @Injectable({
   providedIn: 'root',
 })
-export class DataflowExecutionService {
+export class ExecutionService {
   constructor(private http: HttpClient) {}
 
   private interpolate(variables, str: string) {

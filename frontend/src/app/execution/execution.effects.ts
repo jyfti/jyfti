@@ -2,14 +2,19 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
 import { catchError, concatMap, map } from 'rxjs/operators';
-import { DataflowExecutionService } from 'src/app/execution/dataflow-execution.service';
-import { startExecution, startStepExecution, finishStepExecution, finishExecution } from '../ngrx/dataflow-execution.actions';
+import { ExecutionService } from 'src/app/execution/execution.service';
+import {
+  startExecution,
+  startStepExecution,
+  finishStepExecution,
+  finishExecution,
+} from '../ngrx/dataflow-execution.actions';
 
 @Injectable()
 export class ExecutionEffects {
   constructor(
     private actions$: Actions,
-    private dataflowExecutionService: DataflowExecutionService
+    private executionService: ExecutionService
   ) {}
 
   startExecution$ = createEffect(() =>
@@ -29,9 +34,9 @@ export class ExecutionEffects {
     this.actions$.pipe(
       ofType(startStepExecution),
       concatMap((action) =>
-        this.dataflowExecutionService
+        this.executionService
           .request(
-            this.dataflowExecutionService.createHttpRequest(
+            this.executionService.createHttpRequest(
               action.steps[action.stepIndex].request,
               action.variables
             )
