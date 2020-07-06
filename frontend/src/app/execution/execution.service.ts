@@ -1,7 +1,7 @@
 import { HttpClient, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { filter, map, catchError } from 'rxjs/operators';
 import { HttpRequestTemplate } from '../types/http-request-template.type';
 import { VariableMap } from '../types/variabe-map.type';
 import jsone from 'json-e';
@@ -13,14 +13,13 @@ import { Step } from '../types/step.type';
 export class ExecutionService {
   constructor(private http: HttpClient) {}
 
-  executeStep(
-    step: Step,
-    variables: VariableMap
-  ): Observable<HttpResponse<any>> {
+  executeStep(step: Step, variables: VariableMap): Observable<any> {
     if (step?.request) {
-      return this.request(this.createHttpRequest(step.request, variables));
-    } else {
-      return of();
+      return this.request(this.createHttpRequest(step.request, variables)).pipe(
+        catchError((response) => of(response))
+      );
+    } else if (step?.expression) {
+      return of(jsone(step.expression, variables));
     }
   }
 

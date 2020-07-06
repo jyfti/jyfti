@@ -37,15 +37,14 @@ export class ExecutionEffects {
         this.executionService
           .executeStep(action.steps[action.stepIndex], action.variables)
           .pipe(
-            catchError((response) => of(response)),
-            map((httpResponse) =>
+            map((evaluation) =>
               finishStepExecution({
                 stepIndex: action.stepIndex,
-                evaluation: httpResponse,
+                evaluation,
                 steps: action.steps,
                 variables: {
                   ...action.variables,
-                  [action.steps[action.stepIndex].assignTo]: httpResponse,
+                  [action.steps[action.stepIndex].assignTo]: evaluation,
                 },
               })
             )

@@ -13,8 +13,9 @@
     {
       "assignTo": "issues",
       "expression": {
-        "a": "d",
-        "e": "f"
+        "a": {
+          "$eval": "2 + 4"
+        }
       }
     }
   ]
