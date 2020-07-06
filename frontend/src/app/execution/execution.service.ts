@@ -1,6 +1,6 @@
 import { HttpClient, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { HttpRequestTemplate } from '../types/http-request-template.type';
 import { VariableMap } from '../types/variabe-map.type';
@@ -17,7 +17,11 @@ export class ExecutionService {
     step: Step,
     variables: VariableMap
   ): Observable<HttpResponse<any>> {
-    return this.request(this.createHttpRequest(step.request, variables));
+    if (step?.request) {
+      return this.request(this.createHttpRequest(step.request, variables));
+    } else {
+      return of();
+    }
   }
 
   private interpolate(variables, str: string) {
