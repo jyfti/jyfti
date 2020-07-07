@@ -5,7 +5,10 @@ import jsone from 'json-e';
 import { isNil } from 'lodash';
 import { Observable, of } from 'rxjs';
 import { catchError, filter, map } from 'rxjs/operators';
-import { finishStepExecution } from '../ngrx/dataflow-execution.actions';
+import {
+  finishStepExecution,
+  startStepExecution,
+} from '../ngrx/dataflow-execution.actions';
 import { ExecutionScope } from '../types/execution-scope.type';
 import { HttpRequestTemplate } from '../types/http-request-template.type';
 import { VariableMap } from '../types/variabe-map.type';
@@ -42,6 +45,20 @@ export class ExecutionService {
         )
       );
     } else if (!isNil(step?.for)) {
+      if (isNil(scope.subScope)) {
+        return of(
+          startStepExecution({
+            scope: {
+              ...scope,
+              subScope: {
+                stepIndex: 0,
+                steps: step.for.do,
+                variables: {},
+              },
+            },
+          })
+        );
+      }
       return of({ error: 'Not yet implemented' }).pipe(
         map((evaluation) =>
           finishStepExecution({

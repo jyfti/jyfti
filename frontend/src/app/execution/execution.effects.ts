@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { of } from 'rxjs';
-import { catchError, concatMap, map } from 'rxjs/operators';
+import { concatMap, map } from 'rxjs/operators';
 import { ExecutionService } from 'src/app/execution/execution.service';
 import {
+  finishExecution,
+  finishStepExecution,
   startExecution,
   startStepExecution,
-  finishStepExecution,
-  finishExecution,
 } from '../ngrx/dataflow-execution.actions';
 
 @Injectable()
