@@ -9,9 +9,7 @@ export interface ForLoop {
   return: JsonExpression,
 }
 
-export type Step = HttpRequestStep;
-
-export interface HttpRequestStep {
+export interface Step {
   assignTo: string;
   request?: HttpRequestTemplate;
   expression?: JsonExpression;
