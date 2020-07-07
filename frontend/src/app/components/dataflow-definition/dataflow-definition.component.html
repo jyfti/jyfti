@@ -8,7 +8,7 @@
     />
   </div>
   <app-steps
-    [formGroup]="formGroup"
+    [steps]="formGroup.get('steps')"
     [evaluations]="evaluations$ | async"
     (editStepRequest)="editStep(formGroup, $event)"
   ></app-steps>

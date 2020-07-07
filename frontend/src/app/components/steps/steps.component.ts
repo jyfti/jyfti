@@ -1,5 +1,5 @@
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import { FormArray, FormGroup } from '@angular/forms';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormArray } from '@angular/forms';
 import { DataflowFormService } from 'src/app/services/dataflow-form.service';
 
 @Component({
@@ -8,7 +8,7 @@ import { DataflowFormService } from 'src/app/services/dataflow-form.service';
   styles: [],
 })
 export class StepsComponent implements OnInit {
-  @Input() formGroup: FormGroup;
+  @Input() steps: FormArray;
   @Input() evaluations: any;
 
   @Output() editStepRequest = new EventEmitter<number>();
@@ -17,16 +17,12 @@ export class StepsComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  steps(formGroup) {
-    return formGroup.get('steps') as FormArray;
+  removeStep(stepIndex: number) {
+    this.steps.removeAt(stepIndex);
   }
 
-  removeStep(formGroup: FormGroup, stepIndex: number) {
-    this.steps(formGroup).removeAt(stepIndex);
-  }
-
-  addRequestStep(formGroup: FormGroup) {
-    this.steps(formGroup).push(
+  addRequestStep() {
+    this.steps.push(
       this.dataflowFormService.createStep({
         assignTo: 'my_variable',
         request: {
@@ -39,8 +35,8 @@ export class StepsComponent implements OnInit {
     );
   }
 
-  addEvaluationStep(formGroup: FormGroup) {
-    this.steps(formGroup).push(
+  addEvaluationStep() {
+    this.steps.push(
       this.dataflowFormService.createStep({
         assignTo: 'my_variable',
         expression: {},
@@ -48,8 +44,8 @@ export class StepsComponent implements OnInit {
     );
   }
 
-  addForLoopStep(formGroup: FormGroup) {
-    this.steps(formGroup).push(
+  addForLoopStep() {
+    this.steps.push(
       this.dataflowFormService.createStep({
         assignTo: 'my_variable',
         for: {

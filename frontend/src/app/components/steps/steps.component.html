@@ -1,10 +1,10 @@
 <div class="flex flex-col gap-2">
   <app-step
-    *ngFor="let step of steps(formGroup).controls; let stepIndex = index"
+    *ngFor="let step of steps.controls; let stepIndex = index"
     [formGroup]="step"
     [evaluation]="evaluations[stepIndex]"
     [stepIndex]="stepIndex"
-    (removed)="removeStep(formGroup, stepIndex)"
+    (removed)="removeStep(stepIndex)"
     (editRequested)="editStepRequest.emit(stepIndex)"
   >
     <app-http-request
@@ -24,22 +24,16 @@
   </app-step>
 </div>
 <div class="grid gap-2 grid-cols-3 mt-2">
-  <button
-    class="p-4 bg-gray-300 hover:bg-gray-400"
-    (click)="addRequestStep(formGroup)"
-  >
+  <button class="p-4 bg-gray-300 hover:bg-gray-400" (click)="addRequestStep()">
     Add request step
   </button>
   <button
     class="p-4 bg-gray-300 hover:bg-gray-400"
-    (click)="addEvaluationStep(formGroup)"
+    (click)="addEvaluationStep()"
   >
     Add evaluation step
   </button>
-  <button
-    class="p-4 bg-gray-300 hover:bg-gray-400"
-    (click)="addForLoopStep(formGroup)"
-  >
+  <button class="p-4 bg-gray-300 hover:bg-gray-400" (click)="addForLoopStep()">
     Add for loop
   </button>
 </div>
