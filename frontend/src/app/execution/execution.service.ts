@@ -15,7 +15,11 @@ import { ExecutionScope } from '../types/execution-scope.type';
 export class ExecutionService {
   constructor(private http: HttpClient) {}
 
-  executeStep(step: Step, variables: VariableMap, subScope?: ExecutionScope): Observable<any> {
+  executeStep(
+    step: Step,
+    variables: VariableMap,
+    subScope?: ExecutionScope
+  ): Observable<any> {
     if (!isNil(step?.request)) {
       return this.request(this.createHttpRequest(step.request, variables)).pipe(
         catchError((response) => of(response))
@@ -26,13 +30,23 @@ export class ExecutionService {
         catchError((error) => of({ error: error.toString() }))
       );
     } else if (!isNil(step?.for)) {
-      return of({ error: "Not yet implemented" });
+      return of({ error: 'Not yet implemented' });
     } else {
       return of({
         error:
           "Step does not contain any of 'request', 'expression' and 'for'.",
       });
     }
+  }
+
+  addEvaluationToScope(scope: ExecutionScope, evaluation: any): ExecutionScope {
+    return {
+      ...scope,
+      variables: {
+        ...scope.variables,
+        [scope.steps[scope.stepIndex].assignTo]: evaluation,
+      },
+    };
   }
 
   private interpolate(variables, str: string) {

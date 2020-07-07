@@ -45,15 +45,10 @@ export class ExecutionEffects {
           .pipe(
             map((evaluation) =>
               finishStepExecution({
-                scope: {
-                  stepIndex: action.scope.stepIndex,
-                  steps: action.scope.steps,
-                  variables: {
-                    ...action.scope.variables,
-                    [action.scope.steps[action.scope.stepIndex]
-                      .assignTo]: evaluation,
-                  },
-                },
+                scope: this.executionService.addEvaluationToScope(
+                  action.scope,
+                  evaluation
+                ),
                 evaluation,
               })
             )
