@@ -26,7 +26,10 @@
         [formControl]="step.get('expression')"
         ngDefaultControl
       ></app-json-e-evaluation>
-      <app-for-loop *ngIf="step.get('for')"></app-for-loop>
+      <app-for-loop
+        *ngIf="step.get('for')"
+        [formGroup]="step.get('for')"
+      ></app-for-loop>
     </app-step>
   </div>
   <div class="grid gap-2 grid-cols-3 mt-2">

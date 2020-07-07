@@ -1,1 +1,14 @@
-<p>for-loop works!</p>
+<div [formGroup]="formGroup" class="w-full py-5 px-6 bg-gray-400">
+  for <input type="text" formControlName="const" class="py-1 px-2 mx-1 bg-gray-400 border border-transparent hover:border-blue-400" /> in
+  <ngx-monaco-editor
+    [options]="{ language: 'json' }"
+    formControlName="in"
+  ></ngx-monaco-editor>
+  do
+  <span>something</span>
+  return
+  <ngx-monaco-editor
+    [options]="{ language: 'json' }"
+    formControlName="return"
+  ></ngx-monaco-editor>
+</div>
