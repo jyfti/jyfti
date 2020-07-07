@@ -112,7 +112,16 @@ export class DataflowDefinitionComponent implements OnInit {
     this.steps(formGroup).push(
       this.dataflowFormService.createStep({
         assignTo: 'my_variable',
-        for: {}
+        for: {
+          const: "value",
+          in: {
+            $eval: "values"
+          },
+          do: [],
+          return: {
+            $eval: "value"
+          }
+        }
       })
     );
   }

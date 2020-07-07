@@ -7,7 +7,7 @@ import {
   AbstractControl,
 } from '@angular/forms';
 import { Dataflow } from '../types/dataflow.type';
-import { Step } from '../types/step.type';
+import { Step, ForLoop } from '../types/step.type';
 import { HttpRequestTemplate } from '../types/http-request-template.type';
 
 @Injectable({
@@ -49,7 +49,7 @@ export class DataflowFormService {
     } else if (step?.for) {
       return {
         type: 'for',
-        control: this.fb.control(''),
+        control: this.createForLoop(step.for),
       };
     }
   }
@@ -60,6 +60,15 @@ export class DataflowFormService {
       url: [request.url],
       body: [request.body],
       headers: [request.headers],
+    });
+  }
+
+  createForLoop(forLoop: ForLoop): FormGroup {
+    return this.fb.group({
+      const: [forLoop.const],
+      in: [JSON.stringify(forLoop.in, null, 2)],
+      do: this.fb.array([]),
+      return: [JSON.stringify(forLoop.return, null, 2)],
     });
   }
 }

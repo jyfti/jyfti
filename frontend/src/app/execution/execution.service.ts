@@ -25,7 +25,7 @@ export class ExecutionService {
         catchError((error) => of({ error: error.toString() }))
       );
     } else if (!isNil(step?.for)) {
-      return of();
+      return of({ error: "Not yet implemented" });
     } else {
       return of({
         error:
