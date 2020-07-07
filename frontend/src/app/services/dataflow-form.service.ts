@@ -1,5 +1,11 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, FormArray, FormControl, AbstractControl } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormArray,
+  FormControl,
+  AbstractControl,
+} from '@angular/forms';
 import { Dataflow } from '../types/dataflow.type';
 import { Step } from '../types/step.type';
 import { HttpRequestTemplate } from '../types/http-request-template.type';
@@ -39,6 +45,11 @@ export class DataflowFormService {
       return {
         type: 'expression',
         control: this.fb.control(JSON.stringify(step.expression, null, 2)),
+      };
+    } else if (step?.for) {
+      return {
+        type: 'for',
+        control: this.fb.control(''),
       };
     }
   }

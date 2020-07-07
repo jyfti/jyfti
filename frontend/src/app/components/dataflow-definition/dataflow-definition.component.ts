@@ -107,4 +107,13 @@ export class DataflowDefinitionComponent implements OnInit {
       })
     );
   }
+
+  addForLoopStep(formGroup: FormGroup) {
+    this.steps(formGroup).push(
+      this.dataflowFormService.createStep({
+        assignTo: 'my_variable',
+        for: {}
+      })
+    );
+  }
 }

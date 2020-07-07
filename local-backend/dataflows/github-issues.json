@@ -20,6 +20,38 @@
           "$eval": "x.title"
         }
       }
+    },
+    {
+      "assignTo": "issueResponse",
+      "request": {
+        "method": "GET",
+        "url": "http://api.github.com/repos/fboeller/dataflow/issues",
+        "body": null,
+        "headers": null
+      }
+    },
+    {
+      "assignTo": "foobar",
+      "for": {
+        "const": "issue",
+        "in": {
+          "$eval": "issueResponse.body"
+        },
+        "do": [
+          {
+            "assignTo": "issues",
+            "request": {
+              "method": "GET",
+              "url": "${issue.url}",
+              "body": null,
+              "headers": null
+            }
+          }
+        ],
+        "return": {
+          "$eval": "issues"
+        }
+      }
     }
   ]
 }

@@ -20,6 +20,7 @@ import { dataflowReducer } from './ngrx/dataflow.reducer';
 import { ExecutionModule } from './execution/execution.module';
 import { DataflowPersistenceEffects } from './ngrx/effects/dataflow-persistence.effects';
 import { JsonEEvaluationComponent } from './components/json-e-evaluation/json-e-evaluation.component';
+import { ForLoopComponent } from './components/for-loop/for-loop.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { JsonEEvaluationComponent } from './components/json-e-evaluation/json-e-
     HttpRequestDetailComponent,
     DataflowSelectionComponent,
     JsonEEvaluationComponent,
+    ForLoopComponent,
   ],
   imports: [
     BrowserModule,

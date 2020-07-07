@@ -6,4 +6,5 @@ export interface HttpRequestStep {
   assignTo: string;
   request?: HttpRequestTemplate;
   expression?: any;
+  for?: any;
 }

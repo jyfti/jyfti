@@ -26,9 +26,10 @@
         [formControl]="step.get('expression')"
         ngDefaultControl
       ></app-json-e-evaluation>
+      <app-for-loop *ngIf="step.get('for')"></app-for-loop>
     </app-step>
   </div>
-  <div class="grid gap-2 grid-cols-2 mt-2">
+  <div class="grid gap-2 grid-cols-3 mt-2">
     <button
       class="p-4 bg-gray-300 hover:bg-gray-400"
       (click)="addRequestStep(formGroup)"
@@ -40,6 +41,12 @@
       (click)="addEvaluationStep(formGroup)"
     >
       Add evaluation step
+    </button>
+    <button
+      class="p-4 bg-gray-300 hover:bg-gray-400"
+      (click)="addForLoopStep(formGroup)"
+    >
+      Add for loop
     </button>
   </div>
   <div class="flex gap-2 justify-end">
