@@ -5,7 +5,7 @@
     [evaluation]="evaluations[stepIndex]"
     [stepIndex]="stepIndex"
     (removed)="removeStep(formGroup, stepIndex)"
-    (editRequested)="editStep(formGroup, stepIndex)"
+    (editRequested)="editStepRequest.emit(stepIndex)"
   >
     <app-http-request
       *ngIf="step.get('request')"

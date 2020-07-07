@@ -1,18 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormGroup } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
-import { GlobalState } from 'src/app/ngrx/dataflow.state';
-import { DataflowFormService } from 'src/app/services/dataflow-form.service';
+import { map } from 'rxjs/operators';
+import { selectExecution } from 'src/app/execution/execution.reducer';
 import {
-  startExecution,
   resetExecution,
+  startExecution,
 } from 'src/app/ngrx/dataflow-execution.actions';
 import { loadedDataflow, persistDataflow } from 'src/app/ngrx/dataflow.actions';
-import { selectExecution } from 'src/app/execution/execution.reducer';
+import { GlobalState } from 'src/app/ngrx/dataflow.state';
 import { DataflowFormValueExtractionService } from 'src/app/services/dataflow-form-value-extraction.service';
+import { DataflowFormService } from 'src/app/services/dataflow-form.service';
 
 @Component({
   selector: 'app-dataflow-definition',
@@ -26,7 +26,9 @@ export class DataflowDefinitionComponent implements OnInit {
   constructor(
     private store: Store<GlobalState>,
     private dataflowFormService: DataflowFormService,
-    private dataflowFormValueExtractionService: DataflowFormValueExtractionService
+    private dataflowFormValueExtractionService: DataflowFormValueExtractionService,
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit() {
@@ -38,6 +40,17 @@ export class DataflowDefinitionComponent implements OnInit {
     this.evaluations$ = this.execution$.pipe(
       map((execution) => execution?.evaluations || {})
     );
+  }
+
+  editStep(formGroup: FormGroup, stepIndex: number) {
+    this.store.dispatch(
+      loadedDataflow({
+        dataflow: this.dataflowFormValueExtractionService.extractDataFlow(
+          formGroup.value
+        ),
+      })
+    );
+    this.router.navigate(['step', stepIndex], { relativeTo: this.route });
   }
 
   execute(formGroup: FormGroup) {

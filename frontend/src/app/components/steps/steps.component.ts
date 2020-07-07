@@ -1,10 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { GlobalState } from 'src/app/ngrx/dataflow.state';
-import { Store } from '@ngrx/store';
-import { FormGroup, FormArray } from '@angular/forms';
-import { loadedDataflow } from 'src/app/ngrx/dataflow.actions';
-import { Router, ActivatedRoute } from '@angular/router';
-import { DataflowFormValueExtractionService } from 'src/app/services/dataflow-form-value-extraction.service';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { FormArray, FormGroup } from '@angular/forms';
 import { DataflowFormService } from 'src/app/services/dataflow-form.service';
 
 @Component({
@@ -16,29 +11,14 @@ export class StepsComponent implements OnInit {
   @Input() formGroup: FormGroup;
   @Input() evaluations: any;
 
-  constructor(
-    private store: Store<GlobalState>,
-    private router: Router,
-    private route: ActivatedRoute,
-    private dataflowFormValueExtractionService: DataflowFormValueExtractionService,
-    private dataflowFormService: DataflowFormService
-  ) {}
+  @Output() editStepRequest = new EventEmitter<number>();
+
+  constructor(private dataflowFormService: DataflowFormService) {}
 
   ngOnInit(): void {}
 
   steps(formGroup) {
     return formGroup.get('steps') as FormArray;
-  }
-
-  editStep(formGroup: FormGroup, stepIndex: number) {
-    this.store.dispatch(
-      loadedDataflow({
-        dataflow: this.dataflowFormValueExtractionService.extractDataFlow(
-          formGroup.value
-        ),
-      })
-    );
-    this.router.navigate(['step', stepIndex], { relativeTo: this.route });
   }
 
   removeStep(formGroup: FormGroup, stepIndex: number) {
