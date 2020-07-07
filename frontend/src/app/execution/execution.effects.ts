@@ -35,19 +35,7 @@ export class ExecutionEffects {
   stepExecution$ = createEffect(() =>
     this.actions$.pipe(
       ofType(startStepExecution),
-      concatMap((action) =>
-        this.executionService.executeStep(action.scope).pipe(
-          map((evaluation) =>
-            finishStepExecution({
-              scope: this.executionService.addEvaluationToScope(
-                action.scope,
-                evaluation
-              ),
-              evaluation,
-            })
-          )
-        )
-      )
+      concatMap((action) => this.executionService.executeStep(action.scope))
     )
   );
 
