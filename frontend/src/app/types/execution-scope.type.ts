@@ -5,4 +5,5 @@ export interface ExecutionScope {
   stepIndex: number;
   steps: Step[];
   variables: VariableMap;
+  subScope?: ExecutionScope;
 }

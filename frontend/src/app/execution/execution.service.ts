@@ -7,6 +7,7 @@ import { catchError, filter, map } from 'rxjs/operators';
 import { HttpRequestTemplate } from '../types/http-request-template.type';
 import { Step } from '../types/step.type';
 import { VariableMap } from '../types/variabe-map.type';
+import { ExecutionScope } from '../types/execution-scope.type';
 
 @Injectable({
   providedIn: 'root',
@@ -14,7 +15,7 @@ import { VariableMap } from '../types/variabe-map.type';
 export class ExecutionService {
   constructor(private http: HttpClient) {}
 
-  executeStep(step: Step, variables: VariableMap): Observable<any> {
+  executeStep(step: Step, variables: VariableMap, subScope?: ExecutionScope): Observable<any> {
     if (!isNil(step?.request)) {
       return this.request(this.createHttpRequest(step.request, variables)).pipe(
         catchError((response) => of(response))

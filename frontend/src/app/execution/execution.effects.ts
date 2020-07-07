@@ -39,7 +39,8 @@ export class ExecutionEffects {
         this.executionService
           .executeStep(
             action.scope.steps[action.scope.stepIndex],
-            action.scope.variables
+            action.scope.variables,
+            action.scope.subScope
           )
           .pipe(
             map((evaluation) =>
