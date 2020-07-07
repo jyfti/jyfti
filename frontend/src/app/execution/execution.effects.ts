@@ -36,23 +36,17 @@ export class ExecutionEffects {
     this.actions$.pipe(
       ofType(startStepExecution),
       concatMap((action) =>
-        this.executionService
-          .executeStep(
-            action.scope.steps[action.scope.stepIndex],
-            action.scope.variables,
-            action.scope.subScope
+        this.executionService.executeStep(action.scope).pipe(
+          map((evaluation) =>
+            finishStepExecution({
+              scope: this.executionService.addEvaluationToScope(
+                action.scope,
+                evaluation
+              ),
+              evaluation,
+            })
           )
-          .pipe(
-            map((evaluation) =>
-              finishStepExecution({
-                scope: this.executionService.addEvaluationToScope(
-                  action.scope,
-                  evaluation
-                ),
-                evaluation,
-              })
-            )
-          )
+        )
       )
     )
   );

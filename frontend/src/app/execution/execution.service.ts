@@ -15,18 +15,15 @@ import { ExecutionScope } from '../types/execution-scope.type';
 export class ExecutionService {
   constructor(private http: HttpClient) {}
 
-  executeStep(
-    step: Step,
-    variables: VariableMap,
-    subScope?: ExecutionScope
-  ): Observable<any> {
+  executeStep(scope: ExecutionScope): Observable<any> {
+    const step = scope.steps[scope.stepIndex];
     if (!isNil(step?.request)) {
-      return this.request(this.createHttpRequest(step.request, variables)).pipe(
-        catchError((response) => of(response))
-      );
+      return this.request(
+        this.createHttpRequest(step.request, scope.variables)
+      ).pipe(catchError((response) => of(response)));
     } else if (!isNil(step?.expression)) {
       return of(step.expression).pipe(
-        map((expression) => jsone(expression, variables)),
+        map((expression) => jsone(expression, scope.variables)),
         catchError((error) => of({ error: error.toString() }))
       );
     } else if (!isNil(step?.for)) {
