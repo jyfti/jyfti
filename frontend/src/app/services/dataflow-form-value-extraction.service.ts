@@ -20,7 +20,8 @@ export class DataflowFormValueExtractionService {
   extractStep(value: any): Step {
     return {
       assignTo: value?.assignTo,
-      request: value?.request,
+      ...value,
+      // Special case for expression
       expression: value?.expression ? JSON.parse(value?.expression) : undefined,
     };
   }

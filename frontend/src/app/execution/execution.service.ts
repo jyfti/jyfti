@@ -1,11 +1,12 @@
 import { HttpClient, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of, empty, throwError } from 'rxjs';
-import { filter, map, catchError } from 'rxjs/operators';
-import { HttpRequestTemplate } from '../types/http-request-template.type';
-import { VariableMap } from '../types/variabe-map.type';
 import jsone from 'json-e';
+import { isNil } from 'lodash';
+import { Observable, of } from 'rxjs';
+import { catchError, filter, map } from 'rxjs/operators';
+import { HttpRequestTemplate } from '../types/http-request-template.type';
 import { Step } from '../types/step.type';
+import { VariableMap } from '../types/variabe-map.type';
 
 @Injectable({
   providedIn: 'root',
@@ -14,16 +15,16 @@ export class ExecutionService {
   constructor(private http: HttpClient) {}
 
   executeStep(step: Step, variables: VariableMap): Observable<any> {
-    if (step?.request) {
+    if (!isNil(step?.request)) {
       return this.request(this.createHttpRequest(step.request, variables)).pipe(
         catchError((response) => of(response))
       );
-    } else if (step?.expression) {
+    } else if (!isNil(step?.expression)) {
       return of(step.expression).pipe(
         map((expression) => jsone(expression, variables)),
         catchError((error) => of({ error: error.toString() }))
       );
-    } else if (step?.for) {
+    } else if (!isNil(step?.for)) {
       return of();
     } else {
       return of({
