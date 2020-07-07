@@ -5,7 +5,7 @@
       formControlName="assignTo"
       [title]="evaluation | json"
     />
-    <span class="self-center">=</span>
+    <span class="self-center"><i class="fas fa-equals"></i></span>
   </div>
   <div class="w-full">
     <ng-content></ng-content>
@@ -14,12 +14,12 @@
     class="px-4 bg-blue-500 hover:bg-blue-600 text-white"
     (click)="editRequested.emit()"
   >
-    Edit
+    <i class="fas fa-edit"></i>
   </button>
   <button
     class="px-4 bg-red-500 hover:bg-red-600 text-white"
     (click)="removed.emit()"
   >
-    Remove
+    <i class="fas fa-trash"></i>
   </button>
 </div>

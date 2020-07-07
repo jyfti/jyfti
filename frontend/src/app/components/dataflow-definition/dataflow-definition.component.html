@@ -18,19 +18,19 @@
       *ngIf="execution$ | async"
       (click)="clearExecution()"
     >
-      Clear execution
+      <i class="fas fa-stop"></i>
     </button>
     <button
       class="mt-2 p-4 bg-blue-600 hover:bg-blue-700 text-white"
       (click)="execute(formGroup)"
     >
-      Execute
+      <i class="fas fa-play"></i>
     </button>
     <button
       class="mt-2 p-4 bg-blue-600 hover:bg-blue-700 text-white"
       (click)="persist(formGroup)"
     >
-      Persist
+      <i class="fas fa-save"></i>
     </button>
   </div>
 </div>
