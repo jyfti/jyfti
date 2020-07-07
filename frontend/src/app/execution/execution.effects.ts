@@ -22,9 +22,11 @@ export class ExecutionEffects {
       ofType(startExecution),
       map((action) =>
         startStepExecution({
-          steps: action.dataflow.steps,
-          stepIndex: 0,
-          variables: {},
+          scope: {
+            steps: action.dataflow.steps,
+            stepIndex: 0,
+            variables: {},
+          },
         })
       )
     )
@@ -35,17 +37,23 @@ export class ExecutionEffects {
       ofType(startStepExecution),
       concatMap((action) =>
         this.executionService
-          .executeStep(action.steps[action.stepIndex], action.variables)
+          .executeStep(
+            action.scope.steps[action.scope.stepIndex],
+            action.scope.variables
+          )
           .pipe(
             map((evaluation) =>
               finishStepExecution({
-                stepIndex: action.stepIndex,
-                evaluation,
-                steps: action.steps,
-                variables: {
-                  ...action.variables,
-                  [action.steps[action.stepIndex].assignTo]: evaluation,
+                scope: {
+                  stepIndex: action.scope.stepIndex,
+                  steps: action.scope.steps,
+                  variables: {
+                    ...action.scope.variables,
+                    [action.scope.steps[action.scope.stepIndex]
+                      .assignTo]: evaluation,
+                  },
                 },
+                evaluation,
               })
             )
           )
@@ -57,12 +65,13 @@ export class ExecutionEffects {
     this.actions$.pipe(
       ofType(finishStepExecution),
       map((action) =>
-        action.stepIndex + 1 === action.steps.length
+        action.scope.stepIndex + 1 === action.scope.steps.length
           ? finishExecution()
           : startStepExecution({
-              steps: action.steps,
-              stepIndex: action.stepIndex + 1,
-              variables: action.variables,
+              scope: {
+                ...action.scope,
+                stepIndex: action.scope.stepIndex + 1,
+              },
             })
       )
     )

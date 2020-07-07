@@ -1,7 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 import { Dataflow } from '../types/dataflow.type';
-import { Step } from '../types/step.type';
-import { VariableMap } from '../types/variabe-map.type';
+import { ExecutionScope } from '../types/execution-scope.type';
 
 export const startExecution = createAction(
   '[Execution] Start',
@@ -14,15 +13,10 @@ export const resetExecution = createAction('[Execution] Reset');
 
 export const startStepExecution = createAction(
   '[Execution] Start step',
-  props<{ stepIndex: number; steps: Step[]; variables: VariableMap }>()
+  props<{ scope: ExecutionScope }>()
 );
 
 export const finishStepExecution = createAction(
   '[Execution] Finish step',
-  props<{
-    stepIndex: number;
-    evaluation: any;
-    steps: Step[];
-    variables: VariableMap;
-  }>()
+  props<{ scope: ExecutionScope; evaluation: any }>()
 );

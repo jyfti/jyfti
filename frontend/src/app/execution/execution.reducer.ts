@@ -22,15 +22,15 @@ const _executionReducer = createReducer(
     evaluations: {},
   })),
   on(resetExecution, (state) => null),
-  on(startStepExecution, (state, { stepIndex }) => ({
+  on(startStepExecution, (state, { scope }) => ({
     ...state,
-    stepIndex,
+    stepIndex: scope.stepIndex,
   })),
-  on(finishStepExecution, (state, { stepIndex, evaluation }) => ({
+  on(finishStepExecution, (state, { scope, evaluation }) => ({
     ...state,
     evaluations: {
       ...state.evaluations,
-      [stepIndex]: evaluation,
+      [scope.stepIndex]: evaluation,
     },
   }))
 );
