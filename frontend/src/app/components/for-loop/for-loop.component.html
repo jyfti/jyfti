@@ -5,7 +5,10 @@
     formControlName="in"
   ></ngx-monaco-editor>
   do
-  <span>something</span>
+  <app-steps
+    [steps]="formGroup.get('do')"
+    [evaluations]="{}"
+  ></app-steps>
   return
   <ngx-monaco-editor
     [options]="{ language: 'json' }"
