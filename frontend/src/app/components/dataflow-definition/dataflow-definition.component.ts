@@ -23,16 +23,10 @@ export class DataflowDefinitionComponent implements OnInit {
   execution$: Observable<any>;
   evaluations$: Observable<any>;
 
-  steps(formGroup) {
-    return formGroup.get('steps') as FormArray;
-  }
-
   constructor(
     private store: Store<GlobalState>,
     private dataflowFormService: DataflowFormService,
-    private dataflowFormValueExtractionService: DataflowFormValueExtractionService,
-    private router: Router,
-    private route: ActivatedRoute
+    private dataflowFormValueExtractionService: DataflowFormValueExtractionService
   ) {}
 
   ngOnInit() {
@@ -68,61 +62,5 @@ export class DataflowDefinitionComponent implements OnInit {
 
   clearExecution() {
     this.store.dispatch(resetExecution());
-  }
-
-  editStep(formGroup: FormGroup, stepIndex: number) {
-    this.store.dispatch(
-      loadedDataflow({
-        dataflow: this.dataflowFormValueExtractionService.extractDataFlow(
-          formGroup.value
-        ),
-      })
-    );
-    this.router.navigate(['step', stepIndex], { relativeTo: this.route });
-  }
-
-  removeStep(formGroup: FormGroup, stepIndex: number) {
-    this.steps(formGroup).removeAt(stepIndex);
-  }
-
-  addRequestStep(formGroup: FormGroup) {
-    this.steps(formGroup).push(
-      this.dataflowFormService.createStep({
-        assignTo: 'my_variable',
-        request: {
-          method: 'GET',
-          url: 'http://swapi.dev/api/planets/1/',
-          body: null,
-          headers: null,
-        },
-      })
-    );
-  }
-
-  addEvaluationStep(formGroup: FormGroup) {
-    this.steps(formGroup).push(
-      this.dataflowFormService.createStep({
-        assignTo: 'my_variable',
-        expression: {}
-      })
-    );
-  }
-
-  addForLoopStep(formGroup: FormGroup) {
-    this.steps(formGroup).push(
-      this.dataflowFormService.createStep({
-        assignTo: 'my_variable',
-        for: {
-          const: "value",
-          in: {
-            $eval: "values"
-          },
-          do: [],
-          return: {
-            $eval: "value"
-          }
-        }
-      })
-    );
   }
 }

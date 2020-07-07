@@ -1,0 +1,45 @@
+<div class="flex flex-col gap-2">
+  <app-step
+    *ngFor="let step of steps(formGroup).controls; let stepIndex = index"
+    [formGroup]="step"
+    [evaluation]="evaluations[stepIndex]"
+    [stepIndex]="stepIndex"
+    (removed)="removeStep(formGroup, stepIndex)"
+    (editRequested)="editStep(formGroup, stepIndex)"
+  >
+    <app-http-request
+      *ngIf="step.get('request')"
+      [formGroup]="step.get('request')"
+      [evaluation]="evaluations[stepIndex]"
+    ></app-http-request>
+    <app-json-e-evaluation
+      *ngIf="step.get('expression')"
+      [formControl]="step.get('expression')"
+      ngDefaultControl
+    ></app-json-e-evaluation>
+    <app-for-loop
+      *ngIf="step.get('for')"
+      [formGroup]="step.get('for')"
+    ></app-for-loop>
+  </app-step>
+</div>
+<div class="grid gap-2 grid-cols-3 mt-2">
+  <button
+    class="p-4 bg-gray-300 hover:bg-gray-400"
+    (click)="addRequestStep(formGroup)"
+  >
+    Add request step
+  </button>
+  <button
+    class="p-4 bg-gray-300 hover:bg-gray-400"
+    (click)="addEvaluationStep(formGroup)"
+  >
+    Add evaluation step
+  </button>
+  <button
+    class="p-4 bg-gray-300 hover:bg-gray-400"
+    (click)="addForLoopStep(formGroup)"
+  >
+    Add for loop
+  </button>
+</div>
