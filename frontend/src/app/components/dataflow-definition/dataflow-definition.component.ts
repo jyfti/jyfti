@@ -3,8 +3,11 @@ import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { selectExecution } from 'src/app/execution/execution.reducer';
+import { map, tap, filter, startWith } from 'rxjs/operators';
+import {
+  selectExecution,
+  ExecutionState,
+} from 'src/app/execution/execution.reducer';
 import {
   resetExecution,
   startExecution,
@@ -13,6 +16,7 @@ import { loadedDataflow, persistDataflow } from 'src/app/ngrx/dataflow.actions';
 import { GlobalState } from 'src/app/ngrx/dataflow.state';
 import { DataflowFormValueExtractionService } from 'src/app/services/dataflow-form-value-extraction.service';
 import { DataflowFormService } from 'src/app/services/dataflow-form.service';
+import { isNil } from 'lodash';
 
 @Component({
   selector: 'app-dataflow-definition',
@@ -20,7 +24,7 @@ import { DataflowFormService } from 'src/app/services/dataflow-form.service';
 })
 export class DataflowDefinitionComponent implements OnInit {
   formGroup$: Observable<FormGroup>;
-  execution$: Observable<any>;
+  execution$: Observable<ExecutionState>;
   evaluations$: Observable<any>;
 
   constructor(
@@ -38,7 +42,9 @@ export class DataflowDefinitionComponent implements OnInit {
       map((dataflow) => this.dataflowFormService.createDataFlow(dataflow))
     );
     this.evaluations$ = this.execution$.pipe(
-      map((execution) => execution?.evaluations || {})
+      map((execution) => execution?.scope?.variables),
+      filter((variables) => !isNil(variables)),
+      startWith({})
     );
   }
 
