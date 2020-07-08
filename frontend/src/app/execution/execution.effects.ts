@@ -3,8 +3,6 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { concatMap, map } from 'rxjs/operators';
 import { ExecutionService } from 'src/app/execution/execution.service';
 import {
-  finishExecution,
-  finishStepExecution,
   startExecution,
   startStepExecution,
 } from '../ngrx/dataflow-execution.actions';
@@ -35,22 +33,6 @@ export class ExecutionEffects {
     this.actions$.pipe(
       ofType(startStepExecution),
       concatMap((action) => this.executionService.executeStep(action.scope))
-    )
-  );
-
-  nextStepAfterFinishedPreviousStep$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(finishStepExecution),
-      map((action) =>
-        action.scope.stepIndex + 1 === action.scope.steps.length
-          ? finishExecution()
-          : startStepExecution({
-              scope: {
-                ...action.scope,
-                stepIndex: action.scope.stepIndex + 1,
-              },
-            })
-      )
     )
   );
 }

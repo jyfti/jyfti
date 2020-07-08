@@ -7,16 +7,14 @@ export const startExecution = createAction(
   props<{ dataflow: Dataflow }>()
 );
 
-export const finishExecution = createAction('[Execution] Finish');
+export const finishExecution = createAction(
+  '[Execution] Finish',
+  props<{ scope: ExecutionScope }>()
+);
 
 export const resetExecution = createAction('[Execution] Reset');
 
 export const startStepExecution = createAction(
   '[Execution] Start step',
-  props<{ scope: ExecutionScope }>()
-);
-
-export const finishStepExecution = createAction(
-  '[Execution] Finish step',
   props<{ scope: ExecutionScope }>()
 );

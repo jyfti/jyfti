@@ -6,8 +6,8 @@ import { isNil } from 'lodash';
 import { Observable, of } from 'rxjs';
 import { catchError, filter, map } from 'rxjs/operators';
 import {
-  finishStepExecution,
   startStepExecution,
+  finishExecution,
 } from '../ngrx/dataflow-execution.actions';
 import { ExecutionScope } from '../types/execution-scope.type';
 import { HttpRequestTemplate } from '../types/http-request-template.type';
@@ -34,11 +34,8 @@ export class ExecutionService {
         error:
           "Step does not contain any of 'request', 'expression' and 'for'.",
       }).pipe(
-        map((evaluation) =>
-          finishStepExecution({
-            scope: this.addEvaluationToScope(scope, evaluation),
-          })
-        )
+        map((evaluation) => this.addEvaluationToScope(scope, evaluation)),
+        map((newScope) => this.createNextStep(newScope))
       );
     }
   }
@@ -51,11 +48,8 @@ export class ExecutionService {
       this.createHttpRequest(step.request, this.extractVariableMap(scope))
     ).pipe(
       catchError((response) => of(response)),
-      map((evaluation) =>
-        finishStepExecution({
-          scope: this.addEvaluationToScope(scope, evaluation),
-        })
-      )
+      map((evaluation) => this.addEvaluationToScope(scope, evaluation)),
+      map((newScope) => this.createNextStep(newScope))
     );
   }
 
@@ -66,11 +60,8 @@ export class ExecutionService {
     return of(step.expression).pipe(
       map((expression) => jsone(expression, this.extractVariableMap(scope))),
       catchError((error) => of({ error: error.toString() })),
-      map((evaluation) =>
-        finishStepExecution({
-          scope: this.addEvaluationToScope(scope, evaluation),
-        })
-      )
+      map((evaluation) => this.addEvaluationToScope(scope, evaluation)),
+      map((newScope) => this.createNextStep(newScope))
     );
   }
 
@@ -93,11 +84,8 @@ export class ExecutionService {
       );
     }
     return of({ error: 'Not yet implemented' }).pipe(
-      map((evaluation) =>
-        finishStepExecution({
-          scope: this.addEvaluationToScope(scope, evaluation),
-        })
-      )
+      map((evaluation) => this.addEvaluationToScope(scope, evaluation)),
+      map((newScope) => this.createNextStep(newScope))
     );
   }
 
@@ -117,6 +105,17 @@ export class ExecutionService {
       (stepIndex) => scope.steps[stepIndex].assignTo,
       scope.variables
     );
+  }
+
+  createNextStep(scope: ExecutionScope): Action {
+    return scope.stepIndex + 1 === scope.steps.length
+      ? finishExecution({ scope })
+      : startStepExecution({
+          scope: {
+            ...scope,
+            stepIndex: scope.stepIndex + 1,
+          },
+        });
   }
 
   private interpolate(variables: VariableMap, str: string) {
