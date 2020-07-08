@@ -18,5 +18,5 @@ export const startStepExecution = createAction(
 
 export const finishStepExecution = createAction(
   '[Execution] Finish step',
-  props<{ scope: ExecutionScope; evaluation: any }>()
+  props<{ scope: ExecutionScope }>()
 );

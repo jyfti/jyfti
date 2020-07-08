@@ -37,7 +37,6 @@ export class ExecutionService {
         map((evaluation) =>
           finishStepExecution({
             scope: this.addEvaluationToScope(scope, evaluation),
-            evaluation,
           })
         )
       );
@@ -55,7 +54,6 @@ export class ExecutionService {
       map((evaluation) =>
         finishStepExecution({
           scope: this.addEvaluationToScope(scope, evaluation),
-          evaluation,
         })
       )
     );
@@ -71,7 +69,6 @@ export class ExecutionService {
       map((evaluation) =>
         finishStepExecution({
           scope: this.addEvaluationToScope(scope, evaluation),
-          evaluation,
         })
       )
     );
@@ -99,7 +96,6 @@ export class ExecutionService {
       map((evaluation) =>
         finishStepExecution({
           scope: this.addEvaluationToScope(scope, evaluation),
-          evaluation,
         })
       )
     );

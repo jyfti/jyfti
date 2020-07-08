@@ -25,7 +25,7 @@ import { isNil } from 'lodash';
 export class DataflowDefinitionComponent implements OnInit {
   formGroup$: Observable<FormGroup>;
   execution$: Observable<ExecutionState>;
-  evaluations$: Observable<any>;
+  evaluations$: Observable<{ [stepIndex: number]: any }>;
 
   constructor(
     private store: Store<GlobalState>,
