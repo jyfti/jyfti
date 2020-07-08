@@ -13,6 +13,7 @@ import { ExecutionScope } from '../types/execution-scope.type';
 import { HttpRequestTemplate } from '../types/http-request-template.type';
 import { VariableMap } from '../types/variabe-map.type';
 import { Step } from '../types/step.type';
+import { mapKeys } from 'lodash/fp';
 
 @Injectable({
   providedIn: 'root',
@@ -48,7 +49,7 @@ export class ExecutionService {
     scope: ExecutionScope
   ): Observable<Action> {
     return this.request(
-      this.createHttpRequest(step.request, scope.variables)
+      this.createHttpRequest(step.request, this.extractVariableMap(scope))
     ).pipe(
       catchError((response) => of(response)),
       map((evaluation) =>
@@ -65,7 +66,7 @@ export class ExecutionService {
     scope: ExecutionScope
   ): Observable<Action> {
     return of(step.expression).pipe(
-      map((expression) => jsone(expression, scope.variables)),
+      map((expression) => jsone(expression, this.extractVariableMap(scope))),
       catchError((error) => of({ error: error.toString() })),
       map((evaluation) =>
         finishStepExecution({
@@ -109,12 +110,20 @@ export class ExecutionService {
       ...scope,
       variables: {
         ...scope.variables,
-        [scope.steps[scope.stepIndex].assignTo]: evaluation,
+        [scope.stepIndex]: evaluation,
       },
     };
   }
 
-  private interpolate(variables, str: string) {
+  extractVariableMap(scope: ExecutionScope): VariableMap {
+    // TODO: This does not consider subscopes yet
+    return mapKeys(
+      (stepIndex) => scope.steps[stepIndex].assignTo,
+      scope.variables
+    );
+  }
+
+  private interpolate(variables: VariableMap, str: string) {
     const identifiers = Object.keys(variables);
     const values = Object.values(variables);
     return new Function(...identifiers, `return \`${str}\`;`)(...values);
