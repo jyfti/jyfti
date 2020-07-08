@@ -12,6 +12,7 @@ import {
 import { ExecutionScope } from '../types/execution-scope.type';
 import { HttpRequestTemplate } from '../types/http-request-template.type';
 import { VariableMap } from '../types/variabe-map.type';
+import { Step } from '../types/step.type';
 
 @Injectable({
   providedIn: 'root',
@@ -22,51 +23,11 @@ export class ExecutionService {
   executeStep(scope: ExecutionScope): Observable<Action> {
     const step = scope.steps[scope.stepIndex];
     if (!isNil(step?.request)) {
-      return this.request(
-        this.createHttpRequest(step.request, scope.variables)
-      ).pipe(
-        catchError((response) => of(response)),
-        map((evaluation) =>
-          finishStepExecution({
-            scope: this.addEvaluationToScope(scope, evaluation),
-            evaluation,
-          })
-        )
-      );
+      return this.executeRequestStep(step, scope);
     } else if (!isNil(step?.expression)) {
-      return of(step.expression).pipe(
-        map((expression) => jsone(expression, scope.variables)),
-        catchError((error) => of({ error: error.toString() })),
-        map((evaluation) =>
-          finishStepExecution({
-            scope: this.addEvaluationToScope(scope, evaluation),
-            evaluation,
-          })
-        )
-      );
+      return this.executeExpressionStep(step, scope);
     } else if (!isNil(step?.for)) {
-      if (isNil(scope.subScope)) {
-        return of(
-          startStepExecution({
-            scope: {
-              ...scope,
-              subScope: {
-                stepIndex: 0,
-                steps: step.for.do,
-                variables: {},
-              },
-            },
-          })
-        );
-      }
-      return of({ error: 'Not yet implemented' }).pipe(
-        map((evaluation) =>
-          finishStepExecution({
-            scope: this.addEvaluationToScope(scope, evaluation),
-            evaluation,
-          })
-        )
-      );
+      return this.executeForLoopStep(step, scope);
     } else {
       return of({
         error:
@@ -80,6 +41,67 @@ export class ExecutionService {
         )
       );
     }
+  }
+
+  private executeRequestStep(
+    step: Step,
+    scope: ExecutionScope
+  ): Observable<Action> {
+    return this.request(
+      this.createHttpRequest(step.request, scope.variables)
+    ).pipe(
+      catchError((response) => of(response)),
+      map((evaluation) =>
+        finishStepExecution({
+          scope: this.addEvaluationToScope(scope, evaluation),
+          evaluation,
+        })
+      )
+    );
+  }
+
+  private executeExpressionStep(
+    step: Step,
+    scope: ExecutionScope
+  ): Observable<Action> {
+    return of(step.expression).pipe(
+      map((expression) => jsone(expression, scope.variables)),
+      catchError((error) => of({ error: error.toString() })),
+      map((evaluation) =>
+        finishStepExecution({
+          scope: this.addEvaluationToScope(scope, evaluation),
+          evaluation,
+        })
+      )
+    );
+  }
+
+  private executeForLoopStep(
+    step: Step,
+    scope: ExecutionScope
+  ): Observable<Action> {
+    if (isNil(scope.subScope)) {
+      return of(
+        startStepExecution({
+          scope: {
+            ...scope,
+            subScope: {
+              stepIndex: 0,
+              steps: step.for.do,
+              variables: {},
+            },
+          },
+        })
+      );
+    }
+    return of({ error: 'Not yet implemented' }).pipe(
+      map((evaluation) =>
+        finishStepExecution({
+          scope: this.addEvaluationToScope(scope, evaluation),
+          evaluation,
+        })
+      )
+    );
   }
 
   addEvaluationToScope(scope: ExecutionScope, evaluation: any): ExecutionScope {
