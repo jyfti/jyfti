@@ -1,11 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { concatMap, map } from 'rxjs/operators';
+import { switchMap } from 'rxjs/operators';
 import { ExecutionService } from 'src/app/execution/execution.service';
-import {
-  startExecution,
-  startStepExecution,
-} from '../ngrx/dataflow-execution.actions';
+import { startExecution } from '../ngrx/dataflow-execution.actions';
 
 @Injectable()
 export class ExecutionEffects {
@@ -17,22 +14,9 @@ export class ExecutionEffects {
   startExecution$ = createEffect(() =>
     this.actions$.pipe(
       ofType(startExecution),
-      map((action) =>
-        startStepExecution({
-          scope: {
-            steps: action.dataflow.steps,
-            stepIndex: 0,
-            variables: {},
-          },
-        })
+      switchMap((action) =>
+        this.executionService.executeDataflow(action.dataflow)
       )
-    )
-  );
-
-  stepExecution$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(startStepExecution),
-      concatMap((action) => this.executionService.executeStep(action.scope))
     )
   );
 }

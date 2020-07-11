@@ -3,24 +3,43 @@ import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
 import jsone from 'json-e';
 import { isNil } from 'lodash';
-import { Observable, of, empty } from 'rxjs';
-import { catchError, filter, map, expand } from 'rxjs/operators';
+import { mapKeys } from 'lodash/fp';
+import { empty, Observable, of } from 'rxjs';
+import { catchError, expand, filter, map } from 'rxjs/operators';
 import {
-  startStepExecution,
   finishExecution,
+  startStepExecution,
   stepExecution,
 } from '../ngrx/dataflow-execution.actions';
+import { Dataflow } from '../types/dataflow.type';
 import { ExecutionScope } from '../types/execution-scope.type';
 import { HttpRequestTemplate } from '../types/http-request-template.type';
-import { VariableMap } from '../types/variabe-map.type';
 import { Step } from '../types/step.type';
-import { mapKeys } from 'lodash/fp';
+import { VariableMap } from '../types/variabe-map.type';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ExecutionService {
   constructor(private http: HttpClient) {}
+
+  executeDataflow(dataflow: Dataflow): Observable<Action> {
+    return of<Action>(
+      startStepExecution({
+        scope: {
+          steps: dataflow.steps,
+          stepIndex: 0,
+          variables: {},
+        },
+      })
+    ).pipe(
+      expand((action) =>
+        action.type === startStepExecution.type
+          ? this.executeStep((action as any).scope)
+          : empty()
+      )
+    );
+  }
 
   executeStep(scope: ExecutionScope): Observable<Action> {
     const step = scope.steps[scope.stepIndex];
