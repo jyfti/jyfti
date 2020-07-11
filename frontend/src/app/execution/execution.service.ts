@@ -3,11 +3,12 @@ import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
 import jsone from 'json-e';
 import { isNil } from 'lodash';
-import { Observable, of } from 'rxjs';
-import { catchError, filter, map } from 'rxjs/operators';
+import { Observable, of, empty } from 'rxjs';
+import { catchError, filter, map, expand } from 'rxjs/operators';
 import {
   startStepExecution,
   finishExecution,
+  stepExecution,
 } from '../ngrx/dataflow-execution.actions';
 import { ExecutionScope } from '../types/execution-scope.type';
 import { HttpRequestTemplate } from '../types/http-request-template.type';
@@ -69,23 +70,29 @@ export class ExecutionService {
     step: Step,
     scope: ExecutionScope
   ): Observable<Action> {
-    if (isNil(scope.subScope)) {
-      return of(
-        startStepExecution({
-          scope: {
-            ...scope,
-            subScope: {
-              stepIndex: 0,
-              steps: step.for.do,
-              variables: {},
-            },
-          },
-        })
-      );
-    }
-    return of({ error: 'Not yet implemented' }).pipe(
-      map((evaluation) => this.addEvaluationToScope(scope, evaluation)),
-      map((newScope) => this.createNextStep(newScope))
+    const subScope = {
+      stepIndex: 0,
+      steps: step.for.do,
+      variables: {},
+    };
+    return of(stepExecution({ scope: subScope })).pipe(
+      expand((action) =>
+        action.type === stepExecution.type
+          ? this.executeStep(action.scope).pipe(
+              map((a) => {
+                console.log(a);
+                if (a.type === finishExecution.type) {
+                  // TODO: Evaluate `return` and add to scope
+                  return this.createNextStep(scope);
+                } else if (a.type === stepExecution.type) {
+                  return a;
+                } else if (a.type === startStepExecution.type) {
+                  return stepExecution({ scope: (a as any).scope });
+                }
+              })
+            )
+          : empty()
+      )
     );
   }
 

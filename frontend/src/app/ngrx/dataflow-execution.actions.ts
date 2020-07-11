@@ -18,3 +18,8 @@ export const startStepExecution = createAction(
   '[Execution] Start step',
   props<{ scope: ExecutionScope }>()
 );
+
+export const stepExecution = createAction(
+  '[Execution] Step',
+  props<{ scope: ExecutionScope }>()
+);
