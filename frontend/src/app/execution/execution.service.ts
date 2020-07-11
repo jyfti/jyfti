@@ -5,7 +5,7 @@ import jsone from 'json-e';
 import { isNil } from 'lodash';
 import { mapKeys } from 'lodash/fp';
 import { empty, Observable, of } from 'rxjs';
-import { catchError, expand, filter, map } from 'rxjs/operators';
+import { catchError, expand, filter, map, flatMap } from 'rxjs/operators';
 import {
   finishExecution,
   startStepExecution,
@@ -16,6 +16,7 @@ import { ExecutionScope } from '../types/execution-scope.type';
 import { HttpRequestTemplate } from '../types/http-request-template.type';
 import { Step } from '../types/step.type';
 import { VariableMap } from '../types/variabe-map.type';
+import { ofType } from '@ngrx/effects';
 
 @Injectable({
   providedIn: 'root',
@@ -34,9 +35,10 @@ export class ExecutionService {
       })
     ).pipe(
       expand((action) =>
-        action.type === startStepExecution.type
-          ? this.executeStep((action as any).scope)
-          : empty()
+        of(action).pipe(
+          ofType(startStepExecution),
+          flatMap((a) => this.executeStep(a.scope))
+        )
       )
     );
   }
