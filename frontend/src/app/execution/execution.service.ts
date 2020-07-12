@@ -96,21 +96,24 @@ export class ExecutionService {
   }
 
   private executeForLoop(step: Step): (ExecutionScope) => Observable<Action> {
-    return this.executeForLoopStep(step);
-  }
-
-  private executeForLoopStep(
-    step: Step
-  ): (ExecutionScope) => Observable<Action> {
     return (scope) => {
       const parentVariables = this.extractVariableMap(scope);
+      return this.executeForLoopSteps(step.for.do, {
+        ...parentVariables,
+        [step.for.const]: parentVariables[step.for.in][0],
+      })(scope);
+    };
+  }
+
+  private executeForLoopSteps(
+    steps: Step[],
+    parentVariables: VariableMap
+  ): (ExecutionScope) => Observable<Action> {
+    return (scope) => {
       const initialScope = {
         stepIndex: 0,
-        steps: step.for.do,
-        parentVariables: {
-          ...parentVariables,
-          [step.for.const]: parentVariables[step.for.in][0],
-        },
+        steps,
+        parentVariables,
         localVariables: {},
       };
       return this.executeSteps(initialScope).pipe(
