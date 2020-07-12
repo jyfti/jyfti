@@ -64,7 +64,7 @@ export class ExecutionService {
     } else if (!isNil(step?.expression)) {
       return this.executeExpressionStep(step);
     } else if (!isNil(step?.for)) {
-      return this.executeForLoopStep(step);
+      return this.executeForLoop(step);
     } else {
       return this.executionFailure();
     }
@@ -93,6 +93,10 @@ export class ExecutionService {
         map((evaluation) => this.addEvaluationToScope(scope, evaluation)),
         map((newScope) => this.createNextStep(newScope))
       );
+  }
+
+  private executeForLoop(step: Step): (ExecutionScope) => Observable<Action> {
+    return this.executeForLoopStep(step);
   }
 
   private executeForLoopStep(
