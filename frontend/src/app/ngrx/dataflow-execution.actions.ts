@@ -14,11 +14,6 @@ export const finishExecution = createAction(
 
 export const resetExecution = createAction('[Execution] Reset');
 
-export const startStepExecution = createAction(
-  '[Execution] Start step',
-  props<{ scope: ExecutionScope }>()
-);
-
 export const stepExecution = createAction(
   '[Execution] Step',
   props<{ scope: ExecutionScope }>()

@@ -2,8 +2,8 @@ import { createReducer, on, createFeatureSelector } from '@ngrx/store';
 import {
   resetExecution,
   startExecution,
-  startStepExecution,
   finishExecution,
+  stepExecution,
 } from '../ngrx/dataflow-execution.actions';
 import { ExecutionScope } from '../types/execution-scope.type';
 
@@ -26,7 +26,7 @@ const _executionReducer = createReducer(
   })),
   on(resetExecution, (state) => null),
   on(finishExecution, (state, { scope }) => ({ scope })),
-  on(startStepExecution, (state, { scope }) => ({ scope }))
+  on(stepExecution, (state, { scope }) => ({ scope }))
 );
 
 export function executionReducer(state, action) {

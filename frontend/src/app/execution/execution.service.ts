@@ -1,5 +1,6 @@
 import { HttpClient, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { ofType } from '@ngrx/effects';
 import { Action } from '@ngrx/store';
 import jsone from 'json-e';
 import { isNil } from 'lodash';
@@ -7,18 +8,16 @@ import { mapKeys } from 'lodash/fp';
 import { empty, Observable, of, range } from 'rxjs';
 import {
   catchError,
+  concatAll,
+  concatMap,
   expand,
   filter,
   map,
-  flatMap,
   scan,
-  concatMap,
   share,
-  concatAll,
 } from 'rxjs/operators';
 import {
   finishExecution,
-  startStepExecution,
   stepExecution,
 } from '../ngrx/dataflow-execution.actions';
 import { Dataflow } from '../types/dataflow.type';
@@ -26,7 +25,6 @@ import { ExecutionScope } from '../types/execution-scope.type';
 import { HttpRequestTemplate } from '../types/http-request-template.type';
 import { Step } from '../types/step.type';
 import { VariableMap } from '../types/variabe-map.type';
-import { ofType } from '@ngrx/effects';
 
 @Injectable({
   providedIn: 'root',
@@ -40,12 +38,12 @@ export class ExecutionService {
         (acc, index) =>
           acc.pipe(
             share(),
-            ofType(startStepExecution),
+            ofType(stepExecution),
             filter((action) => action.scope.stepIndex === index),
             concatMap((action) => this.executeStep(action.scope))
           ),
         of(
-          startStepExecution({
+          stepExecution({
             scope: {
               steps: dataflow.steps,
               stepIndex: 0,
@@ -118,8 +116,6 @@ export class ExecutionService {
               map((a) => {
                 if (a.type === stepExecution.type) {
                   return a;
-                } else if (a.type === startStepExecution.type) {
-                  return stepExecution({ scope: (a as any).scope });
                 } else {
                   return a;
                 }
@@ -164,7 +160,7 @@ export class ExecutionService {
   createNextStep(scope: ExecutionScope): Action {
     return scope.stepIndex + 1 === scope.steps.length
       ? finishExecution({ scope })
-      : startStepExecution({
+      : stepExecution({
           scope: {
             ...scope,
             stepIndex: scope.stepIndex + 1,
