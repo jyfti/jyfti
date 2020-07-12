@@ -122,16 +122,18 @@ export class ExecutionService {
           )
         ),
         concatAll(),
-        map((action) =>
-          stepExecution({
-            scope: {
-              ...scope,
-              subScope: (action as any).scope,
-            },
-          })
-        ),
+        map((action) => this.liftToParentScope(scope, action)),
         endWith(this.createNextStep(scope))
       );
+  }
+
+  private liftToParentScope(parentScope: any, action: any) {
+    return stepExecution({
+      scope: {
+        ...parentScope,
+        subScope: action.scope,
+      },
+    });
   }
 
   private executionFailure(): (ExecutionScope) => Observable<Action> {
