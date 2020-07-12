@@ -101,18 +101,30 @@ export class ExecutionService {
         action.type === stepExecution.type
           ? this.executeStep(action.scope).pipe(
               map((a) => {
-                if (a.type === finishExecution.type) {
-                  // TODO: Evaluate `return` and add to scope
-                  return this.createNextStep(scope);
-                } else if (a.type === stepExecution.type) {
+                if (a.type === stepExecution.type) {
                   return a;
                 } else if (a.type === startStepExecution.type) {
                   return stepExecution({ scope: (a as any).scope });
+                } else {
+                  return a;
                 }
               })
             )
           : empty()
-      )
+      ),
+      map((action) => {
+        if (action.type === finishExecution.type) {
+          // TODO: Evaluate `return` and add to scope
+          return this.createNextStep(scope);
+        } else if (action.type === stepExecution.type) {
+          return stepExecution({
+            scope: {
+              ...scope,
+              subScope: (action as any).scope,
+            },
+          });
+        }
+      })
     );
   }
 
