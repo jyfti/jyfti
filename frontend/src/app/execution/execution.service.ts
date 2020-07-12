@@ -59,91 +59,90 @@ export class ExecutionService {
   executeStep(scope: ExecutionScope): Observable<Action> {
     const step = scope.steps[scope.stepIndex];
     if (!isNil(step?.request)) {
-      return this.executeRequestStep(step, scope);
+      return this.executeRequestStep(step)(scope);
     } else if (!isNil(step?.expression)) {
-      return this.executeExpressionStep(step, scope);
+      return this.executeExpressionStep(step)(scope);
     } else if (!isNil(step?.for)) {
-      return this.executeForLoopStep(step, scope);
+      return this.executeForLoopStep(step)(scope);
     } else {
-      return this.executionFailure(step, scope);
+      return this.executionFailure(step)(scope);
     }
   }
 
   private executeRequestStep(
-    step: Step,
-    scope: ExecutionScope
-  ): Observable<Action> {
-    return this.request(
-      this.createHttpRequest(step.request, this.extractVariableMap(scope))
-    ).pipe(
-      catchError((response) => of(response)),
-      map((evaluation) => this.addEvaluationToScope(scope, evaluation)),
-      map((newScope) => this.createNextStep(newScope))
-    );
+    step: Step
+  ): (ExecutionScope) => Observable<Action> {
+    return (scope) =>
+      this.request(
+        this.createHttpRequest(step.request, this.extractVariableMap(scope))
+      ).pipe(
+        catchError((response) => of(response)),
+        map((evaluation) => this.addEvaluationToScope(scope, evaluation)),
+        map((newScope) => this.createNextStep(newScope))
+      );
   }
 
   private executeExpressionStep(
-    step: Step,
-    scope: ExecutionScope
-  ): Observable<Action> {
-    return of(step.expression).pipe(
-      map((expression) => jsone(expression, this.extractVariableMap(scope))),
-      catchError((error) => of({ error: error.toString() })),
-      map((evaluation) => this.addEvaluationToScope(scope, evaluation)),
-      map((newScope) => this.createNextStep(newScope))
-    );
+    step: Step
+  ): (ExecutionScope) => Observable<Action> {
+    return (scope) =>
+      of(step.expression).pipe(
+        map((expression) => jsone(expression, this.extractVariableMap(scope))),
+        catchError((error) => of({ error: error.toString() })),
+        map((evaluation) => this.addEvaluationToScope(scope, evaluation)),
+        map((newScope) => this.createNextStep(newScope))
+      );
   }
 
   private executeForLoopStep(
-    step: Step,
-    scope: ExecutionScope
-  ): Observable<Action> {
-    return range(0, step.for.do.length).pipe(
-      scan(
-        (acc, index) =>
-          acc.pipe(
-            share(),
-            ofType(stepExecution),
-            filter((action) => action.scope.stepIndex === index),
-            concatMap((action) => this.executeStep(action.scope))
-          ),
-        of(
-          stepExecution({
-            scope: {
-              stepIndex: 0,
-              steps: step.for.do,
-              variables: {},
-            },
-          })
-        )
-      ),
-      concatAll(),
-      map((action) => {
-        if (action.type === finishExecution.type) {
-          // TODO: Evaluate `return` and add to scope
-          return this.createNextStep(scope);
-        } else if (action.type === stepExecution.type) {
-          return stepExecution({
-            scope: {
-              ...scope,
-              subScope: (action as any).scope,
-            },
-          });
-        }
-      })
-    );
+    step: Step
+  ): (ExecutionScope) => Observable<Action> {
+    return (scope) =>
+      range(0, step.for.do.length).pipe(
+        scan(
+          (acc, index) =>
+            acc.pipe(
+              share(),
+              ofType(stepExecution),
+              filter((action) => action.scope.stepIndex === index),
+              concatMap((action) => this.executeStep(action.scope))
+            ),
+          of(
+            stepExecution({
+              scope: {
+                stepIndex: 0,
+                steps: step.for.do,
+                variables: {},
+              },
+            })
+          )
+        ),
+        concatAll(),
+        map((action) => {
+          if (action.type === finishExecution.type) {
+            // TODO: Evaluate `return` and add to scope
+            return this.createNextStep(scope);
+          } else if (action.type === stepExecution.type) {
+            return stepExecution({
+              scope: {
+                ...scope,
+                subScope: (action as any).scope,
+              },
+            });
+          }
+        })
+      );
   }
 
-  private executionFailure(
-    step: Step,
-    scope: ExecutionScope
-  ): Observable<Action> {
-    return of({
-      error: "Step does not contain any of 'request', 'expression' and 'for'.",
-    }).pipe(
-      map((evaluation) => this.addEvaluationToScope(scope, evaluation)),
-      map((newScope) => this.createNextStep(newScope))
-    );
+  private executionFailure(step: Step): (ExecutionScope) => Observable<Action> {
+    return (scope) =>
+      of({
+        error:
+          "Step does not contain any of 'request', 'expression' and 'for'.",
+      }).pipe(
+        map((evaluation) => this.addEvaluationToScope(scope, evaluation)),
+        map((newScope) => this.createNextStep(newScope))
+      );
   }
 
   addEvaluationToScope(scope: ExecutionScope, evaluation: any): ExecutionScope {
