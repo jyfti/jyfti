@@ -47,6 +47,7 @@ export class ExecutionService {
             scope: {
               steps: dataflow.steps,
               stepIndex: 0,
+              parentVariables: {},
               localVariables: {},
             },
           })
@@ -114,6 +115,7 @@ export class ExecutionService {
               scope: {
                 stepIndex: 0,
                 steps: step.for.do,
+                parentVariables: this.extractVariableMap(scope),
                 localVariables: {},
               },
             })
@@ -154,7 +156,13 @@ export class ExecutionService {
   }
 
   extractVariableMap(scope: ExecutionScope): VariableMap {
-    // TODO: This does not consider subscopes yet
+    return {
+      ...scope.parentVariables,
+      ...this.extractLocalVariableMap(scope),
+    };
+  }
+
+  extractLocalVariableMap(scope: ExecutionScope): VariableMap {
     return mapKeys(
       (stepIndex) => scope.steps[stepIndex].assignTo,
       scope.localVariables
