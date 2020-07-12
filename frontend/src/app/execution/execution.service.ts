@@ -47,7 +47,6 @@ export class ExecutionService {
       scan(
         (acc, index) =>
           acc.pipe(
-            ofType(stepExecution),
             filter((action) => action.scope.stepIndex === index),
             switchMap((action) => {
               const step = action.scope.steps[action.scope.stepIndex];
