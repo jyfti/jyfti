@@ -67,7 +67,7 @@ export class ExecutionService {
     } else if (!isNil(step?.for)) {
       return this.executeForLoopStep(step);
     } else {
-      return this.executionFailure(step);
+      return this.executionFailure();
     }
   }
 
@@ -139,7 +139,7 @@ export class ExecutionService {
       );
   }
 
-  private executionFailure(step: Step): (ExecutionScope) => Observable<Action> {
+  private executionFailure(): (ExecutionScope) => Observable<Action> {
     return (scope) =>
       of({
         error:
