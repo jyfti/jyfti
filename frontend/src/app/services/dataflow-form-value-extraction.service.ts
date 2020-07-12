@@ -32,7 +32,7 @@ export class DataflowFormValueExtractionService {
   extractForLoop(_for: any): ForLoop {
     return {
       const: _for?.const,
-      in: JSON.parse(_for?.in),
+      in: _for?.in,
       do: isArray(_for?.do)
         ? _for.do.map((step) => this.extractStep(step))
         : undefined,

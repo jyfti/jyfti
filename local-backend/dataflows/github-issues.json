@@ -2,7 +2,7 @@
   "name": "Get GitHub issues of a repo",
   "steps": [
     {
-      "assignTo": "issues",
+      "assignTo": "issueResponse",
       "request": {
         "method": "GET",
         "url": "http://api.github.com/repos/fboeller/dataflow/issues",
@@ -22,27 +22,33 @@
       }
     },
     {
-      "assignTo": "issueResponse",
-      "request": {
-        "method": "GET",
-        "url": "http://api.github.com/repos/fboeller/dataflow/issues",
-        "body": null,
-        "headers": null
+      "assignTo": "issues",
+      "expression": {
+        "$map": {
+          "$eval": "issues.body"
+        }
       }
     },
     {
       "assignTo": "foobar",
       "for": {
         "const": "issue",
-        "in": {
-          "$eval": "issueResponse.body"
-        },
+        "in": "issues",
         "do": [
           {
-            "assignTo": "issues",
+            "assignTo": "my_variable",
             "request": {
               "method": "GET",
-              "url": "${issue.url}",
+              "url": "http://swapi.dev/api/planets/1/",
+              "body": null,
+              "headers": null
+            }
+          },
+          {
+            "assignTo": "my_variable",
+            "request": {
+              "method": "GET",
+              "url": "http://swapi.dev/api/planets/1/",
               "body": null,
               "headers": null
             }
@@ -51,6 +57,15 @@
         "return": {
           "$eval": "issues"
         }
+      }
+    },
+    {
+      "assignTo": "my_variable",
+      "request": {
+        "method": "GET",
+        "url": "http://swapi.dev/api/planets/1/",
+        "body": null,
+        "headers": null
       }
     }
   ]

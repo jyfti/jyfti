@@ -1,14 +1,18 @@
 <div [formGroup]="formGroup" class="w-full py-5 px-6 bg-gray-400">
-  for <input type="text" formControlName="const" class="py-1 px-2 mx-1 bg-gray-400 border border-transparent hover:border-blue-400" /> in
-  <ngx-monaco-editor
-    [options]="{ language: 'json' }"
+  for
+  <input
+    type="text"
+    formControlName="const"
+    class="py-1 px-2 mx-1 bg-gray-400 border border-transparent hover:border-blue-400"
+  />
+  in
+  <input
+    type="text"
     formControlName="in"
-  ></ngx-monaco-editor>
+    class="py-1 px-2 mx-1 bg-gray-400 border border-transparent hover:border-blue-400"
+  />
   do
-  <app-steps
-    [steps]="formGroup.get('do')"
-    [evaluations]="{}"
-  ></app-steps>
+  <app-steps [steps]="formGroup.get('do')" [evaluations]="{}"></app-steps>
   return
   <ngx-monaco-editor
     [options]="{ language: 'json' }"
