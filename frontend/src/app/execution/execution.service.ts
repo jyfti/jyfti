@@ -115,7 +115,8 @@ export class ExecutionService {
         map((action) => this.liftToParentScope(scope, action)),
         concatMap((action) =>
           action.scope.subScope.loopIndex + 1 ===
-          parentVariables[step.for.in].length
+            parentVariables[step.for.in].length &&
+          action.scope.subScope.stepIndex + 1 === step.for.do.length
             ? of(action, this.createNextStep(action.scope))
             : of(action)
         )
