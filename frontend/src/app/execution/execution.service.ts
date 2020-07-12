@@ -99,10 +99,14 @@ export class ExecutionService {
     step: Step
   ): (ExecutionScope) => Observable<Action> {
     return (scope) => {
+      const parentVariables = this.extractVariableMap(scope);
       const initialScope = {
         stepIndex: 0,
         steps: step.for.do,
-        parentVariables: this.extractVariableMap(scope),
+        parentVariables: {
+          ...parentVariables,
+          [step.for.const]: parentVariables[step.for.in][0],
+        },
         localVariables: {},
       };
       return this.executeSteps(initialScope).pipe(
