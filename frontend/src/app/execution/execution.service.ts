@@ -9,16 +9,14 @@ import { Observable, of, range } from 'rxjs';
 import {
   catchError,
   concatAll,
-  concatMap,
+  endWith,
   filter,
   map,
   scan,
   share,
+  switchMap,
 } from 'rxjs/operators';
-import {
-  finishExecution,
-  stepExecution,
-} from '../ngrx/dataflow-execution.actions';
+import { stepExecution, finishExecution } from '../ngrx/dataflow-execution.actions';
 import { Dataflow } from '../types/dataflow.type';
 import { ExecutionScope } from '../types/execution-scope.type';
 import { HttpRequestTemplate } from '../types/http-request-template.type';
@@ -39,7 +37,7 @@ export class ExecutionService {
             share(),
             ofType(stepExecution),
             filter((action) => action.scope.stepIndex === index),
-            concatMap((action) => {
+            switchMap((action) => {
               const step = action.scope.steps[action.scope.stepIndex];
               return this.executeStep(step)(action.scope);
             })
@@ -106,7 +104,7 @@ export class ExecutionService {
               share(),
               ofType(stepExecution),
               filter((action) => action.scope.stepIndex === index),
-              concatMap((action) => {
+              switchMap((action) => {
                 const step = action.scope.steps[action.scope.stepIndex];
                 return this.executeStep(step)(action.scope);
               })
@@ -122,19 +120,15 @@ export class ExecutionService {
           )
         ),
         concatAll(),
-        map((action) => {
-          if (action.type === finishExecution.type) {
-            // TODO: Evaluate `return` and add to scope
-            return this.createNextStep(scope);
-          } else if (action.type === stepExecution.type) {
-            return stepExecution({
-              scope: {
-                ...scope,
-                subScope: (action as any).scope,
-              },
-            });
-          }
-        })
+        map((action) =>
+          stepExecution({
+            scope: {
+              ...scope,
+              subScope: (action as any).scope,
+            },
+          })
+        ),
+        endWith(this.createNextStep(scope))
       );
   }
 
@@ -168,14 +162,12 @@ export class ExecutionService {
   }
 
   createNextStep(scope: ExecutionScope): Action {
-    return scope.stepIndex + 1 === scope.steps.length
-      ? finishExecution({ scope })
-      : stepExecution({
-          scope: {
-            ...scope,
-            stepIndex: scope.stepIndex + 1,
-          },
-        });
+    return stepExecution({
+      scope: {
+        ...scope,
+        stepIndex: scope.stepIndex + 1,
+      },
+    });
   }
 
   private interpolate(variables: VariableMap, str: string) {
