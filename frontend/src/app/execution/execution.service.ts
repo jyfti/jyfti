@@ -5,12 +5,11 @@ import { Action } from '@ngrx/store';
 import jsone from 'json-e';
 import { isNil } from 'lodash';
 import { mapKeys } from 'lodash/fp';
-import { empty, Observable, of, range } from 'rxjs';
+import { Observable, of, range } from 'rxjs';
 import {
   catchError,
   concatAll,
   concatMap,
-  expand,
   filter,
   map,
   scan,
@@ -24,7 +23,7 @@ import { Dataflow } from '../types/dataflow.type';
 import { ExecutionScope } from '../types/execution-scope.type';
 import { HttpRequestTemplate } from '../types/http-request-template.type';
 import { Step } from '../types/step.type';
-import { VariableMap } from '../types/variabe-map.type';
+import { VariableMap } from '../types/variable-map.type';
 
 @Injectable({
   providedIn: 'root',
