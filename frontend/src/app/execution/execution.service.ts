@@ -50,9 +50,7 @@ export class ExecutionService {
             filter((action) => action.scope.stepIndex === index),
             switchMap((action) => {
               const step = action.scope.steps[action.scope.stepIndex];
-              return this.executeStep(step)(action.scope).pipe(
-                tap(console.log)
-              );
+              return this.executeStep(step)(action.scope);
             }),
             shareReplay()
           ),
