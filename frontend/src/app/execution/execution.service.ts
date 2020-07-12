@@ -4,8 +4,18 @@ import { Action } from '@ngrx/store';
 import jsone from 'json-e';
 import { isNil } from 'lodash';
 import { mapKeys } from 'lodash/fp';
-import { empty, Observable, of } from 'rxjs';
-import { catchError, expand, filter, map, flatMap } from 'rxjs/operators';
+import { empty, Observable, of, range } from 'rxjs';
+import {
+  catchError,
+  expand,
+  filter,
+  map,
+  flatMap,
+  scan,
+  concatMap,
+  share,
+  concatAll,
+} from 'rxjs/operators';
 import {
   finishExecution,
   startStepExecution,
@@ -25,21 +35,26 @@ export class ExecutionService {
   constructor(private http: HttpClient) {}
 
   executeDataflow(dataflow: Dataflow): Observable<Action> {
-    return of<Action>(
-      startStepExecution({
-        scope: {
-          steps: dataflow.steps,
-          stepIndex: 0,
-          variables: {},
-        },
-      })
-    ).pipe(
-      expand((action) =>
-        of(action).pipe(
-          ofType(startStepExecution),
-          flatMap((a) => this.executeStep(a.scope))
+    return range(0, dataflow.steps.length).pipe(
+      scan(
+        (acc, index) =>
+          acc.pipe(
+            share(),
+            ofType(startStepExecution),
+            filter((action) => action.scope.stepIndex === index),
+            concatMap((action) => this.executeStep(action.scope))
+          ),
+        of(
+          startStepExecution({
+            scope: {
+              steps: dataflow.steps,
+              stepIndex: 0,
+              variables: {},
+            },
+          })
         )
-      )
+      ),
+      concatAll()
     );
   }
 
