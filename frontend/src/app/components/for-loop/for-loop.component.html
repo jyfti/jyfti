@@ -11,11 +11,12 @@
     formControlName="in"
     class="py-1 px-2 mx-1 bg-gray-400 border border-transparent hover:border-blue-400"
   />
-  do
-  <app-steps [steps]="formGroup.get('do')" [evaluations]="{}"></app-steps>
-  return
-  <ngx-monaco-editor
-    [options]="{ language: 'json' }"
+  return each
+  <input
+    type="text"
     formControlName="return"
-  ></ngx-monaco-editor>
+    class="py-1 px-2 mx-1 bg-gray-400 border border-transparent hover:border-blue-400"
+  />
+  after steps
+  <app-steps [steps]="formGroup.get('do')" [evaluations]="{}"></app-steps>
 </div>

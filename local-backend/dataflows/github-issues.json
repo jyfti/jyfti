@@ -36,16 +36,7 @@
         "in": "issues",
         "do": [
           {
-            "assignTo": "my_variable",
-            "request": {
-              "method": "GET",
-              "url": "http://swapi.dev/api/planets/1/",
-              "body": null,
-              "headers": null
-            }
-          },
-          {
-            "assignTo": "my_variable",
+            "assignTo": "a",
             "request": {
               "method": "GET",
               "url": "http://swapi.dev/api/planets/1/",
@@ -54,9 +45,7 @@
             }
           }
         ],
-        "return": {
-          "$eval": "issues"
-        }
+        "return": "a"
       }
     },
     {

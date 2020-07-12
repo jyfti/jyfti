@@ -68,7 +68,7 @@ export class DataflowFormService {
       const: [forLoop.const],
       in: [forLoop.in],
       do: this.createSteps(forLoop.do),
-      return: [JSON.stringify(forLoop.return, null, 2)],
+      return: [forLoop.return],
     });
   }
 }

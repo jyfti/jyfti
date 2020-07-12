@@ -36,7 +36,7 @@ export class DataflowFormValueExtractionService {
       do: isArray(_for?.do)
         ? _for.do.map((step) => this.extractStep(step))
         : undefined,
-      return: JSON.parse(_for?.return),
+      return: _for?.return,
     };
   }
 }
