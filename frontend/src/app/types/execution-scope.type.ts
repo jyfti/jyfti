@@ -3,6 +3,7 @@ import { VariableMap } from './variable-map.type';
 
 export interface ExecutionScope {
   stepIndex: number;
+  loopIndex: number;
   steps: Step[];
   localVariables: { [stepIndex: number]: any };
   parentVariables: VariableMap;

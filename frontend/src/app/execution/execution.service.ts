@@ -101,8 +101,9 @@ export class ExecutionService {
     return (scope) => {
       const parentVariables = this.extractVariableMap(scope);
       return from(parentVariables[step.for.in]).pipe(
-        map((loopVariableValue) => ({
+        map((loopVariableValue, loopIndex) => ({
           stepIndex: 0,
+          loopIndex,
           steps: step.for.do,
           parentVariables: {
             ...parentVariables,
@@ -112,7 +113,12 @@ export class ExecutionService {
         })),
         concatMap((initialScope) => this.executeSteps(initialScope)),
         map((action) => this.liftToParentScope(scope, action)),
-        endWith(this.createNextStep(scope))
+        concatMap((action) =>
+          action.scope.subScope.loopIndex + 1 ===
+          parentVariables[step.for.in].length
+            ? of(action, this.createNextStep(action.scope))
+            : of(action)
+        )
       );
     };
   }
