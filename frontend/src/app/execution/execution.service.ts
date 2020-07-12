@@ -5,7 +5,7 @@ import { Action } from '@ngrx/store';
 import jsone from 'json-e';
 import { isNil } from 'lodash';
 import { mapKeys } from 'lodash/fp';
-import { Observable, of, range } from 'rxjs';
+import { Observable, of, range, from } from 'rxjs';
 import {
   catchError,
   concatAll,
@@ -15,6 +15,7 @@ import {
   scan,
   share,
   switchMap,
+  concatMap,
 } from 'rxjs/operators';
 import { stepExecution } from '../ngrx/dataflow-execution.actions';
 import { Dataflow } from '../types/dataflow.type';
@@ -98,10 +99,14 @@ export class ExecutionService {
   private executeForLoop(step: Step): (ExecutionScope) => Observable<Action> {
     return (scope) => {
       const parentVariables = this.extractVariableMap(scope);
-      return this.executeForLoopSteps(step.for.do, {
-        ...parentVariables,
-        [step.for.const]: parentVariables[step.for.in][0],
-      })(scope);
+      return from(parentVariables[step.for.in]).pipe(
+        concatMap((loopVariableValue) =>
+          this.executeForLoopSteps(step.for.do, {
+            ...parentVariables,
+            [step.for.const]: loopVariableValue,
+          })(scope)
+        )
+      );
     };
   }
 
