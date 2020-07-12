@@ -14,7 +14,7 @@
       "assignTo": "titles",
       "expression": {
         "$map": {
-          "$eval": "issues.body"
+          "$eval": "issueResponse.body"
         },
         "each(x)": {
           "$eval": "x.title"
@@ -24,37 +24,23 @@
     {
       "assignTo": "issues",
       "expression": {
-        "$map": {
-          "$eval": "issues.body"
-        }
+        "$eval": "issueResponse.body"
       }
     },
     {
-      "assignTo": "foobar",
+      "assignTo": "titles2",
       "for": {
         "const": "issue",
         "in": "issues",
         "do": [
           {
-            "assignTo": "a",
-            "request": {
-              "method": "GET",
-              "url": "http://swapi.dev/api/planets/1/",
-              "body": null,
-              "headers": null
+            "assignTo": "title",
+            "expression": {
+              "$eval": "issue.title"
             }
           }
         ],
-        "return": "a"
-      }
-    },
-    {
-      "assignTo": "my_variable",
-      "request": {
-        "method": "GET",
-        "url": "http://swapi.dev/api/planets/1/",
-        "body": null,
-        "headers": null
+        "return": "title"
       }
     }
   ]
