@@ -40,7 +40,10 @@ export class ExecutionService {
             share(),
             ofType(stepExecution),
             filter((action) => action.scope.stepIndex === index),
-            concatMap((action) => this.executeStep(action.scope)(action.scope))
+            concatMap((action) => {
+              const step = action.scope.steps[action.scope.stepIndex];
+              return this.executeStep(step)(action.scope);
+            })
           ),
         of(
           stepExecution({
@@ -56,8 +59,7 @@ export class ExecutionService {
     );
   }
 
-  executeStep(scope: ExecutionScope): (ExecutionScope) => Observable<Action> {
-    const step = scope.steps[scope.stepIndex];
+  executeStep(step: Step): (ExecutionScope) => Observable<Action> {
     if (!isNil(step?.request)) {
       return this.executeRequestStep(step);
     } else if (!isNil(step?.expression)) {
@@ -105,7 +107,10 @@ export class ExecutionService {
               share(),
               ofType(stepExecution),
               filter((action) => action.scope.stepIndex === index),
-              concatMap((action) => this.executeStep(action.scope)(action.scope))
+              concatMap((action) => {
+                const step = action.scope.steps[action.scope.stepIndex];
+                return this.executeStep(step)(action.scope);
+              })
             ),
           of(
             stepExecution({
