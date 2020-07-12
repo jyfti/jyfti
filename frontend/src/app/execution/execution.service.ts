@@ -104,17 +104,26 @@ export class ExecutionService {
     step: Step,
     scope: ExecutionScope
   ): Observable<Action> {
-    const subScope = {
-      stepIndex: 0,
-      steps: step.for.do,
-      variables: {},
-    };
-    return of(stepExecution({ scope: subScope })).pipe(
-      expand((action) =>
-        action.type === stepExecution.type
-          ? this.executeStep(action.scope)
-          : empty()
+    return range(0, step.for.do.length).pipe(
+      scan(
+        (acc, index) =>
+          acc.pipe(
+            share(),
+            ofType(stepExecution),
+            filter((action) => action.scope.stepIndex === index),
+            concatMap((action) => this.executeStep(action.scope))
+          ),
+        of(
+          stepExecution({
+            scope: {
+              stepIndex: 0,
+              steps: step.for.do,
+              variables: {},
+            },
+          })
+        )
       ),
+      concatAll(),
       map((action) => {
         if (action.type === finishExecution.type) {
           // TODO: Evaluate `return` and add to scope
@@ -127,7 +136,7 @@ export class ExecutionService {
             },
           });
         }
-      })
+      }),
     );
   }
 
