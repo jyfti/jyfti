@@ -112,15 +112,7 @@ export class ExecutionService {
     return of(stepExecution({ scope: subScope })).pipe(
       expand((action) =>
         action.type === stepExecution.type
-          ? this.executeStep(action.scope).pipe(
-              map((a) => {
-                if (a.type === stepExecution.type) {
-                  return a;
-                } else {
-                  return a;
-                }
-              })
-            )
+          ? this.executeStep(action.scope)
           : empty()
       ),
       map((action) => {
