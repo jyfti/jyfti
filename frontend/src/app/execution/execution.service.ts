@@ -104,18 +104,16 @@ export class ExecutionService {
     return (scope) => {
       const parentVariables = this.extractVariableMap(scope);
       return from(parentVariables[step.for.in]).pipe(
-        concatMap((loopVariableValue) => {
-          const initialScope = {
-            stepIndex: 0,
-            steps: step.for.do,
-            parentVariables: {
-              ...parentVariables,
-              [step.for.const]: loopVariableValue,
-            },
-            localVariables: {},
-          };
-          return this.executeSteps(initialScope);
-        }),
+        map((loopVariableValue) => ({
+          stepIndex: 0,
+          steps: step.for.do,
+          parentVariables: {
+            ...parentVariables,
+            [step.for.const]: loopVariableValue,
+          },
+          localVariables: {},
+        })),
+        concatMap((initialScope) => this.executeSteps(initialScope)),
         map((action) => this.liftToParentScope(scope, action)),
         endWith(this.createNextStep(scope))
       );
