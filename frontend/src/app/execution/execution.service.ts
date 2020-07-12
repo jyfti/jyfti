@@ -30,7 +30,17 @@ export class ExecutionService {
   constructor(private http: HttpClient) {}
 
   executeDataflow(dataflow: Dataflow): Observable<Action> {
-    return range(0, dataflow.steps.length).pipe(
+    const initialScope = {
+      steps: dataflow.steps,
+      stepIndex: 0,
+      parentVariables: {},
+      localVariables: {},
+    };
+    return this.executeSteps(initialScope);
+  }
+
+  private executeSteps(scope: ExecutionScope): Observable<Action> {
+    return range(0, scope.steps.length).pipe(
       scan(
         (acc, index) =>
           acc.pipe(
@@ -42,16 +52,7 @@ export class ExecutionService {
               return this.executeStep(step)(action.scope);
             })
           ),
-        of(
-          stepExecution({
-            scope: {
-              steps: dataflow.steps,
-              stepIndex: 0,
-              parentVariables: {},
-              localVariables: {},
-            },
-          })
-        )
+        of(stepExecution({ scope }))
       ),
       concatAll()
     );
@@ -98,30 +99,12 @@ export class ExecutionService {
     step: Step
   ): (ExecutionScope) => Observable<Action> {
     return (scope) =>
-      range(0, step.for.do.length).pipe(
-        scan(
-          (acc, index) =>
-            acc.pipe(
-              share(),
-              ofType(stepExecution),
-              filter((action) => action.scope.stepIndex === index),
-              switchMap((action) => {
-                const step = action.scope.steps[action.scope.stepIndex];
-                return this.executeStep(step)(action.scope);
-              })
-            ),
-          of(
-            stepExecution({
-              scope: {
-                stepIndex: 0,
-                steps: step.for.do,
-                parentVariables: this.extractVariableMap(scope),
-                localVariables: {},
-              },
-            })
-          )
-        ),
-        concatAll(),
+      this.executeSteps({
+        stepIndex: 0,
+        steps: step.for.do,
+        parentVariables: this.extractVariableMap(scope),
+        localVariables: {},
+      }).pipe(
         map((action) => this.liftToParentScope(scope, action)),
         endWith(this.createNextStep(scope))
       );
