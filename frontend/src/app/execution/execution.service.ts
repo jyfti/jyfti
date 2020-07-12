@@ -101,7 +101,6 @@ export class ExecutionService {
         action.type === stepExecution.type
           ? this.executeStep(action.scope).pipe(
               map((a) => {
-                console.log(a);
                 if (a.type === finishExecution.type) {
                   // TODO: Evaluate `return` and add to scope
                   return this.createNextStep(scope);
