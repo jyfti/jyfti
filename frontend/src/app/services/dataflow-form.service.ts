@@ -67,7 +67,7 @@ export class DataflowFormService {
     return this.fb.group({
       const: [forLoop.const],
       in: [JSON.stringify(forLoop.in, null, 2)],
-      do: this.fb.array([]),
+      do: this.createSteps(forLoop.do),
       return: [JSON.stringify(forLoop.return, null, 2)],
     });
   }
