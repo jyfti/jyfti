@@ -16,6 +16,8 @@ import {
   share,
   switchMap,
   concatMap,
+  tap,
+  shareReplay,
 } from 'rxjs/operators';
 import { stepExecution } from '../ngrx/dataflow-execution.actions';
 import { Dataflow } from '../types/dataflow.type';
@@ -45,13 +47,15 @@ export class ExecutionService {
       scan(
         (acc, index) =>
           acc.pipe(
-            share(),
             ofType(stepExecution),
             filter((action) => action.scope.stepIndex === index),
             switchMap((action) => {
               const step = action.scope.steps[action.scope.stepIndex];
-              return this.executeStep(step)(action.scope);
-            })
+              return this.executeStep(step)(action.scope).pipe(
+                tap(console.log)
+              );
+            }),
+            shareReplay()
           ),
         of(stepExecution({ scope }))
       ),
