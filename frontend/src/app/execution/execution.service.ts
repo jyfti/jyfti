@@ -98,16 +98,18 @@ export class ExecutionService {
   private executeForLoopStep(
     step: Step
   ): (ExecutionScope) => Observable<Action> {
-    return (scope) =>
-      this.executeSteps({
+    return (scope) => {
+      const initialScope = {
         stepIndex: 0,
         steps: step.for.do,
         parentVariables: this.extractVariableMap(scope),
         localVariables: {},
-      }).pipe(
+      };
+      return this.executeSteps(initialScope).pipe(
         map((action) => this.liftToParentScope(scope, action)),
         endWith(this.createNextStep(scope))
       );
+    };
   }
 
   private liftToParentScope(parentScope: any, action: any) {
