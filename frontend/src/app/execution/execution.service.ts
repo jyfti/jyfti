@@ -16,7 +16,7 @@ import {
   share,
   switchMap,
 } from 'rxjs/operators';
-import { stepExecution, finishExecution } from '../ngrx/dataflow-execution.actions';
+import { stepExecution } from '../ngrx/dataflow-execution.actions';
 import { Dataflow } from '../types/dataflow.type';
 import { ExecutionScope } from '../types/execution-scope.type';
 import { HttpRequestTemplate } from '../types/http-request-template.type';
@@ -47,7 +47,7 @@ export class ExecutionService {
             scope: {
               steps: dataflow.steps,
               stepIndex: 0,
-              variables: {},
+              localVariables: {},
             },
           })
         )
@@ -114,7 +114,7 @@ export class ExecutionService {
               scope: {
                 stepIndex: 0,
                 steps: step.for.do,
-                variables: {},
+                localVariables: {},
               },
             })
           )
@@ -146,8 +146,8 @@ export class ExecutionService {
   addEvaluationToScope(scope: ExecutionScope, evaluation: any): ExecutionScope {
     return {
       ...scope,
-      variables: {
-        ...scope.variables,
+      localVariables: {
+        ...scope.localVariables,
         [scope.stepIndex]: evaluation,
       },
     };
@@ -157,7 +157,7 @@ export class ExecutionService {
     // TODO: This does not consider subscopes yet
     return mapKeys(
       (stepIndex) => scope.steps[stepIndex].assignTo,
-      scope.variables
+      scope.localVariables
     );
   }
 

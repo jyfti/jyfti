@@ -42,7 +42,7 @@ export class DataflowDefinitionComponent implements OnInit {
       map((dataflow) => this.dataflowFormService.createDataFlow(dataflow))
     );
     this.evaluations$ = this.execution$.pipe(
-      map((execution) => execution?.scope?.variables),
+      map((execution) => execution?.scope?.localVariables),
       filter((variables) => !isNil(variables)),
       startWith({})
     );
