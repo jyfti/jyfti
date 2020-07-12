@@ -65,13 +65,7 @@ export class ExecutionService {
     } else if (!isNil(step?.for)) {
       return this.executeForLoopStep(step, scope);
     } else {
-      return of({
-        error:
-          "Step does not contain any of 'request', 'expression' and 'for'.",
-      }).pipe(
-        map((evaluation) => this.addEvaluationToScope(scope, evaluation)),
-        map((newScope) => this.createNextStep(newScope))
-      );
+      return this.executionFailure(step, scope);
     }
   }
 
@@ -136,7 +130,19 @@ export class ExecutionService {
             },
           });
         }
-      }),
+      })
+    );
+  }
+
+  private executionFailure(
+    step: Step,
+    scope: ExecutionScope
+  ): Observable<Action> {
+    return of({
+      error: "Step does not contain any of 'request', 'expression' and 'for'.",
+    }).pipe(
+      map((evaluation) => this.addEvaluationToScope(scope, evaluation)),
+      map((newScope) => this.createNextStep(newScope))
     );
   }
 
