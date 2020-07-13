@@ -1,23 +1,19 @@
 import { HttpClient, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ofType } from '@ngrx/effects';
 import { Action } from '@ngrx/store';
 import jsone from 'json-e';
 import { isNil } from 'lodash';
 import { mapKeys } from 'lodash/fp';
-import { Observable, of, range, from } from 'rxjs';
+import { from, Observable, of, range } from 'rxjs';
 import {
   catchError,
   concatAll,
-  endWith,
+  concatMap,
   filter,
   map,
   scan,
-  share,
-  switchMap,
-  concatMap,
-  tap,
   shareReplay,
+  switchMap,
 } from 'rxjs/operators';
 import { stepExecution } from '../ngrx/dataflow-execution.actions';
 import { Dataflow } from '../types/dataflow.type';
