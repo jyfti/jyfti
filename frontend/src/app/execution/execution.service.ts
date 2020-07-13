@@ -1,5 +1,4 @@
 import { HttpClient, HttpRequest, HttpResponse } from '@angular/common/http';
-import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
 import jsone from 'json-e';
 import { isNil } from 'lodash';
@@ -22,20 +21,18 @@ import { HttpRequestTemplate } from '../types/http-request-template.type';
 import { Step } from '../types/step.type';
 import { VariableMap } from '../types/variable-map.type';
 
-export class ExecutionService {
-  constructor(private http: HttpClient) {}
-
-  executeDataflow(dataflow: Dataflow): Observable<Action> {
+export function createExecution(http: HttpClient) {
+  function executeDataflow(dataflow: Dataflow): Observable<Action> {
     const initialScope = {
       steps: dataflow.steps,
       stepIndex: 0,
       parentVariables: {},
       localVariables: {},
     };
-    return this.executeSteps(initialScope);
+    return executeSteps(initialScope);
   }
 
-  private executeSteps(scope: ExecutionScope): Observable<Action> {
+  function executeSteps(scope: ExecutionScope): Observable<Action> {
     return range(0, scope.steps.length).pipe(
       scan(
         (acc, index) =>
@@ -43,7 +40,7 @@ export class ExecutionService {
             filter((action) => action.scope.stepIndex === index),
             switchMap((action) => {
               const step = action.scope.steps[action.scope.stepIndex];
-              return this.executeStep(step)(action.scope);
+              return executeStep(step)(action.scope);
             }),
             shareReplay()
           ),
@@ -53,46 +50,44 @@ export class ExecutionService {
     );
   }
 
-  executeStep(step: Step): (ExecutionScope) => Observable<Action> {
+  function executeStep(step: Step): (ExecutionScope) => Observable<Action> {
     if (!isNil(step?.request)) {
-      return this.executeRequestStep(step);
+      return executeRequestStep(step);
     } else if (!isNil(step?.expression)) {
-      return this.executeExpressionStep(step);
+      return executeExpressionStep(step);
     } else if (!isNil(step?.for)) {
-      return this.executeForLoop(step);
+      return executeForLoop(step);
     } else {
-      return this.executionFailure();
+      return executionFailure();
     }
   }
 
-  private executeRequestStep(
+  function executeRequestStep(
     step: Step
   ): (ExecutionScope) => Observable<Action> {
     return (scope) =>
-      this.request(
-        this.createHttpRequest(step.request, this.extractVariableMap(scope))
-      ).pipe(
+      request(createHttpRequest(step.request, extractVariableMap(scope))).pipe(
         catchError((response) => of(response)),
-        map((evaluation) => this.addEvaluationToScope(scope, evaluation)),
-        map((newScope) => this.createNextStep(newScope))
+        map((evaluation) => addEvaluationToScope(scope, evaluation)),
+        map((newScope) => createNextStep(newScope))
       );
   }
 
-  private executeExpressionStep(
+  function executeExpressionStep(
     step: Step
   ): (ExecutionScope) => Observable<Action> {
     return (scope) =>
       of(step.expression).pipe(
-        map((expression) => jsone(expression, this.extractVariableMap(scope))),
+        map((expression) => jsone(expression, extractVariableMap(scope))),
         catchError((error) => of({ error: error.toString() })),
-        map((evaluation) => this.addEvaluationToScope(scope, evaluation)),
-        map((newScope) => this.createNextStep(newScope))
+        map((evaluation) => addEvaluationToScope(scope, evaluation)),
+        map((newScope) => createNextStep(newScope))
       );
   }
 
-  private executeForLoop(step: Step): (ExecutionScope) => Observable<Action> {
+  function executeForLoop(step: Step): (ExecutionScope) => Observable<Action> {
     return (scope) => {
-      const parentVariables = this.extractVariableMap(scope);
+      const parentVariables = extractVariableMap(scope);
       return from(parentVariables[step.for.in]).pipe(
         map((loopVariableValue, loopIndex) => ({
           stepIndex: 0,
@@ -104,20 +99,20 @@ export class ExecutionService {
           },
           localVariables: {},
         })),
-        concatMap((initialScope) => this.executeSteps(initialScope)),
-        map((action) => this.liftToParentScope(scope, action)),
+        concatMap((initialScope) => executeSteps(initialScope)),
+        map((action) => liftToParentScope(scope, action)),
         concatMap((action) =>
           action.scope.subScope.loopIndex + 1 ===
             parentVariables[step.for.in].length &&
           action.scope.subScope.stepIndex + 1 === step.for.do.length
-            ? of(action, this.createNextStep(action.scope))
+            ? of(action, createNextStep(action.scope))
             : of(action)
         )
       );
     };
   }
 
-  private liftToParentScope(parentScope: any, action: any) {
+  function liftToParentScope(parentScope: any, action: any) {
     return stepExecution({
       scope: {
         ...parentScope,
@@ -126,18 +121,21 @@ export class ExecutionService {
     });
   }
 
-  private executionFailure(): (ExecutionScope) => Observable<Action> {
+  function executionFailure(): (ExecutionScope) => Observable<Action> {
     return (scope) =>
       of({
         error:
           "Step does not contain any of 'request', 'expression' and 'for'.",
       }).pipe(
-        map((evaluation) => this.addEvaluationToScope(scope, evaluation)),
-        map((newScope) => this.createNextStep(newScope))
+        map((evaluation) => addEvaluationToScope(scope, evaluation)),
+        map((newScope) => createNextStep(newScope))
       );
   }
 
-  addEvaluationToScope(scope: ExecutionScope, evaluation: any): ExecutionScope {
+  function addEvaluationToScope(
+    scope: ExecutionScope,
+    evaluation: any
+  ): ExecutionScope {
     return {
       ...scope,
       localVariables: {
@@ -147,21 +145,21 @@ export class ExecutionService {
     };
   }
 
-  extractVariableMap(scope: ExecutionScope): VariableMap {
+  function extractVariableMap(scope: ExecutionScope): VariableMap {
     return {
       ...scope.parentVariables,
-      ...this.extractLocalVariableMap(scope),
+      ...extractLocalVariableMap(scope),
     };
   }
 
-  extractLocalVariableMap(scope: ExecutionScope): VariableMap {
+  function extractLocalVariableMap(scope: ExecutionScope): VariableMap {
     return mapKeys(
       (stepIndex) => scope.steps[stepIndex].assignTo,
       scope.localVariables
     );
   }
 
-  createNextStep(scope: ExecutionScope): Action {
+  function createNextStep(scope: ExecutionScope): Action {
     return stepExecution({
       scope: {
         ...scope,
@@ -170,25 +168,32 @@ export class ExecutionService {
     });
   }
 
-  private interpolate(variables: VariableMap, str: string) {
+  function interpolate(variables: VariableMap, str: string) {
     const identifiers = Object.keys(variables);
     const values = Object.values(variables);
     return new Function(...identifiers, `return \`${str}\`;`)(...values);
   }
 
-  createHttpRequest(template: HttpRequestTemplate, variables: VariableMap) {
+  function createHttpRequest(
+    template: HttpRequestTemplate,
+    variables: VariableMap
+  ) {
     return new HttpRequest(
       template.method as any,
-      this.interpolate(variables, template.url),
+      interpolate(variables, template.url),
       jsone(JSON.parse(template.body), variables),
       { headers: jsone(JSON.parse(template.headers), variables) }
     );
   }
 
-  request(httpRequest: HttpRequest<any>): Observable<HttpResponse<any>> {
-    return this.http.request(httpRequest).pipe(
+  function request(
+    httpRequest: HttpRequest<any>
+  ): Observable<HttpResponse<any>> {
+    return http.request(httpRequest).pipe(
       filter((httpEvent) => httpEvent instanceof HttpResponse),
       map((httpEvent) => httpEvent as HttpResponse<any>)
     );
   }
+
+  return { executeDataflow };
 }
