@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { switchMap } from 'rxjs/operators';
-import { createExecution } from 'src/app/execution/execution.service';
+import { ExecutionService } from 'src/app/execution/execution.service';
 import { startExecution } from '../ngrx/dataflow-execution.actions';
 import { HttpClient } from '@angular/common/http';
 
@@ -13,7 +13,7 @@ export class ExecutionEffects {
     this.actions$.pipe(
       ofType(startExecution),
       switchMap((action) =>
-        createExecution(this.http).executeDataflow(action.dataflow)
+        new ExecutionService(this.http).executeDataflow(action.dataflow)
       )
     )
   );
