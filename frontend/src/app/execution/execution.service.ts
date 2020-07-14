@@ -22,6 +22,9 @@ import { HttpRequestTemplate } from '../types/http-request-template.type';
 import { Step } from '../types/step.type';
 import { VariableMap } from '../types/variable-map.type';
 
+@Injectable({
+  providedIn: 'root',
+})
 export class ExecutionService {
   constructor(private http: HttpClient) {}
 
