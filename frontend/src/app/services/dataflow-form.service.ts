@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import {
+  AbstractControl,
+  FormArray,
   FormBuilder,
   FormGroup,
-  FormArray,
-  FormControl,
-  AbstractControl,
 } from '@angular/forms';
+
 import { Dataflow } from '../types/dataflow.type';
-import { Step, ForLoop } from '../types/step.type';
 import { HttpRequestTemplate } from '../types/http-request-template.type';
+import { ForLoop, Step } from '../types/step.type';
 
 @Injectable({
   providedIn: 'root',

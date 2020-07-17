@@ -1,6 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DataflowSelectionComponent } from './dataflow-selection.component';
+import { provideMockStore } from '@ngrx/store/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { ReactiveFormsModule } from '@angular/forms';
 
 describe('DataflowSelectionComponent', () => {
   let component: DataflowSelectionComponent;
@@ -8,9 +11,14 @@ describe('DataflowSelectionComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DataflowSelectionComponent ]
-    })
-    .compileComponents();
+      declarations: [DataflowSelectionComponent],
+      providers: [
+        provideMockStore({
+          initialState: { dataflow: { dataflowPreviews: [] } },
+        }),
+      ],
+      imports: [RouterTestingModule, ReactiveFormsModule],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
