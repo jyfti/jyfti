@@ -4,8 +4,11 @@ import { VariableMap } from '../types/variable-map.type';
 import { isNil } from 'lodash';
 import jsone from 'json-e';
 import { HttpRequestTemplate } from '../types/http-request-template.type';
-import { Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { filter, map, catchError } from 'rxjs/operators';
+import { Step, JsonExpression } from '../types/step.type';
+
+export type Evaluation = any;
 
 @Injectable({
   providedIn: 'root',
@@ -13,13 +16,29 @@ import { filter, map } from 'rxjs/operators';
 export class ExecutionNewService {
   constructor(private http: HttpClient) {}
 
+  executeStep(step: Step, variables: VariableMap): Observable<Evaluation> {
+    if (!isNil(step?.expression)) {
+      return this.executeExpressionStep(step, variables);
+    }
+  }
+
+  executeExpressionStep(
+    step: Step,
+    variables: VariableMap
+  ): Observable<Evaluation> {
+    return of(step.expression).pipe(
+      map((expression) => jsone(expression, variables)),
+      catchError((error) => of({ error: error.toString() }))
+    );
+  }
+
   private interpolate(variables: VariableMap, str: string) {
     const identifiers = Object.keys(variables);
     const values = Object.values(variables);
     return new Function(...identifiers, `return \`${str}\`;`)(...values);
   }
 
-  private evaluate(variables: VariableMap, expression: any) {
+  private evaluate(variables: VariableMap, expression: string) {
     return isNil(expression) ? null : jsone(JSON.parse(expression), variables);
   }
 
