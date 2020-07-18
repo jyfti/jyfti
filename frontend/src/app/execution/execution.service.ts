@@ -26,11 +26,11 @@ import { Step } from '../types/step.type';
 import { VariableMap } from '../types/variable-map.type';
 import { TypedAction } from '@ngrx/store/src/models';
 
-type StepAction = TypedAction<'[Execution] Step'> & {
+export type StepAction = TypedAction<'[Execution] Step'> & {
   scope: ExecutionScope;
 };
 
-class ExecutionResult {
+export class ExecutionResult {
   constructor(
     public byproduct: Observable<StepAction>,
     public initiator?: StepAction
@@ -246,12 +246,16 @@ export class ExecutionService {
     return new Function(...identifiers, `return \`${str}\`;`)(...values);
   }
 
+  private evaluate(variables: VariableMap, expression: any) {
+    return isNil(expression) ? null : jsone(JSON.parse(expression), variables);
+  }
+
   createHttpRequest(template: HttpRequestTemplate, variables: VariableMap) {
     return new HttpRequest(
       template.method as any,
       this.interpolate(variables, template.url),
-      jsone(JSON.parse(template.body), variables),
-      { headers: jsone(JSON.parse(template.headers), variables) }
+      this.evaluate(variables, template.body),
+      { headers: this.evaluate(variables, template.headers) }
     );
   }
 
