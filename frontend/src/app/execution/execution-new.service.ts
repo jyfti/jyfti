@@ -21,6 +21,11 @@ export class ExecutionNewService {
       return this.executeRequestStep(step, variables);
     } else if (!isNil(step?.expression)) {
       return this.executeExpressionStep(step, variables);
+    } else {
+      return of({
+        error:
+          "Step does not contain any of 'request', 'expression' and 'for'.",
+      });
     }
   }
 
