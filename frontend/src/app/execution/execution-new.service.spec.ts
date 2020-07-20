@@ -1,17 +1,22 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { cold } from 'jest-marbles';
+import { of } from 'rxjs';
 
 import { Step } from '../types/step.type';
 import { VariableMap } from '../types/variable-map.type';
 import { ExecutionNewService } from './execution-new.service';
+import { map } from 'rxjs/operators';
 
 describe('ExecutionNewService', () => {
   let service: ExecutionNewService;
+  const httpClientStub = {
+    request: () => of(new HttpResponse({ body: { field: 'value' } })),
+  };
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      providers: [{ provide: HttpClient, useValue: httpClientStub }],
     });
     service = TestBed.inject(ExecutionNewService);
   });
@@ -20,8 +25,26 @@ describe('ExecutionNewService', () => {
     expect(service).toBeTruthy();
   });
 
-  describe('expression step', () => {
-    it('should evaluate successfully', () => {
+  describe('should execute http request step', () => {
+    it('without expressions successfully', () => {
+      const step: Step = {
+        assignTo: 'outVar',
+        request: {
+          method: 'GET',
+          url: 'http://localhost:1234/abc',
+        },
+      };
+      const variables: VariableMap = {};
+      expect(
+        service
+          .executeStep(step, variables)
+          .pipe(map((response) => response.body))
+      ).toBeObservable(cold('(a|)', { a: { field: 'value' } }));
+    });
+  });
+
+  describe('should evaluate expression step', () => {
+    it('successfully', () => {
       const step: Step = {
         assignTo: 'outVar',
         expression: {
@@ -36,7 +59,7 @@ describe('ExecutionNewService', () => {
       );
     });
 
-    it('should evaluate to an error if the expression is invalid', () => {
+    it('to an error if the expression is invalid', () => {
       const step: Step = {
         assignTo: 'outVar',
         expression: {
@@ -55,7 +78,7 @@ describe('ExecutionNewService', () => {
       );
     });
 
-    it('should evaluate evaluate to an error if a variable does not exist', () => {
+    it('to an error if a variable does not exist', () => {
       const step: Step = {
         assignTo: 'outVar',
         expression: {

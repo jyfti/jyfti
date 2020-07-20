@@ -5,7 +5,7 @@ import { isNil } from 'lodash';
 import jsone from 'json-e';
 import { HttpRequestTemplate } from '../types/http-request-template.type';
 import { Observable, of } from 'rxjs';
-import { filter, map, catchError } from 'rxjs/operators';
+import { filter, map, catchError, flatMap } from 'rxjs/operators';
 import { Step, JsonExpression } from '../types/step.type';
 
 export type Evaluation = any;
@@ -17,9 +17,21 @@ export class ExecutionNewService {
   constructor(private http: HttpClient) {}
 
   executeStep(step: Step, variables: VariableMap): Observable<Evaluation> {
-    if (!isNil(step?.expression)) {
+    if (!isNil(step?.request)) {
+      return this.executeRequestStep(step, variables);
+    } else if (!isNil(step?.expression)) {
       return this.executeExpressionStep(step, variables);
     }
+  }
+
+  executeRequestStep(
+    step: Step,
+    variables: VariableMap
+  ): Observable<Evaluation> {
+    return of(this.createHttpRequest(step.request, variables)).pipe(
+      flatMap((request) => this.request(request)),
+      catchError((response) => of(response))
+    );
   }
 
   executeExpressionStep(
