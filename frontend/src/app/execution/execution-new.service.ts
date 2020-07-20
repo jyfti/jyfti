@@ -1,12 +1,20 @@
+import { HttpClient, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { HttpRequest, HttpClient, HttpResponse } from '@angular/common/http';
-import { VariableMap } from '../types/variable-map.type';
-import { isNil } from 'lodash';
 import jsone from 'json-e';
+import { isNil, zip, reduce as _reduce, merge } from 'lodash/fp';
+import { from, Observable, of } from 'rxjs';
+import {
+  catchError,
+  filter,
+  flatMap,
+  map,
+  reduce,
+  concatAll,
+} from 'rxjs/operators';
+
 import { HttpRequestTemplate } from '../types/http-request-template.type';
-import { Observable, of } from 'rxjs';
-import { filter, map, catchError, flatMap } from 'rxjs/operators';
-import { Step, JsonExpression } from '../types/step.type';
+import { Step } from '../types/step.type';
+import { VariableMap } from '../types/variable-map.type';
 
 export type Evaluation = any;
 
@@ -15,6 +23,37 @@ export type Evaluation = any;
 })
 export class ExecutionNewService {
   constructor(private http: HttpClient) {}
+
+  executeBlock(
+    steps: Step[],
+    variables: VariableMap
+  ): Observable<Evaluation[]> {
+    return from(steps).pipe(
+      reduce(
+        (evaluations$, step) =>
+          evaluations$.pipe(
+            flatMap((evaluations) =>
+              this.executeStep(
+                step,
+                merge(this.toVariableMap(steps, evaluations), variables)
+              ).pipe(map((evaluation) => evaluations.concat([evaluation])))
+            )
+          ),
+        of([])
+      ),
+      concatAll()
+    );
+  }
+
+  toVariableMap(steps: Step[], evaluations: Evaluation[]): VariableMap {
+    return _reduce(
+      (variables: VariableMap, [step, evaluation]) => ({
+        ...variables,
+        [step.assignTo]: evaluation,
+      }),
+      {}
+    )(zip(steps, evaluations));
+  }
 
   executeStep(step: Step, variables: VariableMap): Observable<Evaluation> {
     if (!isNil(step?.request)) {
