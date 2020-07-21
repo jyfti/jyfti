@@ -93,4 +93,30 @@ describe('ExecutionEngineService', () => {
       );
     });
   });
+
+  describe('the advancement of paths', () => {
+    describe('on root level', () => {
+      const dataflow: Dataflow = {
+        name: 'MyDataflow',
+        steps: [
+          {
+            assignTo: 'var1',
+            expression: 1,
+          },
+          {
+            assignTo: 'var2',
+            expression: 2,
+          },
+        ],
+      };
+
+      it('should advance a path on root', () => {
+        expect(service.advancePath(dataflow, [0])).toEqual([1]);
+      });
+
+      it('should return null on last step of root', () => {
+        expect(service.advancePath(dataflow, [1])).toBeNull();
+      });
+    });
+  });
 });
