@@ -4,13 +4,13 @@ import { VariableMap } from '../types/variable-map.type';
 import { Observable, of } from 'rxjs';
 import { Evaluation } from './execution.service';
 import { flatMap, catchError, map, filter } from 'rxjs/operators';
-import { JsonExpression } from '../types/step.type';
+import { JsonExpression, Step } from '../types/step.type';
 import jsone from 'json-e';
-import { isNil } from 'lodash';
+import { isNil, reduce as _reduce, zip } from 'lodash/fp';
 import { HttpRequest, HttpResponse, HttpClient } from '@angular/common/http';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SingleStepService {
   constructor(private http: HttpClient) {}
@@ -59,5 +59,15 @@ export class SingleStepService {
       filter((httpEvent) => httpEvent instanceof HttpResponse),
       map((httpEvent) => httpEvent as HttpResponse<any>)
     );
+  }
+
+  toVariableMap(steps: Step[], evaluations: Evaluation[]): VariableMap {
+    return _reduce(
+      (variables: VariableMap, [step, evaluation]) => ({
+        ...variables,
+        [step.assignTo]: evaluation,
+      }),
+      {}
+    )(zip(steps, evaluations));
   }
 }

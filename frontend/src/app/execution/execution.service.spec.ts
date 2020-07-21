@@ -210,26 +210,4 @@ describe('ExecutionService', () => {
       ).toBeObservable(cold('(a|)', { a: [[2, 4], [6, 8, 10], [12]] }));
     });
   });
-
-  it('should zip steps and incompleted evaluations to a variable map', () => {
-    const steps: Step[] = [
-      {
-        assignTo: 'varA',
-        expression: 1,
-      },
-      {
-        assignTo: 'varB',
-        expression: 2,
-      },
-      {
-        assignTo: 'varC',
-        expression: 3,
-      },
-    ];
-    const evaluations = [1, 2];
-    expect(service.toVariableMap(steps, evaluations)).toEqual({
-      varA: 1,
-      varB: 2,
-    });
-  });
 });

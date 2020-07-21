@@ -1,23 +1,18 @@
-import { HttpClient, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import jsone from 'json-e';
-import { isNil, zip, reduce as _reduce, merge } from 'lodash/fp';
+import { isNil, merge } from 'lodash/fp';
 import { from, Observable, of } from 'rxjs';
 import {
-  catchError,
-  filter,
+  concatAll,
+  concatMap,
   flatMap,
   map,
   reduce,
-  concatAll,
-  concatMap,
   toArray,
 } from 'rxjs/operators';
 
-import { HttpRequestTemplate } from '../types/http-request-template.type';
-import { Step, ForLoop, JsonExpression } from '../types/step.type';
-import { VariableMap } from '../types/variable-map.type';
 import { Dataflow } from '../types/dataflow.type';
+import { ForLoop, Step } from '../types/step.type';
+import { VariableMap } from '../types/variable-map.type';
 import { SingleStepService } from './single-step.service';
 
 export type Evaluation = any;
@@ -43,7 +38,10 @@ export class ExecutionService {
             flatMap((evaluations) =>
               this.executeStep(
                 step,
-                merge(this.toVariableMap(steps, evaluations), variables)
+                merge(
+                  this.singleStepService.toVariableMap(steps, evaluations),
+                  variables
+                )
               ).pipe(map((evaluation) => evaluations.concat([evaluation])))
             )
           ),
@@ -51,16 +49,6 @@ export class ExecutionService {
       ),
       concatAll()
     );
-  }
-
-  toVariableMap(steps: Step[], evaluations: Evaluation[]): VariableMap {
-    return _reduce(
-      (variables: VariableMap, [step, evaluation]) => ({
-        ...variables,
-        [step.assignTo]: evaluation,
-      }),
-      {}
-    )(zip(steps, evaluations));
   }
 
   executeLoop(
@@ -71,7 +59,9 @@ export class ExecutionService {
       map((loopVariable) => ({ ...variables, [forLoop.const]: loopVariable })),
       concatMap((loopVariables) =>
         this.executeBlock(forLoop.do, loopVariables).pipe(
-          map((evaluations) => this.toVariableMap(forLoop.do, evaluations)),
+          map((evaluations) =>
+            this.singleStepService.toVariableMap(forLoop.do, evaluations)
+          ),
           map((loopStepsVariables) => merge(loopVariables, loopStepsVariables)),
           map((allVariables) => allVariables[forLoop.return])
         )
