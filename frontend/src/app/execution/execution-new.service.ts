@@ -15,7 +15,7 @@ import {
 } from 'rxjs/operators';
 
 import { HttpRequestTemplate } from '../types/http-request-template.type';
-import { Step, ForLoop } from '../types/step.type';
+import { Step, ForLoop, JsonExpression } from '../types/step.type';
 import { VariableMap } from '../types/variable-map.type';
 
 export type Evaluation = any;
@@ -76,9 +76,9 @@ export class ExecutionNewService {
 
   executeStep(step: Step, variables: VariableMap): Observable<Evaluation> {
     if (!isNil(step?.request)) {
-      return this.executeRequestStep(step, variables);
+      return this.executeRequestStep(step.request, variables);
     } else if (!isNil(step?.expression)) {
-      return this.executeExpressionStep(step, variables);
+      return this.executeExpressionStep(step.expression, variables);
     } else if (!isNil(step?.for)) {
       return this.executeLoop(step.for, variables);
     } else {
@@ -90,20 +90,20 @@ export class ExecutionNewService {
   }
 
   executeRequestStep(
-    step: Step,
+    request: HttpRequestTemplate,
     variables: VariableMap
   ): Observable<Evaluation> {
-    return of(this.createHttpRequest(step.request, variables)).pipe(
+    return of(this.createHttpRequest(request, variables)).pipe(
       flatMap((request) => this.request(request)),
       catchError((response) => of(response))
     );
   }
 
   executeExpressionStep(
-    step: Step,
+    expression: JsonExpression,
     variables: VariableMap
   ): Observable<Evaluation> {
-    return of(step.expression).pipe(
+    return of(expression).pipe(
       map((expression) => jsone(expression, variables)),
       catchError((error) => of({ error: error.toString() }))
     );
