@@ -18,6 +18,7 @@ import { HttpRequestTemplate } from '../types/http-request-template.type';
 import { Step, ForLoop, JsonExpression } from '../types/step.type';
 import { VariableMap } from '../types/variable-map.type';
 import { Dataflow } from '../types/dataflow.type';
+import { SingleStepService } from './single-step.service';
 
 export type Evaluation = any;
 
@@ -25,7 +26,7 @@ export type Evaluation = any;
   providedIn: 'root',
 })
 export class ExecutionService {
-  constructor(private http: HttpClient) {}
+  constructor(private singleStepService: SingleStepService) {}
 
   executeDataflow(dataflow: Dataflow): Observable<Evaluation[]> {
     return this.executeBlock(dataflow.steps, {});
@@ -81,9 +82,12 @@ export class ExecutionService {
 
   executeStep(step: Step, variables: VariableMap): Observable<Evaluation> {
     if (!isNil(step?.request)) {
-      return this.executeRequestStep(step.request, variables);
+      return this.singleStepService.executeRequestStep(step.request, variables);
     } else if (!isNil(step?.expression)) {
-      return this.executeExpressionStep(step.expression, variables);
+      return this.singleStepService.executeExpressionStep(
+        step.expression,
+        variables
+      );
     } else if (!isNil(step?.for)) {
       return this.executeLoop(step.for, variables);
     } else {
@@ -92,51 +96,5 @@ export class ExecutionService {
           "Step does not contain any of 'request', 'expression' and 'for'.",
       });
     }
-  }
-
-  executeRequestStep(
-    request: HttpRequestTemplate,
-    variables: VariableMap
-  ): Observable<Evaluation> {
-    return of(this.createHttpRequest(request, variables)).pipe(
-      flatMap((request) => this.request(request)),
-      catchError((response) => of(response))
-    );
-  }
-
-  executeExpressionStep(
-    expression: JsonExpression,
-    variables: VariableMap
-  ): Observable<Evaluation> {
-    return of(expression).pipe(
-      map((expression) => jsone(expression, variables)),
-      catchError((error) => of({ error: error.toString() }))
-    );
-  }
-
-  private interpolate(variables: VariableMap, str: string) {
-    const identifiers = Object.keys(variables);
-    const values = Object.values(variables);
-    return new Function(...identifiers, `return \`${str}\`;`)(...values);
-  }
-
-  private evaluate(variables: VariableMap, expression: string) {
-    return isNil(expression) ? null : jsone(JSON.parse(expression), variables);
-  }
-
-  createHttpRequest(template: HttpRequestTemplate, variables: VariableMap) {
-    return new HttpRequest(
-      template.method as any,
-      this.interpolate(variables, template.url),
-      this.evaluate(variables, template.body),
-      { headers: this.evaluate(variables, template.headers) }
-    );
-  }
-
-  request(httpRequest: HttpRequest<any>): Observable<HttpResponse<any>> {
-    return this.http.request(httpRequest).pipe(
-      filter((httpEvent) => httpEvent instanceof HttpResponse),
-      map((httpEvent) => httpEvent as HttpResponse<any>)
-    );
   }
 }
