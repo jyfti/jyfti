@@ -48,9 +48,9 @@ describe('ExecutionEngineService', () => {
       };
       expect(service.executeDataflow(dataflow)).toBeObservable(
         cold('(abc|)', {
-          a: { path: 0, evaluation: 5 },
-          b: { path: 1, evaluation: 10 },
-          c: { path: 2, evaluation: 50 },
+          a: { path: [0], evaluation: 5 },
+          b: { path: [1], evaluation: 10 },
+          c: { path: [2], evaluation: 50 },
         })
       );
     });
@@ -67,7 +67,7 @@ describe('ExecutionEngineService', () => {
           },
         ],
       };
-      expect(service.tick(dataflow, 0, [])).toBeObservable(
+      expect(service.tick(dataflow, [0], [])).toBeObservable(
         cold('(a|)', { a: 1 })
       );
     });
@@ -88,7 +88,7 @@ describe('ExecutionEngineService', () => {
           },
         ],
       };
-      expect(service.tick(dataflow, 1, [42])).toBeObservable(
+      expect(service.tick(dataflow, [1], [42])).toBeObservable(
         cold('(a|)', { a: 42 })
       );
     });

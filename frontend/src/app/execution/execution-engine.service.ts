@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { isNil } from 'lodash/fp';
+import { isNil, last, dropRight, concat } from 'lodash/fp';
 import { Observable, of } from 'rxjs';
 import { flatMap, startWith } from 'rxjs/operators';
 
@@ -9,7 +9,7 @@ import { VariableMap } from '../types/variable-map.type';
 import { Evaluation } from './execution.service';
 import { SingleStepService } from './single-step.service';
 
-export type Path = number;
+export type Path = number[];
 
 export interface PathedEvaluation {
   path: Path;
@@ -25,7 +25,7 @@ export class ExecutionEngineService {
   constructor(private singleStepService: SingleStepService) {}
 
   executeDataflow(dataflow: Dataflow): Observable<PathedEvaluation> {
-    return this.executeTicksFrom(dataflow, 0, []);
+    return this.executeTicksFrom(dataflow, [0], []);
   }
 
   executeTicksFrom(
@@ -56,13 +56,16 @@ export class ExecutionEngineService {
     evaluations: Evaluations
   ): Observable<Evaluation> {
     return this.executeStep(
-      dataflow.steps[path],
+      dataflow.steps[last(path)],
       this.singleStepService.toVariableMap(dataflow.steps, evaluations)
     );
   }
 
+  // TODO: Advance path recursively
   advancePath(dataflow: Dataflow, path: Path): Path {
-    return path + 1 < dataflow.steps.length ? path + 1 : null;
+    return last(path) + 1 < dataflow.steps.length
+      ? concat(dropRight(1)(path), [last(path) + 1])
+      : null;
   }
 
   addEvaluation(
