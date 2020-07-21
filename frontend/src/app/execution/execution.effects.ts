@@ -1,14 +1,17 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { switchMap } from 'rxjs/operators';
-import { ExecutionService } from 'src/app/execution/execution.service';
-import { startExecution } from '../ngrx/dataflow-execution.actions';
+import { switchMap, map } from 'rxjs/operators';
+import {
+  startExecution,
+  finishExecution,
+} from '../ngrx/dataflow-execution.actions';
+import { ExecutionNewService } from './execution-new.service';
 
 @Injectable()
 export class ExecutionEffects {
   constructor(
     private actions$: Actions,
-    private executionService: ExecutionService
+    private executionService: ExecutionNewService
   ) {}
 
   startExecution$ = createEffect(() =>
@@ -16,7 +19,8 @@ export class ExecutionEffects {
       ofType(startExecution),
       switchMap((action) =>
         this.executionService.executeDataflow(action.dataflow)
-      )
+      ),
+      map((evaluations) => finishExecution({ evaluations }))
     )
   );
 }

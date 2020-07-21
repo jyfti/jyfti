@@ -17,6 +17,7 @@ import { GlobalState } from 'src/app/ngrx/dataflow.state';
 import { DataflowFormValueExtractionService } from 'src/app/services/dataflow-form-value-extraction.service';
 import { DataflowFormService } from 'src/app/services/dataflow-form.service';
 import { isNil } from 'lodash';
+import { Evaluation } from 'src/app/execution/execution-new.service';
 
 @Component({
   selector: 'app-dataflow-definition',
@@ -25,7 +26,7 @@ import { isNil } from 'lodash';
 export class DataflowDefinitionComponent implements OnInit {
   formGroup$: Observable<FormGroup>;
   execution$: Observable<ExecutionState>;
-  evaluations$: Observable<{ [stepIndex: number]: any }>;
+  evaluations$: Observable<Evaluation[]>;
 
   constructor(
     private store: Store<GlobalState>,
@@ -41,11 +42,7 @@ export class DataflowDefinitionComponent implements OnInit {
       select('dataflow', 'dataflow'),
       map((dataflow) => this.dataflowFormService.createDataFlow(dataflow))
     );
-    this.evaluations$ = this.execution$.pipe(
-      map((execution) => execution?.scope?.localVariables),
-      filter((variables) => !isNil(variables)),
-      startWith({})
-    );
+    this.evaluations$ = this.execution$.pipe(select('evaluations'));
   }
 
   editStep(formGroup: FormGroup, stepIndex: number) {

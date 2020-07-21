@@ -17,6 +17,7 @@ import {
 import { HttpRequestTemplate } from '../types/http-request-template.type';
 import { Step, ForLoop, JsonExpression } from '../types/step.type';
 import { VariableMap } from '../types/variable-map.type';
+import { Dataflow } from '../types/dataflow.type';
 
 export type Evaluation = any;
 
@@ -25,6 +26,10 @@ export type Evaluation = any;
 })
 export class ExecutionNewService {
   constructor(private http: HttpClient) {}
+
+  executeDataflow(dataflow: Dataflow): Observable<Evaluation[]> {
+    return this.executeBlock(dataflow.steps, {});
+  }
 
   executeBlock(
     steps: Step[],
