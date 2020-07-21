@@ -1,7 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 import { Dataflow } from '../types/dataflow.type';
 import { ExecutionScope } from '../types/execution-scope.type';
-import { Evaluation } from '../execution/execution-new.service';
+import { Evaluation } from '../execution/execution.service';
 
 export const startExecution = createAction(
   '[Execution] Start',

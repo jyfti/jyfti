@@ -24,7 +24,7 @@ export type Evaluation = any;
 @Injectable({
   providedIn: 'root',
 })
-export class ExecutionNewService {
+export class ExecutionService {
   constructor(private http: HttpClient) {}
 
   executeDataflow(dataflow: Dataflow): Observable<Evaluation[]> {

@@ -5,13 +5,13 @@ import {
   startExecution,
   finishExecution,
 } from '../ngrx/dataflow-execution.actions';
-import { ExecutionNewService } from './execution-new.service';
+import { ExecutionService } from './execution.service';
 
 @Injectable()
 export class ExecutionEffects {
   constructor(
     private actions$: Actions,
-    private executionService: ExecutionNewService
+    private executionService: ExecutionService
   ) {}
 
   startExecution$ = createEffect(() =>

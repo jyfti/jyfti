@@ -17,7 +17,7 @@ import { GlobalState } from 'src/app/ngrx/dataflow.state';
 import { DataflowFormValueExtractionService } from 'src/app/services/dataflow-form-value-extraction.service';
 import { DataflowFormService } from 'src/app/services/dataflow-form.service';
 import { isNil } from 'lodash';
-import { Evaluation } from 'src/app/execution/execution-new.service';
+import { Evaluation } from 'src/app/execution/execution.service';
 
 @Component({
   selector: 'app-dataflow-definition',

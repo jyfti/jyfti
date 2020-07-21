@@ -5,11 +5,11 @@ import { of } from 'rxjs';
 
 import { Step, ForLoop } from '../types/step.type';
 import { VariableMap } from '../types/variable-map.type';
-import { ExecutionNewService } from './execution-new.service';
+import { ExecutionService } from './execution.service';
 import { map } from 'rxjs/operators';
 
-describe('ExecutionNewService', () => {
-  let service: ExecutionNewService;
+describe('ExecutionService', () => {
+  let service: ExecutionService;
   const httpClientStub = {
     request: () => of(new HttpResponse({ body: { field: 'value' } })),
   };
@@ -18,7 +18,7 @@ describe('ExecutionNewService', () => {
     TestBed.configureTestingModule({
       providers: [{ provide: HttpClient, useValue: httpClientStub }],
     });
-    service = TestBed.inject(ExecutionNewService);
+    service = TestBed.inject(ExecutionService);
   });
 
   it('should be created', () => {

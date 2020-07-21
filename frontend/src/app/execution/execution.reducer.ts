@@ -5,7 +5,7 @@ import {
   stepExecution,
   finishExecution,
 } from '../ngrx/dataflow-execution.actions';
-import { Evaluation } from './execution-new.service';
+import { Evaluation } from './execution.service';
 
 export const selectExecution = createFeatureSelector<ExecutionState>(
   'execution'
