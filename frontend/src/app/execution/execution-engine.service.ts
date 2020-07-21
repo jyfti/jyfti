@@ -5,11 +5,14 @@ import { Dataflow } from '../types/dataflow.type';
 import { SingleStepService } from './single-step.service';
 import { Step } from '../types/step.type';
 import { VariableMap } from '../types/variable-map.type';
-import { isNil } from 'lodash';
+import { isNil } from 'lodash/fp';
+import { map, flatMap, startWith, filter } from 'rxjs/operators';
 
-export interface ExecutionScope {
-  stepIndex: number;
-  evaluations: Evaluation[];
+export type Path = number;
+
+export interface PathedEvaluation {
+  path: Path;
+  evaluation: Evaluation;
 }
 
 @Injectable({
@@ -18,14 +21,53 @@ export interface ExecutionScope {
 export class ExecutionEngineService {
   constructor(private singleStepService: SingleStepService) {}
 
-  executeNext(
+  executeDataflow(dataflow: Dataflow): Observable<PathedEvaluation> {
+    return this.executeTicksFrom(dataflow, 0, []);
+  }
+
+  executeTicksFrom(
     dataflow: Dataflow,
-    scope: ExecutionScope
+    path: Path,
+    evaluations: Evaluation[]
+  ): Observable<PathedEvaluation> {
+    return this.tick(dataflow, path, evaluations).pipe(
+      flatMap((evaluation) => {
+        const newPath = this.advancePath(dataflow, path);
+        const newEvaluations = this.addEvaluation(
+          path,
+          evaluations,
+          evaluation
+        );
+        return !newPath
+          ? of({ path, evaluation })
+          : this.executeTicksFrom(dataflow, newPath, newEvaluations).pipe(
+              startWith({ path, evaluation })
+            );
+      })
+    );
+  }
+
+  tick(
+    dataflow: Dataflow,
+    path: Path,
+    evaluations: Evaluation[]
   ): Observable<Evaluation> {
     return this.executeStep(
-      dataflow.steps[scope.stepIndex],
-      this.singleStepService.toVariableMap(dataflow.steps, scope.evaluations)
+      dataflow.steps[path],
+      this.singleStepService.toVariableMap(dataflow.steps, evaluations)
     );
+  }
+
+  advancePath(dataflow: Dataflow, path: Path): Path {
+    return path + 1 < dataflow.steps.length ? path + 1 : null;
+  }
+
+  addEvaluation(
+    path: Path,
+    evaluations: Evaluation[],
+    evaluation: Evaluation
+  ): Evaluation[] {
+    return evaluations.concat([evaluation]);
   }
 
   executeStep(step: Step, variables: VariableMap): Observable<Evaluation> {
