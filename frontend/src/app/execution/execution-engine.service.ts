@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
+import { isNil } from 'lodash/fp';
 import { Observable, of } from 'rxjs';
-import { Evaluation } from './execution.service';
+import { flatMap, startWith } from 'rxjs/operators';
+
 import { Dataflow } from '../types/dataflow.type';
-import { SingleStepService } from './single-step.service';
 import { Step } from '../types/step.type';
 import { VariableMap } from '../types/variable-map.type';
-import { isNil } from 'lodash/fp';
-import { map, flatMap, startWith, filter } from 'rxjs/operators';
+import { Evaluation } from './execution.service';
+import { SingleStepService } from './single-step.service';
 
 export type Path = number;
 
@@ -14,6 +15,8 @@ export interface PathedEvaluation {
   path: Path;
   evaluation: Evaluation;
 }
+
+export type Evaluations = (Evaluation | Evaluations)[];
 
 @Injectable({
   providedIn: 'root',
@@ -28,7 +31,7 @@ export class ExecutionEngineService {
   executeTicksFrom(
     dataflow: Dataflow,
     path: Path,
-    evaluations: Evaluation[]
+    evaluations: Evaluations
   ): Observable<PathedEvaluation> {
     return this.tick(dataflow, path, evaluations).pipe(
       flatMap((evaluation) => {
@@ -50,7 +53,7 @@ export class ExecutionEngineService {
   tick(
     dataflow: Dataflow,
     path: Path,
-    evaluations: Evaluation[]
+    evaluations: Evaluations
   ): Observable<Evaluation> {
     return this.executeStep(
       dataflow.steps[path],
@@ -64,9 +67,9 @@ export class ExecutionEngineService {
 
   addEvaluation(
     path: Path,
-    evaluations: Evaluation[],
+    evaluations: Evaluations,
     evaluation: Evaluation
-  ): Evaluation[] {
+  ): Evaluations {
     return evaluations.concat([evaluation]);
   }
 
