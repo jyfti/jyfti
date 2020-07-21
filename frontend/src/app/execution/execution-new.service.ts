@@ -10,10 +10,12 @@ import {
   map,
   reduce,
   concatAll,
+  concatMap,
+  toArray,
 } from 'rxjs/operators';
 
 import { HttpRequestTemplate } from '../types/http-request-template.type';
-import { Step } from '../types/step.type';
+import { Step, ForLoop } from '../types/step.type';
 import { VariableMap } from '../types/variable-map.type';
 
 export type Evaluation = any;
@@ -55,11 +57,30 @@ export class ExecutionNewService {
     )(zip(steps, evaluations));
   }
 
+  executeLoop(
+    forLoop: ForLoop,
+    variables: VariableMap
+  ): Observable<Evaluation> {
+    return from(variables[forLoop.in]).pipe(
+      map((loopVariable) => ({ ...variables, [forLoop.const]: loopVariable })),
+      concatMap((loopVariables) =>
+        this.executeBlock(forLoop.do, loopVariables).pipe(
+          map((evaluations) => this.toVariableMap(forLoop.do, evaluations)),
+          map((loopStepsVariables) => merge(loopVariables, loopStepsVariables)),
+          map((allVariables) => allVariables[forLoop.return])
+        )
+      ),
+      toArray()
+    );
+  }
+
   executeStep(step: Step, variables: VariableMap): Observable<Evaluation> {
     if (!isNil(step?.request)) {
       return this.executeRequestStep(step, variables);
     } else if (!isNil(step?.expression)) {
       return this.executeExpressionStep(step, variables);
+    } else if (!isNil(step?.for)) {
+      return this.executeLoop(step.for, variables);
     } else {
       return of({
         error:
