@@ -64,7 +64,7 @@ export class ExecutionEngineService {
     evaluations: Evaluations
   ): Observable<Evaluation> {
     return this.executeStep(
-      dataflow.steps[last(path)],
+      this.executionPathService.resolveStep(dataflow, path),
       this.singleStepService.toVariableMap(dataflow.steps, evaluations)
     );
   }
