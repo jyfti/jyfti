@@ -11,6 +11,25 @@ import { Step } from '../types/step.type';
 export class ExecutionPathService {
   constructor() {}
 
+  resolveStep(dataflow: Dataflow, path: Path): Step {
+    return this.resolveStepRec(dataflow.steps, path);
+  }
+
+  resolveStepRec(steps: Step[], path: Path): Step {
+    if (path.length <= 0) {
+      throw new Error(`Can not resolve empty path`);
+    } else if (path.length == 1) {
+      return steps[path[0]];
+    } else {
+      const step = steps[path[0]];
+      if (has('for', step)) {
+        return this.resolveStepRec(step.for.do, tail(tail(path)));
+      } else {
+        throw new Error(`Can not resolve path ${path} at flat step ${step}`);
+      }
+    }
+  }
+
   advancePath(dataflow: Dataflow, path: Path, variables: VariableMap): Path {
     return this.advancePathRec(dataflow.steps, path, variables);
   }
