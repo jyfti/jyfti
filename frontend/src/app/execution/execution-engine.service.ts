@@ -39,7 +39,7 @@ export class ExecutionEngineService {
   ): Observable<PathedEvaluation> {
     return this.tick(dataflow, path, evaluations).pipe(
       flatMap((evaluation) => {
-        const newEvaluations = this.addEvaluation(
+        const newEvaluations = this.executionPathService.addEvaluation(
           path,
           evaluations,
           evaluation
@@ -67,14 +67,6 @@ export class ExecutionEngineService {
       this.executionPathService.resolveStep(dataflow, path),
       this.singleStepService.toVariableMap(dataflow.steps, evaluations)
     );
-  }
-
-  addEvaluation(
-    path: Path,
-    evaluations: Evaluations,
-    evaluation: Evaluation
-  ): Evaluations {
-    return evaluations.concat([evaluation]);
   }
 
   executeStep(step: Step, variables: VariableMap): Observable<Evaluation> {

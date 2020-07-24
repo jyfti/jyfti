@@ -26,6 +26,21 @@ describe('ExecutionPathService', () => {
     expect(service.resolveEvaluation(evaluations, path)).toEqual(expectation);
   });
 
+  it.each([
+    [[], [], 'a', ['a']],
+    [[0], [], 'a', ['a']],
+    [[1], ['a'], 'b', ['a', 'b']],
+    [[1, 0], ['a'], 'b', ['a', ['b']]],
+    [[1, 0, 0], ['a'], 'b', ['a', [['b']]]]
+  ])(
+    'addEvaluation(%s, %s, %s)=%s',
+    (path, evaluations, evaluation, expectation) => {
+      expect(service.addEvaluation(path, evaluations, evaluation)).toEqual(
+        expectation
+      );
+    }
+  );
+
   describe('resolveStep', () => {
     it('should resolve the first step of a flat dataflow', () => {
       const steps: Step[] = [
