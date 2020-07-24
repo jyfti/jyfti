@@ -73,6 +73,10 @@ describe('ExecutionPathService', () => {
         0,
       ]);
     });
+
+    it('should go to the loop itself once the loop is over', () => {
+      expect(service.advancePathRec(steps, [0, 1, 0], variables)).toEqual([0]);
+    });
   });
 
   describe('with nested for loops', () => {
@@ -149,8 +153,18 @@ describe('ExecutionPathService', () => {
         [2, 0, 2, 0, 0],
       ],
       [
-        'should advance a path in a loop to the next iteration of the loop if the end of the loop is reached',
+        'should advance a path in a loop to the loop itself if the end of the loop is reached',
         [2, 1, 2, 1, 0],
+        [2, 1, 2],
+      ],
+      [
+        'should advance a path in a loop to the loop itself if the end of the loop is reached after the end of the sub loop happened',
+        [2, 1, 2],
+        [2],
+      ],
+      [
+        'should advance a path from a loop to the next step after the loop',
+        [2],
         [3],
       ],
     ])('%s', (text, inPath, outPath) => {

@@ -58,13 +58,9 @@ export class ExecutionPathService {
     const currentPosition = path[0];
     const currentStep = steps[currentPosition];
     if (has('for', currentStep)) {
-      const nextLoopPath = this.advancePathForLoop(
-        currentStep,
-        tail(path),
-        variables
-      );
-      if (nextLoopPath.length == 0) {
-        // Loop over
+      const subPath = tail(path);
+      if (subPath.length == 0) {
+        // Loop just ended
         const nextPosition = this.advancePathFlat(steps, currentPosition);
         return isNil(nextPosition)
           ? []
@@ -73,7 +69,14 @@ export class ExecutionPathService {
               this.createStartingPath(steps[nextPosition])
             );
       } else {
-        return concat([currentPosition], nextLoopPath);
+        const nextLoopPath = this.advancePathForLoop(
+          currentStep,
+          subPath,
+          variables
+        );
+        return nextLoopPath.length == 0
+          ? [currentPosition] // Loop over
+          : concat([currentPosition], nextLoopPath);
       }
     } else {
       const nextPosition = this.advancePathFlat(steps, currentPosition);
