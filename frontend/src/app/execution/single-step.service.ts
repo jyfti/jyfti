@@ -6,7 +6,13 @@ import { Evaluation } from './execution.service';
 import { flatMap, catchError, map, filter } from 'rxjs/operators';
 import { JsonExpression, Step } from '../types/step.type';
 import jsone from 'json-e';
-import { isNil, reduce as _reduce, zip } from 'lodash/fp';
+import {
+  isNil,
+  reduce as _reduce,
+  filter as _filter,
+  zip,
+  flow,
+} from 'lodash/fp';
 import { HttpRequest, HttpResponse, HttpClient } from '@angular/common/http';
 
 @Injectable({
@@ -62,12 +68,15 @@ export class SingleStepService {
   }
 
   toVariableMap(steps: Step[], evaluations: Evaluation[]): VariableMap {
-    return _reduce(
-      (variables: VariableMap, [step, evaluation]) => ({
-        ...variables,
-        [step.assignTo]: evaluation,
-      }),
-      {}
+    return flow(
+      _filter(([step, evaluation]) => !isNil(step) && !isNil(evaluation)),
+      _reduce(
+        (variables: VariableMap, [step, evaluation]) => ({
+          ...variables,
+          [step.assignTo]: evaluation,
+        }),
+        {}
+      )
     )(zip(steps, evaluations));
   }
 }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { isNil, last, dropRight, concat } from 'lodash/fp';
+import { isNil, last, has, tail, concat } from 'lodash/fp';
 import { Observable, of } from 'rxjs';
 import { flatMap, startWith } from 'rxjs/operators';
 
@@ -35,13 +35,17 @@ export class ExecutionEngineService {
   ): Observable<PathedEvaluation> {
     return this.tick(dataflow, path, evaluations).pipe(
       flatMap((evaluation) => {
-        const newPath = this.advancePath(dataflow, path);
         const newEvaluations = this.addEvaluation(
           path,
           evaluations,
           evaluation
         );
-        return !newPath
+        const newPath = this.advancePath(
+          dataflow,
+          path,
+          this.singleStepService.toVariableMap(dataflow.steps, evaluations)
+        );
+        return newPath.length == 0
           ? of({ path, evaluation })
           : this.executeTicksFrom(dataflow, newPath, newEvaluations).pipe(
               startWith({ path, evaluation })
@@ -61,11 +65,76 @@ export class ExecutionEngineService {
     );
   }
 
-  // TODO: Advance path recursively
-  advancePath(dataflow: Dataflow, path: Path): Path {
-    return last(path) + 1 < dataflow.steps.length
-      ? concat(dropRight(1)(path), [last(path) + 1])
-      : null;
+  advancePath(dataflow: Dataflow, path: Path, variables: VariableMap): Path {
+    return this.advancePathRec(dataflow.steps, path, variables);
+  }
+
+  private createStartingPath(step: Step): Path {
+    return has('for', step)
+      ? concat([0, 0], this.createStartingPath(step.for.do[0]))
+      : [];
+  }
+
+  private advancePathForLoop(
+    step: Step,
+    path: Path,
+    variables: VariableMap
+  ): Path {
+    const currentVariableIndex = path[0];
+    const subPath = tail(path);
+    const nextLoopPath = this.advancePathRec(step.for.do, subPath, variables);
+    if (nextLoopPath.length == 0) {
+      // All steps within the for loop are done, go to next variable of list
+      const loopVariables = variables[step.for.in];
+      const nextVariableIndex = this.advancePathFlat(
+        loopVariables,
+        currentVariableIndex
+      );
+      return isNil(nextVariableIndex)
+        ? [] // Loop over
+        : concat(
+            [nextVariableIndex, 0],
+            this.createStartingPath(step.for.do[0])
+          );
+    } else {
+      return concat([currentVariableIndex], nextLoopPath);
+    }
+  }
+
+  private advancePathFlat(elements: any[], position: number): number {
+    return position + 1 < elements.length ? position + 1 : null;
+  }
+
+  advancePathRec(steps: Step[], path: Path, variables: VariableMap): Path {
+    if (path.length == 0) {
+      return concat([0], this.createStartingPath(steps[0]));
+    }
+    const currentPosition = path[0];
+    const currentStep = steps[currentPosition];
+    if (has('for', currentStep)) {
+      const nextLoopPath = this.advancePathForLoop(
+        currentStep,
+        tail(path),
+        variables
+      );
+      if (nextLoopPath.length == 0) {
+        // Loop over
+        const nextPosition = this.advancePathFlat(steps, currentPosition);
+        return isNil(nextPosition)
+          ? []
+          : concat(
+              [nextPosition],
+              this.createStartingPath(steps[nextPosition])
+            );
+      } else {
+        return concat([currentPosition], nextLoopPath);
+      }
+    } else {
+      const nextPosition = this.advancePathFlat(steps, currentPosition);
+      return isNil(nextPosition)
+        ? []
+        : concat([nextPosition], this.createStartingPath(steps[nextPosition]));
+    }
   }
 
   addEvaluation(
