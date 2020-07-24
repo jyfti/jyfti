@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { isNil, has, tail, concat } from 'lodash/fp';
 import { Dataflow } from '../types/dataflow.type';
-import { Path } from './execution-engine.service';
+import { Path, Evaluations } from './execution-engine.service';
 import { VariableMap } from '../types/variable-map.type';
 import { Step } from '../types/step.type';
+import { Evaluation } from './execution.service';
 
 @Injectable({
   providedIn: 'root',
@@ -11,12 +12,23 @@ import { Step } from '../types/step.type';
 export class ExecutionPathService {
   constructor() {}
 
+  resolveEvaluation(
+    evaluations: Evaluation | Evaluations,
+    path: Path
+  ): Evaluation | Evaluations {
+    if (path.length == 0) {
+      return evaluations;
+    } else {
+      return this.resolveEvaluation(evaluations[path[0]], tail(path));
+    }
+  }
+
   resolveStep(dataflow: Dataflow, path: Path): Step {
     return this.resolveStepRec(dataflow.steps, path);
   }
 
   resolveStepRec(steps: Step[], path: Path): Step {
-    if (path.length <= 0) {
+    if (path.length == 0) {
       throw new Error(`Can not resolve empty path`);
     } else if (path.length == 1) {
       return steps[path[0]];
