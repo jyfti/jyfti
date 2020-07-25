@@ -23,6 +23,7 @@ import { JsonEEvaluationComponent } from './components/json-e-evaluation/json-e-
 import { ForLoopComponent } from './components/for-loop/for-loop.component';
 import { StepsComponent } from './components/steps/steps.component';
 import { ExecutionLogComponent } from './components/execution-log/execution-log.component';
+import { DataflowJsonViewComponent } from './components/dataflow-json-view/dataflow-json-view.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { ExecutionLogComponent } from './components/execution-log/execution-log.
     ForLoopComponent,
     StepsComponent,
     ExecutionLogComponent,
+    DataflowJsonViewComponent,
   ],
   imports: [
     BrowserModule,

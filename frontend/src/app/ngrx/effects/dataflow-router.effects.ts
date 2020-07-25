@@ -22,7 +22,9 @@ export class DataflowRouterEffects {
         (action: RouterNavigationAction) =>
           action.payload.routerState.root.firstChild
       ),
-      filter((firstChild) => firstChild.routeConfig.path === 'dataflow/:id'),
+      filter((firstChild) =>
+        firstChild.routeConfig.path.startsWith('dataflow/:id')
+      ),
       map((firstChild) => firstChild.params['id']),
       flatMap((id) =>
         of(id).pipe(
