@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
-import { isNil, last, has, tail, concat } from 'lodash/fp';
+import { isNil, isArray } from 'lodash/fp';
 import { Observable, of } from 'rxjs';
 import { flatMap, startWith } from 'rxjs/operators';
 
 import { Dataflow } from '../types/dataflow.type';
 import { Step } from '../types/step.type';
 import { VariableMap } from '../types/variable-map.type';
-import { Evaluation } from './execution.service';
-import { SingleStepService } from './single-step.service';
 import { ExecutionPathService } from './execution-path.service';
-import { isArray } from 'lodash';
+import { Evaluation } from './execution.service';
 import { PathAdvancementService } from './path-advancement.service';
+import { SingleStepService } from './single-step.service';
+import { StepResolvementService } from './step-resolvement.service';
 
 export type Path = number[];
 
@@ -28,7 +28,8 @@ export class ExecutionEngineService {
   constructor(
     private singleStepService: SingleStepService,
     private executionPathService: ExecutionPathService,
-    private pathAdvancementService: PathAdvancementService
+    private pathAdvancementService: PathAdvancementService,
+    private stepResolvementService: StepResolvementService
   ) {}
 
   executeDataflow(dataflow: Dataflow): Observable<PathedEvaluation> {
@@ -67,7 +68,7 @@ export class ExecutionEngineService {
     evaluations: Evaluations
   ): Observable<Evaluation> {
     return this.executeStep(
-      this.executionPathService.resolveStep(dataflow, path),
+      this.stepResolvementService.resolveStep(dataflow, path),
       this.executionPathService.resolveEvaluation(evaluations, path),
       this.singleStepService.toVariableMap(dataflow.steps, evaluations)
     );
