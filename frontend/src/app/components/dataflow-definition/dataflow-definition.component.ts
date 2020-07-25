@@ -76,6 +76,10 @@ export class DataflowDefinitionComponent implements OnInit {
     );
   }
 
+  viewJson() {
+    this.router.navigate(['json'], { relativeTo: this.route });
+  }
+
   clearExecution() {
     this.store.dispatch(resetExecution());
   }
