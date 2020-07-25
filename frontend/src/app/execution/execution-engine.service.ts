@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { flatMap, startWith, map } from 'rxjs/operators';
+import { Observable, of, concat, empty } from 'rxjs';
+import { flatMap, startWith, map, concatAll } from 'rxjs/operators';
 
 import { Dataflow } from '../types/dataflow.type';
 import { EvaluationResolvementService } from './evaluation-resolvement.service';
@@ -44,11 +44,13 @@ export class ExecutionEngineService {
       flatMap((tickState) => this.nextStep(tickState)),
       flatMap((evaluation) => {
         const nextTickState = this.nextTickState(tickState, evaluation);
-        return nextTickState.path.length == 0
-          ? of({ path: tickState.path, evaluation })
-          : this.executeTicksFrom(nextTickState).pipe(
-              startWith({ path: tickState.path, evaluation })
-            );
+        const continuingTicks =
+          nextTickState.path.length == 0
+            ? empty()
+            : this.executeTicksFrom(nextTickState);
+        return continuingTicks.pipe(
+          startWith({ path: tickState.path, evaluation })
+        );
       })
     );
   }
