@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
+import { concat, get, isNil, tail } from 'lodash/fp';
+
 import { Dataflow } from '../types/dataflow.type';
-import { Path } from './execution-engine.service';
-import { VariableMap } from '../types/variable-map.type';
 import { Step } from '../types/step.type';
-import { has, tail, isNil, concat } from 'lodash/fp';
+import { VariableMap } from '../types/variable-map.type';
+import { Path } from './execution-engine.service';
 
 @Injectable({
   providedIn: 'root',
@@ -15,8 +16,12 @@ export class PathAdvancementService {
     return this.advancePathRec(dataflow.steps, path, variables);
   }
 
+  isForStep(step: Step) {
+    return !isNil(get('for', step));
+  }
+
   private createStartingPath(step: Step, variables: VariableMap): Path {
-    return has('for', step) &&
+    return this.isForStep(step) &&
       step.for.do.length != 0 &&
       variables[step.for.in]?.length > 0
       ? concat([0, 0], this.createStartingPath(step.for.do[0], variables))
@@ -59,7 +64,7 @@ export class PathAdvancementService {
     }
     const currentPosition = path[0];
     const currentStep = steps[currentPosition];
-    if (has('for', currentStep)) {
+    if (this.isForStep(currentStep)) {
       const subPath = tail(path);
       if (subPath.length == 0) {
         // Loop just ended
