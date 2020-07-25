@@ -7,12 +7,7 @@
       placeholder="Dataflow Name"
     />
   </div>
-  <app-steps
-    [steps]="formGroup.get('steps')"
-    [evaluations]="evaluations$ | async"
-    (editStepRequest)="editStep(formGroup, $event)"
-  ></app-steps>
-  <div class="flex gap-2 justify-end">
+  <div class="flex mb-2 gap-2 justify-end">
     <button
       class="mt-2 p-4 bg-red-500 hover:bg-red-600 text-white"
       *ngIf="execution$ | async"
@@ -33,4 +28,9 @@
       <i class="fas fa-save"></i>
     </button>
   </div>
+  <app-steps
+    [steps]="formGroup.get('steps')"
+    [evaluations]="evaluations$ | async"
+    (editStepRequest)="editStep(formGroup, $event)"
+  ></app-steps>
 </div>

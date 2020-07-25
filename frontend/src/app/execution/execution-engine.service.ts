@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, concat, empty } from 'rxjs';
-import { flatMap, startWith, map, concatAll } from 'rxjs/operators';
+import { empty, Observable, of } from 'rxjs';
+import { flatMap, startWith } from 'rxjs/operators';
 
 import { Dataflow } from '../types/dataflow.type';
 import { EvaluationResolvementService } from './evaluation-resolvement.service';
