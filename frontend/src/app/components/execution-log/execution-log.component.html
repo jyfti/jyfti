@@ -1,5 +1,10 @@
-<div class="flex flex-col gap-2">
-  <div *ngFor="let pathedEvaluation of pathedEvaluations$ | async">
-    {{ pathedEvaluation | json }}
-  </div>
+<div class="grid gap-2" style="grid-template-columns: 1fr 4fr;">
+  <ng-container *ngFor="let pathedEvaluation of pathedEvaluations$ | async">
+    <div>
+      {{ pathedEvaluation.path | json }}
+    </div>
+    <div>
+      {{ pathedEvaluation.evaluation | json }}
+    </div>
+  </ng-container>
 </div>
