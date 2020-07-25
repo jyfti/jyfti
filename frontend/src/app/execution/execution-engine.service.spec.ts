@@ -67,9 +67,9 @@ describe('ExecutionEngineService', () => {
           },
         ],
       };
-      expect(service.tick(dataflow, [0], [])).toBeObservable(
-        cold('(a|)', { a: 1 })
-      );
+      expect(
+        service.nextStep({ dataflow, path: [0], evaluations: [] })
+      ).toBeObservable(cold('(a|)', { a: 1 }));
     });
 
     it('should execute the second step considering the evaluation of the first step without evaluating it', () => {
@@ -88,9 +88,9 @@ describe('ExecutionEngineService', () => {
           },
         ],
       };
-      expect(service.tick(dataflow, [1], [42])).toBeObservable(
-        cold('(a|)', { a: 42 })
-      );
+      expect(
+        service.nextStep({ dataflow, path: [1], evaluations: [42] })
+      ).toBeObservable(cold('(a|)', { a: 42 }));
     });
 
     describe('with a single-step loop', () => {
@@ -115,20 +115,24 @@ describe('ExecutionEngineService', () => {
       };
 
       it('should evaluate the return value with no loop iteration to an empty list', () => {
-        expect(service.tick(dataflow, [0], [])).toBeObservable(
-          cold('(a|)', { a: [] })
-        );
+        expect(
+          service.nextStep({ dataflow, path: [0], evaluations: [] })
+        ).toBeObservable(cold('(a|)', { a: [] }));
       });
 
       it('should evaluate the return value with a single loop iteration to a single element list', () => {
-        expect(service.tick(dataflow, [0], [[['a']]])).toBeObservable(
-          cold('(a|)', { a: ['a'] })
-        );
+        expect(
+          service.nextStep({ dataflow, path: [0], evaluations: [[['a']]] })
+        ).toBeObservable(cold('(a|)', { a: ['a'] }));
       });
 
       it('should evaluate the return value with multiple loop iterations to list of the size of the iterations', () => {
         expect(
-          service.tick(dataflow, [0], [[['a'], ['b'], ['c']]])
+          service.nextStep({
+            dataflow,
+            path: [0],
+            evaluations: [[['a'], ['b'], ['c']]],
+          })
         ).toBeObservable(cold('(a|)', { a: ['a', 'b', 'c'] }));
       });
     });
@@ -165,30 +169,34 @@ describe('ExecutionEngineService', () => {
       };
 
       it('should evaluate the return value with no loop iteration to an empty list', () => {
-        expect(service.tick(dataflow, [0], [])).toBeObservable(
-          cold('(a|)', { a: [] })
-        );
+        expect(
+          service.nextStep({ dataflow, path: [0], evaluations: [] })
+        ).toBeObservable(cold('(a|)', { a: [] }));
       });
 
       it('should evaluate the return value with a single loop iteration to a single element list', () => {
-        expect(service.tick(dataflow, [0], [[[10, 20, 30]]])).toBeObservable(
-          cold('(a|)', { a: [30] })
-        );
+        expect(
+          service.nextStep({
+            dataflow,
+            path: [0],
+            evaluations: [[[10, 20, 30]]],
+          })
+        ).toBeObservable(cold('(a|)', { a: [30] }));
       });
 
       it('should evaluate the return value with multiple loop iterations to list of the size of the iterations', () => {
         expect(
-          service.tick(
+          service.nextStep({
             dataflow,
-            [0],
-            [
+            path: [0],
+            evaluations: [
               [
                 [10, 20, 30],
                 [10, 20, 30],
                 [10, 20, 30],
               ],
-            ]
-          )
+            ],
+          })
         ).toBeObservable(cold('(a|)', { a: [30, 30, 30] }));
       });
     });
