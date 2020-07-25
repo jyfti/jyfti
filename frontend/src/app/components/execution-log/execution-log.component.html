@@ -1,10 +1,16 @@
-<div class="grid gap-2" style="grid-template-columns: 1fr 4fr;">
+<div class="grid gap-2" style="grid-template-columns: 1fr 9fr;">
   <ng-container *ngFor="let pathedEvaluation of pathedEvaluations$ | async">
     <div>
       {{ pathedEvaluation.path | json }}
     </div>
-    <div>
-      {{ pathedEvaluation.evaluation | json }}
+    <div class="py-5 px-6 bg-gray-400">
+      <ngx-monaco-editor
+        [options]="{}"
+        [model]="{
+          value: pathedEvaluation.evaluation | json,
+          language: 'json'
+        }"
+      ></ngx-monaco-editor>
     </div>
   </ng-container>
 </div>
