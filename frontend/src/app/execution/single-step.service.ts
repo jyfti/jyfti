@@ -1,25 +1,47 @@
+import { HttpClient, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { HttpRequestTemplate } from '../types/http-request-template.type';
-import { VariableMap } from '../types/variable-map.type';
-import { Observable, of } from 'rxjs';
-import { Evaluation } from './execution.service';
-import { flatMap, catchError, map, filter } from 'rxjs/operators';
-import { JsonExpression, Step } from '../types/step.type';
 import jsone from 'json-e';
 import {
+  filter as _filter,
+  flow,
+  isArray,
   isNil,
   reduce as _reduce,
-  filter as _filter,
   zip,
-  flow,
 } from 'lodash/fp';
-import { HttpRequest, HttpResponse, HttpClient } from '@angular/common/http';
+import { Observable, of } from 'rxjs';
+import { catchError, filter, flatMap, map } from 'rxjs/operators';
+
+import { HttpRequestTemplate } from '../types/http-request-template.type';
+import { JsonExpression, Step } from '../types/step.type';
+import { VariableMap } from '../types/variable-map.type';
+import { Evaluations } from './execution-engine.service';
+import { Evaluation } from './execution.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SingleStepService {
   constructor(private http: HttpClient) {}
+
+  executeStep(
+    step: Step,
+    localEvaluations: Evaluation | Evaluations,
+    variables: VariableMap
+  ): Observable<Evaluation> {
+    if (!isNil(step?.request)) {
+      return this.executeRequestStep(step.request, variables);
+    } else if (!isNil(step?.expression)) {
+      return this.executeExpressionStep(step.expression, variables);
+    } else if (!isNil(step?.for)) {
+      return this.evaluateLoopReturn(localEvaluations, step);
+    } else {
+      return of({
+        error:
+          "Step does not contain any of 'request', 'expression' and 'for'.",
+      });
+    }
+  }
 
   executeRequestStep(
     request: HttpRequestTemplate,
@@ -39,6 +61,23 @@ export class SingleStepService {
       map((expression) => jsone(expression, variables)),
       catchError((error) => of({ error: error.toString() }))
     );
+  }
+
+  private evaluateLoopReturn(
+    localEvaluations: Evaluation | Evaluations,
+    step: Step
+  ): Observable<Evaluation[]> {
+    if (!isNil(localEvaluations) && !isArray(localEvaluations)) {
+      throw new Error(
+        'Expected list of loop iteration evaluations, but got a single evaluation'
+      );
+    }
+    const loopReturn: Evaluation[] = (localEvaluations || [])
+      .map((loopIterationEvaluation) =>
+        this.toVariableMap(step.for.do, loopIterationEvaluation)
+      )
+      .map((loopIterationVariables) => loopIterationVariables[step.for.return]);
+    return of(loopReturn);
   }
 
   private interpolate(variables: VariableMap, str: string) {

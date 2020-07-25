@@ -1,11 +1,8 @@
 import { Injectable } from '@angular/core';
-import { isNil, isArray } from 'lodash/fp';
 import { Observable, of } from 'rxjs';
 import { flatMap, startWith } from 'rxjs/operators';
 
 import { Dataflow } from '../types/dataflow.type';
-import { Step } from '../types/step.type';
-import { VariableMap } from '../types/variable-map.type';
 import { EvaluationResolvementService } from './evaluation-resolvement.service';
 import { Evaluation } from './execution.service';
 import { PathAdvancementService } from './path-advancement.service';
@@ -67,52 +64,10 @@ export class ExecutionEngineService {
     path: Path,
     evaluations: Evaluations
   ): Observable<Evaluation> {
-    return this.executeStep(
+    return this.singleStepService.executeStep(
       this.stepResolvementService.resolveStep(dataflow, path),
       this.evaluationResolvementService.resolveEvaluation(evaluations, path),
       this.singleStepService.toVariableMap(dataflow.steps, evaluations)
     );
-  }
-
-  executeStep(
-    step: Step,
-    localEvaluations: Evaluation | Evaluations,
-    variables: VariableMap
-  ): Observable<Evaluation> {
-    if (!isNil(step?.request)) {
-      return this.singleStepService.executeRequestStep(step.request, variables);
-    } else if (!isNil(step?.expression)) {
-      return this.singleStepService.executeExpressionStep(
-        step.expression,
-        variables
-      );
-    } else if (!isNil(step?.for)) {
-      return this.evaluateLoopReturn(localEvaluations, step);
-    } else {
-      return of({
-        error:
-          "Step does not contain any of 'request', 'expression' and 'for'.",
-      });
-    }
-  }
-
-  private evaluateLoopReturn(
-    localEvaluations: Evaluation | Evaluations,
-    step: Step
-  ): Observable<Evaluation[]> {
-    if (!isNil(localEvaluations) && !isArray(localEvaluations)) {
-      throw new Error(
-        'Expected list of loop iteration evaluations, but got a single evaluation'
-      );
-    }
-    const loopReturn: Evaluation[] = (localEvaluations || [])
-      .map((loopIterationEvaluation) =>
-        this.singleStepService.toVariableMap(
-          step.for.do,
-          loopIterationEvaluation
-        )
-      )
-      .map((loopIterationVariables) => loopIterationVariables[step.for.return]);
-    return of(loopReturn);
   }
 }
