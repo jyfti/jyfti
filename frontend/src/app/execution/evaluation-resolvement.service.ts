@@ -7,7 +7,7 @@ import { Evaluation } from './execution.service';
 @Injectable({
   providedIn: 'root',
 })
-export class ExecutionPathService {
+export class EvaluationResolvementService {
   constructor() {}
 
   resolveEvaluation(

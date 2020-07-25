@@ -1,14 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ExecutionPathService } from './execution-path.service';
-import { Step } from '../types/step.type';
+import { EvaluationResolvementService } from './evaluation-resolvement.service';
 
-describe('ExecutionPathService', () => {
-  let service: ExecutionPathService;
+describe('EvaluationResolvementService', () => {
+  let service: EvaluationResolvementService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(ExecutionPathService);
+    service = TestBed.inject(EvaluationResolvementService);
   });
 
   it('should be created', () => {

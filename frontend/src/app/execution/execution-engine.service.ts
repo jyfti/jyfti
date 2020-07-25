@@ -6,7 +6,7 @@ import { flatMap, startWith } from 'rxjs/operators';
 import { Dataflow } from '../types/dataflow.type';
 import { Step } from '../types/step.type';
 import { VariableMap } from '../types/variable-map.type';
-import { ExecutionPathService } from './execution-path.service';
+import { EvaluationResolvementService } from './evaluation-resolvement.service';
 import { Evaluation } from './execution.service';
 import { PathAdvancementService } from './path-advancement.service';
 import { SingleStepService } from './single-step.service';
@@ -27,7 +27,7 @@ export type Evaluations = (Evaluation | Evaluations)[];
 export class ExecutionEngineService {
   constructor(
     private singleStepService: SingleStepService,
-    private executionPathService: ExecutionPathService,
+    private evaluationResolvementService: EvaluationResolvementService,
     private pathAdvancementService: PathAdvancementService,
     private stepResolvementService: StepResolvementService
   ) {}
@@ -43,7 +43,7 @@ export class ExecutionEngineService {
   ): Observable<PathedEvaluation> {
     return this.tick(dataflow, path, evaluations).pipe(
       flatMap((evaluation) => {
-        const newEvaluations = this.executionPathService.addEvaluation(
+        const newEvaluations = this.evaluationResolvementService.addEvaluation(
           path,
           evaluations,
           evaluation
@@ -69,7 +69,7 @@ export class ExecutionEngineService {
   ): Observable<Evaluation> {
     return this.executeStep(
       this.stepResolvementService.resolveStep(dataflow, path),
-      this.executionPathService.resolveEvaluation(evaluations, path),
+      this.evaluationResolvementService.resolveEvaluation(evaluations, path),
       this.singleStepService.toVariableMap(dataflow.steps, evaluations)
     );
   }
