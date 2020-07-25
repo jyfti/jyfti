@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { flatMap, startWith } from 'rxjs/operators';
+import { flatMap, startWith, map } from 'rxjs/operators';
 
 import { Dataflow } from '../types/dataflow.type';
 import { EvaluationResolvementService } from './evaluation-resolvement.service';
@@ -40,30 +40,38 @@ export class ExecutionEngineService {
   }
 
   executeTicksFrom(tickState: TickState): Observable<PathedEvaluation> {
-    return this.nextStep(tickState).pipe(
+    return of(tickState).pipe(
+      flatMap((tickState) => this.nextStep(tickState)),
       flatMap((evaluation) => {
-        const newEvaluations = this.evaluationResolvementService.addEvaluation(
-          tickState.path,
-          tickState.evaluations,
-          evaluation
-        );
-        const newPath = this.pathAdvancementService.advancePath(
-          tickState.dataflow,
-          tickState.path,
-          this.singleStepService.toVariableMap(
-            tickState.dataflow.steps,
-            tickState.evaluations
-          )
-        );
-        return newPath.length == 0
+        const nextTickState = this.nextTickState(tickState, evaluation);
+        return nextTickState.path.length == 0
           ? of({ path: tickState.path, evaluation })
-          : this.executeTicksFrom({
-              dataflow: tickState.dataflow,
-              path: newPath,
-              evaluations: newEvaluations,
-            }).pipe(startWith({ path: tickState.path, evaluation }));
+          : this.executeTicksFrom(nextTickState).pipe(
+              startWith({ path: tickState.path, evaluation })
+            );
       })
     );
+  }
+
+  nextTickState(tickState: TickState, evaluation: Evaluation): TickState {
+    const nextPath = this.pathAdvancementService.advancePath(
+      tickState.dataflow,
+      tickState.path,
+      this.singleStepService.toVariableMap(
+        tickState.dataflow.steps,
+        tickState.evaluations
+      )
+    );
+    const nextEvaluations = this.evaluationResolvementService.addEvaluation(
+      tickState.path,
+      tickState.evaluations,
+      evaluation
+    );
+    return {
+      dataflow: tickState.dataflow,
+      path: nextPath,
+      evaluations: nextEvaluations,
+    };
   }
 
   nextStep(tickState: TickState): Observable<Evaluation> {
