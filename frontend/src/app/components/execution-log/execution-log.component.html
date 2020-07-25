@@ -5,7 +5,9 @@
     </div>
     <div class="py-5 px-6 bg-gray-400">
       <ngx-monaco-editor
-        [options]="{}"
+        [options]="{
+          readOnly: true
+        }"
         [model]="{
           value: pathedEvaluation.evaluation | json,
           language: 'json'
