@@ -15,9 +15,11 @@ export class PathAdvancementService {
     return this.advancePathRec(dataflow.steps, path, variables);
   }
 
-  private createStartingPath(step: Step): Path {
-    return has('for', step) && step.for.do.length != 0
-      ? concat([0, 0], this.createStartingPath(step.for.do[0]))
+  private createStartingPath(step: Step, variables: VariableMap): Path {
+    return has('for', step) &&
+      step.for.do.length != 0 &&
+      variables[step.for.in]?.length > 0
+      ? concat([0, 0], this.createStartingPath(step.for.do[0], variables))
       : [];
   }
 
@@ -40,7 +42,7 @@ export class PathAdvancementService {
         ? [] // Loop over
         : concat(
             [nextVariableIndex, 0],
-            this.createStartingPath(step.for.do[0])
+            this.createStartingPath(step.for.do[0], variables)
           );
     } else {
       return concat([currentVariableIndex], nextLoopPath);
@@ -53,7 +55,7 @@ export class PathAdvancementService {
 
   advancePathRec(steps: Step[], path: Path, variables: VariableMap): Path {
     if (path.length == 0) {
-      return concat([0], this.createStartingPath(steps[0]));
+      return concat([0], this.createStartingPath(steps[0], variables));
     }
     const currentPosition = path[0];
     const currentStep = steps[currentPosition];
@@ -66,7 +68,7 @@ export class PathAdvancementService {
           ? []
           : concat(
               [nextPosition],
-              this.createStartingPath(steps[nextPosition])
+              this.createStartingPath(steps[nextPosition], variables)
             );
       } else {
         const nextLoopPath = this.advancePathForLoop(
@@ -82,7 +84,10 @@ export class PathAdvancementService {
       const nextPosition = this.advancePathFlat(steps, currentPosition);
       return isNil(nextPosition)
         ? []
-        : concat([nextPosition], this.createStartingPath(steps[nextPosition]));
+        : concat(
+            [nextPosition],
+            this.createStartingPath(steps[nextPosition], variables)
+          );
     }
   }
 }

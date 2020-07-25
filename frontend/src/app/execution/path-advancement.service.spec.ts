@@ -58,8 +58,8 @@ describe('PathAdvancementService', () => {
       },
     ];
 
-    it('should go immediately to next step after the loop if the loop list is empty', () => {
-      expect(service.advancePathRec(steps, [], { listVar: [] })).toEqual([]);
+    it('should finish the loop immediately if the list does not have elements', () => {
+      expect(service.advancePathRec(steps, [], { listVar: [] })).toEqual([0]);
     });
 
     const variables = {
