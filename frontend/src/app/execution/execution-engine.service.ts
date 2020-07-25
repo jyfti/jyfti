@@ -10,6 +10,7 @@ import { Evaluation } from './execution.service';
 import { SingleStepService } from './single-step.service';
 import { ExecutionPathService } from './execution-path.service';
 import { isArray } from 'lodash';
+import { PathAdvancementService } from './path-advancement.service';
 
 export type Path = number[];
 
@@ -26,7 +27,8 @@ export type Evaluations = (Evaluation | Evaluations)[];
 export class ExecutionEngineService {
   constructor(
     private singleStepService: SingleStepService,
-    private executionPathService: ExecutionPathService
+    private executionPathService: ExecutionPathService,
+    private pathAdvancementService: PathAdvancementService
   ) {}
 
   executeDataflow(dataflow: Dataflow): Observable<PathedEvaluation> {
@@ -45,7 +47,7 @@ export class ExecutionEngineService {
           evaluations,
           evaluation
         );
-        const newPath = this.executionPathService.advancePath(
+        const newPath = this.pathAdvancementService.advancePath(
           dataflow,
           path,
           this.singleStepService.toVariableMap(dataflow.steps, evaluations)
