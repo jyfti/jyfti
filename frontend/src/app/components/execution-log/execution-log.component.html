@@ -1,0 +1,5 @@
+<div class="flex gap-2">
+  <div *ngFor="let pathedEvaluation of pathedEvaluations$ | async">
+    {{ pathedEvaluation | json }}
+  </div>
+</div>

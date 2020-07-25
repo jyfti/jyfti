@@ -22,6 +22,7 @@ import { DataflowPersistenceEffects } from './ngrx/effects/dataflow-persistence.
 import { JsonEEvaluationComponent } from './components/json-e-evaluation/json-e-evaluation.component';
 import { ForLoopComponent } from './components/for-loop/for-loop.component';
 import { StepsComponent } from './components/steps/steps.component';
+import { ExecutionLogComponent } from './components/execution-log/execution-log.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { StepsComponent } from './components/steps/steps.component';
     JsonEEvaluationComponent,
     ForLoopComponent,
     StepsComponent,
+    ExecutionLogComponent,
   ],
   imports: [
     BrowserModule,

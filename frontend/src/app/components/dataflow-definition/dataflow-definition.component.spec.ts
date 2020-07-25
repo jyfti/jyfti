@@ -5,9 +5,8 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { MockComponents } from 'ng-mocks';
 
 import { initialState } from '../../ngrx/dataflow.state';
-import { HttpRequestComponent } from '../http-request/http-request.component';
-import { DataflowDefinitionComponent } from './dataflow-definition.component';
 import { StepsComponent } from '../steps/steps.component';
+import { DataflowDefinitionComponent } from './dataflow-definition.component';
 
 describe('DataflowDefinitionComponent', () => {
   let component: DataflowDefinitionComponent;

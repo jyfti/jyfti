@@ -3,11 +3,12 @@ import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { map, tap, filter, startWith } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import {
-  selectExecution,
   ExecutionState,
+  selectExecution,
 } from 'src/app/execution/execution.reducer';
+import { Evaluation } from 'src/app/execution/execution.service';
 import {
   resetExecution,
   startExecution,
@@ -16,8 +17,6 @@ import { loadedDataflow, persistDataflow } from 'src/app/ngrx/dataflow.actions';
 import { GlobalState } from 'src/app/ngrx/dataflow.state';
 import { DataflowFormValueExtractionService } from 'src/app/services/dataflow-form-value-extraction.service';
 import { DataflowFormService } from 'src/app/services/dataflow-form.service';
-import { isNil } from 'lodash';
-import { Evaluation } from 'src/app/execution/execution.service';
 
 @Component({
   selector: 'app-dataflow-definition',
@@ -64,6 +63,7 @@ export class DataflowDefinitionComponent implements OnInit {
         ),
       })
     );
+    this.router.navigate(['execution'], { relativeTo: this.route });
   }
 
   persist(formGroup: FormGroup) {
