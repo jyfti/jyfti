@@ -93,7 +93,7 @@ describe('ExecutionEngineService', () => {
       );
     });
 
-    describe('with a loop', () => {
+    describe('with a single-step loop', () => {
       const dataflow: Dataflow = {
         name: 'MyDataflow',
         steps: [
@@ -113,15 +113,83 @@ describe('ExecutionEngineService', () => {
           },
         ],
       };
+
       it('should evaluate the return value with no loop iteration to an empty list', () => {
         expect(service.tick(dataflow, [0], [])).toBeObservable(
           cold('(a|)', { a: [] })
         );
       });
+
       it('should evaluate the return value with a single loop iteration to a single element list', () => {
         expect(service.tick(dataflow, [0], [[['a']]])).toBeObservable(
           cold('(a|)', { a: ['a'] })
         );
+      });
+
+      it('should evaluate the return value with multiple loop iterations to list of the size of the iterations', () => {
+        expect(
+          service.tick(dataflow, [0], [[['a'], ['b'], ['c']]])
+        ).toBeObservable(cold('(a|)', { a: ['a', 'b', 'c'] }));
+      });
+    });
+
+    describe('with a multi-step loop', () => {
+      const dataflow: Dataflow = {
+        name: 'MyDataflow',
+        steps: [
+          {
+            assignTo: 'outVar',
+            for: {
+              const: 'loopVar',
+              in: 'listVar',
+              do: [
+                {
+                  assignTo: 'var1',
+                  expression: 10,
+                },
+                {
+                  assignTo: 'var2',
+                  expression: 20,
+                },
+                {
+                  assignTo: 'var3',
+                  expression: {
+                    $eval: 'var1 + var2',
+                  },
+                },
+              ],
+              return: 'var3',
+            },
+          },
+        ],
+      };
+
+      it('should evaluate the return value with no loop iteration to an empty list', () => {
+        expect(service.tick(dataflow, [0], [])).toBeObservable(
+          cold('(a|)', { a: [] })
+        );
+      });
+
+      it('should evaluate the return value with a single loop iteration to a single element list', () => {
+        expect(service.tick(dataflow, [0], [[[10, 20, 30]]])).toBeObservable(
+          cold('(a|)', { a: [30] })
+        );
+      });
+
+      it('should evaluate the return value with multiple loop iterations to list of the size of the iterations', () => {
+        expect(
+          service.tick(
+            dataflow,
+            [0],
+            [
+              [
+                [10, 20, 30],
+                [10, 20, 30],
+                [10, 20, 30],
+              ],
+            ]
+          )
+        ).toBeObservable(cold('(a|)', { a: [30, 30, 30] }));
       });
     });
   });
