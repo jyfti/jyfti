@@ -5,7 +5,6 @@ import { of } from 'rxjs';
 
 import { ExecutionEngineService } from './execution-engine.service';
 import { Dataflow } from '../types/dataflow.type';
-import { Step } from '../types/step.type';
 
 describe('ExecutionEngineService', () => {
   let service: ExecutionEngineService;
@@ -59,7 +58,7 @@ describe('ExecutionEngineService', () => {
 
   describe('the execution of the next step', () => {
     it('should execute the first step', () => {
-      const dataflow = {
+      const dataflow: Dataflow = {
         name: 'MyDataflow',
         steps: [
           {
@@ -74,7 +73,7 @@ describe('ExecutionEngineService', () => {
     });
 
     it('should execute the second step considering the evaluation of the first step without evaluating it', () => {
-      const dataflow = {
+      const dataflow: Dataflow = {
         name: 'MyDataflow',
         steps: [
           {
@@ -92,6 +91,38 @@ describe('ExecutionEngineService', () => {
       expect(service.tick(dataflow, [1], [42])).toBeObservable(
         cold('(a|)', { a: 42 })
       );
+    });
+
+    describe('with a loop', () => {
+      const dataflow: Dataflow = {
+        name: 'MyDataflow',
+        steps: [
+          {
+            assignTo: 'outVar',
+            for: {
+              const: 'loopVar',
+              in: 'listVar',
+              do: [
+                {
+                  assignTo: 'innerVar',
+                  expression: 'a',
+                },
+              ],
+              return: 'innerVar',
+            },
+          },
+        ],
+      };
+      it('should evaluate the return value with no loop iteration to an empty list', () => {
+        expect(service.tick(dataflow, [0], [])).toBeObservable(
+          cold('(a|)', { a: [] })
+        );
+      });
+      it('should evaluate the return value with a single loop iteration to a single element list', () => {
+        expect(service.tick(dataflow, [0], [[['a']]])).toBeObservable(
+          cold('(a|)', { a: ['a'] })
+        );
+      });
     });
   });
 });

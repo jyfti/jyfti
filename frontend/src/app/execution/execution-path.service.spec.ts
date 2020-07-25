@@ -31,7 +31,8 @@ describe('ExecutionPathService', () => {
     [[0], [], 'a', ['a']],
     [[1], ['a'], 'b', ['a', 'b']],
     [[1, 0], ['a'], 'b', ['a', ['b']]],
-    [[1, 0, 0], ['a'], 'b', ['a', [['b']]]]
+    [[1, 0, 0], ['a'], 'b', ['a', [['b']]]],
+    [[0], [[['a']]], 'b', ['b']],
   ])(
     'addEvaluation(%s, %s, %s)=%s',
     (path, evaluations, evaluation, expectation) => {
@@ -150,6 +151,10 @@ describe('ExecutionPathService', () => {
         },
       },
     ];
+
+    it('should go immediately to next step after the loop if the loop list is empty', () => {
+      expect(service.advancePathRec(steps, [], { listVar: [] })).toEqual([]);
+    });
 
     const variables = {
       listVar: ['a', 'b'],

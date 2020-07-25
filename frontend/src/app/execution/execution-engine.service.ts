@@ -9,6 +9,7 @@ import { VariableMap } from '../types/variable-map.type';
 import { Evaluation } from './execution.service';
 import { SingleStepService } from './single-step.service';
 import { ExecutionPathService } from './execution-path.service';
+import { isArray } from 'lodash';
 
 export type Path = number[];
 
@@ -65,11 +66,16 @@ export class ExecutionEngineService {
   ): Observable<Evaluation> {
     return this.executeStep(
       this.executionPathService.resolveStep(dataflow, path),
+      this.executionPathService.resolveEvaluation(evaluations, path),
       this.singleStepService.toVariableMap(dataflow.steps, evaluations)
     );
   }
 
-  executeStep(step: Step, variables: VariableMap): Observable<Evaluation> {
+  executeStep(
+    step: Step,
+    localEvaluations: Evaluation | Evaluations,
+    variables: VariableMap
+  ): Observable<Evaluation> {
     if (!isNil(step?.request)) {
       return this.singleStepService.executeRequestStep(step.request, variables);
     } else if (!isNil(step?.expression)) {
@@ -77,11 +83,33 @@ export class ExecutionEngineService {
         step.expression,
         variables
       );
+    } else if (!isNil(step?.for)) {
+      return this.evaluateLoopReturn(localEvaluations, step);
     } else {
       return of({
         error:
           "Step does not contain any of 'request', 'expression' and 'for'.",
       });
     }
+  }
+
+  private evaluateLoopReturn(
+    localEvaluations: Evaluation | Evaluations,
+    step: Step
+  ): Observable<Evaluation[]> {
+    if (!isNil(localEvaluations) && !isArray(localEvaluations)) {
+      throw new Error(
+        'Expected list of loop iteration evaluations, but got a single evaluation'
+      );
+    }
+    const loopReturn: Evaluation[] = (localEvaluations || [])
+      .map((loopIterationEvaluation) =>
+        this.singleStepService.toVariableMap(
+          step.for.do,
+          loopIterationEvaluation
+        )
+      )
+      .map((loopIterationVariables) => loopIterationVariables[step.for.return]);
+    return of(loopReturn);
   }
 }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { isNil, has, tail, concat } from 'lodash/fp';
+import { isNil, has, tail, concat, dropRight } from 'lodash/fp';
 import { Dataflow } from '../types/dataflow.type';
 import { Path, Evaluations } from './execution-engine.service';
 import { VariableMap } from '../types/variable-map.type';
@@ -30,17 +30,20 @@ export class ExecutionPathService {
   ): Evaluations {
     if (path.length == 0) {
       return evaluations.concat([evaluation]);
-    } else if (path.length == 1) {
-      if (path[0] != evaluations.length) {
-        throw new Error('Can not override existing evaluation');
+    }
+    if (path[0] < evaluations.length - 1) {
+      throw new Error(
+        'Can not modify sub evaluations of other than the current or next evaluation'
+      );
+    }
+    if (path.length == 1) {
+      if (path[0] == evaluations.length) {
+        return evaluations.concat([evaluation]);
+      } else {
+        // Current evaluation hold a sub scope before and will now hold the return of the subscope
+        return dropRight(1)(evaluations).concat([evaluation]);
       }
-      return this.addEvaluation([], evaluations, evaluation);
     } else {
-      if (path[0] < evaluations.length - 1) {
-        throw new Error(
-          'Can not modify sub evaluations of other than the current or next evaluation'
-        );
-      }
       return evaluations.concat([
         this.addEvaluation(
           tail(path),
@@ -75,7 +78,7 @@ export class ExecutionPathService {
   }
 
   private createStartingPath(step: Step): Path {
-    return has('for', step)
+    return has('for', step) && step.for.do.length != 0
       ? concat([0, 0], this.createStartingPath(step.for.do[0]))
       : [];
   }
