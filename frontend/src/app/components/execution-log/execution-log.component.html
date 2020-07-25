@@ -6,7 +6,8 @@
     <div class="py-5 px-6 bg-gray-400">
       <ngx-monaco-editor
         [options]="{
-          readOnly: true
+          readOnly: true,
+          scrollBeyondLastLine: false
         }"
         [model]="{
           value: pathedEvaluation.evaluation | json,
