@@ -8,7 +8,6 @@ import { FormGroup } from '@angular/forms';
 })
 export class HttpRequestComponent implements OnInit {
   @Input() formGroup: FormGroup;
-  @Input() evaluation: HttpResponse<any>;
 
   readonly httpMethods: string[] = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'];
 

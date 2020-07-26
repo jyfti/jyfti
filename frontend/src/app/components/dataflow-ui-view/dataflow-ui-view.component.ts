@@ -5,11 +5,6 @@ import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import {
-  ExecutionState,
-  selectExecution,
-} from 'src/app/execution/execution.reducer';
-import { Evaluation } from 'src/app/execution/execution.service';
-import {
   resetExecution,
   startExecution,
 } from 'src/app/ngrx/dataflow-execution.actions';
@@ -24,8 +19,6 @@ import { DataflowFormService } from 'src/app/services/dataflow-form.service';
 })
 export class DataflowUiViewComponent implements OnInit {
   formGroup$: Observable<FormGroup>;
-  execution$: Observable<ExecutionState>;
-  evaluations$: Observable<Evaluation[]>;
 
   constructor(
     private store: Store<GlobalState>,
@@ -36,12 +29,10 @@ export class DataflowUiViewComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.execution$ = this.store.pipe(select(selectExecution));
     this.formGroup$ = this.store.pipe(
       select('dataflow', 'dataflow'),
       map((dataflow) => this.dataflowFormService.createDataFlow(dataflow))
     );
-    this.evaluations$ = this.execution$.pipe(select('evaluations'));
   }
 
   editStep(formGroup: FormGroup, stepIndex: number) {

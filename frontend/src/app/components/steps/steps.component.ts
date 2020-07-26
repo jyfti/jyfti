@@ -9,7 +9,6 @@ import { DataflowFormService } from 'src/app/services/dataflow-form.service';
 })
 export class StepsComponent implements OnInit {
   @Input() steps: FormArray;
-  @Input() evaluations: { [stepIndex: number]: any };
 
   @Output() editStepRequest = new EventEmitter<number>();
 

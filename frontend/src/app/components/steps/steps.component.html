@@ -2,7 +2,6 @@
   <app-step
     *ngFor="let step of steps.controls; let stepIndex = index"
     [formGroup]="step"
-    [evaluation]="evaluations[stepIndex]"
     [stepIndex]="stepIndex"
     (removed)="removeStep(stepIndex)"
     (editRequested)="editStepRequest.emit(stepIndex)"
@@ -10,7 +9,6 @@
     <app-http-request
       *ngIf="step.get('request')"
       [formGroup]="step.get('request')"
-      [evaluation]="evaluations[stepIndex]"
     ></app-http-request>
     <app-json-e-evaluation
       *ngIf="step.get('expression')"
