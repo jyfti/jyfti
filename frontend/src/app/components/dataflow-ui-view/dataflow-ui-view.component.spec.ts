@@ -6,25 +6,22 @@ import { MockComponents } from 'ng-mocks';
 
 import { initialState } from '../../ngrx/dataflow.state';
 import { StepsComponent } from '../steps/steps.component';
-import { DataflowDefinitionComponent } from './dataflow-definition.component';
+import { DataflowUiViewComponent } from './dataflow-ui-view.component';
 
-describe('DataflowDefinitionComponent', () => {
-  let component: DataflowDefinitionComponent;
-  let fixture: ComponentFixture<DataflowDefinitionComponent>;
+describe('DataflowUiViewComponent', () => {
+  let component: DataflowUiViewComponent;
+  let fixture: ComponentFixture<DataflowUiViewComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        DataflowDefinitionComponent,
-        MockComponents(StepsComponent),
-      ],
+      declarations: [DataflowUiViewComponent, MockComponents(StepsComponent)],
       providers: [provideMockStore({ initialState })],
       imports: [ReactiveFormsModule, RouterTestingModule],
     }).compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DataflowDefinitionComponent);
+    fixture = TestBed.createComponent(DataflowUiViewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -9,7 +9,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { MonacoEditorModule, NgxMonacoEditorConfig } from 'ngx-monaco-editor';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './components/app/app.component';
-import { DataflowDefinitionComponent } from './components/dataflow-definition/dataflow-definition.component';
+import { DataflowUiViewComponent } from './components/dataflow-ui-view/dataflow-ui-view.component';
 import { DataflowSelectionComponent } from './components/dataflow-selection/dataflow-selection.component';
 import { HttpRequestDetailComponent } from './components/http-request-detail/http-request-detail.component';
 import { HttpRequestComponent } from './components/http-request/http-request.component';
@@ -32,7 +32,7 @@ const monacoConfig: NgxMonacoEditorConfig = {
 @NgModule({
   declarations: [
     AppComponent,
-    DataflowDefinitionComponent,
+    DataflowUiViewComponent,
     HttpRequestComponent,
     StepComponent,
     HttpStatusBadgeComponent,

@@ -19,10 +19,10 @@ import { DataflowFormValueExtractionService } from 'src/app/services/dataflow-fo
 import { DataflowFormService } from 'src/app/services/dataflow-form.service';
 
 @Component({
-  selector: 'app-dataflow-definition',
-  templateUrl: './dataflow-definition.component.html',
+  selector: 'app-dataflow-ui-view',
+  templateUrl: './dataflow-ui-view.component.html',
 })
-export class DataflowDefinitionComponent implements OnInit {
+export class DataflowUiViewComponent implements OnInit {
   formGroup$: Observable<FormGroup>;
   execution$: Observable<ExecutionState>;
   evaluations$: Observable<Evaluation[]>;
