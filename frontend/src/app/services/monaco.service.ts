@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, interval } from 'rxjs';
 import { filter, map, first, tap } from 'rxjs/operators';
-import * as dataflowSchema from '../../assets/dataflow-schema.json';
+import dataflowSchema from '../../assets/dataflow-schema.json';
 
 @Injectable({
   providedIn: 'root',
@@ -21,21 +21,14 @@ export class MonacoService {
   }
 
   onMonacoLoad(monaco) {
+    console.log(dataflowSchema);
     monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
       validate: true,
       schemas: [
         {
           uri: 'internal://server/dataflow-schema.json',
           fileMatch: ['dataflow.json'],
-          schema: {
-            type: 'object',
-            properties: {
-              name: {
-                description: 'The name of the dataflow',
-                type: 'string',
-              },
-            },
-          },
+          schema: dataflowSchema,
         },
       ],
     });

@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import { NgxEditorModel } from 'ngx-monaco-editor';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { GlobalState } from 'src/app/ngrx/dataflow.state';
 import { MonacoService } from 'src/app/services/monaco.service';
-import { combineLatest, tap, map } from 'rxjs/operators';
-import { Observable } from 'rxjs';
 import { Dataflow } from 'src/app/types/dataflow.type';
 
 @Component({
