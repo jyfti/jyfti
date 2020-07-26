@@ -4,10 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import {
-  resetExecution,
-  startExecution,
-} from 'src/app/ngrx/dataflow-execution.actions';
+import { startExecution } from 'src/app/ngrx/dataflow-execution.actions';
 import { loadedDataflow, persistDataflow } from 'src/app/ngrx/dataflow.actions';
 import { GlobalState } from 'src/app/ngrx/dataflow.state';
 import { DataflowFormValueExtractionService } from 'src/app/services/dataflow-form-value-extraction.service';
@@ -69,9 +66,5 @@ export class DataflowUiViewComponent implements OnInit {
 
   viewJson() {
     this.router.navigate(['json'], { relativeTo: this.route });
-  }
-
-  clearExecution() {
-    this.store.dispatch(resetExecution());
   }
 }
