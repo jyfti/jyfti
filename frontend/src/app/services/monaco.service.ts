@@ -21,7 +21,6 @@ export class MonacoService {
   }
 
   onMonacoLoad(monaco) {
-    console.log(dataflowSchema);
     monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
       validate: true,
       schemas: [

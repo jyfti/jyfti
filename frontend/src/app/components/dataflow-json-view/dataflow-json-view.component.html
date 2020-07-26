@@ -2,10 +2,6 @@
   <ngx-monaco-editor
     style="height: 100%;"
     [options]="{}"
-    [model]="{
-      value: dataflow$ | async | json,
-      language: 'json',
-      uri: uri$ | async
-    }"
+    [model]="model$ | async"
   ></ngx-monaco-editor>
 </div>
