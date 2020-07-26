@@ -6,7 +6,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { routerReducer, StoreRouterConnectingModule } from '@ngrx/router-store';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { MonacoEditorModule } from 'ngx-monaco-editor';
+import { MonacoEditorModule, NgxMonacoEditorConfig } from 'ngx-monaco-editor';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './components/app/app.component';
 import { DataflowDefinitionComponent } from './components/dataflow-definition/dataflow-definition.component';
@@ -24,6 +24,10 @@ import { ForLoopComponent } from './components/for-loop/for-loop.component';
 import { StepsComponent } from './components/steps/steps.component';
 import { ExecutionLogComponent } from './components/execution-log/execution-log.component';
 import { DataflowJsonViewComponent } from './components/dataflow-json-view/dataflow-json-view.component';
+
+const monacoConfig: NgxMonacoEditorConfig = {
+  defaultOptions: { scrollBeyondLastLine: false },
+};
 
 @NgModule({
   declarations: [
@@ -51,7 +55,7 @@ import { DataflowJsonViewComponent } from './components/dataflow-json-view/dataf
       maxAge: 25,
     }),
     StoreRouterConnectingModule.forRoot(),
-    MonacoEditorModule.forRoot(),
+    MonacoEditorModule.forRoot(monacoConfig),
     ExecutionModule,
   ],
   providers: [],

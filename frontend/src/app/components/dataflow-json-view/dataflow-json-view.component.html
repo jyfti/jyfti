@@ -1,12 +1,11 @@
 <div class="h-screen py-5 px-6 bg-gray-400">
   <ngx-monaco-editor
     style="height: 100%;"
-    [options]="{
-      scrollBeyondLastLine: false
-    }"
+    [options]="{}"
     [model]="{
       value: dataflow$ | async | json,
-      language: 'json'
+      language: 'json',
+      uri: uri$ | async
     }"
   ></ngx-monaco-editor>
 </div>

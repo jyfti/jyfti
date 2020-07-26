@@ -1,0 +1,84 @@
+{
+  "type": "object",
+  "properties": {
+    "name": {
+      "description": "The name of the dataflow",
+      "type": "string"
+    },
+    "steps": {
+      "description": "A sequence of steps that are executed one after the other and where the results of a previous step can be used in later steps",
+      "type": "array",
+      "items": [
+        {
+          "type": "object",
+          "properties": {
+            "assignTo": {
+              "type": "string"
+            },
+            "request": {
+              "type": "object",
+              "properties": {
+                "method": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string"
+                },
+                "body": {
+                  "type": "null"
+                },
+                "headers": {
+                  "type": "null"
+                }
+              },
+              "required": ["method", "url"]
+            },
+            "expression": {
+              "type": "object"
+            },
+            "for": {
+              "type": "object",
+              "properties": {
+                "const": {
+                  "type": "string"
+                },
+                "in": {
+                  "type": "string"
+                },
+                "do": {
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "assignTo": {
+                          "type": "string"
+                        },
+                        "expression": {
+                          "type": "object",
+                          "properties": {
+                            "$eval": {
+                              "type": "string"
+                            }
+                          },
+                          "required": ["$eval"]
+                        }
+                      },
+                      "required": ["assignTo", "expression"]
+                    }
+                  ]
+                },
+                "return": {
+                  "type": "string"
+                }
+              },
+              "required": ["const", "in", "do", "return"]
+            }
+          },
+          "required": ["assignTo"]
+        }
+      ]
+    }
+  },
+  "required": ["name", "steps"]
+}
