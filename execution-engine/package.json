@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "dev": "nodemon",
     "build": "rm -rf ./build && npx tsc",
     "start": "npm run build && node -r tsconfig-paths/register build/index.js"
@@ -13,10 +13,20 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@babel/core": "^7.11.1",
+    "@babel/preset-env": "^7.11.0",
+    "@babel/preset-typescript": "^7.10.4",
+    "@types/jest": "^26.0.9",
+    "@types/lodash": "^4.14.159",
     "@types/node": "^14.0.27",
+    "babel-jest": "^26.3.0",
+    "jest": "^26.3.0",
     "nodemon": "^2.0.4",
     "ts-node": "^8.10.2",
     "tsconfig-paths": "^3.9.0",
     "typescript": "^3.9.7"
+  },
+  "dependencies": {
+    "lodash": "^4.17.19"
   }
 }

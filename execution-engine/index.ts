@@ -1,3 +1,3 @@
-import { randomNumber } from "libs/number";
+import { StepResolvementService } from "libs/services/step-resolvement.service";
 
-console.log("Random number (1 - 100): ", randomNumber());
+console.log("Hello, world!");
