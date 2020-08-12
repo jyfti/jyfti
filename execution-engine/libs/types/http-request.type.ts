@@ -1,6 +1,8 @@
+import { Dictionary } from "lodash";
+
 export type HttpMethod = "POST" | "PUT" | "GET" | "DELETE" | "PATCH";
 
-export type HttpProtocol = "https" | "http";
+export type HttpProtocol = "https:" | "http:";
 
 export interface HttpRequest<T> {
   protocol: HttpProtocol;
@@ -9,4 +11,5 @@ export interface HttpRequest<T> {
   method: HttpMethod;
   body?: T;
   port?: number;
+  headers?: Dictionary<any>;
 }

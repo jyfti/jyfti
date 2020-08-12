@@ -12,7 +12,7 @@ const httpClientStub: Partial<HttpService> = {
     of({ body: [{ title: "My Issue" }, { title: "My other Issue" }] }),
 };
 let service = new ExecutionEngineService(
-  new SingleStepService(httpClientStub as HttpService),
+  new SingleStepService(new HttpService()),
   new EvaluationResolvementService(),
   new PathAdvancementService(),
   new StepResolvementService()

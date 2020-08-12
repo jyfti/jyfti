@@ -9,13 +9,18 @@ import {
 } from "lodash/fp";
 import { Observable, of } from "rxjs";
 import { catchError, flatMap, map } from "rxjs/operators";
+import * as url from "url";
 
 import { HttpRequestTemplate } from "../types/http-request-template.type";
 import { JsonExpression, Step } from "../types/step.type";
 import { VariableMap } from "../types/variable-map.type";
 import { Evaluations, Evaluation } from "../types/evaluations.type";
 import { HttpService } from "./http.service";
-import { HttpRequest, HttpMethod } from "../types/http-request.type";
+import {
+  HttpRequest,
+  HttpMethod,
+  HttpProtocol,
+} from "../types/http-request.type";
 
 export class SingleStepService {
   constructor(private http: HttpService) {}
@@ -92,14 +97,15 @@ export class SingleStepService {
     template: HttpRequestTemplate,
     variables: VariableMap
   ): HttpRequest<any> {
+    const requestUrl = this.interpolate(variables, template.url);
+    const parsedRequestUrl = url.parse(requestUrl, true);
     return {
-      protocol: "http",
+      protocol: (parsedRequestUrl.protocol || "https:") as HttpProtocol,
       method: template.method as HttpMethod,
-      // TODO: Separate url into parts
-      hostname: this.interpolate(variables, template.url),
-      path: "",
+      hostname: parsedRequestUrl.hostname || "",
+      path: parsedRequestUrl.path || "",
       body: this.evaluate(variables, template.body),
-      // TODO: headers: this.evaluate(variables, template.headers),
+      // headers: this.evaluate(variables, template.headers),
     };
   }
 
