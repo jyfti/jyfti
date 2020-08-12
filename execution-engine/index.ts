@@ -5,19 +5,24 @@ import { EvaluationResolvementService } from "libs/services/evaluation-resolveme
 import { PathAdvancementService } from "libs/services/path-advancement.service";
 import { StepResolvementService } from "libs/services/step-resolvement.service";
 import * as fs from "fs";
+import { Command } from "commander";
 
-let service = new ExecutionEngineService(
-  new SingleStepService(new HttpService()),
-  new EvaluationResolvementService(),
-  new PathAdvancementService(),
-  new StepResolvementService()
-);
+const program = new Command();
+program
+  .version("0.0.1")
+  .command("run <path>")
+  .description("run a dataflow")
+  .action((path) => {
+    const service = new ExecutionEngineService(
+      new SingleStepService(new HttpService()),
+      new EvaluationResolvementService(),
+      new PathAdvancementService(),
+      new StepResolvementService()
+    );
+    fs.readFile(path, "utf8", (err, data) => {
+      const dataflow = JSON.parse(data);
+      service.executeDataflow(dataflow).subscribe(console.log);
+    });
+  });
 
-fs.readFile(
-  "../local-backend/dataflows/github-issues.json",
-  "utf8",
-  (err, data) => {
-    const dataflow = JSON.parse(data);
-    service.executeDataflow(dataflow).subscribe(console.log);
-  }
-);
+program.parse(process.argv);
