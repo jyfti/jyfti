@@ -46,16 +46,22 @@ program
         ? json
         : { dataflow: json, path: [0], evaluations: [] };
       const destination = isTickState ? path : "./jift.state.json";
-      service.executeTick(tickState).subscribe((pathedEvaluation) => {
-        fs.writeFile(
-          destination,
-          JSON.stringify(
-            service.nextTickState(tickState, pathedEvaluation.evaluation)
-          ),
-          "utf8",
-          (err) => console.error(err)
-        );
-      });
+      if (tickState.path.length === 0) {
+        console.log("Dataflow execution already completed");
+      } else {
+        service.executeTick(tickState).subscribe((pathedEvaluation) => {
+          const nextTickState = service.nextTickState(
+            tickState,
+            pathedEvaluation.evaluation
+          );
+          fs.writeFile(
+            destination,
+            JSON.stringify(nextTickState),
+            "utf8",
+            (err) => console.error(err)
+          );
+        });
+      }
     });
   });
 
