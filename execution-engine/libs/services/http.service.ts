@@ -1,19 +1,19 @@
 import { from, Observable } from "rxjs";
+import { HttpRequest } from "../types/http-request.type";
 
 export class HttpService {
-  constructor() {}
-
+    
   /**
    * An http request without any external dependencies.
    * https://www.tomas-dvorak.cz/posts/nodejs-request-without-dependencies/
    */
-  get(url: string): Observable<string> {
+  request(requestInfo: HttpRequest<any>): Observable<any> {
     return from(
       new Promise<string>((resolve, reject) => {
-        const lib = url.startsWith("https")
+        const lib = requestInfo.protocol.startsWith("https")
           ? require("https")
           : require("http");
-        const request = lib.get(url, (response: any) => {
+        const request = lib.request(requestInfo, (response: any) => {
           if (response.statusCode < 200 || response.statusCode > 299) {
             reject(
               new Error(
@@ -23,7 +23,7 @@ export class HttpService {
           }
           const body: any[] = [];
           response.on("data", (chunk: any) => body.push(chunk));
-          response.on("end", () => resolve(body.join("")));
+          response.on("end", () => resolve(JSON.parse(body.join(""))));
         });
         request.on("error", (err: any) => reject(err));
       })
