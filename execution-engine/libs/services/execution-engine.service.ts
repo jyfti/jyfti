@@ -7,20 +7,8 @@ import { Evaluation } from "./execution.service";
 import { PathAdvancementService } from "./path-advancement.service";
 import { SingleStepService } from "./single-step.service";
 import { StepResolvementService } from "./step-resolvement.service";
-import { Evaluations } from "../types/evaluations.type";
-
-type Path = number[];
-
-interface PathedEvaluation {
-  path: Path;
-  evaluation: Evaluation;
-}
-
-interface TickState {
-  dataflow: Dataflow;
-  path: Path;
-  evaluations: Evaluations;
-}
+import { PathedEvaluation } from "libs/types/pathed-evaluation.type";
+import { TickState } from "libs/types/tick-state.type";
 
 export class ExecutionEngineService {
   constructor(
