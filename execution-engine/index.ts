@@ -56,7 +56,7 @@ program
           );
           fs.writeFile(
             destination,
-            JSON.stringify(nextTickState),
+            JSON.stringify(nextTickState, null, 2),
             "utf8",
             (err) => console.error(err)
           );
