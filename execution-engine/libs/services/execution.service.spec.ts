@@ -10,7 +10,7 @@ import { HttpService } from "./http.service";
 
 describe("ExecutionService", () => {
   const httpClientStub: Partial<HttpService> = {
-    request: () => of({ field: "value" }),
+    request: () => of({ body: { field: "value" } }),
   };
   let service = new ExecutionService(
     new SingleStepService(httpClientStub as HttpService)
@@ -31,7 +31,7 @@ describe("ExecutionService", () => {
       };
       const variables: VariableMap = {};
       expect(service.executeStep(step, variables)).toBeObservable(
-        cold("(a|)", { a: { field: "value" } })
+        cold("(a|)", { a: { body: { field: "value" } } })
       );
     });
   });

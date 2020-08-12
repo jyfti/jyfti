@@ -11,7 +11,7 @@ import { StepResolvementService } from "./step-resolvement.service";
 
 describe("ExecutionEngineService", () => {
   const httpClientStub: Partial<HttpService> = {
-    request: () => of({ field: "value" }),
+    request: () => of({ body: { field: "value" } }),
   };
   let service = new ExecutionEngineService(
     new SingleStepService(httpClientStub as HttpService),

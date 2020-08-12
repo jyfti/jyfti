@@ -5,7 +5,7 @@ import { HttpService } from "./http.service";
 
 describe("SingleStepService", () => {
   const httpClientStub: Partial<HttpService> = {
-    request: () => of({ field: "value" }),
+    request: () => of({ body: { field: "value" } }),
   };
 
   let service = new SingleStepService(httpClientStub as HttpService);

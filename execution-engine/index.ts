@@ -5,12 +5,7 @@ import { EvaluationResolvementService } from "libs/services/evaluation-resolveme
 import { PathAdvancementService } from "libs/services/path-advancement.service";
 import { StepResolvementService } from "libs/services/step-resolvement.service";
 import * as fs from "fs";
-import { of } from "rxjs";
 
-const httpClientStub: Partial<HttpService> = {
-  request: () =>
-    of({ body: [{ title: "My Issue" }, { title: "My other Issue" }] }),
-};
 let service = new ExecutionEngineService(
   new SingleStepService(new HttpService()),
   new EvaluationResolvementService(),
