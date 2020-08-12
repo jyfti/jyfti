@@ -1,5 +1,5 @@
 import { empty, Observable, of } from "rxjs";
-import { flatMap, startWith } from "rxjs/operators";
+import { flatMap, startWith, map } from "rxjs/operators";
 
 import { Dataflow } from "../types/dataflow.type";
 import { EvaluationResolvementService } from "./evaluation-resolvement.service";
@@ -23,18 +23,24 @@ export class ExecutionEngineService {
   }
 
   executeTicksFrom(tickState: TickState): Observable<PathedEvaluation> {
-    return of(tickState).pipe(
-      flatMap((tickState) => this.nextStep(tickState)),
-      flatMap((evaluation) => {
-        const nextTickState = this.nextTickState(tickState, evaluation);
+    return this.executeTick(tickState).pipe(
+      flatMap((pathedEvaluation) => {
+        const nextTickState = this.nextTickState(
+          tickState,
+          pathedEvaluation.evaluation
+        );
         const continuingTicks =
           nextTickState.path.length == 0
             ? empty()
             : this.executeTicksFrom(nextTickState);
-        return continuingTicks.pipe(
-          startWith({ path: tickState.path, evaluation })
-        );
+        return continuingTicks.pipe(startWith(pathedEvaluation));
       })
+    );
+  }
+
+  executeTick(tickState: TickState): Observable<PathedEvaluation> {
+    return this.nextStep(tickState).pipe(
+      map((evaluation) => ({ path: tickState.path, evaluation }))
     );
   }
 
