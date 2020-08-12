@@ -19,6 +19,7 @@
     "@types/jest": "^26.0.9",
     "@types/lodash": "^4.14.159",
     "@types/node": "^14.0.27",
+    "@types/rx": "^4.1.2",
     "babel-jest": "^26.3.0",
     "jest": "^26.3.0",
     "nodemon": "^2.0.4",
@@ -27,6 +28,7 @@
     "typescript": "^3.9.7"
   },
   "dependencies": {
-    "lodash": "^4.17.19"
+    "lodash": "^4.17.19",
+    "rxjs": "^6.6.2"
   }
 }
