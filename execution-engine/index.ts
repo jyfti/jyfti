@@ -7,6 +7,7 @@ import { StepResolvementService } from "libs/services/step-resolvement.service";
 import * as fs from "fs";
 import { Command } from "commander";
 import { createExecutionEngine } from "libs/services/engine.factory";
+import { map } from "rxjs/operators";
 
 const program = new Command();
 program.version("0.0.1");
@@ -40,18 +41,16 @@ program
       if (tickState.path.length === 0) {
         console.log("Dataflow execution already completed");
       } else {
-        engine.executeTick(tickState).subscribe((pathedEvaluation) => {
-          const nextTickState = engine.nextTickState(
-            tickState,
-            pathedEvaluation.evaluation
-          );
-          fs.writeFile(
-            destination,
-            JSON.stringify(nextTickState, null, 2),
-            "utf8",
-            (err) => console.error(err)
-          );
-        });
+        engine
+          .executeTick(tickState)
+          .pipe(
+            map((pathedEvaluation) => pathedEvaluation.evaluation),
+            map((evaluation) => engine.nextTickState(tickState, evaluation)),
+            map((nextTickState) => JSON.stringify(nextTickState, null, 2))
+          )
+          .subscribe((nextTickState) => {
+            fs.writeFile(destination, nextTickState, "utf8", console.error);
+          });
       }
     });
   });
