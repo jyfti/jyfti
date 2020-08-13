@@ -99,4 +99,16 @@ program
     }
   });
 
+program
+  .command("reset [name]")
+  .description("resets the current execution state of the dataflow")
+  .action(async (name) => {
+    const jiftConfig = await readJiftConfig();
+    const fullStatePath = nodePath.resolve(
+      jiftConfig.outRoot,
+      name + ".state.json"
+    );
+    await fs.promises.unlink(fullStatePath);
+  });
+
 program.parse(process.argv);
