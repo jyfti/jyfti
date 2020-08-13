@@ -1,8 +1,26 @@
 import * as fs from "fs";
+import * as nodePath from "path";
 import { Command } from "commander";
 import { createExecutionEngine } from "libs/services/engine.factory";
 import { map, flatMap, tap } from "rxjs/operators";
 import { of, from } from "rxjs";
+
+interface JiftConfig {
+  dataflowRoot: string;
+}
+
+function readJson(path: string) {
+  return fs.promises.readFile(path, "utf8").then(JSON.parse);
+}
+
+function readJiftConfig(): Promise<JiftConfig> {
+  return readJson("jift.json").catch(
+    (err) =>
+      ({
+        dataflowRoot: "./",
+      } as JiftConfig)
+  );
+}
 
 const program = new Command();
 program.version("0.0.1");
@@ -11,7 +29,10 @@ program
   .command("run <path>")
   .description("run a dataflow")
   .action(async (path) => {
-    const dataflow = JSON.parse(await fs.promises.readFile(path, "utf8"));
+    const jiftConfig = await readJiftConfig();
+    const dataflow = await readJson(
+      nodePath.resolve(jiftConfig.dataflowRoot, path)
+    );
     const engine = createExecutionEngine();
     engine.executeDataflow(dataflow).subscribe(console.log);
   });
@@ -22,13 +43,13 @@ program
     "reads the tick state, executes the next tick and writes back the new tick state"
   )
   .action(async (path, destination) => {
-    const dataflow = JSON.parse(await fs.promises.readFile(path, "utf8"));
+    const dataflow = await readJson(path);
     const stateExists = await fs.promises
       .stat("jift.state.json")
       .then(() => true)
       .catch(() => false);
     const tickState = stateExists
-      ? JSON.parse(await fs.promises.readFile("jift.state.json", "utf8"))
+      ? await readJson("jift.state.json")
       : { dataflow, path: [0], evaluations: [] };
     if (tickState.path.length === 0) {
       console.log("Dataflow execution already completed");
