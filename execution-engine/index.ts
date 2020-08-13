@@ -13,13 +13,12 @@ function readJson(path: string) {
   return fs.promises.readFile(path, "utf8").then(JSON.parse);
 }
 
+const defaultJiftConfig: JiftConfig = {
+  dataflowRoot: "./",
+};
+
 function readJiftConfig(): Promise<JiftConfig> {
-  return readJson("jift.json").catch(
-    (err) =>
-      ({
-        dataflowRoot: "./",
-      } as JiftConfig)
-  );
+  return readJson("jift.json").catch((err) => defaultJiftConfig);
 }
 
 const program = new Command();
