@@ -53,16 +53,16 @@ program
   });
 
 program
-  .command("tick [path] [destination]")
+  .command("tick [name]")
   .description(
     "reads the tick state, executes the next tick and writes back the new tick state"
   )
-  .action(async (path, destination) => {
+  .action(async (name) => {
     const jiftConfig = await readJiftConfig();
-    const fullPath = nodePath.resolve(jiftConfig.sourceRoot, path);
+    const fullPath = nodePath.resolve(jiftConfig.sourceRoot, name + ".json");
     const fullStatePath = nodePath.resolve(
       jiftConfig.outRoot,
-      "jift.state.json"
+      name + ".state.json"
     );
     await ensureDirExists(jiftConfig.outRoot);
     const dataflow = await readJson(fullPath);
@@ -84,15 +84,13 @@ program
           map((evaluation) => engine.nextTickState(tickState, evaluation)),
           map((nextTickState) => JSON.stringify(nextTickState, null, 2)),
           flatMap((string) =>
-            destination
-              ? from(
-                  fs.promises.writeFile(
-                    nodePath.resolve(jiftConfig.outRoot, destination),
-                    string,
-                    "utf8"
-                  )
-                )
-              : of(string).pipe(tap(console.log))
+            from(
+              fs.promises.writeFile(
+                nodePath.resolve(jiftConfig.outRoot, name + ".state.json"),
+                string,
+                "utf8"
+              )
+            )
           )
         )
         .subscribe();
