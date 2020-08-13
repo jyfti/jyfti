@@ -30,7 +30,6 @@ program
       const tickState = isTickState
         ? json
         : { dataflow: json, path: [0], evaluations: [] };
-      const destination = isTickState ? path : "./jift.state.json";
       if (tickState.path.length === 0) {
         console.log("Dataflow execution already completed");
       } else {
@@ -42,9 +41,7 @@ program
             map((evaluation) => engine.nextTickState(tickState, evaluation)),
             map((nextTickState) => JSON.stringify(nextTickState, null, 2))
           )
-          .subscribe((nextTickState) => {
-            fs.writeFile(destination, nextTickState, "utf8", console.error);
-          });
+          .subscribe(console.log);
       }
     });
   });

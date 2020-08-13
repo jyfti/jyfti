@@ -7,7 +7,7 @@
     "test": "jest",
     "dev": "nodemon",
     "build": "rm -rf ./build && npx tsc",
-    "start": "npm run build && node -r tsconfig-paths/register build/index.js"
+    "start": "npm run --silent build && node -r tsconfig-paths/register build/index.js"
   },
   "keywords": [],
   "author": "",
