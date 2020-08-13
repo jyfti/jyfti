@@ -6,7 +6,7 @@ import { map, flatMap, tap } from "rxjs/operators";
 import { of, from } from "rxjs";
 
 interface JiftConfig {
-  dataflowRoot: string;
+  sourceRoot: string;
 }
 
 function readJson(path: string) {
@@ -14,7 +14,7 @@ function readJson(path: string) {
 }
 
 const defaultJiftConfig: JiftConfig = {
-  dataflowRoot: "./",
+  sourceRoot: "./",
 };
 
 function readJiftConfig(): Promise<JiftConfig> {
@@ -30,7 +30,7 @@ program
   .action(async (path) => {
     const jiftConfig = await readJiftConfig();
     const dataflow = await readJson(
-      nodePath.resolve(jiftConfig.dataflowRoot, path)
+      nodePath.resolve(jiftConfig.sourceRoot, path)
     );
     const engine = createExecutionEngine();
     engine.executeDataflow(dataflow).subscribe(console.log);
