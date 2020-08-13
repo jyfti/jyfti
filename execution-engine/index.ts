@@ -1,9 +1,3 @@
-import { ExecutionEngineService } from "libs/services/execution-engine.service";
-import { SingleStepService } from "libs/services/single-step.service";
-import { HttpService } from "libs/services/http.service";
-import { EvaluationResolvementService } from "libs/services/evaluation-resolvement.service";
-import { PathAdvancementService } from "libs/services/path-advancement.service";
-import { StepResolvementService } from "libs/services/step-resolvement.service";
 import * as fs from "fs";
 import { Command } from "commander";
 import { createExecutionEngine } from "libs/services/engine.factory";
@@ -16,9 +10,9 @@ program
   .command("run <path>")
   .description("run a dataflow")
   .action((path) => {
-    const engine = createExecutionEngine();
     fs.readFile(path, "utf8", (err, data) => {
       const dataflow = JSON.parse(data);
+      const engine = createExecutionEngine();
       engine.executeDataflow(dataflow).subscribe(console.log);
     });
   });
@@ -30,7 +24,6 @@ program
   )
   .action((path) => {
     path = path || "./jift.state.json";
-    const engine = createExecutionEngine();
     fs.readFile(path, "utf8", (err, data) => {
       const json = JSON.parse(data);
       const isTickState = "dataflow" in json;
@@ -41,6 +34,7 @@ program
       if (tickState.path.length === 0) {
         console.log("Dataflow execution already completed");
       } else {
+        const engine = createExecutionEngine();
         engine
           .executeTick(tickState)
           .pipe(
