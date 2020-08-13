@@ -69,7 +69,7 @@ describe("ExecutionEngineService", () => {
         ],
       };
       expect(
-        service.nextStep({ dataflow, path: [0], evaluations: [] })
+        service.nextStep(dataflow, { path: [0], evaluations: [] })
       ).toBeObservable(cold("(a|)", { a: 1 }));
     });
 
@@ -90,7 +90,7 @@ describe("ExecutionEngineService", () => {
         ],
       };
       expect(
-        service.nextStep({ dataflow, path: [1], evaluations: [42] })
+        service.nextStep(dataflow, { path: [1], evaluations: [42] })
       ).toBeObservable(cold("(a|)", { a: 42 }));
     });
 
@@ -117,20 +117,19 @@ describe("ExecutionEngineService", () => {
 
       it("should evaluate the return value with no loop iteration to an empty list", () => {
         expect(
-          service.nextStep({ dataflow, path: [0], evaluations: [] })
+          service.nextStep(dataflow, { path: [0], evaluations: [] })
         ).toBeObservable(cold("(a|)", { a: [] }));
       });
 
       it("should evaluate the return value with a single loop iteration to a single element list", () => {
         expect(
-          service.nextStep({ dataflow, path: [0], evaluations: [[["a"]]] })
+          service.nextStep(dataflow, { path: [0], evaluations: [[["a"]]] })
         ).toBeObservable(cold("(a|)", { a: ["a"] }));
       });
 
       it("should evaluate the return value with multiple loop iterations to list of the size of the iterations", () => {
         expect(
-          service.nextStep({
-            dataflow,
+          service.nextStep(dataflow, {
             path: [0],
             evaluations: [[["a"], ["b"], ["c"]]],
           })
@@ -171,14 +170,13 @@ describe("ExecutionEngineService", () => {
 
       it("should evaluate the return value with no loop iteration to an empty list", () => {
         expect(
-          service.nextStep({ dataflow, path: [0], evaluations: [] })
+          service.nextStep(dataflow, { path: [0], evaluations: [] })
         ).toBeObservable(cold("(a|)", { a: [] }));
       });
 
       it("should evaluate the return value with a single loop iteration to a single element list", () => {
         expect(
-          service.nextStep({
-            dataflow,
+          service.nextStep(dataflow, {
             path: [0],
             evaluations: [[[10, 20, 30]]],
           })
@@ -187,8 +185,7 @@ describe("ExecutionEngineService", () => {
 
       it("should evaluate the return value with multiple loop iterations to list of the size of the iterations", () => {
         expect(
-          service.nextStep({
-            dataflow,
+          service.nextStep(dataflow, {
             path: [0],
             evaluations: [
               [

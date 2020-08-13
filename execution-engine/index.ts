@@ -78,10 +78,12 @@ program
     } else {
       const engine = createExecutionEngine();
       engine
-        .executeTick(tickState)
+        .executeTick(dataflow, tickState)
         .pipe(
           map((pathedEvaluation) => pathedEvaluation.evaluation),
-          map((evaluation) => engine.nextTickState(tickState, evaluation)),
+          map((evaluation) =>
+            engine.nextTickState(dataflow, tickState, evaluation)
+          ),
           map((nextTickState) => JSON.stringify(nextTickState, null, 2)),
           flatMap((string) =>
             from(

@@ -19,37 +19,48 @@ export class ExecutionEngineService {
   ) {}
 
   executeDataflow(dataflow: Dataflow): Observable<PathedEvaluation> {
-    return this.executeTicksFrom({ dataflow, path: [0], evaluations: [] });
+    return this.executeTicksFrom(dataflow, { path: [0], evaluations: [] });
   }
 
-  executeTicksFrom(tickState: TickState): Observable<PathedEvaluation> {
-    return this.executeTick(tickState).pipe(
+  executeTicksFrom(
+    dataflow: Dataflow,
+    tickState: TickState
+  ): Observable<PathedEvaluation> {
+    return this.executeTick(dataflow, tickState).pipe(
       flatMap((pathedEvaluation) => {
         const nextTickState = this.nextTickState(
+          dataflow,
           tickState,
           pathedEvaluation.evaluation
         );
         const continuingTicks =
           nextTickState.path.length == 0
             ? empty()
-            : this.executeTicksFrom(nextTickState);
+            : this.executeTicksFrom(dataflow, nextTickState);
         return continuingTicks.pipe(startWith(pathedEvaluation));
       })
     );
   }
 
-  executeTick(tickState: TickState): Observable<PathedEvaluation> {
-    return this.nextStep(tickState).pipe(
+  executeTick(
+    dataflow: Dataflow,
+    tickState: TickState
+  ): Observable<PathedEvaluation> {
+    return this.nextStep(dataflow, tickState).pipe(
       map((evaluation) => ({ path: tickState.path, evaluation }))
     );
   }
 
-  nextTickState(tickState: TickState, evaluation: Evaluation): TickState {
+  nextTickState(
+    dataflow: Dataflow,
+    tickState: TickState,
+    evaluation: Evaluation
+  ): TickState {
     const nextPath = this.pathAdvancementService.advancePath(
-      tickState.dataflow,
+      dataflow,
       tickState.path,
       this.singleStepService.toVariableMap(
-        tickState.dataflow.steps,
+        dataflow.steps,
         tickState.evaluations
       )
     );
@@ -59,24 +70,20 @@ export class ExecutionEngineService {
       evaluation
     );
     return {
-      dataflow: tickState.dataflow,
       path: nextPath,
       evaluations: nextEvaluations,
     };
   }
 
-  nextStep(tickState: TickState): Observable<Evaluation> {
+  nextStep(dataflow: Dataflow, tickState: TickState): Observable<Evaluation> {
     return this.singleStepService.executeStep(
-      this.stepResolvementService.resolveStep(
-        tickState.dataflow,
-        tickState.path
-      ),
+      this.stepResolvementService.resolveStep(dataflow, tickState.path),
       this.evaluationResolvementService.resolveEvaluation(
         tickState.evaluations,
         tickState.path
       ),
       this.singleStepService.toVariableMap(
-        tickState.dataflow.steps,
+        dataflow.steps,
         tickState.evaluations
       )
     );
