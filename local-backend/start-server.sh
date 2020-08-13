@@ -1,1 +1,1 @@
-deno run --unstable --allow-read --allow-write --allow-net index.ts ./dataflows
+deno run --unstable --allow-read --allow-write --allow-net index.ts ../dataflows
