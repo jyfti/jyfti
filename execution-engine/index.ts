@@ -10,12 +10,10 @@ program.version("0.0.1");
 program
   .command("run <path>")
   .description("run a dataflow")
-  .action((path) => {
-    fs.readFile(path, "utf8", (err, data) => {
-      const dataflow = JSON.parse(data);
-      const engine = createExecutionEngine();
-      engine.executeDataflow(dataflow).subscribe(console.log);
-    });
+  .action(async (path) => {
+    const dataflow = JSON.parse(await fs.promises.readFile(path, "utf8"));
+    const engine = createExecutionEngine();
+    engine.executeDataflow(dataflow).subscribe(console.log);
   });
 
 program
