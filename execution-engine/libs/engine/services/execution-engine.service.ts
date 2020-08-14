@@ -7,8 +7,8 @@ import { Evaluation } from "./execution.service";
 import { PathAdvancementService } from "./path-advancement.service";
 import { SingleStepService } from "./single-step.service";
 import { StepResolvementService } from "./step-resolvement.service";
-import { PathedEvaluation } from "libs/types/pathed-evaluation.type";
-import { TickState } from "libs/types/tick-state.type";
+import { PathedEvaluation } from "libs/engine/types/pathed-evaluation.type";
+import { TickState } from "libs/engine/types/tick-state.type";
 
 export class ExecutionEngineService {
   constructor(

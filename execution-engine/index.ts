@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as nodePath from "path";
 import { Command } from "commander";
-import { createExecutionEngine } from "libs/services/engine.factory";
+import { createExecutionEngine } from "libs/engine/services/engine.factory";
 import { map, flatMap, tap } from "rxjs/operators";
 import { of, from } from "rxjs";
 
