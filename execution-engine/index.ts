@@ -1,7 +1,9 @@
+#!/usr/bin/env node
+
 import { Command } from "commander";
-import { run } from "libs/cli/commands/run.command";
-import { step } from "libs/cli/commands/step.command";
-import { reset } from "libs/cli/commands/reset.command";
+import { run } from "./libs/cli/commands/run.command";
+import { step } from "./libs/cli/commands/step.command";
+import { reset } from "./libs/cli/commands/reset.command";
 
 const program = new Command();
 program.version("0.0.1");

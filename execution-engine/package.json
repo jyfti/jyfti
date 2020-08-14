@@ -1,12 +1,13 @@
 {
-  "name": "execution-engine",
+  "name": "jift",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "index.ts",
+  "bin": "./build/index.js",
   "scripts": {
     "test": "jest",
     "dev": "nodemon",
-    "build": "rm -rf ./build && npx tsc",
+    "build": "rm -rf ./build && npx tsc && npm link",
     "start": "npm run --silent build && node -r tsconfig-paths/register build/index.js"
   },
   "keywords": [],

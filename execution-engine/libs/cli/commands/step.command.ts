@@ -1,7 +1,7 @@
 import * as nodePath from "path";
 import * as fs from "fs";
 import { readJiftConfig, ensureDirExists, readJson } from "../file.service";
-import { createExecutionEngine } from "libs/engine/services/engine.factory";
+import { createExecutionEngine } from "../../engine/services/engine.factory";
 import { map, flatMap } from "rxjs/operators";
 import { from } from "rxjs";
 

@@ -1,6 +1,6 @@
 import { readJiftConfig, readJson } from "../file.service";
 import * as nodePath from "path";
-import { createExecutionEngine } from "libs/engine/services/engine.factory";
+import { createExecutionEngine } from "../../engine/services/engine.factory";
 
 export async function run(name: string) {
   const jiftConfig = await readJiftConfig();
