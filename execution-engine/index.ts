@@ -2,13 +2,9 @@ import * as fs from "fs";
 import * as nodePath from "path";
 import { Command } from "commander";
 import { createExecutionEngine } from "libs/engine/services/engine.factory";
-import { map, flatMap, tap } from "rxjs/operators";
-import { of, from } from "rxjs";
-
-interface JiftConfig {
-  sourceRoot: string;
-  outRoot: string;
-}
+import { map, flatMap } from "rxjs/operators";
+import { from } from "rxjs";
+import { JiftConfig } from "libs/cli/types/jift-config";
 
 function readJson(path: string) {
   return fs.promises.readFile(path, "utf8").then(JSON.parse);
