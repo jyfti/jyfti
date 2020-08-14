@@ -11,12 +11,12 @@ program.version("0.0.1");
 program.command("run <name>").description("run a workflow").action(run);
 
 program
-  .command("step [name]")
+  .command("step <name>")
   .description("executes the next step of the given workflow")
   .action(step);
 
 program
-  .command("reset [name]")
+  .command("reset <name>")
   .description("resets the current execution state of the workflow")
   .action(reset);
 
