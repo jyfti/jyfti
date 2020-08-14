@@ -1,5 +1,5 @@
 {
-  "name": "@jift/cli",
+  "name": "jift-cli",
   "version": "0.0.1",
   "description": "Jift is a json-based, light-weight workflow engine for software engineers. Jift makes it easy to connect APIs via transparently executed workflows.",
   "main": "index.ts",
