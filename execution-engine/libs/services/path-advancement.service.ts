@@ -1,6 +1,6 @@
 import { concat, get, isNil, tail } from "lodash/fp";
 
-import { Dataflow } from "../types/dataflow.type";
+import { Workflow } from "../types/workflow.type";
 import { Step } from "../types/step.type";
 import { VariableMap } from "../types/variable-map.type";
 import { Path } from "../types/path.type";
@@ -8,8 +8,8 @@ import { Path } from "../types/path.type";
 export class PathAdvancementService {
   constructor() {}
 
-  advancePath(dataflow: Dataflow, path: Path, variables: VariableMap): Path {
-    return this.advancePathRec(dataflow.steps, path, variables);
+  advancePath(workflow: Workflow, path: Path, variables: VariableMap): Path {
+    return this.advancePathRec(workflow.steps, path, variables);
   }
 
   isForStep(step: Step) {

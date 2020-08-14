@@ -1,5 +1,5 @@
 import { PathAdvancementService } from "./path-advancement.service";
-import { Dataflow } from "../types/dataflow.type";
+import { Workflow } from "../types/workflow.type";
 import { Step } from "../types/step.type";
 
 describe("PathAdvancementService", () => {
@@ -10,8 +10,8 @@ describe("PathAdvancementService", () => {
   });
 
   describe("with one level", () => {
-    const dataflow: Dataflow = {
-      name: "MyDataflow",
+    const workflow: Workflow = {
+      name: "MyWorkflow",
       steps: [
         {
           assignTo: "var1",
@@ -25,11 +25,11 @@ describe("PathAdvancementService", () => {
     };
 
     it("should advance a path on root", () => {
-      expect(service.advancePath(dataflow, [0], {})).toEqual([1]);
+      expect(service.advancePath(workflow, [0], {})).toEqual([1]);
     });
 
     it("should return empty list on last step of root", () => {
-      expect(service.advancePath(dataflow, [1], {})).toEqual([]);
+      expect(service.advancePath(workflow, [1], {})).toEqual([]);
     });
   });
 
@@ -77,8 +77,8 @@ describe("PathAdvancementService", () => {
   });
 
   describe("with nested for loops", () => {
-    const dataflow: Dataflow = {
-      name: "MyDataflow",
+    const workflow: Workflow = {
+      name: "MyWorkflow",
       steps: [
         {
           assignTo: "listVar1",
@@ -165,7 +165,7 @@ describe("PathAdvancementService", () => {
         [3],
       ],
     ])("%s", (text, inPath, outPath) => {
-      expect(service.advancePath(dataflow, inPath, variables)).toEqual(outPath);
+      expect(service.advancePath(workflow, inPath, variables)).toEqual(outPath);
     });
   });
 });

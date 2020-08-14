@@ -1,7 +1,7 @@
 import { empty, Observable, of } from "rxjs";
 import { flatMap, startWith, map } from "rxjs/operators";
 
-import { Dataflow } from "../types/dataflow.type";
+import { Workflow } from "../types/workflow.type";
 import { EvaluationResolvementService } from "./evaluation-resolvement.service";
 import { Evaluation } from "./execution.service";
 import { PathAdvancementService } from "./path-advancement.service";
@@ -18,49 +18,49 @@ export class ExecutionEngineService {
     private stepResolvementService: StepResolvementService
   ) {}
 
-  executeDataflow(dataflow: Dataflow): Observable<PathedEvaluation> {
-    return this.executeTicksFrom(dataflow, { path: [0], evaluations: [] });
+  executeWorkflow(workflow: Workflow): Observable<PathedEvaluation> {
+    return this.executeTicksFrom(workflow, { path: [0], evaluations: [] });
   }
 
   executeTicksFrom(
-    dataflow: Dataflow,
+    workflow: Workflow,
     tickState: TickState
   ): Observable<PathedEvaluation> {
-    return this.executeTick(dataflow, tickState).pipe(
+    return this.executeTick(workflow, tickState).pipe(
       flatMap((pathedEvaluation) => {
         const nextTickState = this.nextTickState(
-          dataflow,
+          workflow,
           tickState,
           pathedEvaluation.evaluation
         );
         const continuingTicks =
           nextTickState.path.length == 0
             ? empty()
-            : this.executeTicksFrom(dataflow, nextTickState);
+            : this.executeTicksFrom(workflow, nextTickState);
         return continuingTicks.pipe(startWith(pathedEvaluation));
       })
     );
   }
 
   executeTick(
-    dataflow: Dataflow,
+    workflow: Workflow,
     tickState: TickState
   ): Observable<PathedEvaluation> {
-    return this.nextStep(dataflow, tickState).pipe(
+    return this.nextStep(workflow, tickState).pipe(
       map((evaluation) => ({ path: tickState.path, evaluation }))
     );
   }
 
   nextTickState(
-    dataflow: Dataflow,
+    workflow: Workflow,
     tickState: TickState,
     evaluation: Evaluation
   ): TickState {
     const nextPath = this.pathAdvancementService.advancePath(
-      dataflow,
+      workflow,
       tickState.path,
       this.singleStepService.toVariableMap(
-        dataflow.steps,
+        workflow.steps,
         tickState.evaluations
       )
     );
@@ -75,15 +75,15 @@ export class ExecutionEngineService {
     };
   }
 
-  nextStep(dataflow: Dataflow, tickState: TickState): Observable<Evaluation> {
+  nextStep(workflow: Workflow, tickState: TickState): Observable<Evaluation> {
     return this.singleStepService.executeStep(
-      this.stepResolvementService.resolveStep(dataflow, tickState.path),
+      this.stepResolvementService.resolveStep(workflow, tickState.path),
       this.evaluationResolvementService.resolveEvaluation(
         tickState.evaluations,
         tickState.path
       ),
       this.singleStepService.toVariableMap(
-        dataflow.steps,
+        workflow.steps,
         tickState.evaluations
       )
     );

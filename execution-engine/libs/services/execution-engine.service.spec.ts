@@ -2,7 +2,7 @@ import { cold } from "jest-marbles";
 import { of } from "rxjs";
 
 import { ExecutionEngineService } from "./execution-engine.service";
-import { Dataflow } from "../types/dataflow.type";
+import { Workflow } from "../types/workflow.type";
 import { SingleStepService } from "./single-step.service";
 import { HttpService } from "./http.service";
 import { EvaluationResolvementService } from "./evaluation-resolvement.service";
@@ -25,9 +25,9 @@ describe("ExecutionEngineService", () => {
   });
 
   describe("the execution of ticks", () => {
-    it("should progress through a small dataflow and eventually terminate", () => {
-      const dataflow: Dataflow = {
-        name: "MyDataflow",
+    it("should progress through a small workflow and eventually terminate", () => {
+      const workflow: Workflow = {
+        name: "MyWorkflow",
         steps: [
           {
             assignTo: "var1",
@@ -47,7 +47,7 @@ describe("ExecutionEngineService", () => {
           },
         ],
       };
-      expect(service.executeDataflow(dataflow)).toBeObservable(
+      expect(service.executeWorkflow(workflow)).toBeObservable(
         cold("(abc|)", {
           a: { path: [0], evaluation: 5 },
           b: { path: [1], evaluation: 10 },
@@ -59,8 +59,8 @@ describe("ExecutionEngineService", () => {
 
   describe("the execution of the next step", () => {
     it("should execute the first step", () => {
-      const dataflow: Dataflow = {
-        name: "MyDataflow",
+      const workflow: Workflow = {
+        name: "MyWorkflow",
         steps: [
           {
             assignTo: "outVar",
@@ -69,13 +69,13 @@ describe("ExecutionEngineService", () => {
         ],
       };
       expect(
-        service.nextStep(dataflow, { path: [0], evaluations: [] })
+        service.nextStep(workflow, { path: [0], evaluations: [] })
       ).toBeObservable(cold("(a|)", { a: 1 }));
     });
 
     it("should execute the second step considering the evaluation of the first step without evaluating it", () => {
-      const dataflow: Dataflow = {
-        name: "MyDataflow",
+      const workflow: Workflow = {
+        name: "MyWorkflow",
         steps: [
           {
             assignTo: "var1",
@@ -90,13 +90,13 @@ describe("ExecutionEngineService", () => {
         ],
       };
       expect(
-        service.nextStep(dataflow, { path: [1], evaluations: [42] })
+        service.nextStep(workflow, { path: [1], evaluations: [42] })
       ).toBeObservable(cold("(a|)", { a: 42 }));
     });
 
     describe("with a single-step loop", () => {
-      const dataflow: Dataflow = {
-        name: "MyDataflow",
+      const workflow: Workflow = {
+        name: "MyWorkflow",
         steps: [
           {
             assignTo: "outVar",
@@ -117,19 +117,19 @@ describe("ExecutionEngineService", () => {
 
       it("should evaluate the return value with no loop iteration to an empty list", () => {
         expect(
-          service.nextStep(dataflow, { path: [0], evaluations: [] })
+          service.nextStep(workflow, { path: [0], evaluations: [] })
         ).toBeObservable(cold("(a|)", { a: [] }));
       });
 
       it("should evaluate the return value with a single loop iteration to a single element list", () => {
         expect(
-          service.nextStep(dataflow, { path: [0], evaluations: [[["a"]]] })
+          service.nextStep(workflow, { path: [0], evaluations: [[["a"]]] })
         ).toBeObservable(cold("(a|)", { a: ["a"] }));
       });
 
       it("should evaluate the return value with multiple loop iterations to list of the size of the iterations", () => {
         expect(
-          service.nextStep(dataflow, {
+          service.nextStep(workflow, {
             path: [0],
             evaluations: [[["a"], ["b"], ["c"]]],
           })
@@ -138,8 +138,8 @@ describe("ExecutionEngineService", () => {
     });
 
     describe("with a multi-step loop", () => {
-      const dataflow: Dataflow = {
-        name: "MyDataflow",
+      const workflow: Workflow = {
+        name: "MyWorkflow",
         steps: [
           {
             assignTo: "outVar",
@@ -170,13 +170,13 @@ describe("ExecutionEngineService", () => {
 
       it("should evaluate the return value with no loop iteration to an empty list", () => {
         expect(
-          service.nextStep(dataflow, { path: [0], evaluations: [] })
+          service.nextStep(workflow, { path: [0], evaluations: [] })
         ).toBeObservable(cold("(a|)", { a: [] }));
       });
 
       it("should evaluate the return value with a single loop iteration to a single element list", () => {
         expect(
-          service.nextStep(dataflow, {
+          service.nextStep(workflow, {
             path: [0],
             evaluations: [[[10, 20, 30]]],
           })
@@ -185,7 +185,7 @@ describe("ExecutionEngineService", () => {
 
       it("should evaluate the return value with multiple loop iterations to list of the size of the iterations", () => {
         expect(
-          service.nextStep(dataflow, {
+          service.nextStep(workflow, {
             path: [0],
             evaluations: [
               [

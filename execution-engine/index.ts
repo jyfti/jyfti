@@ -41,20 +41,20 @@ const program = new Command();
 program.version("0.0.1");
 
 program
-  .command("run <path>")
-  .description("run a dataflow")
-  .action(async (path) => {
+  .command("run <name>")
+  .description("run a workflow")
+  .action(async (name) => {
     const jiftConfig = await readJiftConfig();
-    const dataflow = await readJson(
-      nodePath.resolve(jiftConfig.sourceRoot, path)
+    const workflow = await readJson(
+      nodePath.resolve(jiftConfig.sourceRoot, name + ".json")
     );
     const engine = createExecutionEngine();
-    engine.executeDataflow(dataflow).subscribe(console.log);
+    engine.executeWorkflow(workflow).subscribe(console.log);
   });
 
 program
   .command("step [name]")
-  .description("executes the next step of the given dataflow")
+  .description("executes the next step of the given workflow")
   .action(async (name) => {
     const jiftConfig = await readJiftConfig();
     const fullPath = nodePath.resolve(jiftConfig.sourceRoot, name + ".json");
@@ -63,24 +63,24 @@ program
       name + ".state.json"
     );
     await ensureDirExists(jiftConfig.outRoot);
-    const dataflow = await readJson(fullPath);
+    const workflow = await readJson(fullPath);
     const stateExists = await fs.promises
       .stat(fullStatePath)
       .then(() => true)
       .catch(() => false);
     const tickState = stateExists
       ? await readJson(fullStatePath)
-      : { dataflow, path: [0], evaluations: [] };
+      : { workflow, path: [0], evaluations: [] };
     if (tickState.path.length === 0) {
-      console.log("Dataflow execution already completed");
+      console.log("Workflow execution already completed");
     } else {
       const engine = createExecutionEngine();
       engine
-        .executeTick(dataflow, tickState)
+        .executeTick(workflow, tickState)
         .pipe(
           map((pathedEvaluation) => pathedEvaluation.evaluation),
           map((evaluation) =>
-            engine.nextTickState(dataflow, tickState, evaluation)
+            engine.nextTickState(workflow, tickState, evaluation)
           ),
           map((nextTickState) => JSON.stringify(nextTickState, null, 2)),
           flatMap((string) =>
@@ -99,7 +99,7 @@ program
 
 program
   .command("reset [name]")
-  .description("resets the current execution state of the dataflow")
+  .description("resets the current execution state of the workflow")
   .action(async (name) => {
     const jiftConfig = await readJiftConfig();
     const fullStatePath = nodePath.resolve(

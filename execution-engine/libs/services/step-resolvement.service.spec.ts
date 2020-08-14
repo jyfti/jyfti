@@ -8,7 +8,7 @@ describe("StepResolvementService", () => {
     expect(service).toBeTruthy();
   });
 
-  it("should resolve the first step of a flat dataflow", () => {
+  it("should resolve the first step of a flat workflow", () => {
     const steps: Step[] = [
       {
         assignTo: "var1",
@@ -18,7 +18,7 @@ describe("StepResolvementService", () => {
     expect(service.resolveStepRec(steps, [0])).toEqual(steps[0]);
   });
 
-  it("should resolve the second step of a dataflow", () => {
+  it("should resolve the second step of a workflow", () => {
     const steps: Step[] = [
       {
         assignTo: "var1",

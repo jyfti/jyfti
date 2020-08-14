@@ -1,4 +1,4 @@
-import { Dataflow } from "../types/dataflow.type";
+import { Workflow } from "../types/workflow.type";
 import { Path } from "../types/path.type";
 import { Step } from "../types/step.type";
 import { tail } from "lodash/fp";
@@ -6,8 +6,8 @@ import { tail } from "lodash/fp";
 export class StepResolvementService {
   constructor() {}
 
-  resolveStep(dataflow: Dataflow, path: Path): Step {
-    return this.resolveStepRec(dataflow.steps, path);
+  resolveStep(workflow: Workflow, path: Path): Step {
+    return this.resolveStepRec(workflow.steps, path);
   }
 
   resolveStepRec(steps: Step[], path: Path): Step {

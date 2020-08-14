@@ -9,7 +9,7 @@ import {
   toArray,
 } from "rxjs/operators";
 
-import { Dataflow } from "../types/dataflow.type";
+import { Workflow } from "../types/workflow.type";
 import { ForLoop, Step } from "../types/step.type";
 import { VariableMap } from "../types/variable-map.type";
 import { SingleStepService } from "./single-step.service";
@@ -19,8 +19,8 @@ export type Evaluation = any;
 export class ExecutionService {
   constructor(private singleStepService: SingleStepService) {}
 
-  executeDataflow(dataflow: Dataflow): Observable<Evaluation[]> {
-    return this.executeBlock(dataflow.steps, {});
+  executeWorkflow(workflow: Workflow): Observable<Evaluation[]> {
+    return this.executeBlock(workflow.steps, {});
   }
 
   executeBlock(

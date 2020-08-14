@@ -1,4 +1,4 @@
 {
-  "sourceRoot": "../dataflows",
+  "sourceRoot": "../workflows",
   "outRoot": "./out"
 }
