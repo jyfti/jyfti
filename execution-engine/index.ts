@@ -4,34 +4,11 @@ import { Command } from "commander";
 import { createExecutionEngine } from "libs/engine/services/engine.factory";
 import { map, flatMap } from "rxjs/operators";
 import { from } from "rxjs";
-import { JiftConfig } from "libs/cli/types/jift-config";
-
-function readJson(path: string) {
-  return fs.promises.readFile(path, "utf8").then(JSON.parse);
-}
-
-function fileExists(path: string): Promise<boolean> {
-  return fs.promises
-    .stat(path)
-    .then(() => true)
-    .catch(() => false);
-}
-
-async function ensureDirExists(path: string) {
-  const exists = await fileExists(path);
-  if (!exists) {
-    await fs.promises.mkdir(path);
-  }
-}
-
-const defaultJiftConfig: JiftConfig = {
-  sourceRoot: "./src",
-  outRoot: "./out",
-};
-
-function readJiftConfig(): Promise<JiftConfig> {
-  return readJson("jift.json").catch((err) => defaultJiftConfig);
-}
+import {
+  readJson,
+  ensureDirExists,
+  readJiftConfig,
+} from "libs/cli/file.service";
 
 const program = new Command();
 program.version("0.0.1");
