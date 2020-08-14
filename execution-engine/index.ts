@@ -1,15 +1,9 @@
 import * as fs from "fs";
 import * as nodePath from "path";
 import { Command } from "commander";
-import { createExecutionEngine } from "libs/engine/services/engine.factory";
-import { map, flatMap } from "rxjs/operators";
-import { from } from "rxjs";
-import {
-  readJson,
-  ensureDirExists,
-  readJiftConfig,
-} from "libs/cli/file.service";
+import { readJiftConfig } from "libs/cli/file.service";
 import { run } from "libs/cli/commands/run.command";
+import { step } from "libs/cli/commands/step.command";
 
 const program = new Command();
 program.version("0.0.1");
@@ -19,47 +13,7 @@ program.command("run <name>").description("run a workflow").action(run);
 program
   .command("step [name]")
   .description("executes the next step of the given workflow")
-  .action(async (name) => {
-    const jiftConfig = await readJiftConfig();
-    const fullPath = nodePath.resolve(jiftConfig.sourceRoot, name + ".json");
-    const fullStatePath = nodePath.resolve(
-      jiftConfig.outRoot,
-      name + ".state.json"
-    );
-    await ensureDirExists(jiftConfig.outRoot);
-    const workflow = await readJson(fullPath);
-    const stateExists = await fs.promises
-      .stat(fullStatePath)
-      .then(() => true)
-      .catch(() => false);
-    const tickState = stateExists
-      ? await readJson(fullStatePath)
-      : { workflow, path: [0], evaluations: [] };
-    if (tickState.path.length === 0) {
-      console.log("Workflow execution already completed");
-    } else {
-      const engine = createExecutionEngine();
-      engine
-        .executeTick(workflow, tickState)
-        .pipe(
-          map((pathedEvaluation) => pathedEvaluation.evaluation),
-          map((evaluation) =>
-            engine.nextTickState(workflow, tickState, evaluation)
-          ),
-          map((nextTickState) => JSON.stringify(nextTickState, null, 2)),
-          flatMap((string) =>
-            from(
-              fs.promises.writeFile(
-                nodePath.resolve(jiftConfig.outRoot, name + ".state.json"),
-                string,
-                "utf8"
-              )
-            )
-          )
-        )
-        .subscribe();
-    }
-  });
+  .action(step);
 
 program
   .command("reset [name]")
