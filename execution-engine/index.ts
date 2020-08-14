@@ -1,9 +1,7 @@
-import * as fs from "fs";
-import * as nodePath from "path";
 import { Command } from "commander";
-import { readJiftConfig } from "libs/cli/file.service";
 import { run } from "libs/cli/commands/run.command";
 import { step } from "libs/cli/commands/step.command";
+import { reset } from "libs/cli/commands/reset.command";
 
 const program = new Command();
 program.version("0.0.1");
@@ -18,13 +16,6 @@ program
 program
   .command("reset [name]")
   .description("resets the current execution state of the workflow")
-  .action(async (name) => {
-    const jiftConfig = await readJiftConfig();
-    const fullStatePath = nodePath.resolve(
-      jiftConfig.outRoot,
-      name + ".state.json"
-    );
-    await fs.promises.unlink(fullStatePath);
-  });
+  .action(reset);
 
 program.parse(process.argv);
