@@ -6,12 +6,12 @@
   "bin": "./build/index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/fboeller/dataflow.git"
+    "url": "https://github.com/fboeller/jift.git"
   },
   "author": "Fabian Böller",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/fboeller/dataflow/issues"
+    "url": "https://github.com/fboeller/jift/issues"
   },
   "keywords": [
     "jift",
@@ -19,7 +19,7 @@
     "workflow",
     "engine"
   ],
-  "homepage": "https://github.com/fboeller/dataflow",
+  "homepage": "https://github.com/fboeller/jift",
   "scripts": {
     "test": "jest",
     "dev": "nodemon",
