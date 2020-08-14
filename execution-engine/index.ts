@@ -9,21 +9,12 @@ import {
   ensureDirExists,
   readJiftConfig,
 } from "libs/cli/file.service";
+import { run } from "libs/cli/commands/run.command";
 
 const program = new Command();
 program.version("0.0.1");
 
-program
-  .command("run <name>")
-  .description("run a workflow")
-  .action(async (name) => {
-    const jiftConfig = await readJiftConfig();
-    const workflow = await readJson(
-      nodePath.resolve(jiftConfig.sourceRoot, name + ".json")
-    );
-    const engine = createExecutionEngine();
-    engine.executeWorkflow(workflow).subscribe(console.log);
-  });
+program.command("run <name>").description("run a workflow").action(run);
 
 program
   .command("step [name]")
