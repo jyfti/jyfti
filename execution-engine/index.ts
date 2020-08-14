@@ -53,10 +53,8 @@ program
   });
 
 program
-  .command("tick [name]")
-  .description(
-    "reads the tick state, executes the next tick and writes back the new tick state"
-  )
+  .command("step [name]")
+  .description("executes the next step of the given dataflow")
   .action(async (name) => {
     const jiftConfig = await readJiftConfig();
     const fullPath = nodePath.resolve(jiftConfig.sourceRoot, name + ".json");
