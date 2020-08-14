@@ -4,15 +4,28 @@
   "description": "Jift is a json-based, light-weight workflow engine for software engineers. Jift makes it easy to connect APIs via transparently executed workflows.",
   "main": "index.ts",
   "bin": "./build/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fboeller/dataflow.git"
+  },
+  "author": "Fabian Böller",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fboeller/dataflow/issues"
+  },
+  "keywords": [
+    "jift",
+    "jift-cli",
+    "workflow",
+    "engine"
+  ],
+  "homepage": "https://github.com/fboeller/dataflow",
   "scripts": {
     "test": "jest",
     "dev": "nodemon",
     "build": "rm -rf ./build && npx tsc && npm link",
     "start": "npm run --silent build && node -r tsconfig-paths/register build/index.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
     "@babel/core": "^7.11.1",
     "@babel/preset-env": "^7.11.0",
