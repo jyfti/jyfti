@@ -1,14 +1,25 @@
-import { readJiftConfig, readState } from "../file.service";
+import { readJiftConfig, readState, readWorkflowNames } from "../file.service";
+import chalk from "chalk";
 
 export async function status(name: string) {
   const jiftConfig = await readJiftConfig();
-  const message = await readState(jiftConfig, name)
-    .then((state) => state.path)
-    .then((path) =>
-      path.length != 0
-        ? "The workflow is at step " + JSON.stringify(path)
-        : "The workflow is completed."
-    )
-    .catch((err) => "The workflow does not have an open execution state.");
-  console.log(message);
+  const workflowNames = name ? [name] : await readWorkflowNames(jiftConfig);
+  const statusList = await Promise.all(
+    workflowNames.map(async (workflowName) => {
+      const message = await readState(jiftConfig, workflowName)
+        .then((state) => state.path)
+        .then((path) =>
+          path.length != 0
+            ? printStatus("Pending") + " At step " + JSON.stringify(path)
+            : printStatus("Completed")
+        )
+        .catch((err) => printStatus("Not running"));
+      return workflowName + " " + message;
+    })
+  );
+  console.log(statusList.join("\n"));
+}
+
+function printStatus(status: string): string {
+  return chalk.yellow(`[${status}]`);
 }

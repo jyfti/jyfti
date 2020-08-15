@@ -43,6 +43,7 @@
     "typescript": "^3.9.7"
   },
   "dependencies": {
+    "chalk": "^4.1.0",
     "commander": "^6.0.0",
     "json-e": "^4.1.0",
     "lodash": "^4.17.19",

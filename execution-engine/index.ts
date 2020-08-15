@@ -42,7 +42,7 @@ program
   .action(state);
 
 program
-  .command("status <name>")
+  .command("status [name]")
   .description("prints information about the status of the workflow execution")
   .action(status);
 
