@@ -4,13 +4,13 @@ import inquirer from "inquirer";
 
 export async function promptWorkflow(
   jiftConfig: JiftConfig,
-  actionText: string
+  question: string
 ): Promise<string | undefined> {
   const workflowNames = await readWorkflowNames(jiftConfig);
   const answers = await inquirer.prompt([
     {
       name: "workflow",
-      message: `Which workflow do you want to ${actionText}?`,
+      message: question,
       type: "list",
       choices: workflowNames,
     },

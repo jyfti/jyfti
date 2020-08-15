@@ -4,7 +4,7 @@ import { promptWorkflow } from "../inquirer.service";
 export async function view(name?: string) {
   const jiftConfig = await readJiftConfig();
   if (!name) {
-    name = await promptWorkflow(jiftConfig, "view");
+    name = await promptWorkflow(jiftConfig, "Which workflow do you want to view?");
   }
   if (name) {
     const message = await readWorkflow(jiftConfig, name)

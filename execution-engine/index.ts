@@ -22,10 +22,10 @@ program
 
 program.command("list").description("list workflows").action(list);
 
-program.command("run <name>").description("run this workflow").action(run);
+program.command("run [name]").description("run this workflow").action(run);
 
 program
-  .command("step <name>")
+  .command("step [name]")
   .description("execute the next step of this workflow")
   .action(step);
 
@@ -37,7 +37,7 @@ program
 program.command("view [name]").description("print this workflow").action(view);
 
 program
-  .command("state <name>")
+  .command("state [name]")
   .description("print the execution state of this workflow")
   .action(state);
 
