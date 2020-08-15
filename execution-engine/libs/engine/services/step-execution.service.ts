@@ -22,7 +22,7 @@ import {
   HttpProtocol,
 } from "../types/http-request.type";
 
-export class SingleStepService {
+export class StepExecutionService {
   constructor(private http: HttpService) {}
 
   executeStep(

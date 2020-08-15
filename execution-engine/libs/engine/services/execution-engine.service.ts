@@ -1,15 +1,10 @@
-import {
-  empty,
-  Observable,
-  MonoTypeOperatorFunction,
-  OperatorFunction,
-} from "rxjs";
+import { empty, Observable, OperatorFunction } from "rxjs";
 import { flatMap, startWith, map, scan } from "rxjs/operators";
 
 import { Workflow } from "../types/workflow.type";
 import { EvaluationResolvementService } from "./evaluation-resolvement.service";
 import { PathAdvancementService } from "./path-advancement.service";
-import { SingleStepService } from "./single-step.service";
+import { StepExecutionService } from "./step-execution.service";
 import { StepResolvementService } from "./step-resolvement.service";
 import { PathedEvaluation } from "libs/engine/types/pathed-evaluation.type";
 import { State } from "libs/engine/types/state.type";
@@ -17,7 +12,7 @@ import { Evaluation } from "../types/evaluations.type";
 
 export class ExecutionEngine {
   constructor(
-    private singleStepService: SingleStepService,
+    private stepExecutionService: StepExecutionService,
     private evaluationResolvementService: EvaluationResolvementService,
     private pathAdvancementService: PathAdvancementService,
     private stepResolvementService: StepResolvementService
@@ -65,7 +60,7 @@ export class ExecutionEngine {
     const nextPath = this.pathAdvancementService.advancePath(
       workflow,
       state.path,
-      this.singleStepService.toVariableMap(workflow.steps, state.evaluations)
+      this.stepExecutionService.toVariableMap(workflow.steps, state.evaluations)
     );
     const nextEvaluations = this.evaluationResolvementService.addEvaluation(
       state.path,
@@ -79,13 +74,13 @@ export class ExecutionEngine {
   }
 
   nextStep(workflow: Workflow, state: State): Observable<Evaluation> {
-    return this.singleStepService.executeStep(
+    return this.stepExecutionService.executeStep(
       this.stepResolvementService.resolveStep(workflow, state.path),
       this.evaluationResolvementService.resolveEvaluation(
         state.evaluations,
         state.path
       ),
-      this.singleStepService.toVariableMap(workflow.steps, state.evaluations)
+      this.stepExecutionService.toVariableMap(workflow.steps, state.evaluations)
     );
   }
 }

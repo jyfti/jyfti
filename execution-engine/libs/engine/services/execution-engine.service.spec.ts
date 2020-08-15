@@ -3,7 +3,7 @@ import { of } from "rxjs";
 
 import { ExecutionEngine } from "./execution-engine.service";
 import { Workflow } from "../types/workflow.type";
-import { SingleStepService } from "./single-step.service";
+import { StepExecutionService } from "./step-execution.service";
 import { HttpService } from "./http.service";
 import { EvaluationResolvementService } from "./evaluation-resolvement.service";
 import { PathAdvancementService } from "./path-advancement.service";
@@ -14,7 +14,7 @@ describe("ExecutionEngineService", () => {
     request: () => of({ body: { field: "value" } }),
   };
   let service = new ExecutionEngine(
-    new SingleStepService(httpClientStub as HttpService),
+    new StepExecutionService(httpClientStub as HttpService),
     new EvaluationResolvementService(),
     new PathAdvancementService(),
     new StepResolvementService()

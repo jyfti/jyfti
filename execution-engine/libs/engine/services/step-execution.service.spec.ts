@@ -1,14 +1,14 @@
-import { SingleStepService } from "./single-step.service";
+import { StepExecutionService } from "./step-execution.service";
 import { of } from "rxjs";
 import { Step } from "../types/step.type";
 import { HttpService } from "./http.service";
 
-describe("SingleStepService", () => {
+describe("StepExecutionService", () => {
   const httpClientStub: Partial<HttpService> = {
     request: () => of({ body: { field: "value" } }),
   };
 
-  let service = new SingleStepService(httpClientStub as HttpService);
+  let service = new StepExecutionService(httpClientStub as HttpService);
 
   it("should be created", () => {
     expect(service).toBeTruthy();
