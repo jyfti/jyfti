@@ -5,7 +5,7 @@
       "assignTo": "issueResponse",
       "request": {
         "method": "GET",
-        "url": "https://api.github.com/repos/fboeller/dataflow/issues",
+        "url": "https://api.github.com/repos/fboeller/jift/issues",
         "body": null,
         "headers": null
       }
