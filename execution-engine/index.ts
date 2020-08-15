@@ -12,6 +12,7 @@ import {
   list,
   clean,
   complete,
+  validate,
 } from "./libs/cli/commands";
 
 const program = new Command();
@@ -62,5 +63,10 @@ program
   .command("status [name]")
   .description("print the status of the workflow execution")
   .action(status);
+
+program
+  .command("validate [name]")
+  .description("validate this workflow")
+  .action(validate);
 
 program.parse(process.argv);
