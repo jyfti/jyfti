@@ -10,7 +10,7 @@ import { PathedEvaluation } from "libs/engine/types/pathed-evaluation.type";
 import { State } from "libs/engine/types/state.type";
 import { Evaluation } from "../types/evaluations.type";
 
-export class ExecutionEngine {
+export class ExecutionService {
   constructor(
     private stepExecutionService: StepExecutionService,
     private evaluationResolvementService: EvaluationResolvementService,

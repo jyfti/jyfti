@@ -1,7 +1,7 @@
 import { cold } from "jest-marbles";
 import { of } from "rxjs";
 
-import { ExecutionEngine } from "./execution-engine.service";
+import { ExecutionService } from "./execution.service";
 import { Workflow } from "../types/workflow.type";
 import { StepExecutionService } from "./step-execution.service";
 import { HttpService } from "./http.service";
@@ -9,11 +9,11 @@ import { EvaluationResolvementService } from "./evaluation-resolvement.service";
 import { PathAdvancementService } from "./path-advancement.service";
 import { StepResolvementService } from "./step-resolvement.service";
 
-describe("ExecutionEngineService", () => {
+describe("ExecutionService", () => {
   const httpClientStub: Partial<HttpService> = {
     request: () => of({ body: { field: "value" } }),
   };
-  let service = new ExecutionEngine(
+  let service = new ExecutionService(
     new StepExecutionService(httpClientStub as HttpService),
     new EvaluationResolvementService(),
     new PathAdvancementService(),
