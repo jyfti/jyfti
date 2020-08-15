@@ -19,23 +19,23 @@ program
   .description("initializes this directory to be used by jift")
   .action(init);
 
-program.command("run <name>").description("run a workflow").action(run);
+program.command("run <name>").description("run this workflow").action(run);
 
 program
   .command("step <name>")
-  .description("executes the next step of the given workflow")
+  .description("executes the next step of this workflow")
   .action(step);
 
 program
   .command("reset <name>")
-  .description("resets the execution state of the workflow")
+  .description("resets the execution state of this workflow")
   .action(reset);
 
-program.command("view <name>").description("prints the workflow").action(view);
+program.command("view <name>").description("prints this workflow").action(view);
 
 program
   .command("state <name>")
-  .description("prints the execution state of the workflow")
+  .description("prints the execution state of this workflow")
   .action(state);
 
 program
