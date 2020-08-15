@@ -9,6 +9,7 @@ import {
   view,
   state,
   status,
+  list,
 } from "./libs/cli/commands";
 
 const program = new Command();
@@ -18,6 +19,8 @@ program
   .command("init")
   .description("initializes this directory to be used by jift")
   .action(init);
+
+program.command("list").description("lists workflows").action(list);
 
 program.command("run <name>").description("run this workflow").action(run);
 

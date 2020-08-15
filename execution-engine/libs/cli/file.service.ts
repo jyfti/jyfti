@@ -46,6 +46,15 @@ export function writeJiftConfig(jiftConfig: JiftConfig): Promise<any> {
   return fs.promises.writeFile(jiftConfigName, data, "utf8");
 }
 
+export async function readWorkflowNames(
+  jiftConfig: JiftConfig
+): Promise<string[]> {
+  const fileNames = await fs.promises.readdir(jiftConfig.sourceRoot);
+  return fileNames
+    .filter((fileName) => fileName.endsWith(".json"))
+    .map((fileName) => fileName.substring(0, fileName.length - ".json".length));
+}
+
 export function readWorkflow(
   jiftConfig: JiftConfig,
   name: string
