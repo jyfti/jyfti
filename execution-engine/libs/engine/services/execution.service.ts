@@ -18,17 +18,6 @@ export class ExecutionService {
     private stepResolvementService: StepResolvementService
   ) {}
 
-  toStates(workflow: Workflow): OperatorFunction<PathedEvaluation, State> {
-    return (pathedEvaluation$) =>
-      pathedEvaluation$.pipe(
-        scan<PathedEvaluation, State>(
-          (state, pathedEvaluation) =>
-            this.nextState(workflow, state, pathedEvaluation.evaluation),
-          { path: [0], evaluations: [] }
-        )
-      );
-  }
-
   nextState(workflow: Workflow, state: State, evaluation: Evaluation): State {
     const nextPath = this.pathAdvancementService.advancePath(
       workflow,

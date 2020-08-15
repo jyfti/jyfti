@@ -13,6 +13,7 @@ import { from } from "rxjs";
 import { promptWorkflow } from "../inquirer.service";
 import { State } from "../../engine/types/state.type";
 import { JiftConfig } from "../types/jift-config";
+import { initialState } from "../../engine/services/engine";
 
 export async function step(name?: string) {
   const jiftConfig = await readJiftConfig();
@@ -33,10 +34,7 @@ export async function step(name?: string) {
       engine
         .step(state)
         .pipe(
-          map((pathedEvaluation) => pathedEvaluation.evaluation),
-          map((evaluation) =>
-            engine.service.nextState(workflow, state, evaluation)
-          ),
+          map((evaluation) => engine.toState(state, evaluation)),
           flatMap((state) => from(writeState(jiftConfig, name!, state)))
         )
         .subscribe();
@@ -51,5 +49,3 @@ export async function readStateOrInitial(
   const stateExists = await fileExists(statePath);
   return stateExists ? await readState(jiftConfig, name) : initialState;
 }
-
-const initialState: State = { path: [0], evaluations: [] };

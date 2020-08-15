@@ -28,7 +28,7 @@ export async function run(name?: string, cmd?: any) {
         tap((pathedEvaluation) =>
           console.log(printPathedEvaluation(cmd?.verbose, pathedEvaluation))
         ),
-        engine.service.toStates(workflow),
+        engine.toStates(),
         last(),
         flatMap((state) => from(writeState(jiftConfig, name!, state)))
       )
