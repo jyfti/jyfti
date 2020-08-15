@@ -13,8 +13,7 @@ import { Workflow } from "../types/workflow.type";
 import { ForLoop, Step } from "../types/step.type";
 import { VariableMap } from "../types/variable-map.type";
 import { SingleStepService } from "./single-step.service";
-
-export type Evaluation = any;
+import { Evaluation } from "../types/evaluations.type";
 
 export class ExecutionService {
   constructor(private singleStepService: SingleStepService) {}

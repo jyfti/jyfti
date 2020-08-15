@@ -1,16 +1,16 @@
-import { empty, Observable, of } from "rxjs";
+import { empty, Observable } from "rxjs";
 import { flatMap, startWith, map } from "rxjs/operators";
 
 import { Workflow } from "../types/workflow.type";
 import { EvaluationResolvementService } from "./evaluation-resolvement.service";
-import { Evaluation } from "./execution.service";
 import { PathAdvancementService } from "./path-advancement.service";
 import { SingleStepService } from "./single-step.service";
 import { StepResolvementService } from "./step-resolvement.service";
 import { PathedEvaluation } from "libs/engine/types/pathed-evaluation.type";
 import { State } from "libs/engine/types/state.type";
+import { Evaluation } from "../types/evaluations.type";
 
-export class ExecutionEngineService {
+export class ExecutionEngine {
   constructor(
     private singleStepService: SingleStepService,
     private evaluationResolvementService: EvaluationResolvementService,

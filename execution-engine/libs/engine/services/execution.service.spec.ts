@@ -4,7 +4,6 @@ import { of } from "rxjs";
 import { Step, ForLoop } from "../types/step.type";
 import { VariableMap } from "../types/variable-map.type";
 import { ExecutionService } from "./execution.service";
-import { map } from "rxjs/operators";
 import { SingleStepService } from "./single-step.service";
 import { HttpService } from "./http.service";
 
