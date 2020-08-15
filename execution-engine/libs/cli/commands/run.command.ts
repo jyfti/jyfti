@@ -8,7 +8,7 @@ import { createEngine } from "../../engine/services/engine.factory";
 import { last, flatMap, tap } from "rxjs/operators";
 import { from } from "rxjs";
 import { promptWorkflow } from "../inquirer.service";
-import { printPathedEvaluation } from "../print.service";
+import { printStepResult } from "../print.service";
 
 export async function run(name?: string, cmd?: any) {
   const jiftConfig = await readJiftConfig();
@@ -25,8 +25,8 @@ export async function run(name?: string, cmd?: any) {
     engine
       .run()
       .pipe(
-        tap((pathedEvaluation) =>
-          console.log(printPathedEvaluation(cmd?.verbose, pathedEvaluation))
+        tap((stepResult) =>
+          console.log(printStepResult(cmd?.verbose, stepResult))
         ),
         engine.toStates(),
         last(),

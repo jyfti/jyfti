@@ -1,11 +1,11 @@
 import chalk from "chalk";
-import { PathedEvaluation } from "../engine/types/pathed-evaluation.type";
+import { StepResult } from "../engine/types/step-result.type";
 
-export function printPathedEvaluation(
+export function printStepResult(
   verbose: boolean,
-  pathedEvaluation: PathedEvaluation
+  stepResult: StepResult
 ): string {
   return verbose
-    ? JSON.stringify(pathedEvaluation, null, 2)
-    : "Completed " + chalk.green(pathedEvaluation.path);
+    ? JSON.stringify(stepResult, null, 2)
+    : "Completed " + chalk.green(stepResult.path);
 }
