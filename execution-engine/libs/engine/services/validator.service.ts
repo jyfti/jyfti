@@ -16,11 +16,17 @@ export async function validateWorkflow(
 export function validateInputs(
   inputDefinitions: InputDefinitions,
   inputs: { [fieldName: string]: any }
-): Ajv.ErrorObject[] {
-  const results = Object.keys(inputDefinitions).map((fieldName) =>
-    validateInput(inputDefinitions[fieldName], inputs[fieldName])
+): { [fieldName: string]: Ajv.ErrorObject[] } {
+  const results = Object.keys(inputDefinitions)
+    .map((fieldName) => ({
+      fieldName,
+      errors: validateInput(inputDefinitions[fieldName], inputs[fieldName]),
+    }))
+    .filter((result) => result.errors.length != 0);
+  return results.reduce(
+    (acc, result) => ({ ...acc, [result.fieldName]: result.errors }),
+    {}
   );
-  return results.reduce((acc, errors) => acc.concat(errors), []);
 }
 
 export function validateInput(

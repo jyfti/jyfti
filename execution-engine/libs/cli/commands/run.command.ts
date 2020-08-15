@@ -8,8 +8,13 @@ import { createEngine } from "../../engine/services/engine.factory";
 import { last, flatMap, tap } from "rxjs/operators";
 import { from } from "rxjs";
 import { promptWorkflow } from "../inquirer.service";
-import { printStepResult, printValidationErrors } from "../print.service";
+import {
+  printStepResult,
+  printValidationErrors,
+  printFieldErrors,
+} from "../print.service";
 import { Workflow } from "../../engine/types/workflow.type";
+import chalk from "chalk";
 
 export async function run(name?: string, inputList?: string[], cmd?: any) {
   const jiftConfig = await readJiftConfig();
@@ -24,10 +29,22 @@ export async function run(name?: string, inputList?: string[], cmd?: any) {
     const workflow = await readWorkflow(jiftConfig, name);
     const inputs = createInputs(workflow, inputList || []);
     const engine = createEngine(workflow);
-    const errors = engine.validate(inputs);
-    if (errors.length != 0) {
-      console.error("Inputs not valid.\n");
-      console.error(printValidationErrors(errors));
+    const fieldErrors = engine.validate(inputs);
+    if (Object.keys(fieldErrors).length !== 0) {
+      const message =
+        chalk.red(
+          "The workflow can not be started because some inputs are invalid.\n\n"
+        ) +
+        Object.keys(fieldErrors)
+          .map((fieldName) =>
+            printFieldErrors(
+              fieldName,
+              inputs[fieldName],
+              fieldErrors[fieldName]
+            )
+          )
+          .join("\n\n");
+      console.error(message);
     } else {
       engine
         .run(inputs)

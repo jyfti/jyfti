@@ -11,6 +11,24 @@ export function printStepResult(
     : "Completed " + chalk.green(stepResult.path);
 }
 
+export function printFieldErrors(
+  fieldName: string,
+  value: any,
+  errors: ajv.ErrorObject[]
+): string {
+  return (
+    `Input: ${chalk.yellow(fieldName)}\n` +
+    `Value: ${chalk.yellow(value)}\n` +
+    `${printValidationErrors(errors)}`
+  );
+}
+
 export function printValidationErrors(errors: ajv.ErrorObject[]): string {
-  return JSON.stringify(errors, null, 2);
+  return errors.map(printValidationError).join("\n");
+}
+
+export function printValidationError(error: ajv.ErrorObject): string {
+  return error.dataPath !== ""
+    ? JSON.stringify(error, null, 2)
+    : "It " + error.message;
 }

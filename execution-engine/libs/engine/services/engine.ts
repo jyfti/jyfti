@@ -14,7 +14,9 @@ export function init(inputs: { [name: string]: any }): State {
 export class Engine {
   constructor(private workflow: Workflow, public service: ExecutionService) {}
 
-  validate(inputs: { [name: string]: any }): ajv.ErrorObject[] {
+  validate(inputs: {
+    [name: string]: any;
+  }): { [name: string]: ajv.ErrorObject[] } {
     return validateInputs(this.workflow.inputs, inputs);
   }
 
