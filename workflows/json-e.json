@@ -1,0 +1,18 @@
+{
+  "$schema": "https://raw.githubusercontent.com/fboeller/jift/master/frontend/src/assets/dataflow-schema.json",
+  "name": "Showcase json-e usage",
+  "steps": [
+    {
+      "assignTo": "a",
+      "expression": {
+        "b": "c"
+      }
+    },
+    {
+      "assignTo": "d",
+      "expression": {
+        "e": "${a.b}"
+      }
+    }
+  ]
+}
