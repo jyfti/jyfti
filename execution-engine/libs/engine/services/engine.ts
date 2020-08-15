@@ -17,14 +17,11 @@ export class Engine {
   complete(state: State): Observable<StepResult> {
     return this.step(state).pipe(
       flatMap((stepResult) => {
-        const nextState = this.service.nextState(
-          this.workflow,
-          state,
-          stepResult.evaluation
-        );
-        const continuingSteps =
-          nextState.path.length == 0 ? empty() : this.complete(nextState);
-        return continuingSteps.pipe(startWith(stepResult));
+        const nextState = this.toState(state, stepResult);
+        const nextStepResults = this.isComplete(nextState)
+          ? empty()
+          : this.complete(nextState);
+        return nextStepResults.pipe(startWith(stepResult));
       })
     );
   }
@@ -33,6 +30,10 @@ export class Engine {
     return this.service
       .nextStep(this.workflow, state)
       .pipe(map((evaluation) => ({ path: state.path, evaluation })));
+  }
+
+  isComplete(state: State): boolean {
+    return state.path.length == 0;
   }
 
   toStates(): OperatorFunction<StepResult, State> {
