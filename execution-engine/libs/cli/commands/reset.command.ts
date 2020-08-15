@@ -1,6 +1,15 @@
-import { readJiftConfig, deleteState, deleteAllStates } from "../file.service";
+import { readJiftConfig, deleteState } from "../file.service";
+import { promptWorkflow } from "../inquirer.service";
 
 export async function reset(name?: string) {
   const jiftConfig = await readJiftConfig();
-  await (name ? deleteState(jiftConfig, name) : deleteAllStates(jiftConfig));
+  if (!name) {
+    name = await promptWorkflow(
+      jiftConfig,
+      "Which workflow do you want to reset?"
+    );
+  }
+  if (name) {
+    await deleteState(jiftConfig, name);
+  }
 }

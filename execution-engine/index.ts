@@ -37,19 +37,19 @@ program
 
 program
   .command("reset [name]")
-  .description("reset execution states")
+  .description("reset the state of this workflow")
   .action(reset);
 
 program.command("view [name]").description("print this workflow").action(view);
 
 program
   .command("state [name]")
-  .description("print the execution state of this workflow")
+  .description("print the state of this workflow")
   .action(state);
 
 program
   .command("status [name]")
-  .description("print information about the status of the workflow execution")
+  .description("print the status of the workflow execution")
   .action(status);
 
 program.parse(process.argv);
