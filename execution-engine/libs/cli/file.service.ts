@@ -39,6 +39,10 @@ export function readJiftConfig(): Promise<JiftConfig> {
   return readJson("jift.json").catch((err) => defaultJiftConfig);
 }
 
+export function writeJiftConfig(jiftConfig: JiftConfig): Promise<any> {
+  return readJson("jift.json").catch((err) => defaultJiftConfig);
+}
+
 export function readWorkflow(
   jiftConfig: JiftConfig,
   name: string

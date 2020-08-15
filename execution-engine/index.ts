@@ -7,9 +7,15 @@ import { reset } from "./libs/cli/commands/reset.command";
 import { status } from "./libs/cli/commands/status.command";
 import { state } from "./libs/cli/commands/state.command";
 import { view } from "./libs/cli/commands/view.command";
+import { init } from "./libs/cli/commands/init.command";
 
 const program = new Command();
 program.version("0.0.1");
+
+program
+  .command("init")
+  .description("initializes this directory to be used by jift")
+  .action(init);
 
 program.command("run <name>").description("run a workflow").action(run);
 
