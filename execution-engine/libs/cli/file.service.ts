@@ -64,6 +64,11 @@ export function readWorkflow(
   return readJson(resolveWorkflow(jiftConfig, name));
 }
 
+export function readWorkflowSchema(): Promise<Workflow> {
+  // TODO Make flexible
+  return readJson("../workflow-schema.json");
+}
+
 export function readState(
   jiftConfig: JiftConfig,
   name: string

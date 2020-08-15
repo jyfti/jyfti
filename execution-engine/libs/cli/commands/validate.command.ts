@@ -1,6 +1,6 @@
-import { readJiftConfig, readJson, readWorkflow } from "../file.service";
+import { readJiftConfig, readWorkflow } from "../file.service";
 import { promptWorkflow } from "../inquirer.service";
-import Ajv from "ajv";
+import { validateWorkflow } from "../validator.service";
 
 export async function validate(name?: string) {
   const jiftConfig = await readJiftConfig();
@@ -12,11 +12,9 @@ export async function validate(name?: string) {
   }
   if (name) {
     const workflow = await readWorkflow(jiftConfig, name);
-    const ajv = new Ajv({ allErrors: true });
-    const validate = ajv.compile(await readJson("../workflow-schema.json"));
-    const valid = validate(workflow);
-    if (!valid) {
-      console.log(validate.errors);
+    const errors = await validateWorkflow(workflow);
+    if (errors.length != 0) {
+      console.log(errors);
       process.exit(1);
     }
   }
