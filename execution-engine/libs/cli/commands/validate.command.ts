@@ -14,7 +14,7 @@ export async function validate(name?: string) {
     const workflow = await readWorkflow(jiftConfig, name);
     const errors = await validateWorkflow(workflow);
     if (errors.length != 0) {
-      console.log(errors);
+      console.log(JSON.stringify(errors, null, 2));
       process.exit(1);
     }
   }
