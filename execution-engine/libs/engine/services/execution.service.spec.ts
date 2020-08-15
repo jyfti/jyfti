@@ -24,39 +24,6 @@ describe("ExecutionService", () => {
     expect(service).toBeTruthy();
   });
 
-  describe("the execution of steps", () => {
-    it("should progress through a small workflow and eventually terminate", () => {
-      const workflow: Workflow = {
-        name: "MyWorkflow",
-        steps: [
-          {
-            assignTo: "var1",
-            expression: 5,
-          },
-          {
-            assignTo: "var2",
-            expression: {
-              $eval: "var1 * 2",
-            },
-          },
-          {
-            assignTo: "var3",
-            expression: {
-              $eval: "var1 * var2",
-            },
-          },
-        ],
-      };
-      expect(service.run(workflow)).toBeObservable(
-        cold("(abc|)", {
-          a: { path: [0], evaluation: 5 },
-          b: { path: [1], evaluation: 10 },
-          c: { path: [2], evaluation: 50 },
-        })
-      );
-    });
-  });
-
   describe("the execution of the next step", () => {
     it("should execute the first step", () => {
       const workflow: Workflow = {

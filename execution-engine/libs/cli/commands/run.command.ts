@@ -22,14 +22,14 @@ export async function run(name?: string, cmd?: any) {
   if (name) {
     await ensureDirExists(jiftConfig.outRoot);
     const workflow = await readWorkflow(jiftConfig, name);
-    const engine = createEngine();
+    const engine = createEngine(workflow);
     engine
-      .run(workflow)
+      .run()
       .pipe(
         tap((pathedEvaluation) =>
           console.log(printPathedEvaluation(cmd, pathedEvaluation))
         ),
-        engine.toStates(workflow),
+        engine.service.toStates(workflow),
         last(),
         flatMap((state) => from(writeState(jiftConfig, name!, state)))
       )

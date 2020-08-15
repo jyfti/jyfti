@@ -31,12 +31,14 @@ export async function step(name?: string) {
     if (state.path.length === 0) {
       console.log("Workflow execution already completed");
     } else {
-      const engine = createEngine();
+      const engine = createEngine(workflow);
       engine
-        .step(workflow, state)
+        .step(state)
         .pipe(
           map((pathedEvaluation) => pathedEvaluation.evaluation),
-          map((evaluation) => engine.nextState(workflow, state, evaluation)),
+          map((evaluation) =>
+            engine.service.nextState(workflow, state, evaluation)
+          ),
           flatMap((state) => from(writeState(jiftConfig, name!, state)))
         )
         .subscribe();
