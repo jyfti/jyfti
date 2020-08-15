@@ -2,6 +2,7 @@ import * as fs from "fs";
 import * as nodePath from "path";
 import { JiftConfig } from "./types/jift-config";
 import { State } from "libs/engine/types/state.type";
+import { Workflow } from "libs/engine/types/workflow.type";
 
 export function fileExists(path: string): Promise<boolean> {
   return fs.promises
@@ -41,11 +42,14 @@ export function readJiftConfig(): Promise<JiftConfig> {
 export function readWorkflow(
   jiftConfig: JiftConfig,
   name: string
-): Promise<any> {
+): Promise<Workflow> {
   return readJson(resolveWorkflow(jiftConfig, name));
 }
 
-export function readState(jiftConfig: JiftConfig, name: string): Promise<any> {
+export function readState(
+  jiftConfig: JiftConfig,
+  name: string
+): Promise<State> {
   return readJson(resolveState(jiftConfig, name));
 }
 
