@@ -57,3 +57,10 @@ export function writeState(
   const data = JSON.stringify(state, null, 2);
   return fs.promises.writeFile(resolveState(jiftConfig, name), data, "utf8");
 }
+
+export function deleteState(
+  jiftConfig: JiftConfig,
+  name: string
+): Promise<any> {
+  return fs.promises.unlink(resolveState(jiftConfig, name));
+}
