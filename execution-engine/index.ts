@@ -28,7 +28,11 @@ program
   .description("clean the output directory")
   .action(clean);
 
-program.command("run [name]").description("run this workflow").action(run);
+program
+  .command("run [name]")
+  .description("run this workflow")
+  .option("-v --verbose", "print evaluations")
+  .action(run);
 
 program
   .command("step [name]")
