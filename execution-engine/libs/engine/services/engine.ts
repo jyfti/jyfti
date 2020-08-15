@@ -2,8 +2,10 @@ import { ExecutionService } from "./execution.service";
 import { Workflow } from "../types/workflow.type";
 import { StepResult } from "../types/step-result.type";
 import { State } from "../types/state.type";
-import { Observable, empty, OperatorFunction } from "rxjs";
+import { Observable, empty, OperatorFunction, from } from "rxjs";
 import { flatMap, startWith, map, scan } from "rxjs/operators";
+import { validateInputs } from "./validator.service";
+import ajv from "ajv";
 
 export function init(inputs: { [name: string]: any }): State {
   return { path: [0], inputs, evaluations: [] };
@@ -12,13 +14,16 @@ export function init(inputs: { [name: string]: any }): State {
 export class Engine {
   constructor(private workflow: Workflow, public service: ExecutionService) {}
 
+  validate(inputs: { [name: string]: any }): ajv.ErrorObject[] {
+    return validateInputs(this.workflow.inputs, inputs);
+  }
+
   /**
    * Runs the workflow from start to completion.
    *
    * @returns A cold observable of all step results. Completes successfully iff the workflow is completing. Errors otherwise.
    */
   run(inputs: { [name: string]: any }): Observable<StepResult> {
-    // TODO Validate inputs
     return this.complete(init(inputs));
   }
 

@@ -8,8 +8,8 @@ import { createEngine } from "../../engine/services/engine.factory";
 import { last, flatMap, tap } from "rxjs/operators";
 import { from } from "rxjs";
 import { promptWorkflow } from "../inquirer.service";
-import { printStepResult } from "../print.service";
-import { Workflow } from "libs/engine/types/workflow.type";
+import { printStepResult, printValidationErrors } from "../print.service";
+import { Workflow } from "../../engine/types/workflow.type";
 
 export async function run(name?: string, inputList?: string[], cmd?: any) {
   const jiftConfig = await readJiftConfig();
@@ -24,17 +24,23 @@ export async function run(name?: string, inputList?: string[], cmd?: any) {
     const workflow = await readWorkflow(jiftConfig, name);
     const inputs = createInputs(workflow, inputList || []);
     const engine = createEngine(workflow);
-    engine
-      .run(inputs)
-      .pipe(
-        tap((stepResult) =>
-          console.log(printStepResult(cmd?.verbose, stepResult))
-        ),
-        engine.toStates(inputs),
-        last(),
-        flatMap((state) => from(writeState(jiftConfig, name!, state)))
-      )
-      .subscribe();
+    const errors = engine.validate(inputs);
+    if (errors.length != 0) {
+      console.error("Inputs not valid.\n");
+      console.error(printValidationErrors(errors));
+    } else {
+      engine
+        .run(inputs)
+        .pipe(
+          tap((stepResult) =>
+            console.log(printStepResult(cmd?.verbose, stepResult))
+          ),
+          engine.toStates(inputs),
+          last(),
+          flatMap((state) => from(writeState(jiftConfig, name!, state)))
+        )
+        .subscribe();
+    }
   }
 }
 

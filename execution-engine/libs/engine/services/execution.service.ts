@@ -5,7 +5,7 @@ import { EvaluationResolvementService } from "./evaluation-resolvement.service";
 import { PathAdvancementService } from "./path-advancement.service";
 import { StepExecutionService } from "./step-execution.service";
 import { StepResolvementService } from "./step-resolvement.service";
-import { State } from "libs/engine/types/state.type";
+import { State } from "../../engine/types/state.type";
 import { Evaluation } from "../types/evaluations.type";
 import { VariableMap } from "../types/variable-map.type";
 

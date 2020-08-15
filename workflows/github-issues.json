@@ -3,7 +3,7 @@
   "name": "Get GitHub issues of a repo",
   "inputs": {
     "org": {
-      "type": "strin"
+      "type": "string"
     },
     "repo": {
       "type": "string"
