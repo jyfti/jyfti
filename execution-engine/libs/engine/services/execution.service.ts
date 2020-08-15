@@ -1,12 +1,10 @@
-import { Observable, OperatorFunction } from "rxjs";
-import { scan } from "rxjs/operators";
+import { Observable } from "rxjs";
 
 import { Workflow } from "../types/workflow.type";
 import { EvaluationResolvementService } from "./evaluation-resolvement.service";
 import { PathAdvancementService } from "./path-advancement.service";
 import { StepExecutionService } from "./step-execution.service";
 import { StepResolvementService } from "./step-resolvement.service";
-import { StepResult } from "libs/engine/types/step-result.type";
 import { State } from "libs/engine/types/state.type";
 import { Evaluation } from "../types/evaluations.type";
 
