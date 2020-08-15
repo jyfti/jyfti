@@ -8,8 +8,7 @@ import { createEngine } from "../../engine/services/engine.factory";
 import { last, flatMap, tap } from "rxjs/operators";
 import { from } from "rxjs";
 import { promptWorkflow } from "../inquirer.service";
-import { PathedEvaluation } from "../../engine/types/pathed-evaluation.type";
-import chalk from "chalk";
+import { printPathedEvaluation } from "../print.service";
 
 export async function run(name?: string, cmd?: any) {
   const jiftConfig = await readJiftConfig();
@@ -27,7 +26,7 @@ export async function run(name?: string, cmd?: any) {
       .run()
       .pipe(
         tap((pathedEvaluation) =>
-          console.log(printPathedEvaluation(cmd, pathedEvaluation))
+          console.log(printPathedEvaluation(cmd?.verbose, pathedEvaluation))
         ),
         engine.service.toStates(workflow),
         last(),
@@ -35,13 +34,4 @@ export async function run(name?: string, cmd?: any) {
       )
       .subscribe();
   }
-}
-
-function printPathedEvaluation(
-  cmd: any,
-  pathedEvaluation: PathedEvaluation
-): string {
-  return cmd?.verbose
-    ? JSON.stringify(pathedEvaluation, null, 2)
-    : "Completed " + chalk.green(pathedEvaluation.path);
 }
