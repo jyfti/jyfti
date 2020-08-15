@@ -1,0 +1,101 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "type": "object",
+  "properties": {
+    "name": {
+      "description": "The name of the workflow",
+      "type": "string"
+    },
+    "inputs": {
+      "description": "The inputs of the workflow",
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/definitions/input"
+      }
+    },
+    "steps": {
+      "description": "A sequence of steps that are executed one after the other and where the results of a previous step can be used in later steps",
+      "type": "array",
+      "items": { "$ref": "#/definitions/step" }
+    }
+  },
+  "required": ["name", "steps"],
+  "definitions": {
+    "input": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        }
+      }
+    },
+    "step": {
+      "allOf": [
+        {
+          "properties": {
+            "assignTo": {
+              "type": "string"
+            }
+          },
+          "required": ["assignTo"]
+        },
+        {
+          "anyOf": [
+            { "$ref": "#/definitions/expressionStep" },
+            { "$ref": "#/definitions/requestStep" },
+            { "$ref": "#/definitions/forStep" }
+          ]
+        }
+      ]
+    },
+    "expressionStep": {
+      "properties": { "expression": { "$ref": "#/definitions/jsone" } }
+    },
+    "forStep": {
+      "properties": { "for": { "$ref": "#/definitions/forLoop" } }
+    },
+    "requestStep": {
+      "properties": { "request": { "$ref": "#/definitions/request" } }
+    },
+    "jsone": {
+      "type": "object"
+    },
+    "request": {
+      "type": "object",
+      "properties": {
+        "method": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        },
+        "body": {
+          "type": "object"
+        },
+        "headers": {
+          "type": "object"
+        }
+      },
+      "required": ["method", "url"]
+    },
+    "forLoop": {
+      "type": "object",
+      "properties": {
+        "const": {
+          "type": "string"
+        },
+        "in": {
+          "type": "string"
+        },
+        "do": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/step" }
+        },
+        "return": {
+          "type": "string"
+        }
+      },
+      "required": ["const", "in", "do", "return"]
+    }
+  }
+}

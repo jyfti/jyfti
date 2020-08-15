@@ -13,9 +13,7 @@ export async function validate(name?: string) {
   if (name) {
     const workflow = await readWorkflow(jiftConfig, name);
     const ajv = new Ajv({ allErrors: true });
-    const validate = ajv.compile(
-      await readJson("../frontend/src/assets/dataflow-schema.json")
-    );
+    const validate = ajv.compile(await readJson("../workflow-schema.json"));
     const valid = validate(workflow);
     if (!valid) {
       console.log(validate.errors);
