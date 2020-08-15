@@ -1,5 +1,5 @@
 {
-  "$schema": "https://raw.githubusercontent.com/fboeller/jift/master/frontend/src/assets/dataflow-schema.json",
+  "$schema": "https://raw.githubusercontent.com/fboeller/jift/master/workflow-schema.json",
   "name": "Get GitHub issues of a repo",
   "inputs": {
     "org": {
