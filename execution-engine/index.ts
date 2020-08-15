@@ -27,8 +27,8 @@ program
   .action(step);
 
 program
-  .command("reset <name>")
-  .description("resets the execution state of this workflow")
+  .command("reset [name]")
+  .description("resets execution states")
   .action(reset);
 
 program.command("view <name>").description("prints this workflow").action(view);

@@ -1,6 +1,6 @@
-import { readJiftConfig, deleteState } from "../file.service";
+import { readJiftConfig, deleteState, deleteAllStates } from "../file.service";
 
-export async function reset(name: string) {
+export async function reset(name?: string) {
   const jiftConfig = await readJiftConfig();
-  await deleteState(jiftConfig, name);
+  await (name ? deleteState(jiftConfig, name) : deleteAllStates(jiftConfig));
 }

@@ -75,3 +75,7 @@ export function deleteState(
 ): Promise<any> {
   return fs.promises.unlink(resolveState(jiftConfig, name));
 }
+
+export async function deleteAllStates(jiftConfig: JiftConfig): Promise<any> {
+  return fs.promises.rmdir(jiftConfig.outRoot, { recursive: true });
+}
