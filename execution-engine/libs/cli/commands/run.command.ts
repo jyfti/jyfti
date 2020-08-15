@@ -1,10 +1,16 @@
-import { readJiftConfig, readWorkflow, writeState } from "../file.service";
+import {
+  readJiftConfig,
+  readWorkflow,
+  writeState,
+  ensureDirExists,
+} from "../file.service";
 import { createEngine } from "../../engine/services/engine.factory";
 import { last, flatMap, tap } from "rxjs/operators";
 import { from } from "rxjs";
 
 export async function run(name: string) {
   const jiftConfig = await readJiftConfig();
+  await ensureDirExists(jiftConfig.outRoot);
   const workflow = await readWorkflow(jiftConfig, name);
   const engine = createEngine();
   engine
