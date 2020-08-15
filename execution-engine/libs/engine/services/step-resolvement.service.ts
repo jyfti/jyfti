@@ -1,7 +1,6 @@
 import { Workflow } from "../types/workflow.type";
 import { Path } from "../types/path.type";
 import { Step } from "../types/step.type";
-import { tail } from "lodash/fp";
 
 export class StepResolvementService {
   constructor() {}
@@ -18,7 +17,7 @@ export class StepResolvementService {
     } else {
       const step = steps[path[0]];
       if (step?.for?.do) {
-        return this.resolveStepRec(step.for.do, tail(tail(path)));
+        return this.resolveStepRec(step.for.do, path.slice(2));
       } else {
         throw new Error(`Can not resolve path ${path} at flat step ${step}`);
       }
