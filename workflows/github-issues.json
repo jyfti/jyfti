@@ -1,11 +1,20 @@
 {
+  "$schema": "https://raw.githubusercontent.com/fboeller/jift/master/frontend/src/assets/dataflow-schema.json",
   "name": "Get GitHub issues of a repo",
+  "inputs": {
+    "org": {
+      "type": "string"
+    },
+    "repo": {
+      "type": "string"
+    }
+  },
   "steps": [
     {
       "assignTo": "issueResponse",
       "request": {
         "method": "GET",
-        "url": "https://api.github.com/repos/fboeller/jift/issues",
+        "url": "https://api.github.com/repos/${org}/${repo}/issues",
         "body": null,
         "headers": null
       }
