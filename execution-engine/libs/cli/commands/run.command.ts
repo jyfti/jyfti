@@ -24,7 +24,7 @@ export async function run(name?: string, cmd?: any) {
     const workflow = await readWorkflow(jiftConfig, name);
     const engine = createEngine();
     engine
-      .executeWorkflow(workflow)
+      .run(workflow)
       .pipe(
         tap((pathedEvaluation) =>
           console.log(printPathedEvaluation(cmd, pathedEvaluation))

@@ -23,15 +23,12 @@ export class ExecutionEngine {
     private stepResolvementService: StepResolvementService
   ) {}
 
-  executeWorkflow(workflow: Workflow): Observable<PathedEvaluation> {
-    return this.executeStepFrom(workflow, { path: [0], evaluations: [] });
+  run(workflow: Workflow): Observable<PathedEvaluation> {
+    return this.complete(workflow, { path: [0], evaluations: [] });
   }
 
-  executeStepFrom(
-    workflow: Workflow,
-    state: State
-  ): Observable<PathedEvaluation> {
-    return this.executeStep(workflow, state).pipe(
+  complete(workflow: Workflow, state: State): Observable<PathedEvaluation> {
+    return this.step(workflow, state).pipe(
       flatMap((pathedEvaluation) => {
         const nextState = this.nextState(
           workflow,
@@ -41,13 +38,13 @@ export class ExecutionEngine {
         const continuingSteps =
           nextState.path.length == 0
             ? empty()
-            : this.executeStepFrom(workflow, nextState);
+            : this.complete(workflow, nextState);
         return continuingSteps.pipe(startWith(pathedEvaluation));
       })
     );
   }
 
-  executeStep(workflow: Workflow, state: State): Observable<PathedEvaluation> {
+  step(workflow: Workflow, state: State): Observable<PathedEvaluation> {
     return this.nextStep(workflow, state).pipe(
       map((evaluation) => ({ path: state.path, evaluation }))
     );

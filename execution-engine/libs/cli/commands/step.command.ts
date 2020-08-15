@@ -15,7 +15,10 @@ import { promptWorkflow } from "../inquirer.service";
 export async function step(name?: string) {
   const jiftConfig = await readJiftConfig();
   if (!name) {
-    name = await promptWorkflow(jiftConfig, "Which workflow do you want to progress?");
+    name = await promptWorkflow(
+      jiftConfig,
+      "Which workflow do you want to progress?"
+    );
   }
   if (name) {
     await ensureDirExists(jiftConfig.outRoot);
@@ -30,7 +33,7 @@ export async function step(name?: string) {
     } else {
       const engine = createEngine();
       engine
-        .executeStep(workflow, state)
+        .step(workflow, state)
         .pipe(
           map((pathedEvaluation) => pathedEvaluation.evaluation),
           map((evaluation) => engine.nextState(workflow, state, evaluation)),
