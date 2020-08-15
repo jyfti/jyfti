@@ -24,7 +24,7 @@ describe("ExecutionEngineService", () => {
     expect(service).toBeTruthy();
   });
 
-  describe("the execution of ticks", () => {
+  describe("the execution of steps", () => {
     it("should progress through a small workflow and eventually terminate", () => {
       const workflow: Workflow = {
         name: "MyWorkflow",

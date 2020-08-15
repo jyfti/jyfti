@@ -23,7 +23,7 @@ describe('ExecutionEngineService', () => {
     expect(service).toBeTruthy();
   });
 
-  describe('the execution of ticks', () => {
+  describe('the execution of steps', () => {
     it('should progress through a small dataflow and eventually terminate', () => {
       const dataflow: Dataflow = {
         name: 'MyDataflow',
