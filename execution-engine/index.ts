@@ -6,6 +6,7 @@ import { step } from "./libs/cli/commands/step.command";
 import { reset } from "./libs/cli/commands/reset.command";
 import { status } from "./libs/cli/commands/status.command";
 import { state } from "./libs/cli/commands/state.command";
+import { view } from "./libs/cli/commands/view.command";
 
 const program = new Command();
 program.version("0.0.1");
@@ -21,6 +22,8 @@ program
   .command("reset <name>")
   .description("resets the execution state of the workflow")
   .action(reset);
+
+program.command("view <name>").description("prints the workflow").action(view);
 
 program
   .command("state <name>")

@@ -1,0 +1,9 @@
+import { readJiftConfig, readWorkflow } from "../file.service";
+
+export async function view(name: string) {
+  const jiftConfig = await readJiftConfig();
+  const message = await readWorkflow(jiftConfig, name)
+    .then((state) => JSON.stringify(state, null, 2))
+    .catch(() => "This workflow does not exist.");
+  console.log(message);
+}
