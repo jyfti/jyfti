@@ -1,13 +1,15 @@
 #!/usr/bin/env node
 
 import { Command } from "commander";
-import { run } from "./libs/cli/commands/run.command";
-import { step } from "./libs/cli/commands/step.command";
-import { reset } from "./libs/cli/commands/reset.command";
-import { status } from "./libs/cli/commands/status.command";
-import { state } from "./libs/cli/commands/state.command";
-import { view } from "./libs/cli/commands/view.command";
-import { init } from "./libs/cli/commands/init.command";
+import {
+  init,
+  run,
+  step,
+  reset,
+  view,
+  state,
+  status,
+} from "./libs/cli/commands";
 
 const program = new Command();
 program.version("0.0.1");
