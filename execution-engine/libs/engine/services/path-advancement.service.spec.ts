@@ -12,6 +12,7 @@ describe("PathAdvancementService", () => {
   describe("with one level", () => {
     const workflow: Workflow = {
       name: "MyWorkflow",
+      inputs: {},
       steps: [
         {
           assignTo: "var1",
@@ -79,6 +80,7 @@ describe("PathAdvancementService", () => {
   describe("with nested for loops", () => {
     const workflow: Workflow = {
       name: "MyWorkflow",
+      inputs: {},
       steps: [
         {
           assignTo: "listVar1",

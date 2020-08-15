@@ -21,7 +21,7 @@ export async function step(name?: string) {
   if (name) {
     await ensureDirExists(jiftConfig.outRoot);
     const workflow = await readWorkflow(jiftConfig, name);
-    const state = await readStateOrInitial(jiftConfig, name);
+    const state = await readStateOrInitial(jiftConfig, name, {});
     const engine = createEngine(workflow);
     if (engine.isComplete(state)) {
       console.log("Workflow execution already completed");

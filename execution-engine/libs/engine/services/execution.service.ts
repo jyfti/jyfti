@@ -7,6 +7,7 @@ import { StepExecutionService } from "./step-execution.service";
 import { StepResolvementService } from "./step-resolvement.service";
 import { State } from "libs/engine/types/state.type";
 import { Evaluation } from "../types/evaluations.type";
+import { VariableMap } from "../types/variable-map.type";
 
 export class ExecutionService {
   constructor(
@@ -20,7 +21,7 @@ export class ExecutionService {
     const nextPath = this.pathAdvancementService.advancePath(
       workflow,
       state.path,
-      this.stepExecutionService.toVariableMap(workflow.steps, state.evaluations)
+      this.toVariableMap(workflow, state)
     );
     const nextEvaluations = this.evaluationResolvementService.addEvaluation(
       state.path,
@@ -29,6 +30,7 @@ export class ExecutionService {
     );
     return {
       path: nextPath,
+      inputs: state.inputs,
       evaluations: nextEvaluations,
     };
   }
@@ -40,7 +42,17 @@ export class ExecutionService {
         state.evaluations,
         state.path
       ),
-      this.stepExecutionService.toVariableMap(workflow.steps, state.evaluations)
+      this.toVariableMap(workflow, state)
     );
+  }
+
+  toVariableMap(workflow: Workflow, state: State): VariableMap {
+    return {
+      ...state.inputs,
+      ...this.stepExecutionService.toVariableMap(
+        workflow.steps,
+        state.evaluations
+      ),
+    };
   }
 }

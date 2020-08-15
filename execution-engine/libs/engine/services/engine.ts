@@ -5,7 +5,9 @@ import { State } from "../types/state.type";
 import { Observable, empty, OperatorFunction } from "rxjs";
 import { flatMap, startWith, map, scan } from "rxjs/operators";
 
-export const initialState: State = { path: [0], evaluations: [] };
+export function init(inputs: { [name: string]: any }): State {
+  return { path: [0], inputs, evaluations: [] };
+}
 
 export class Engine {
   constructor(private workflow: Workflow, public service: ExecutionService) {}
@@ -15,8 +17,9 @@ export class Engine {
    *
    * @returns A cold observable of all step results. Completes successfully iff the workflow is completing. Errors otherwise.
    */
-  run(): Observable<StepResult> {
-    return this.complete(initialState);
+  run(inputs: { [name: string]: any }): Observable<StepResult> {
+    // TODO Validate inputs
+    return this.complete(init(inputs));
   }
 
   /**
@@ -65,9 +68,11 @@ export class Engine {
    * Transitions an observable of step results into an observable of states.
    * This is useful, if you do not only want to track results of individual steps, but the accumulated results of all steps up to a specific step.
    */
-  toStates(): OperatorFunction<StepResult, State> {
+  toStates(inputs: {
+    [name: string]: any;
+  }): OperatorFunction<StepResult, State> {
     return (stepResult$) =>
-      stepResult$.pipe(scan(this.toState.bind(this), initialState));
+      stepResult$.pipe(scan(this.toState.bind(this), init(inputs)));
   }
 
   /**

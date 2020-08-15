@@ -30,7 +30,7 @@ program
   .action(clean);
 
 program
-  .command("run [name]")
+  .command("run [name] [inputs...]")
   .description("run this workflow")
   .option("-v --verbose", "print evaluations")
   .action(run);

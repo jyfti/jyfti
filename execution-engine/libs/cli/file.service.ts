@@ -3,7 +3,8 @@ import * as nodePath from "path";
 import { JiftConfig } from "./types/jift-config";
 import { State } from "../engine/types/state.type";
 import { Workflow } from "../engine/types/workflow.type";
-import { initialState } from "../engine/services/engine";
+import { Dictionary } from "lodash";
+import { init } from "../engine/services/engine";
 
 export function fileExists(path: string): Promise<boolean> {
   return fs.promises
@@ -72,11 +73,12 @@ export function readState(
 
 export async function readStateOrInitial(
   jiftConfig: JiftConfig,
-  name: string
+  name: string,
+  inputs: Dictionary<any>
 ): Promise<State> {
   const statePath = resolveState(jiftConfig, name);
   const stateExists = await fileExists(statePath);
-  return stateExists ? await readState(jiftConfig, name) : initialState;
+  return stateExists ? await readState(jiftConfig, name) : init(inputs);
 }
 
 export function writeState(

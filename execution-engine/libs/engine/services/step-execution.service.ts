@@ -21,6 +21,7 @@ import {
   HttpMethod,
   HttpProtocol,
 } from "../types/http-request.type";
+import { interpolate, evaluate } from "./evaluation.service";
 
 export class StepExecutionService {
   constructor(private http: HttpService) {}
@@ -83,28 +84,18 @@ export class StepExecutionService {
     return of(loopReturn);
   }
 
-  private interpolate(variables: VariableMap, str: string) {
-    const identifiers = Object.keys(variables);
-    const values = Object.values(variables);
-    return new Function(...identifiers, `return \`${str}\`;`)(...values);
-  }
-
-  private evaluate(variables: VariableMap, expression: string | undefined) {
-    return isNil(expression) ? null : jsone(JSON.parse(expression), variables);
-  }
-
   createHttpRequest(
     template: HttpRequestTemplate,
     variables: VariableMap
   ): HttpRequest<any> {
-    const requestUrl = this.interpolate(variables, template.url);
+    const requestUrl = interpolate(variables, template.url);
     const parsedRequestUrl = url.parse(requestUrl, true);
     return {
       protocol: (parsedRequestUrl.protocol || "https:") as HttpProtocol,
       method: template.method as HttpMethod,
       hostname: parsedRequestUrl.hostname || "",
       path: parsedRequestUrl.path || "",
-      body: this.evaluate(variables, template.body),
+      body: evaluate(variables, template.body),
       // headers: this.evaluate(variables, template.headers),
     };
   }

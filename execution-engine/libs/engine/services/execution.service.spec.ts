@@ -28,6 +28,7 @@ describe("ExecutionService", () => {
     it("should execute the first step", () => {
       const workflow: Workflow = {
         name: "MyWorkflow",
+        inputs: {},
         steps: [
           {
             assignTo: "outVar",
@@ -36,13 +37,14 @@ describe("ExecutionService", () => {
         ],
       };
       expect(
-        service.nextStep(workflow, { path: [0], evaluations: [] })
+        service.nextStep(workflow, { path: [0], inputs: {}, evaluations: [] })
       ).toBeObservable(cold("(a|)", { a: 1 }));
     });
 
     it("should execute the second step considering the evaluation of the first step without evaluating it", () => {
       const workflow: Workflow = {
         name: "MyWorkflow",
+        inputs: {},
         steps: [
           {
             assignTo: "var1",
@@ -57,13 +59,14 @@ describe("ExecutionService", () => {
         ],
       };
       expect(
-        service.nextStep(workflow, { path: [1], evaluations: [42] })
+        service.nextStep(workflow, { path: [1], inputs: {}, evaluations: [42] })
       ).toBeObservable(cold("(a|)", { a: 42 }));
     });
 
     describe("with a single-step loop", () => {
       const workflow: Workflow = {
         name: "MyWorkflow",
+        inputs: {},
         steps: [
           {
             assignTo: "outVar",
@@ -84,13 +87,17 @@ describe("ExecutionService", () => {
 
       it("should evaluate the return value with no loop iteration to an empty list", () => {
         expect(
-          service.nextStep(workflow, { path: [0], evaluations: [] })
+          service.nextStep(workflow, { path: [0], inputs: {}, evaluations: [] })
         ).toBeObservable(cold("(a|)", { a: [] }));
       });
 
       it("should evaluate the return value with a single loop iteration to a single element list", () => {
         expect(
-          service.nextStep(workflow, { path: [0], evaluations: [[["a"]]] })
+          service.nextStep(workflow, {
+            path: [0],
+            inputs: {},
+            evaluations: [[["a"]]],
+          })
         ).toBeObservable(cold("(a|)", { a: ["a"] }));
       });
 
@@ -98,6 +105,7 @@ describe("ExecutionService", () => {
         expect(
           service.nextStep(workflow, {
             path: [0],
+            inputs: {},
             evaluations: [[["a"], ["b"], ["c"]]],
           })
         ).toBeObservable(cold("(a|)", { a: ["a", "b", "c"] }));
@@ -107,6 +115,7 @@ describe("ExecutionService", () => {
     describe("with a multi-step loop", () => {
       const workflow: Workflow = {
         name: "MyWorkflow",
+        inputs: {},
         steps: [
           {
             assignTo: "outVar",
@@ -137,7 +146,7 @@ describe("ExecutionService", () => {
 
       it("should evaluate the return value with no loop iteration to an empty list", () => {
         expect(
-          service.nextStep(workflow, { path: [0], evaluations: [] })
+          service.nextStep(workflow, { path: [0], inputs: {}, evaluations: [] })
         ).toBeObservable(cold("(a|)", { a: [] }));
       });
 
@@ -145,6 +154,7 @@ describe("ExecutionService", () => {
         expect(
           service.nextStep(workflow, {
             path: [0],
+            inputs: {},
             evaluations: [[[10, 20, 30]]],
           })
         ).toBeObservable(cold("(a|)", { a: [30] }));
@@ -154,6 +164,7 @@ describe("ExecutionService", () => {
         expect(
           service.nextStep(workflow, {
             path: [0],
+            inputs: {},
             evaluations: [
               [
                 [10, 20, 30],

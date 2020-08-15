@@ -22,7 +22,8 @@ export async function complete(name?: string, cmd?: any) {
   if (name) {
     await ensureDirExists(jiftConfig.outRoot);
     const workflow = await readWorkflow(jiftConfig, name);
-    const state = await readStateOrInitial(jiftConfig, name);
+    const inputs = {}; // TODO Add actual inputs
+    const state = await readStateOrInitial(jiftConfig, name, inputs);
     const engine = createEngine(workflow);
     engine
       .complete(state)
@@ -30,7 +31,7 @@ export async function complete(name?: string, cmd?: any) {
         tap((stepResult) =>
           console.log(printStepResult(cmd?.verbose, stepResult))
         ),
-        engine.toStates(),
+        engine.toStates(inputs),
         last(),
         flatMap((state) => from(writeState(jiftConfig, name!, state)))
       )
