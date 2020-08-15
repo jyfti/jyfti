@@ -1,21 +1,22 @@
 import {
   readJiftConfig,
-  ensureDirExists,
   readWorkflow,
   writeState,
+  ensureDirExists,
   readStateOrInitial,
 } from "../file.service";
 import { createEngine } from "../../engine/services/engine.factory";
-import { map, flatMap } from "rxjs/operators";
+import { last, flatMap, tap } from "rxjs/operators";
 import { from } from "rxjs";
 import { promptWorkflow } from "../inquirer.service";
+import { printStepResult } from "../print.service";
 
-export async function step(name?: string) {
+export async function complete(name?: string, cmd?: any) {
   const jiftConfig = await readJiftConfig();
   if (!name) {
     name = await promptWorkflow(
       jiftConfig,
-      "Which workflow do you want to progress?"
+      "Which workflow do you want to complete?"
     );
   }
   if (name) {
@@ -23,16 +24,16 @@ export async function step(name?: string) {
     const workflow = await readWorkflow(jiftConfig, name);
     const state = await readStateOrInitial(jiftConfig, name);
     const engine = createEngine(workflow);
-    if (engine.isComplete(state)) {
-      console.log("Workflow execution already completed");
-    } else {
-      engine
-        .step(state)
-        .pipe(
-          map((evaluation) => engine.toState(state, evaluation)),
-          flatMap((state) => from(writeState(jiftConfig, name!, state)))
-        )
-        .subscribe();
-    }
+    engine
+      .complete(state)
+      .pipe(
+        tap((stepResult) =>
+          console.log(printStepResult(cmd?.verbose, stepResult))
+        ),
+        engine.toStates(),
+        last(),
+        flatMap((state) => from(writeState(jiftConfig, name!, state)))
+      )
+      .subscribe();
   }
 }

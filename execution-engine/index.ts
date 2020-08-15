@@ -11,6 +11,7 @@ import {
   status,
   list,
   clean,
+  complete,
 } from "./libs/cli/commands";
 
 const program = new Command();
@@ -33,6 +34,12 @@ program
   .description("run this workflow")
   .option("-v --verbose", "print evaluations")
   .action(run);
+
+program
+  .command("complete [name]")
+  .description("complete this workflow from its current state")
+  .option("-v --verbose", "print evaluations")
+  .action(complete);
 
 program
   .command("step [name]")

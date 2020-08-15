@@ -1,8 +1,9 @@
 import * as fs from "fs";
 import * as nodePath from "path";
 import { JiftConfig } from "./types/jift-config";
-import { State } from "libs/engine/types/state.type";
-import { Workflow } from "libs/engine/types/workflow.type";
+import { State } from "../engine/types/state.type";
+import { Workflow } from "../engine/types/workflow.type";
+import { initialState } from "../engine/services/engine";
 
 export function fileExists(path: string): Promise<boolean> {
   return fs.promises
@@ -67,6 +68,15 @@ export function readState(
   name: string
 ): Promise<State> {
   return readJson(resolveState(jiftConfig, name));
+}
+
+export async function readStateOrInitial(
+  jiftConfig: JiftConfig,
+  name: string
+): Promise<State> {
+  const statePath = resolveState(jiftConfig, name);
+  const stateExists = await fileExists(statePath);
+  return stateExists ? await readState(jiftConfig, name) : initialState;
 }
 
 export function writeState(
