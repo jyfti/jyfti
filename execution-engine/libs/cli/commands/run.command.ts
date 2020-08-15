@@ -45,6 +45,7 @@ export async function run(name?: string, inputList?: string[], cmd?: any) {
           )
           .join("\n\n");
       console.error(message);
+      process.exit(1);
     } else {
       engine
         .run(inputs)
