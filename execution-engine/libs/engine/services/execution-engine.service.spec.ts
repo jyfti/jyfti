@@ -1,7 +1,7 @@
 import { cold } from "jest-marbles";
 import { of } from "rxjs";
 
-import { ExecutionEngineService } from "./execution-engine.service";
+import { ExecutionEngine } from "./execution-engine.service";
 import { Workflow } from "../types/workflow.type";
 import { SingleStepService } from "./single-step.service";
 import { HttpService } from "./http.service";
@@ -13,7 +13,7 @@ describe("ExecutionEngineService", () => {
   const httpClientStub: Partial<HttpService> = {
     request: () => of({ body: { field: "value" } }),
   };
-  let service = new ExecutionEngineService(
+  let service = new ExecutionEngine(
     new SingleStepService(httpClientStub as HttpService),
     new EvaluationResolvementService(),
     new PathAdvancementService(),

@@ -6,8 +6,9 @@ import {
   readState,
   fileExists,
   readWorkflow,
+  writeState,
 } from "../file.service";
-import { createExecutionEngine } from "../../engine/services/engine.factory";
+import { createEngine } from "../../engine/services/engine.factory";
 import { map, flatMap } from "rxjs/operators";
 import { from } from "rxjs";
 
@@ -23,16 +24,13 @@ export async function step(name: string) {
   if (state.path.length === 0) {
     console.log("Workflow execution already completed");
   } else {
-    const engine = createExecutionEngine();
+    const engine = createEngine();
     engine
       .executeStep(workflow, state)
       .pipe(
         map((pathedEvaluation) => pathedEvaluation.evaluation),
         map((evaluation) => engine.nextState(workflow, state, evaluation)),
-        map((nextState) => JSON.stringify(nextState, null, 2)),
-        flatMap((string) =>
-          from(fs.promises.writeFile(statePath, string, "utf8"))
-        )
+        flatMap((state) => from(writeState(jiftConfig, name, state)))
       )
       .subscribe();
   }

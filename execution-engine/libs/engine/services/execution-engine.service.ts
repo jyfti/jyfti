@@ -1,5 +1,10 @@
-import { empty, Observable } from "rxjs";
-import { flatMap, startWith, map } from "rxjs/operators";
+import {
+  empty,
+  Observable,
+  MonoTypeOperatorFunction,
+  OperatorFunction,
+} from "rxjs";
+import { flatMap, startWith, map, scan } from "rxjs/operators";
 
 import { Workflow } from "../types/workflow.type";
 import { EvaluationResolvementService } from "./evaluation-resolvement.service";
@@ -46,6 +51,17 @@ export class ExecutionEngine {
     return this.nextStep(workflow, state).pipe(
       map((evaluation) => ({ path: state.path, evaluation }))
     );
+  }
+
+  toStates(workflow: Workflow): OperatorFunction<PathedEvaluation, State> {
+    return (pathedEvaluation$) =>
+      pathedEvaluation$.pipe(
+        scan<PathedEvaluation, State>(
+          (state, pathedEvaluation) =>
+            this.nextState(workflow, state, pathedEvaluation.evaluation),
+          { path: [0], evaluations: [] }
+        )
+      );
   }
 
   nextState(workflow: Workflow, state: State, evaluation: Evaluation): State {

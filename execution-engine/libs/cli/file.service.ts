@@ -1,6 +1,7 @@
 import * as fs from "fs";
 import * as nodePath from "path";
 import { JiftConfig } from "./types/jift-config";
+import { State } from "libs/engine/types/state.type";
 
 export function fileExists(path: string): Promise<boolean> {
   return fs.promises
@@ -46,4 +47,13 @@ export function readWorkflow(
 
 export function readState(jiftConfig: JiftConfig, name: string): Promise<any> {
   return readJson(resolveState(jiftConfig, name));
+}
+
+export function writeState(
+  jiftConfig: JiftConfig,
+  name: string,
+  state: State
+): Promise<any> {
+  const data = JSON.stringify(state, null, 2);
+  return fs.promises.writeFile(resolveState(jiftConfig, name), data, "utf8");
 }
