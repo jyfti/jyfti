@@ -3,10 +3,12 @@
   "name": "Get GitHub issues of a repo",
   "inputs": {
     "org": {
-      "type": "string"
+      "type": "string",
+      "description": "An organization of a GitHub repository"
     },
     "repo": {
-      "type": "string"
+      "type": "string",
+      "description": "A GitHub repository"
     }
   },
   "steps": [

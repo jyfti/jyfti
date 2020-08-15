@@ -7,12 +7,8 @@ import {
 import { createEngine } from "../../engine/services/engine.factory";
 import { last, flatMap, tap } from "rxjs/operators";
 import { from } from "rxjs";
-import { promptWorkflow } from "../inquirer.service";
-import {
-  printStepResult,
-  printValidationErrors,
-  printFieldErrors,
-} from "../print.service";
+import { promptWorkflow, promptWorkflowInputs } from "../inquirer.service";
+import { printStepResult, printFieldErrors } from "../print.service";
 import { Workflow } from "../../engine/types/workflow.type";
 import chalk from "chalk";
 
@@ -27,6 +23,9 @@ export async function run(name?: string, inputList?: string[], cmd?: any) {
   if (name) {
     await ensureDirExists(jiftConfig.outRoot);
     const workflow = await readWorkflow(jiftConfig, name);
+    if ((inputList || []).length === 0) {
+      inputList = await promptWorkflowInputs(workflow);
+    }
     const inputs = createInputs(workflow, inputList || []);
     const engine = createEngine(workflow);
     const fieldErrors = engine.validate(inputs);
