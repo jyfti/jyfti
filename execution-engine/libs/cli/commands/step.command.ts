@@ -11,6 +11,8 @@ import { createEngine } from "../../engine/services/engine.factory";
 import { map, flatMap } from "rxjs/operators";
 import { from } from "rxjs";
 import { promptWorkflow } from "../inquirer.service";
+import { State } from "../../engine/types/state.type";
+import { JiftConfig } from "../types/jift-config";
 
 export async function step(name?: string) {
   const jiftConfig = await readJiftConfig();
@@ -23,11 +25,7 @@ export async function step(name?: string) {
   if (name) {
     await ensureDirExists(jiftConfig.outRoot);
     const workflow = await readWorkflow(jiftConfig, name);
-    const statePath = resolveState(jiftConfig, name);
-    const stateExists = await fileExists(statePath);
-    const state = stateExists
-      ? await readState(jiftConfig, name)
-      : { workflow, path: [0], evaluations: [] };
+    const state = await readStateOrInitial(jiftConfig);
     if (state.path.length === 0) {
       console.log("Workflow execution already completed");
     } else {
@@ -45,3 +43,13 @@ export async function step(name?: string) {
     }
   }
 }
+
+export async function readStateOrInitial(
+  jiftConfig: JiftConfig
+): Promise<State> {
+  const statePath = resolveState(jiftConfig, name);
+  const stateExists = await fileExists(statePath);
+  return stateExists ? await readState(jiftConfig, name) : initialState;
+}
+
+const initialState: State = { path: [0], evaluations: [] };
