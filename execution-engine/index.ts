@@ -5,6 +5,7 @@ import { run } from "./libs/cli/commands/run.command";
 import { step } from "./libs/cli/commands/step.command";
 import { reset } from "./libs/cli/commands/reset.command";
 import { status } from "./libs/cli/commands/status.command";
+import { state } from "./libs/cli/commands/state.command";
 
 const program = new Command();
 program.version("0.0.1");
@@ -22,8 +23,13 @@ program
   .action(reset);
 
 program
-  .command("status <name>")
+  .command("state <name>")
   .description("prints the execution state of the workflow")
+  .action(state);
+
+program
+  .command("status <name>")
+  .description("prints information about the status of the workflow execution")
   .action(status);
 
 program.parse(process.argv);
