@@ -47,7 +47,7 @@ describe("ExecutionEngineService", () => {
           },
         ],
       };
-      expect(service.executeWorkflow(workflow)).toBeObservable(
+      expect(service.run(workflow)).toBeObservable(
         cold("(abc|)", {
           a: { path: [0], evaluation: 5 },
           b: { path: [1], evaluation: 10 },
