@@ -10,6 +10,7 @@ import {
   state,
   status,
   list,
+  clean,
 } from "./libs/cli/commands";
 
 const program = new Command();
@@ -21,6 +22,11 @@ program
   .action(init);
 
 program.command("list").description("list workflows").action(list);
+
+program
+  .command("clean")
+  .description("clean the output directory")
+  .action(clean);
 
 program.command("run [name]").description("run this workflow").action(run);
 

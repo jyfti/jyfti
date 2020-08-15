@@ -6,3 +6,4 @@ export * from "./state.command";
 export * from "./view.command";
 export * from "./init.command";
 export * from "./list.command";
+export * from "./clean.command";
