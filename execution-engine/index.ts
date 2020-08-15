@@ -34,7 +34,7 @@ program
   .description("reset execution states")
   .action(reset);
 
-program.command("view <name>").description("print this workflow").action(view);
+program.command("view [name]").description("print this workflow").action(view);
 
 program
   .command("state <name>")
