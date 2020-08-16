@@ -1,5 +1,5 @@
 import { ensureDirExists } from "../files/file.service";
-import { readJiftConfig } from "../files/config-file.service";
+import { readConfig } from "../files/config-file.service";
 import { createEngine } from "../../engine/services/engine.factory";
 import { last, flatMap, tap } from "rxjs/operators";
 import { from } from "rxjs";
@@ -16,16 +16,13 @@ import { readWorkflowOrTerminate } from "../files/workflow-file.service";
 import { writeState } from "../files/state-file.service";
 
 export async function start(name?: string, inputList?: string[], cmd?: any) {
-  const jiftConfig = await readJiftConfig();
+  const config = await readConfig();
   if (!name) {
-    name = await promptWorkflow(
-      jiftConfig,
-      "Which workflow do you want to start?"
-    );
+    name = await promptWorkflow(config, "Which workflow do you want to start?");
   }
   if (name) {
-    await ensureDirExists(jiftConfig.outRoot);
-    const workflow = await readWorkflowOrTerminate(jiftConfig, name);
+    await ensureDirExists(config.outRoot);
+    const workflow = await readWorkflowOrTerminate(config, name);
     if ((inputList || []).length === 0) {
       inputList = await promptWorkflowInputs(workflow);
     }
@@ -46,7 +43,7 @@ export async function start(name?: string, inputList?: string[], cmd?: any) {
         console.log(printJson(initialState));
       }
       if (!cmd?.complete) {
-        await writeState(jiftConfig, name, initialState);
+        await writeState(config, name, initialState);
       } else {
         engine
           .complete(initialState)
@@ -57,7 +54,7 @@ export async function start(name?: string, inputList?: string[], cmd?: any) {
             engine.toStates(inputs),
             last(),
             tap((state) => console.log(printOutput(engine.getOutput(state)))),
-            flatMap((state) => from(writeState(jiftConfig, name!, state)))
+            flatMap((state) => from(writeState(config, name!, state)))
           )
           .subscribe();
       }

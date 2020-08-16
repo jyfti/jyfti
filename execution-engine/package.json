@@ -1,12 +1,14 @@
 {
-  "name": "jift-cli",
+  "name": "@jyfti/cli",
   "version": "0.0.1",
   "description": "Jift is a json-based, light-weight workflow engine for software engineers. Jift makes it easy to connect APIs via transparently executed workflows.",
   "main": "index.ts",
-  "bin": "./build/index.js",
+  "bin": {
+    "jift-cli": "build/index.js"
+  },
   "repository": {
     "type": "git",
-    "url": "https://github.com/fboeller/jift.git"
+    "url": "git+https://github.com/fboeller/jift.git"
   },
   "author": "Fabian Böller",
   "license": "MIT",

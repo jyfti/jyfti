@@ -1,13 +1,13 @@
-import { JiftConfig } from "./types/jift-config";
+import { Config } from "./types/config";
 import { readWorkflowNames } from "./files/workflow-file.service";
 import inquirer from "inquirer";
 import { Workflow } from "../engine/types";
 
 export async function promptWorkflow(
-  jiftConfig: JiftConfig,
+  config: Config,
   question: string
 ): Promise<string | undefined> {
-  const workflowNames = await readWorkflowNames(jiftConfig);
+  const workflowNames = await readWorkflowNames(config);
   const answers = await inquirer.prompt([
     {
       name: "workflow",

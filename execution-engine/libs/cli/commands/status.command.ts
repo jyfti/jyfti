@@ -1,15 +1,15 @@
-import { readJiftConfig } from "../files/config-file.service";
+import { readConfig } from "../files/config-file.service";
 import chalk from "chalk";
 import { State } from "../../engine/types";
 import { readWorkflowNames } from "../files/workflow-file.service";
 import { readState } from "../files/state-file.service";
 
 export async function status(name: string) {
-  const jiftConfig = await readJiftConfig();
-  const workflowNames = name ? [name] : await readWorkflowNames(jiftConfig);
+  const config = await readConfig();
+  const workflowNames = name ? [name] : await readWorkflowNames(config);
   const statusList = await Promise.all(
     workflowNames.map(async (workflowName) => {
-      const message = await printState(readState(jiftConfig, workflowName));
+      const message = await printState(readState(config, workflowName));
       const namePrefix = name ? "" : workflowName + " ";
       return namePrefix + message;
     })

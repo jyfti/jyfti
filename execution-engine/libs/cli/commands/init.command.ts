@@ -1,16 +1,16 @@
 import { fileExists, ensureDirExists } from "../files/file.service";
 import {
-  jiftConfigName,
-  writeJiftConfig,
-  defaultJiftConfig,
+  configName,
+  writeConfig,
+  defaultConfig,
 } from "../files/config-file.service";
 
 export async function init() {
-  const configExists = await fileExists(jiftConfigName);
+  const configExists = await fileExists(configName);
   if (configExists) {
     console.log("This directory is already initialized.");
   } else {
-    await writeJiftConfig(defaultJiftConfig);
-    await ensureDirExists(defaultJiftConfig.sourceRoot);
+    await writeConfig(defaultConfig);
+    await ensureDirExists(defaultConfig.sourceRoot);
   }
 }

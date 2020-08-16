@@ -1,4 +1,4 @@
-export interface JiftConfig {
+export interface Config {
   sourceRoot: string;
   outRoot: string;
 }

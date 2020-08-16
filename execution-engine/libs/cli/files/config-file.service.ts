@@ -1,19 +1,19 @@
 import * as fs from "fs";
-import { JiftConfig } from "../types/jift-config";
+import { Config } from "../types/config";
 import { readJson } from "./file.service";
 
-export const jiftConfigName: string = "jift.json";
+export const configName: string = "jift.json";
 
-export const defaultJiftConfig: JiftConfig = {
+export const defaultConfig: Config = {
   sourceRoot: "./src",
   outRoot: "./out",
 };
 
-export function readJiftConfig(): Promise<JiftConfig> {
-  return readJson(jiftConfigName).catch(() => defaultJiftConfig);
+export function readConfig(): Promise<Config> {
+  return readJson(configName).catch(() => defaultConfig);
 }
 
-export function writeJiftConfig(jiftConfig: JiftConfig): Promise<any> {
-  const data = JSON.stringify(jiftConfig, null, 2);
-  return fs.promises.writeFile(jiftConfigName, data, "utf8");
+export function writeConfig(config: Config): Promise<any> {
+  const data = JSON.stringify(config, null, 2);
+  return fs.promises.writeFile(configName, data, "utf8");
 }

@@ -1,4 +1,4 @@
-import { readJiftConfig } from "../../files/config-file.service";
+import { readConfig } from "../../files/config-file.service";
 import inquirer from "inquirer";
 import { Workflow } from "../../../engine/types";
 import {
@@ -7,7 +7,7 @@ import {
 } from "../../files/workflow-file.service";
 
 export async function generateWorkflow(name?: string) {
-  const jiftConfig = await readJiftConfig();
+  const config = await readConfig();
   if (!name) {
     const answers = await inquirer.prompt([
       {
@@ -20,14 +20,14 @@ export async function generateWorkflow(name?: string) {
     name = answers.name;
   }
   if (name) {
-    if (await workflowExists(jiftConfig, name)) {
+    if (await workflowExists(config, name)) {
       console.error(
         "The workflow already exists. Please delete the workflow first."
       );
       process.exit(1);
     }
     const workflow = createExampleWorkflow();
-    await writeWorkflow(jiftConfig, name, workflow);
+    await writeWorkflow(config, name, workflow);
   }
 }
 
@@ -49,7 +49,7 @@ export function createExampleWorkflow(): Workflow {
       },
     },
     output: {
-        $eval: "readme"
+      $eval: "readme",
     },
     steps: [
       {
