@@ -38,7 +38,7 @@ export async function start(name?: string, inputList?: string[], cmd?: any) {
       process.exit(1);
     } else {
       const initialState = engine.init(inputs);
-      if (cmd?.init) {
+      if (!cmd?.complete) {
         await writeState(jiftConfig, name, initialState);
       } else {
         engine
