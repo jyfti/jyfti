@@ -2,7 +2,7 @@ import {
   readJiftConfig,
   workflowExists,
   writeWorkflow,
-} from "../../file.service";
+} from "../../files/file.service";
 import inquirer from "inquirer";
 import { Workflow } from "../../../engine/types";
 

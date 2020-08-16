@@ -4,7 +4,7 @@ import {
   defaultJiftConfig,
   ensureDirExists,
   jiftConfigName,
-} from "../file.service";
+} from "../files/file.service";
 
 export async function init() {
   const configExists = await fileExists(jiftConfigName);

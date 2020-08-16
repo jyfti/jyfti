@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as nodePath from "path";
-import { JiftConfig } from "./types/jift-config";
-import { State, Workflow } from "../engine/types";
+import { JiftConfig } from "../types/jift-config";
+import { State, Workflow } from "../../engine/types";
 
 export function fileExists(path: string): Promise<boolean> {
   return fs.promises

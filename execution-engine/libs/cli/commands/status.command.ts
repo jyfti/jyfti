@@ -1,4 +1,4 @@
-import { readJiftConfig, readState, readWorkflowNames } from "../file.service";
+import { readJiftConfig, readState, readWorkflowNames } from "../files/file.service";
 import chalk from "chalk";
 import { State } from "../../engine/types";
 

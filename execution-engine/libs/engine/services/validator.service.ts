@@ -1,5 +1,5 @@
 import Ajv, { ErrorObject } from "ajv";
-import { readWorkflowSchema } from "../../cli/file.service";
+import { readWorkflowSchema } from "../../cli/files/file.service";
 import {
   InputErrors,
   Inputs,

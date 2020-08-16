@@ -1,4 +1,4 @@
-import { readJiftConfig, readState } from "../file.service";
+import { readJiftConfig, readState } from "../files/file.service";
 import { promptWorkflow } from "../inquirer.service";
 
 export async function state(name?: string) {

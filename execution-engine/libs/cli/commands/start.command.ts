@@ -3,7 +3,7 @@ import {
   readWorkflow,
   writeState,
   ensureDirExists,
-} from "../file.service";
+} from "../files/file.service";
 import { createEngine } from "../../engine/services/engine.factory";
 import { last, flatMap, tap } from "rxjs/operators";
 import { from } from "rxjs";

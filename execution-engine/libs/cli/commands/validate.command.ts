@@ -1,4 +1,4 @@
-import { readJiftConfig, readWorkflow } from "../file.service";
+import { readJiftConfig, readWorkflow } from "../files/file.service";
 import { promptWorkflow } from "../inquirer.service";
 import { validateWorkflow } from "../../engine/services/validator.service";
 import { printValidationErrors } from "../print.service";

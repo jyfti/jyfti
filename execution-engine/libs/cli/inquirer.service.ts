@@ -1,5 +1,5 @@
 import { JiftConfig } from "./types/jift-config";
-import { readWorkflowNames } from "./file.service";
+import { readWorkflowNames } from "./files/file.service";
 import inquirer from "inquirer";
 import { Workflow } from "../engine/types";
 
