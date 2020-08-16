@@ -3,6 +3,7 @@ import { Workflow } from "../types/workflow.type";
 import { readWorkflowSchema } from "../../cli/file.service";
 import { InputDefinitions } from "../types/input-definitions.type";
 import { JsonSchema } from "../types/json-schema.type";
+import { Inputs } from "../types/inputs.type";
 
 export async function validateWorkflow(
   workflow: Workflow
@@ -15,8 +16,8 @@ export async function validateWorkflow(
 
 export function validateInputs(
   inputDefinitions: InputDefinitions,
-  inputs: { [fieldName: string]: any }
-): { [fieldName: string]: Ajv.ErrorObject[] } {
+  inputs: Inputs
+): { [name: string]: Ajv.ErrorObject[] } {
   const results = Object.keys(inputDefinitions)
     .map((fieldName) => ({
       fieldName,

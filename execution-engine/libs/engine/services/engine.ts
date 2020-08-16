@@ -2,21 +2,20 @@ import { ExecutionService } from "./execution.service";
 import { Workflow } from "../types/workflow.type";
 import { StepResult } from "../types/step-result.type";
 import { State } from "../types/state.type";
-import { Observable, empty, OperatorFunction, from } from "rxjs";
+import { Observable, empty, OperatorFunction } from "rxjs";
 import { flatMap, startWith, map, scan } from "rxjs/operators";
 import { validateInputs } from "./validator.service";
 import ajv from "ajv";
+import { Inputs } from "../types/inputs.type";
 
-export function init(inputs: { [name: string]: any }): State {
+export function init(inputs: Inputs): State {
   return { path: [0], inputs, evaluations: [] };
 }
 
 export class Engine {
   constructor(private workflow: Workflow, public service: ExecutionService) {}
 
-  validate(inputs: {
-    [name: string]: any;
-  }): { [name: string]: ajv.ErrorObject[] } {
+  validate(inputs: Inputs): { [name: string]: ajv.ErrorObject[] } {
     return validateInputs(this.workflow.inputs, inputs);
   }
 
@@ -25,7 +24,7 @@ export class Engine {
    *
    * @returns A cold observable of all step results. Completes successfully iff the workflow is completing. Errors otherwise.
    */
-  run(inputs: { [name: string]: any }): Observable<StepResult> {
+  run(inputs: Inputs): Observable<StepResult> {
     return this.complete(init(inputs));
   }
 
@@ -75,9 +74,7 @@ export class Engine {
    * Transitions an observable of step results into an observable of states.
    * This is useful, if you do not only want to track results of individual steps, but the accumulated results of all steps up to a specific step.
    */
-  toStates(inputs: {
-    [name: string]: any;
-  }): OperatorFunction<StepResult, State> {
+  toStates(inputs: Inputs): OperatorFunction<StepResult, State> {
     return (stepResult$) =>
       stepResult$.pipe(scan(this.toState.bind(this), init(inputs)));
   }
