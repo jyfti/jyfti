@@ -55,6 +55,7 @@ export async function start(name?: string, inputList?: string[], cmd?: any) {
             ),
             engine.toStates(inputs),
             last(),
+            tap((state) => console.log(printJson(engine.getOutput(state)))),
             flatMap((state) => from(writeState(jiftConfig, name!, state)))
           )
           .subscribe();

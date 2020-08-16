@@ -3,6 +3,7 @@ import { Observable, empty, OperatorFunction } from "rxjs";
 import { flatMap, startWith, map, scan } from "rxjs/operators";
 import { validateInputs } from "./validator.service";
 import { StepResult, InputErrors, Inputs, State, Workflow } from "../types";
+import { evaluate } from "./evaluation.service";
 
 export class Engine {
   constructor(private workflow: Workflow, public service: ExecutionService) {}
@@ -59,6 +60,10 @@ export class Engine {
    */
   isComplete(state: State): boolean {
     return state.path.length == 0;
+  }
+
+  getOutput(state: State): any | undefined {
+    return this.service.toOutput(this.workflow, state);
   }
 
   /**

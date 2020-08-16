@@ -5,6 +5,7 @@ import { PathAdvancementService } from "./path-advancement.service";
 import { StepExecutionService } from "./step-execution.service";
 import { StepResolvementService } from "./step-resolvement.service";
 import { State, Workflow, Evaluation, VariableMap, Inputs } from "../types";
+import { evaluate } from "./evaluation.service";
 
 export class ExecutionService {
   constructor(
@@ -41,6 +42,12 @@ export class ExecutionService {
       ),
       this.toVariableMap(workflow, state)
     );
+  }
+
+  toOutput(workflow: Workflow, state: State): any | undefined {
+    return workflow.output
+      ? evaluate(this.toVariableMap(workflow, state), workflow.output)
+      : undefined;
   }
 
   toVariableMap(workflow: Workflow, state: State): VariableMap {
