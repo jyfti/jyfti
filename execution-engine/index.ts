@@ -35,6 +35,7 @@ program
   .command("run [name] [inputs...]")
   .description("run this workflow")
   .option("-v --verbose", "print evaluations")
+  .option("-i --init", "initializes the run without executing steps")
   .action(run);
 
 program

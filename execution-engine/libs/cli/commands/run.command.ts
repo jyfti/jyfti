@@ -11,6 +11,7 @@ import { promptWorkflow, promptWorkflowInputs } from "../inquirer.service";
 import { printStepResult, printAllInputErrors } from "../print.service";
 import chalk from "chalk";
 import { Workflow, Inputs } from "../../engine/types";
+import { init } from "../../engine/services/engine";
 
 export async function run(name?: string, inputList?: string[], cmd?: any) {
   const jiftConfig = await readJiftConfig();
@@ -37,17 +38,21 @@ export async function run(name?: string, inputList?: string[], cmd?: any) {
       console.error(message);
       process.exit(1);
     } else {
-      engine
-        .run(inputs)
-        .pipe(
-          tap((stepResult) =>
-            console.log(printStepResult(cmd?.verbose, stepResult))
-          ),
-          engine.toStates(inputs),
-          last(),
-          flatMap((state) => from(writeState(jiftConfig, name!, state)))
-        )
-        .subscribe();
+      if (cmd?.init) {
+        await writeState(jiftConfig, name, init(inputs));
+      } else {
+        engine
+          .run(inputs)
+          .pipe(
+            tap((stepResult) =>
+              console.log(printStepResult(cmd?.verbose, stepResult))
+            ),
+            engine.toStates(inputs),
+            last(),
+            flatMap((state) => from(writeState(jiftConfig, name!, state)))
+          )
+          .subscribe();
+      }
     }
   }
 }
