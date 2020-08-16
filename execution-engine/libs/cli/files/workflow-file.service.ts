@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as nodePath from "path";
 import { JiftConfig } from "../types/jift-config";
-import { Workflow } from "../../engine/types";
+import { Workflow, JsonSchema } from "../../engine/types";
 import { readJson, fileExists } from "./file.service";
 import { join } from "path";
 import chalk from "chalk";
@@ -38,9 +38,18 @@ export async function readWorkflowOrTerminate(
   return workflow;
 }
 
-export function readWorkflowSchema(): Promise<Workflow> {
+export function readWorkflowSchema(): Promise<JsonSchema> {
   // TODO Make flexible
   return readJson("../workflow-schema.json");
+}
+
+export async function readWorkflowSchemaOrTerminate(): Promise<JsonSchema> {
+  const schema = await readWorkflowSchema().catch(() => undefined);
+  if (!schema) {
+    console.error(chalk.red("Workflow schema can not be found."));
+    process.exit(1);
+  }
+  return schema;
 }
 
 export function workflowExists(

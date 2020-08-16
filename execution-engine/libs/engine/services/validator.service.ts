@@ -1,6 +1,4 @@
 import Ajv, { ErrorObject } from "ajv";
-// TODO Remove dependency to cli
-import { readWorkflowSchema } from "../../cli/files/workflow-file.service";
 import {
   InputErrors,
   Inputs,
@@ -9,11 +7,12 @@ import {
   JsonSchema,
 } from "../types";
 
-export async function validateWorkflow(
-  workflow: Workflow
-): Promise<ErrorObject[]> {
+export function validateWorkflow(
+  workflow: Workflow,
+  schema: JsonSchema
+): ErrorObject[] {
   const ajv = new Ajv({ allErrors: true });
-  const validate = ajv.compile(await readWorkflowSchema());
+  const validate = ajv.compile(schema);
   const valid = validate(workflow);
   return validate.errors || [];
 }
