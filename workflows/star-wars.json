@@ -1,5 +1,5 @@
 {
-  "$schema": "https://raw.githubusercontent.com/fboeller/jift/master/workflow-schema.json",
+  "$schema": "https://raw.githubusercontent.com/jyfti/jyfti/master/workflow-schema.json",
   "name": "Get some Star Wars planets",
   "steps": [
     {

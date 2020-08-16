@@ -1,16 +1,16 @@
 {
-  "$schema": "https://raw.githubusercontent.com/fboeller/jift/master/workflow-schema.json",
+  "$schema": "https://raw.githubusercontent.com/jyfti/jyfti/master/workflow-schema.json",
   "name": "Get GitHub issues of a repo",
   "inputs": {
     "org": {
       "type": "string",
       "description": "A GitHub organization",
-      "default": "fboeller"
+      "default": "jyfti"
     },
     "repo": {
       "type": "string",
       "description": "A GitHub repository",
-      "default": "jift"
+      "default": "jyfti"
     }
   },
   "output": {
