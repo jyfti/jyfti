@@ -21,7 +21,7 @@ program.version("0.0.1");
 
 program
   .command("init")
-  .description("init this directory for jift")
+  .description("init this directory for jyfti")
   .action(init);
 
 program.command("list").description("list workflows").action(list);

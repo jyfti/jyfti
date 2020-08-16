@@ -48,7 +48,7 @@ export class HttpService {
     return {
       ...requestInfo,
       headers: {
-        "User-Agent": "jift/0.0.1",
+        "User-Agent": "jyfti/0.0.1",
         ...requestInfo.headers,
       },
     };

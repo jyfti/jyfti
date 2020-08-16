@@ -1,27 +1,27 @@
 {
   "name": "@jyfti/cli",
   "version": "0.0.1",
-  "description": "Jift is a json-based, light-weight workflow engine for software engineers. Jift makes it easy to connect APIs via transparently executed workflows.",
+  "description": "Jyfti is a json-based, light-weight workflow engine for software engineers. Jyfti makes it easy to connect APIs via transparently executed workflows.",
   "main": "index.ts",
   "bin": {
-    "jift-cli": "build/index.js"
+    "jyfti": "build/index.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/fboeller/jift.git"
+    "url": "git+https://github.com/jyfti/jyfti.git"
   },
   "author": "Fabian Böller",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/fboeller/jift/issues"
+    "url": "https://github.com/jyfti/jyfti/issues"
   },
   "keywords": [
-    "jift",
-    "jift-cli",
+    "jyfti",
+    "jyfti-cli",
     "workflow",
     "engine"
   ],
-  "homepage": "https://github.com/fboeller/jift",
+  "homepage": "https://github.com/jyfti/jyfti",
   "scripts": {
     "test": "jest",
     "dev": "nodemon",

@@ -2,7 +2,7 @@ import * as fs from "fs";
 import { Config } from "../types/config";
 import { readJson } from "./file.service";
 
-export const configName: string = "jift.json";
+export const configName: string = "jyfti.json";
 
 export const defaultConfig: Config = {
   sourceRoot: "./src",

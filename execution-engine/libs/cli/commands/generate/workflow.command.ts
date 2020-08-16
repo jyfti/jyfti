@@ -34,18 +34,18 @@ export async function generateWorkflow(name?: string) {
 export function createExampleWorkflow(): Workflow {
   return {
     $schema:
-      "https://raw.githubusercontent.com/fboeller/jift/master/workflow-schema.json",
+      "https://raw.githubusercontent.com/jyfti/jyfti/master/workflow-schema.json",
     name: "Retrieve README file of a GitHub repository",
     inputs: {
       org: {
         type: "string",
         description: "The GitHub organization",
-        default: "fboeller",
+        default: "jyfti",
       },
       repo: {
         type: "string",
         description: "The GitHub repository",
-        default: "jift",
+        default: "jyfti",
       },
     },
     output: {
