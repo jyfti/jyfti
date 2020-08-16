@@ -34,19 +34,20 @@ program
 program
   .command("start [name] [inputs...]")
   .description("start this workflow")
-  .option("-v --verbose", "print evaluations")
+  .option("-v --verbose", "print step results")
   .option("-c --complete", "run the workflow to completion")
   .action(start);
 
 program
   .command("complete [name]")
   .description("complete this workflow from its current state")
-  .option("-v --verbose", "print evaluations")
+  .option("-v --verbose", "print step results")
   .action(complete);
 
 program
   .command("step [name]")
   .description("execute the next step of this workflow")
+  .option("-v --verbose", "print step result")
   .action(step);
 
 program

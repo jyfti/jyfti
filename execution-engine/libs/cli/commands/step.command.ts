@@ -1,13 +1,14 @@
 import { ensureDirExists } from "../files/file.service";
 import { readConfig } from "../files/config-file.service";
 import { createEngine } from "../../engine/services/engine.factory";
-import { map, flatMap } from "rxjs/operators";
+import { map, flatMap, tap } from "rxjs/operators";
 import { from } from "rxjs";
 import { promptWorkflow } from "../inquirer.service";
 import { readWorkflowOrTerminate } from "../files/workflow-file.service";
 import { writeState, readStateOrTerminate } from "../files/state-file.service";
+import { printStepResult } from "../print.service";
 
-export async function step(name?: string) {
+export async function step(name?: string, cmd?: any) {
   const config = await readConfig();
   if (!name) {
     name = await promptWorkflow(
@@ -26,7 +27,10 @@ export async function step(name?: string) {
       engine
         .step(state)
         .pipe(
-          map((evaluation) => engine.toState(state, evaluation)),
+          tap((stepResult) =>
+            console.log(printStepResult(cmd?.verbose, stepResult))
+          ),
+          map((stepResult) => engine.toState(state, stepResult)),
           flatMap((state) => from(writeState(config, name!, state)))
         )
         .subscribe();
