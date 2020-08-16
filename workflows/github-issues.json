@@ -4,11 +4,13 @@
   "inputs": {
     "org": {
       "type": "string",
-      "description": "An organization of a GitHub repository"
+      "description": "A GitHub organization",
+      "default": "fboeller"
     },
     "repo": {
       "type": "string",
-      "description": "A GitHub repository"
+      "description": "A GitHub repository",
+      "default": "jift"
     }
   },
   "steps": [

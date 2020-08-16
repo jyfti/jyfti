@@ -22,15 +22,15 @@ export async function promptWorkflow(
 export async function promptWorkflowInputs(
   workflow: Workflow
 ): Promise<string[]> {
+  const inputs = workflow?.inputs || {};
   // TODO This implicitly relies on a specific structure in the schema
   const answers = await inquirer.prompt(
-    Object.keys(workflow?.inputs || {}).map((fieldName) => ({
+    Object.keys(inputs).map((fieldName) => ({
       name: fieldName,
-      message: (workflow?.inputs || {})[fieldName]?.description,
+      message: inputs[fieldName]?.description,
       type: "string",
+      default: inputs[fieldName]?.default,
     }))
   );
-  return Object.keys(workflow?.inputs || {}).map(
-    (fieldName) => answers[fieldName]
-  );
+  return Object.keys(inputs).map((fieldName) => answers[fieldName]);
 }
