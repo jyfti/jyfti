@@ -1,12 +1,4 @@
 import jsone from "json-e";
-import {
-  filter as _filter,
-  flow,
-  isArray,
-  isNil,
-  reduce as _reduce,
-  zip,
-} from "lodash/fp";
 import { Observable, of } from "rxjs";
 import { catchError, flatMap, map } from "rxjs/operators";
 import * as url from "url";
@@ -33,11 +25,11 @@ export class StepExecutionService {
     localEvaluations: Evaluation | Evaluations,
     variables: VariableMap
   ): Observable<Evaluation> {
-    if (!isNil(step?.request)) {
+    if (step?.request) {
       return this.executeRequestStep(step.request, variables);
-    } else if (!isNil(step?.expression)) {
+    } else if (step?.expression) {
       return this.executeExpressionStep(step.expression, variables);
-    } else if (!isNil(step?.for)) {
+    } else if (step?.for) {
       return this.evaluateLoopReturn(localEvaluations, step);
     } else {
       return of({
@@ -71,17 +63,18 @@ export class StepExecutionService {
     localEvaluations: Evaluation | Evaluations,
     step: Step
   ): Observable<Evaluation[]> {
-    if (!isNil(localEvaluations) && !isArray(localEvaluations)) {
+    if (localEvaluations && !Array.isArray(localEvaluations)) {
       throw new Error(
         "Expected list of loop iteration evaluations, but got a single evaluation"
       );
     }
     const loopReturn: Evaluation[] = (localEvaluations || [])
-      .map((loopIterationEvaluation) =>
+      .map((loopIterationEvaluation: any) =>
         this.toVariableMap(step.for!.do, loopIterationEvaluation)
       )
       .map(
-        (loopIterationVariables) => loopIterationVariables[step.for!.return]
+        (loopIterationVariables: any) =>
+          loopIterationVariables[step.for!.return]
       );
     return of(loopReturn);
   }
@@ -103,15 +96,15 @@ export class StepExecutionService {
   }
 
   toVariableMap(steps: Step[], evaluations: Evaluation[]): VariableMap {
-    return flow(
-      _filter(([step, evaluation]) => !isNil(step) && !isNil(evaluation)),
-      _reduce(
-        (variables: VariableMap, [step, evaluation]) => ({
+    return steps
+      .map((step, index) => ({ step, evaluation: evaluations[index] }))
+      .filter(({ evaluation }) => evaluation)
+      .reduce(
+        (variables: VariableMap, { step, evaluation }) => ({
           ...variables,
           [step.assignTo]: evaluation,
         }),
         {}
-      )
-    )(zip(steps, evaluations));
+      );
   }
 }
