@@ -1,6 +1,8 @@
+import { JsonExpression } from "./step.type";
+
 export interface HttpRequestTemplate {
-  method: string;
-  url: string;
-  body?: string;
-  headers?: string;
+  method: JsonExpression;
+  url: JsonExpression;
+  body?: JsonExpression;
+  headers?: JsonExpression;
 }

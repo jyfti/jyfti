@@ -12,7 +12,7 @@ import { catchError, flatMap, map } from "rxjs/operators";
 import * as url from "url";
 
 import { HttpService } from "./http.service";
-import { interpolate, evaluate } from "./evaluation.service";
+import { evaluate } from "./evaluation.service";
 import {
   Step,
   Evaluation,
@@ -90,11 +90,11 @@ export class StepExecutionService {
     template: HttpRequestTemplate,
     variables: VariableMap
   ): HttpRequest<any> {
-    const requestUrl = interpolate(variables, template.url);
+    const requestUrl = evaluate(variables, template.url);
     const parsedRequestUrl = url.parse(requestUrl, true);
     return {
       protocol: (parsedRequestUrl.protocol || "https:") as HttpProtocol,
-      method: template.method as HttpMethod,
+      method: evaluate(variables, template.method) as HttpMethod,
       hostname: parsedRequestUrl.hostname || "",
       path: parsedRequestUrl.path || "",
       body: evaluate(variables, template.body),
