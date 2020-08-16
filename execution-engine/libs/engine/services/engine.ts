@@ -8,11 +8,15 @@ export class Engine {
   constructor(private workflow: Workflow, public service: ExecutionService) {}
 
   validate(inputs: Inputs): InputErrors {
-    return validateInputs(this.workflow?.inputs || {}, inputs);
+    return validateInputs(this.workflow.inputs || {}, inputs);
   }
 
   init(inputs: Inputs): State {
-    return { path: [0], inputs, evaluations: [] };
+    return {
+      path: [0],
+      inputs: { ...this.service.inputDefaults(this.workflow), ...inputs },
+      evaluations: [],
+    };
   }
 
   /**

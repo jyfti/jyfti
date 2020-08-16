@@ -4,7 +4,7 @@ import { EvaluationResolvementService } from "./evaluation-resolvement.service";
 import { PathAdvancementService } from "./path-advancement.service";
 import { StepExecutionService } from "./step-execution.service";
 import { StepResolvementService } from "./step-resolvement.service";
-import { State, Workflow, Evaluation, VariableMap } from "../types";
+import { State, Workflow, Evaluation, VariableMap, Inputs } from "../types";
 
 export class ExecutionService {
   constructor(
@@ -51,5 +51,16 @@ export class ExecutionService {
         state.evaluations
       ),
     };
+  }
+
+  inputDefaults(workflow: Workflow): Inputs {
+    const inputs = workflow.inputs || {};
+    return Object.keys(inputs)
+      .map((fieldName) => ({ fieldName, default: inputs[fieldName].default }))
+      .filter((input) => input.default)
+      .reduce(
+        (acc, input) => ({ ...acc, [input.fieldName]: input.default }),
+        {}
+      );
   }
 }
