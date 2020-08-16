@@ -14,6 +14,7 @@ import {
   vars,
 } from "./commands";
 import { addGenerateSubCommands } from "./generate";
+import { addRunSubCommands } from "./run";
 
 export function createProgram(): commander.Command {
   const program = new Command();
@@ -32,48 +33,9 @@ export function createProgram(): commander.Command {
     .action(clean);
 
   program
-    .command("start [name] [inputs...]")
-    .description("start this workflow")
-    .option("-v --verbose", "print step results")
-    .option("-c --complete", "run the workflow to completion")
-    .action(start);
-
-  program
-    .command("complete [name]")
-    .description("complete this workflow from its current state")
-    .option("-v --verbose", "print step results")
-    .action(complete);
-
-  program
-    .command("step [name]")
-    .description("execute the next step of this workflow")
-    .option("-v --verbose", "print step result")
-    .action(step);
-
-  program
-    .command("reset [name]")
-    .description("reset the state of this workflow")
-    .action(reset);
-
-  program
     .command("view [name]")
     .description("print this workflow")
     .action(view);
-
-  program
-    .command("state [name]")
-    .description("print the state of this workflow")
-    .action(state);
-
-  program
-    .command("vars [name]")
-    .description("print the variables of this workflow")
-    .action(vars);
-
-  program
-    .command("status [name]")
-    .description("print the status of the workflow execution")
-    .action(status);
 
   program
     .command("validate [name]")
@@ -86,6 +48,10 @@ export function createProgram(): commander.Command {
     .description("generate parts of a workflow");
 
   addGenerateSubCommands(generate);
+
+  const run = program.command("run").description("run a workflow");
+
+  addRunSubCommands(run);
 
   return program;
 }
