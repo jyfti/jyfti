@@ -37,11 +37,12 @@ export async function run(name?: string, inputList?: string[], cmd?: any) {
       console.error(message);
       process.exit(1);
     } else {
+      const initialState = engine.init(inputs);
       if (cmd?.init) {
-        await writeState(jiftConfig, name, engine.init(inputs));
+        await writeState(jiftConfig, name, initialState);
       } else {
         engine
-          .run(inputs)
+          .complete(initialState)
           .pipe(
             tap((stepResult) =>
               console.log(printStepResult(cmd?.verbose, stepResult))

@@ -16,15 +16,6 @@ export class Engine {
   }
 
   /**
-   * Runs the workflow from start to completion.
-   *
-   * @returns A cold observable of all step results. Completes successfully iff the workflow is completing. Errors otherwise.
-   */
-  run(inputs: Inputs): Observable<StepResult> {
-    return this.complete(this.init(inputs));
-  }
-
-  /**
    * Runs the workflow from the given state to completion.
    *
    * @param state The state to begin from.

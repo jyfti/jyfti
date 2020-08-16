@@ -48,7 +48,7 @@ describe("Engine", () => {
   });
 
   it("the execution of steps should progress through a small workflow and eventually terminate", () => {
-    expect(engine.run({})).toBeObservable(
+    expect(engine.complete(engine.init({}))).toBeObservable(
       cold("(abc|)", {
         a: { path: [0], evaluation: 5 },
         b: { path: [1], evaluation: 10 },
