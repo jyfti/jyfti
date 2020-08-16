@@ -28,10 +28,6 @@ export const defaultJiftConfig: JiftConfig = {
   outRoot: "./out",
 };
 
-export function resolveWorkflow(jiftConfig: JiftConfig, name: string) {
-  return nodePath.resolve(jiftConfig.sourceRoot, name + ".json");
-}
-
 export function resolveState(jiftConfig: JiftConfig, name: string) {
   return nodePath.resolve(jiftConfig.outRoot, name + ".state.json");
 }
@@ -43,27 +39,6 @@ export function readJiftConfig(): Promise<JiftConfig> {
 export function writeJiftConfig(jiftConfig: JiftConfig): Promise<any> {
   const data = JSON.stringify(jiftConfig, null, 2);
   return fs.promises.writeFile(jiftConfigName, data, "utf8");
-}
-
-export async function readWorkflowNames(
-  jiftConfig: JiftConfig
-): Promise<string[]> {
-  const fileNames = await fs.promises.readdir(jiftConfig.sourceRoot);
-  return fileNames
-    .filter((fileName) => fileName.endsWith(".json"))
-    .map((fileName) => fileName.substring(0, fileName.length - ".json".length));
-}
-
-export function readWorkflow(
-  jiftConfig: JiftConfig,
-  name: string
-): Promise<Workflow> {
-  return readJson(resolveWorkflow(jiftConfig, name));
-}
-
-export function readWorkflowSchema(): Promise<Workflow> {
-  // TODO Make flexible
-  return readJson("../workflow-schema.json");
 }
 
 export function readState(
@@ -91,20 +66,4 @@ export function deleteState(
 
 export async function deleteAllStates(jiftConfig: JiftConfig): Promise<any> {
   return fs.promises.rmdir(jiftConfig.outRoot, { recursive: true });
-}
-
-export function workflowExists(
-  jiftConfig: JiftConfig,
-  name: string
-): Promise<boolean> {
-  return fileExists(resolveWorkflow(jiftConfig, name));
-}
-
-export function writeWorkflow(
-  jiftConfig: JiftConfig,
-  name: string,
-  workflow: Workflow
-): Promise<any> {
-  const data = JSON.stringify(workflow, null, 2);
-  return fs.promises.writeFile(resolveWorkflow(jiftConfig, name), data, "utf8");
 }

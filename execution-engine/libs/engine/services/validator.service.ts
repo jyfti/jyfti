@@ -1,5 +1,6 @@
 import Ajv, { ErrorObject } from "ajv";
-import { readWorkflowSchema } from "../../cli/files/file.service";
+// TODO Remove dependency to cli
+import { readWorkflowSchema } from "../../cli/files/workflow-file.service";
 import {
   InputErrors,
   Inputs,

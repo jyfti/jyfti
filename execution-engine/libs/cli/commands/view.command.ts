@@ -1,10 +1,14 @@
-import { readJiftConfig, readWorkflow } from "../files/file.service";
+import { readJiftConfig } from "../files/file.service";
 import { promptWorkflow } from "../inquirer.service";
+import { readWorkflow } from "../files/workflow-file.service";
 
 export async function view(name?: string) {
   const jiftConfig = await readJiftConfig();
   if (!name) {
-    name = await promptWorkflow(jiftConfig, "Which workflow do you want to view?");
+    name = await promptWorkflow(
+      jiftConfig,
+      "Which workflow do you want to view?"
+    );
   }
   if (name) {
     const message = await readWorkflow(jiftConfig, name)

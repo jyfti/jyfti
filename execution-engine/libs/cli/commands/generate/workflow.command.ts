@@ -1,10 +1,10 @@
-import {
-  readJiftConfig,
-  workflowExists,
-  writeWorkflow,
-} from "../../files/file.service";
+import { readJiftConfig } from "../../files/file.service";
 import inquirer from "inquirer";
 import { Workflow } from "../../../engine/types";
+import {
+  workflowExists,
+  writeWorkflow,
+} from "../../files/workflow-file.service";
 
 export async function generateWorkflow(name?: string) {
   const jiftConfig = await readJiftConfig();

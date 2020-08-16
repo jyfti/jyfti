@@ -1,7 +1,8 @@
-import { readJiftConfig, readWorkflow } from "../files/file.service";
+import { readJiftConfig } from "../files/file.service";
 import { promptWorkflow } from "../inquirer.service";
 import { validateWorkflow } from "../../engine/services/validator.service";
 import { printValidationErrors } from "../print.service";
+import { readWorkflow } from "../files/workflow-file.service";
 
 export async function validate(name?: string) {
   const jiftConfig = await readJiftConfig();

@@ -1,4 +1,5 @@
-import { readJiftConfig, readWorkflowNames } from "../files/file.service";
+import { readJiftConfig } from "../files/file.service";
+import { readWorkflowNames } from "../files/workflow-file.service";
 
 export async function list() {
   const jiftConfig = await readJiftConfig();
