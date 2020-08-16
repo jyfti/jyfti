@@ -1,8 +1,7 @@
 import * as fs from "fs";
 import * as nodePath from "path";
 import { JiftConfig } from "./types/jift-config";
-import { State } from "../engine/types/state.type";
-import { Workflow } from "../engine/types/workflow.type";
+import { State, Workflow } from "../engine/types";
 import { Dictionary } from "lodash";
 import { init } from "../engine/services/engine";
 

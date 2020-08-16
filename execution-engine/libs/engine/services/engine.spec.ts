@@ -1,5 +1,4 @@
 import { cold } from "jest-marbles";
-import { Workflow } from "../types/workflow.type";
 import { HttpService } from "./http.service";
 import { of } from "rxjs";
 import { ExecutionService } from "./execution.service";
@@ -8,6 +7,7 @@ import { EvaluationResolvementService } from "./evaluation-resolvement.service";
 import { PathAdvancementService } from "./path-advancement.service";
 import { StepResolvementService } from "./step-resolvement.service";
 import { Engine } from "./engine";
+import { Workflow } from "../types";
 
 describe("Engine", () => {
   const httpClientStub: Partial<HttpService> = {

@@ -1,6 +1,4 @@
-import { Workflow } from "../types/workflow.type";
-import { Path } from "../types/path.type";
-import { Step } from "../types/step.type";
+import { Workflow, Path, Step } from "../types";
 
 export class StepResolvementService {
   constructor() {}

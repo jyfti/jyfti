@@ -1,5 +1,5 @@
 import { StepResolvementService } from "./step-resolvement.service";
-import { Step } from "../types/step.type";
+import { Step } from "../types";
 
 describe("StepResolvementService", () => {
   let service = new StepResolvementService();

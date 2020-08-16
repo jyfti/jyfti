@@ -3,8 +3,8 @@ import {
   workflowExists,
   writeWorkflow,
 } from "../../file.service";
-import { Workflow } from "../../../engine/types/workflow.type";
 import inquirer from "inquirer";
+import { Workflow } from "../../../engine/types";
 
 export async function generateWorkflow(name?: string) {
   const jiftConfig = await readJiftConfig();

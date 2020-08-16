@@ -8,14 +8,9 @@ import { createEngine } from "../../engine/services/engine.factory";
 import { last, flatMap, tap } from "rxjs/operators";
 import { from } from "rxjs";
 import { promptWorkflow, promptWorkflowInputs } from "../inquirer.service";
-import {
-  printStepResult,
-  printInputErrors,
-  printAllInputErrors,
-} from "../print.service";
-import { Workflow } from "../../engine/types/workflow.type";
+import { printStepResult, printAllInputErrors } from "../print.service";
 import chalk from "chalk";
-import { Inputs } from "libs/engine/types/inputs.type";
+import { Workflow, Inputs } from "../../engine/types";
 
 export async function run(name?: string, inputList?: string[], cmd?: any) {
   const jiftConfig = await readJiftConfig();
@@ -58,7 +53,7 @@ export async function run(name?: string, inputList?: string[], cmd?: any) {
 }
 
 export function createInputs(workflow: Workflow, inputList: string[]): Inputs {
-  return Object.keys(workflow.inputs).reduce(
+  return Object.keys(workflow?.inputs || {}).reduce(
     (inputs, inputName, index) => ({
       ...inputs,
       [inputName]: inputList[index],

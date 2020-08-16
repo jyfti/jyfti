@@ -1,6 +1,6 @@
 import { readJiftConfig, readState, readWorkflowNames } from "../file.service";
 import chalk from "chalk";
-import { State } from "../../engine/types/state.type";
+import { State } from "../../engine/types";
 
 export async function status(name: string) {
   const jiftConfig = await readJiftConfig();

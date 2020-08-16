@@ -1,6 +1,6 @@
-import { VariableMap } from "../types/variable-map.type";
 import jsone from "json-e";
 import { isNil } from "lodash/fp";
+import { VariableMap } from "../types";
 
 export function interpolate(variables: VariableMap, str: string) {
   const identifiers = Object.keys(variables);

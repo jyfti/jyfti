@@ -1,6 +1,5 @@
 import { PathAdvancementService } from "./path-advancement.service";
-import { Workflow } from "../types/workflow.type";
-import { Step } from "../types/step.type";
+import { Step, Workflow } from "../types";
 
 describe("PathAdvancementService", () => {
   let service = new PathAdvancementService();

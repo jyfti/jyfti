@@ -1,7 +1,5 @@
 import { dropRight, tail } from "lodash/fp";
-
-import { Path } from "../types/path.type";
-import { Evaluation, Evaluations } from "../types/evaluations.type";
+import { Evaluation, Evaluations, Path } from "../types";
 
 export class EvaluationResolvementService {
   constructor() {}

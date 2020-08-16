@@ -1,10 +1,12 @@
 import Ajv, { ErrorObject } from "ajv";
-import { Workflow } from "../types/workflow.type";
 import { readWorkflowSchema } from "../../cli/file.service";
-import { InputDefinitions } from "../types/input-definitions.type";
-import { JsonSchema } from "../types/json-schema.type";
-import { Inputs } from "../types/inputs.type";
-import { InputErrors } from "../types/input-errors.type";
+import {
+  InputErrors,
+  Inputs,
+  Workflow,
+  InputDefinitions,
+  JsonSchema,
+} from "../types";
 
 export async function validateWorkflow(
   workflow: Workflow

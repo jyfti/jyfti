@@ -1,9 +1,5 @@
 import { concat, get, isNil, tail } from "lodash/fp";
-
-import { Workflow } from "../types/workflow.type";
-import { Step } from "../types/step.type";
-import { VariableMap } from "../types/variable-map.type";
-import { Path } from "../types/path.type";
+import { Workflow, Path, VariableMap, Step } from "../types";
 
 export class PathAdvancementService {
   constructor() {}

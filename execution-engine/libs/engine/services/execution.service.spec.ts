@@ -2,12 +2,12 @@ import { cold } from "jest-marbles";
 import { of } from "rxjs";
 
 import { ExecutionService } from "./execution.service";
-import { Workflow } from "../types/workflow.type";
 import { StepExecutionService } from "./step-execution.service";
 import { HttpService } from "./http.service";
 import { EvaluationResolvementService } from "./evaluation-resolvement.service";
 import { PathAdvancementService } from "./path-advancement.service";
 import { StepResolvementService } from "./step-resolvement.service";
+import { Workflow } from "../types";
 
 describe("ExecutionService", () => {
   const httpClientStub: Partial<HttpService> = {

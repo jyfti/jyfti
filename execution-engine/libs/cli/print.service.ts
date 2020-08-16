@@ -1,8 +1,6 @@
 import chalk from "chalk";
-import { StepResult } from "../engine/types/step-result.type";
 import ajv from "ajv";
-import { Inputs } from "../engine/types/inputs.type";
-import { InputErrors } from "../engine/types/input-errors.type";
+import { StepResult, InputErrors, Inputs } from "../engine/types";
 
 export function printStepResult(
   verbose: boolean,

@@ -11,17 +11,19 @@ import { Observable, of } from "rxjs";
 import { catchError, flatMap, map } from "rxjs/operators";
 import * as url from "url";
 
-import { HttpRequestTemplate } from "../types/http-request-template.type";
-import { JsonExpression, Step } from "../types/step.type";
-import { VariableMap } from "../types/variable-map.type";
-import { Evaluations, Evaluation } from "../types/evaluations.type";
 import { HttpService } from "./http.service";
-import {
-  HttpRequest,
-  HttpMethod,
-  HttpProtocol,
-} from "../types/http-request.type";
 import { interpolate, evaluate } from "./evaluation.service";
+import {
+  Step,
+  Evaluation,
+  Evaluations,
+  VariableMap,
+  HttpRequestTemplate,
+  JsonExpression,
+  HttpRequest,
+  HttpProtocol,
+  HttpMethod,
+} from "../types";
 
 export class StepExecutionService {
   constructor(private http: HttpService) {}

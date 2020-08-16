@@ -1,6 +1,6 @@
 import { StepExecutionService } from "./step-execution.service";
 import { of } from "rxjs";
-import { Step } from "../types/step.type";
+import { Step } from "../types";
 import { HttpService } from "./http.service";
 
 describe("StepExecutionService", () => {

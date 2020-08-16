@@ -1,5 +1,5 @@
 import { from, Observable } from "rxjs";
-import { HttpRequest } from "../types/http-request.type";
+import { HttpRequest } from "../types";
 
 export class HttpService {
   readonly timeoutMillis = 10000;
