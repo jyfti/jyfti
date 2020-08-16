@@ -1,0 +1,49 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jyfti/jyfti/master/workflow-schema.json",
+  "name": "Write open PRs to Slack",
+  "inputs": {
+    "org": {
+      "type": "string",
+      "description": "The GitHub organization",
+      "default": "jyfti"
+    },
+    "repo": {
+      "type": "string",
+      "description": "The GitHub repository",
+      "default": "jyfti"
+    }
+  },
+  "output": {
+    "$eval": "slackResponse"
+  },
+  "steps": [
+    {
+      "assignTo": "pullResponse",
+      "request": {
+        "method": "GET",
+        "url": "https://api.github.com/repos/${org}/${repo}/pulls"
+      }
+    },
+    {
+      "assignTo": "titles",
+      "expression": {
+        "$map": {
+          "$eval": "pullResponse.body"
+        },
+        "each(x)": {
+          "$eval": "x.title"
+        }
+      }
+    },
+    {
+      "assignTo": "slackResponse",
+      "request": {
+        "method": "POST",
+        "url": "https://hooks.slack.com/services/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",
+        "body": {
+          "text": "${join(titles, '\n')}"
+        }
+      }
+    }
+  ]
+}

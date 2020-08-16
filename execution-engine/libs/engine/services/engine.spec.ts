@@ -11,7 +11,7 @@ import { Workflow } from "../types";
 
 describe("Engine", () => {
   const httpClientStub: Partial<HttpService> = {
-    request: () => of({ body: { field: "value" } }),
+    request: (request) => of({ request, body: { field: "value" } }),
   };
   const service = new ExecutionService(
     new StepExecutionService(httpClientStub as HttpService),

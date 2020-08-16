@@ -5,7 +5,7 @@ import { HttpService } from "./http.service";
 
 describe("StepExecutionService", () => {
   const httpClientStub: Partial<HttpService> = {
-    request: () => of({ body: { field: "value" } }),
+    request: (request) => of({ request, body: { field: "value" } }),
   };
 
   let service = new StepExecutionService(httpClientStub as HttpService);
