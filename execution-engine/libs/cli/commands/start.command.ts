@@ -12,7 +12,7 @@ import {
 } from "../print.service";
 import chalk from "chalk";
 import { Workflow, Inputs } from "../../engine/types";
-import { readWorkflow } from "../files/workflow-file.service";
+import { readWorkflowOrTerminate } from "../files/workflow-file.service";
 import { writeState } from "../files/state-file.service";
 
 export async function start(name?: string, inputList?: string[], cmd?: any) {
@@ -25,7 +25,7 @@ export async function start(name?: string, inputList?: string[], cmd?: any) {
   }
   if (name) {
     await ensureDirExists(jiftConfig.outRoot);
-    const workflow = await readWorkflow(jiftConfig, name);
+    const workflow = await readWorkflowOrTerminate(jiftConfig, name);
     if ((inputList || []).length === 0) {
       inputList = await promptWorkflowInputs(workflow);
     }

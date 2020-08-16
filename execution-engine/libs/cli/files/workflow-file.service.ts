@@ -3,6 +3,8 @@ import * as nodePath from "path";
 import { JiftConfig } from "../types/jift-config";
 import { Workflow } from "../../engine/types";
 import { readJson, fileExists } from "./file.service";
+import { join } from "path";
+import chalk from "chalk";
 
 export function resolveWorkflow(jiftConfig: JiftConfig, name: string) {
   return nodePath.resolve(jiftConfig.sourceRoot, name + ".json");
@@ -22,6 +24,18 @@ export function readWorkflow(
   name: string
 ): Promise<Workflow> {
   return readJson(resolveWorkflow(jiftConfig, name));
+}
+
+export async function readWorkflowOrTerminate(
+  jiftConfig: JiftConfig,
+  name: string
+): Promise<Workflow> {
+  const workflow = await readWorkflow(jiftConfig, name).catch(() => undefined);
+  if (!workflow) {
+    console.error(chalk.red("Workflow does not exist."));
+    process.exit(1);
+  }
+  return workflow;
 }
 
 export function readWorkflowSchema(): Promise<Workflow> {

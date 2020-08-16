@@ -3,6 +3,7 @@ import * as nodePath from "path";
 import { JiftConfig } from "../types/jift-config";
 import { State } from "../../engine/types";
 import { readJson } from "./file.service";
+import chalk from "chalk";
 
 export function resolveState(jiftConfig: JiftConfig, name: string) {
   return nodePath.resolve(jiftConfig.outRoot, name + ".state.json");
@@ -13,6 +14,18 @@ export function readState(
   name: string
 ): Promise<State> {
   return readJson(resolveState(jiftConfig, name));
+}
+
+export async function readStateOrTerminate(
+  jiftConfig: JiftConfig,
+  name: string
+): Promise<State> {
+  const state = await readState(jiftConfig, name).catch(() => undefined);
+  if (!state) {
+    console.error(chalk.red("Workflow execution is not running."));
+    process.exit(1);
+  }
+  return state;
 }
 
 export function writeState(

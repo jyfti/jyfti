@@ -1,6 +1,7 @@
 import { readJiftConfig } from "../files/config-file.service";
 import { promptWorkflow } from "../inquirer.service";
-import { readWorkflow } from "../files/workflow-file.service";
+import { readWorkflowOrTerminate } from "../files/workflow-file.service";
+import { printJson } from "../print.service";
 
 export async function view(name?: string) {
   const jiftConfig = await readJiftConfig();
@@ -11,9 +12,7 @@ export async function view(name?: string) {
     );
   }
   if (name) {
-    const message = await readWorkflow(jiftConfig, name)
-      .then((state) => JSON.stringify(state, null, 2))
-      .catch(() => "This workflow does not exist.");
-    console.log(message);
+    const workflow = await readWorkflowOrTerminate(jiftConfig, name);
+    console.log(printJson(workflow));
   }
 }

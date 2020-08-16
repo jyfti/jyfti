@@ -5,8 +5,12 @@ import { map, flatMap } from "rxjs/operators";
 import { from } from "rxjs";
 import { promptWorkflow } from "../inquirer.service";
 import chalk from "chalk";
-import { readWorkflow } from "../files/workflow-file.service";
-import { readState, writeState } from "../files/state-file.service";
+import { readWorkflowOrTerminate } from "../files/workflow-file.service";
+import {
+  readState,
+  writeState,
+  readStateOrTerminate,
+} from "../files/state-file.service";
 
 export async function step(name?: string) {
   const jiftConfig = await readJiftConfig();
@@ -18,23 +22,19 @@ export async function step(name?: string) {
   }
   if (name) {
     await ensureDirExists(jiftConfig.outRoot);
-    const workflow = await readWorkflow(jiftConfig, name);
-    const state = await readState(jiftConfig, name).catch(() => undefined);
-    if (!state) {
-      console.error(chalk.red("Workflow execution is not running"));
+    const workflow = await readWorkflowOrTerminate(jiftConfig, name);
+    const state = await readStateOrTerminate(jiftConfig, name);
+    const engine = createEngine(workflow);
+    if (engine.isComplete(state)) {
+      console.log("Workflow execution already completed");
     } else {
-      const engine = createEngine(workflow);
-      if (engine.isComplete(state)) {
-        console.log("Workflow execution already completed");
-      } else {
-        engine
-          .step(state)
-          .pipe(
-            map((evaluation) => engine.toState(state, evaluation)),
-            flatMap((state) => from(writeState(jiftConfig, name!, state)))
-          )
-          .subscribe();
-      }
+      engine
+        .step(state)
+        .pipe(
+          map((evaluation) => engine.toState(state, evaluation)),
+          flatMap((state) => from(writeState(jiftConfig, name!, state)))
+        )
+        .subscribe();
     }
   }
 }
