@@ -11,7 +11,6 @@ import { promptWorkflow, promptWorkflowInputs } from "../inquirer.service";
 import { printStepResult, printAllInputErrors } from "../print.service";
 import chalk from "chalk";
 import { Workflow, Inputs } from "../../engine/types";
-import { init } from "../../engine/services/engine";
 
 export async function run(name?: string, inputList?: string[], cmd?: any) {
   const jiftConfig = await readJiftConfig();
@@ -39,7 +38,7 @@ export async function run(name?: string, inputList?: string[], cmd?: any) {
       process.exit(1);
     } else {
       if (cmd?.init) {
-        await writeState(jiftConfig, name, init(inputs));
+        await writeState(jiftConfig, name, engine.init(inputs));
       } else {
         engine
           .run(inputs)

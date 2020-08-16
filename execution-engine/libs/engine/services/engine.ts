@@ -4,15 +4,15 @@ import { flatMap, startWith, map, scan } from "rxjs/operators";
 import { validateInputs } from "./validator.service";
 import { StepResult, InputErrors, Inputs, State, Workflow } from "../types";
 
-export function init(inputs: Inputs): State {
-  return { path: [0], inputs, evaluations: [] };
-}
-
 export class Engine {
   constructor(private workflow: Workflow, public service: ExecutionService) {}
 
   validate(inputs: Inputs): InputErrors {
     return validateInputs(this.workflow?.inputs || {}, inputs);
+  }
+
+  init(inputs: Inputs): State {
+    return { path: [0], inputs, evaluations: [] };
   }
 
   /**
@@ -21,7 +21,7 @@ export class Engine {
    * @returns A cold observable of all step results. Completes successfully iff the workflow is completing. Errors otherwise.
    */
   run(inputs: Inputs): Observable<StepResult> {
-    return this.complete(init(inputs));
+    return this.complete(this.init(inputs));
   }
 
   /**
@@ -72,7 +72,7 @@ export class Engine {
    */
   toStates(inputs: Inputs): OperatorFunction<StepResult, State> {
     return (stepResult$) =>
-      stepResult$.pipe(scan(this.toState.bind(this), init(inputs)));
+      stepResult$.pipe(scan(this.toState.bind(this), this.init(inputs)));
   }
 
   /**
