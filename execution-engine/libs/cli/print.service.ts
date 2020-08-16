@@ -1,6 +1,8 @@
 import chalk from "chalk";
 import { StepResult } from "../engine/types/step-result.type";
 import ajv from "ajv";
+import { Inputs } from "../engine/types/inputs.type";
+import { InputErrors } from "../engine/types/input-errors.type";
 
 export function printStepResult(
   verbose: boolean,
@@ -9,6 +11,17 @@ export function printStepResult(
   return verbose
     ? JSON.stringify(stepResult, null, 2)
     : "Completed " + chalk.green(stepResult.path);
+}
+
+export function printAllFieldErrors(
+  inputErrors: InputErrors,
+  inputs: Inputs
+): string {
+  return Object.keys(inputErrors)
+    .map((fieldName) =>
+      printFieldErrors(fieldName, inputs[fieldName], inputErrors[fieldName])
+    )
+    .join("\n\n");
 }
 
 export function printFieldErrors(

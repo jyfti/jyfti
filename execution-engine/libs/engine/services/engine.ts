@@ -5,8 +5,8 @@ import { State } from "../types/state.type";
 import { Observable, empty, OperatorFunction } from "rxjs";
 import { flatMap, startWith, map, scan } from "rxjs/operators";
 import { validateInputs } from "./validator.service";
-import ajv from "ajv";
 import { Inputs } from "../types/inputs.type";
+import { InputErrors } from "../types/input-errors.type";
 
 export function init(inputs: Inputs): State {
   return { path: [0], inputs, evaluations: [] };
@@ -15,7 +15,7 @@ export function init(inputs: Inputs): State {
 export class Engine {
   constructor(private workflow: Workflow, public service: ExecutionService) {}
 
-  validate(inputs: Inputs): { [name: string]: ajv.ErrorObject[] } {
+  validate(inputs: Inputs): InputErrors {
     return validateInputs(this.workflow.inputs, inputs);
   }
 
