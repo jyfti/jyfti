@@ -22,7 +22,7 @@ export class HttpService {
           const body: any[] = [];
           response.on("data", (chunk: any) => body.push(chunk));
           response.on("end", () =>
-            resolve({ body: JSON.parse(body.join("")) })
+            resolve({ body: this.parseJsonOrString(body.join("")) })
           );
         });
         request.on("error", (err: any) => reject(err));
@@ -33,6 +33,15 @@ export class HttpService {
         request.end();
       })
     );
+  }
+
+  private parseJsonOrString(str: string): any {
+    // TODO Look at response header for content type
+    try {
+      return JSON.parse(str);
+    } catch {
+      return str;
+    }
   }
 
   private attachHeaders(requestInfo: HttpRequest<any>): HttpRequest<any> {

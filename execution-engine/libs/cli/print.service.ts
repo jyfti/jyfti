@@ -2,6 +2,10 @@ import chalk from "chalk";
 import ajv from "ajv";
 import { StepResult, InputErrors, Inputs } from "../engine/types";
 
+export function printOutput(output: any): string {
+  return typeof output === "string" ? output : printJson(output);
+}
+
 export function printJson(json: any): string {
   return JSON.stringify(json, null, 2);
 }

@@ -48,9 +48,12 @@ export function createExampleWorkflow(): Workflow {
         default: "jift",
       },
     },
+    output: {
+        $eval: "readme"
+    },
     steps: [
       {
-        assignTo: "exampleVariable",
+        assignTo: "readme",
         request: {
           method: "GET",
           url:

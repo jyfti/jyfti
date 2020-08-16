@@ -8,6 +8,7 @@ import {
   printStepResult,
   printAllInputErrors,
   printJson,
+  printOutput,
 } from "../print.service";
 import chalk from "chalk";
 import { Workflow, Inputs } from "../../engine/types";
@@ -55,7 +56,7 @@ export async function start(name?: string, inputList?: string[], cmd?: any) {
             ),
             engine.toStates(inputs),
             last(),
-            tap((state) => console.log(printJson(engine.getOutput(state)))),
+            tap((state) => console.log(printOutput(engine.getOutput(state)))),
             flatMap((state) => from(writeState(jiftConfig, name!, state)))
           )
           .subscribe();

@@ -21,9 +21,7 @@
       "assignTo": "issueResponse",
       "request": {
         "method": "GET",
-        "url": "https://api.github.com/repos/${org}/${repo}/issues",
-        "body": null,
-        "headers": null
+        "url": "https://api.github.com/repos/${org}/${repo}/issues"
       }
     },
     {
