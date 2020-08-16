@@ -11,9 +11,9 @@ import {
   clean,
   complete,
   validate,
-  generateWorkflow,
   vars,
 } from "./commands";
+import { addGenerateSubCommands } from "./generate";
 
 export function createProgram(): commander.Command {
   const program = new Command();
@@ -85,10 +85,7 @@ export function createProgram(): commander.Command {
     .command("generate")
     .description("generate parts of a workflow");
 
-  generate
-    .command("workflow [name]")
-    .description("generate a workflow")
-    .action(generateWorkflow);
+  addGenerateSubCommands(generate);
 
   return program;
 }
