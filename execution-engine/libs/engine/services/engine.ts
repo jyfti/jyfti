@@ -2,8 +2,14 @@ import { ExecutionService } from "./execution.service";
 import { Observable, empty, OperatorFunction } from "rxjs";
 import { flatMap, startWith, map, scan } from "rxjs/operators";
 import { validateInputs } from "./validator.service";
-import { StepResult, InputErrors, Inputs, State, Workflow } from "../types";
-import { evaluate } from "./evaluation.service";
+import {
+  StepResult,
+  InputErrors,
+  Inputs,
+  State,
+  Workflow,
+  VariableMap,
+} from "../types";
 
 export class Engine {
   constructor(private workflow: Workflow, public service: ExecutionService) {}
@@ -64,6 +70,10 @@ export class Engine {
 
   getOutput(state: State): any | undefined {
     return this.service.toOutput(this.workflow, state);
+  }
+
+  getVariableMap(state: State): VariableMap {
+    return this.service.toVariableMap(this.workflow, state);
   }
 
   /**

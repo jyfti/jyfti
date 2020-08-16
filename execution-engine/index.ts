@@ -14,6 +14,7 @@ import {
   complete,
   validate,
   generateWorkflow,
+  vars,
 } from "./libs/cli/commands";
 
 const program = new Command();
@@ -61,6 +62,11 @@ program
   .command("state [name]")
   .description("print the state of this workflow")
   .action(state);
+
+program
+  .command("vars [name]")
+  .description("print the variables of this workflow")
+  .action(vars);
 
 program
   .command("status [name]")

@@ -9,4 +9,5 @@ export * from "./list.command";
 export * from "./clean.command";
 export * from "./complete.command";
 export * from "./validate.command";
+export * from "./vars.command";
 export * from "./generate/workflow.command";
