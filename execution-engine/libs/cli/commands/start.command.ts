@@ -4,7 +4,11 @@ import { createEngine } from "../../engine/services/engine.factory";
 import { last, flatMap, tap } from "rxjs/operators";
 import { from } from "rxjs";
 import { promptWorkflow, promptWorkflowInputs } from "../inquirer.service";
-import { printStepResult, printAllInputErrors } from "../print.service";
+import {
+  printStepResult,
+  printAllInputErrors,
+  printJson,
+} from "../print.service";
 import chalk from "chalk";
 import { Workflow, Inputs } from "../../engine/types";
 import { readWorkflow } from "../files/workflow-file.service";
@@ -36,6 +40,10 @@ export async function start(name?: string, inputList?: string[], cmd?: any) {
       process.exit(1);
     } else {
       const initialState = engine.init(inputs);
+      console.log("Created state.");
+      if (cmd?.verbose) {
+        console.log(printJson(initialState));
+      }
       if (!cmd?.complete) {
         await writeState(jiftConfig, name, initialState);
       } else {

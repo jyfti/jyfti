@@ -2,12 +2,16 @@ import chalk from "chalk";
 import ajv from "ajv";
 import { StepResult, InputErrors, Inputs } from "../engine/types";
 
+export function printJson(json: any): string {
+  return JSON.stringify(json, null, 2);
+}
+
 export function printStepResult(
   verbose: boolean,
   stepResult: StepResult
 ): string {
   return verbose
-    ? JSON.stringify(stepResult, null, 2)
+    ? printJson(stepResult)
     : "Completed " + chalk.green(stepResult.path);
 }
 
@@ -39,7 +43,5 @@ export function printValidationErrors(errors: ajv.ErrorObject[]): string {
 }
 
 export function printValidationError(error: ajv.ErrorObject): string {
-  return error.dataPath !== ""
-    ? JSON.stringify(error, null, 2)
-    : "It " + error.message;
+  return error.dataPath !== "" ? printJson(error) : "It " + error.message;
 }
