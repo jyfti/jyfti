@@ -70,6 +70,7 @@ program
 program
   .command("validate [name]")
   .description("validate this workflow")
+  .option("-a --all", "validate all workflows")
   .action(validate);
 
 const generate = program
