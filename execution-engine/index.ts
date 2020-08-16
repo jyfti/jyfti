@@ -3,7 +3,7 @@
 import { Command } from "commander";
 import {
   init,
-  run,
+  start,
   step,
   reset,
   view,
@@ -32,11 +32,11 @@ program
   .action(clean);
 
 program
-  .command("run [name] [inputs...]")
+  .command("start [name] [inputs...]")
   .description("run this workflow")
   .option("-v --verbose", "print evaluations")
   .option("-i --init", "initializes the run without executing steps")
-  .action(run);
+  .action(start);
 
 program
   .command("complete [name]")

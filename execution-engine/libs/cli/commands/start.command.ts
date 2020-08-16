@@ -12,12 +12,12 @@ import { printStepResult, printAllInputErrors } from "../print.service";
 import chalk from "chalk";
 import { Workflow, Inputs } from "../../engine/types";
 
-export async function run(name?: string, inputList?: string[], cmd?: any) {
+export async function start(name?: string, inputList?: string[], cmd?: any) {
   const jiftConfig = await readJiftConfig();
   if (!name) {
     name = await promptWorkflow(
       jiftConfig,
-      "Which workflow do you want to run?"
+      "Which workflow do you want to start?"
     );
   }
   if (name) {

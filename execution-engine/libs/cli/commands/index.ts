@@ -1,4 +1,4 @@
-export * from "./run.command";
+export * from "./start.command";
 export * from "./step.command";
 export * from "./reset.command";
 export * from "./status.command";
