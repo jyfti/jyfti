@@ -1,5 +1,6 @@
-import { readJiftConfig, readState } from "../files/file.service";
+import { readJiftConfig } from "../files/file.service";
 import { promptWorkflow } from "../inquirer.service";
+import { readState } from "../files/state-file.service";
 
 export async function state(name?: string) {
   const jiftConfig = await readJiftConfig();

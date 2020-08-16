@@ -1,15 +1,11 @@
-import {
-  readJiftConfig,
-  ensureDirExists,
-  writeState,
-  readState,
-} from "../files/file.service";
+import { readJiftConfig, ensureDirExists } from "../files/file.service";
 import { createEngine } from "../../engine/services/engine.factory";
 import { map, flatMap } from "rxjs/operators";
 import { from } from "rxjs";
 import { promptWorkflow } from "../inquirer.service";
 import chalk from "chalk";
 import { readWorkflow } from "../files/workflow-file.service";
+import { readState, writeState } from "../files/state-file.service";
 
 export async function step(name?: string) {
   const jiftConfig = await readJiftConfig();

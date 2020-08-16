@@ -1,5 +1,6 @@
-import { readJiftConfig, deleteState } from "../files/file.service";
+import { readJiftConfig } from "../files/file.service";
 import { promptWorkflow } from "../inquirer.service";
+import { deleteState } from "../files/state-file.service";
 
 export async function reset(name?: string) {
   const jiftConfig = await readJiftConfig();

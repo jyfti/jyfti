@@ -1,6 +1,5 @@
 import {
   readJiftConfig,
-  writeState,
   ensureDirExists,
 } from "../files/file.service";
 import { createEngine } from "../../engine/services/engine.factory";
@@ -11,6 +10,7 @@ import { printStepResult, printAllInputErrors } from "../print.service";
 import chalk from "chalk";
 import { Workflow, Inputs } from "../../engine/types";
 import { readWorkflow } from "../files/workflow-file.service";
+import { writeState } from "../files/state-file.service";
 
 export async function start(name?: string, inputList?: string[], cmd?: any) {
   const jiftConfig = await readJiftConfig();

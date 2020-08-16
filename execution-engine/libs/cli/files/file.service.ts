@@ -1,7 +1,5 @@
 import * as fs from "fs";
-import * as nodePath from "path";
 import { JiftConfig } from "../types/jift-config";
-import { State, Workflow } from "../../engine/types";
 
 export function fileExists(path: string): Promise<boolean> {
   return fs.promises
@@ -28,10 +26,6 @@ export const defaultJiftConfig: JiftConfig = {
   outRoot: "./out",
 };
 
-export function resolveState(jiftConfig: JiftConfig, name: string) {
-  return nodePath.resolve(jiftConfig.outRoot, name + ".state.json");
-}
-
 export function readJiftConfig(): Promise<JiftConfig> {
   return readJson(jiftConfigName).catch((err) => defaultJiftConfig);
 }
@@ -39,31 +33,4 @@ export function readJiftConfig(): Promise<JiftConfig> {
 export function writeJiftConfig(jiftConfig: JiftConfig): Promise<any> {
   const data = JSON.stringify(jiftConfig, null, 2);
   return fs.promises.writeFile(jiftConfigName, data, "utf8");
-}
-
-export function readState(
-  jiftConfig: JiftConfig,
-  name: string
-): Promise<State> {
-  return readJson(resolveState(jiftConfig, name));
-}
-
-export function writeState(
-  jiftConfig: JiftConfig,
-  name: string,
-  state: State
-): Promise<any> {
-  const data = JSON.stringify(state, null, 2);
-  return fs.promises.writeFile(resolveState(jiftConfig, name), data, "utf8");
-}
-
-export function deleteState(
-  jiftConfig: JiftConfig,
-  name: string
-): Promise<any> {
-  return fs.promises.unlink(resolveState(jiftConfig, name));
-}
-
-export async function deleteAllStates(jiftConfig: JiftConfig): Promise<any> {
-  return fs.promises.rmdir(jiftConfig.outRoot, { recursive: true });
 }
