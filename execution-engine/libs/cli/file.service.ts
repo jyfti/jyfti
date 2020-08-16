@@ -105,3 +105,19 @@ export function deleteState(
 export async function deleteAllStates(jiftConfig: JiftConfig): Promise<any> {
   return fs.promises.rmdir(jiftConfig.outRoot, { recursive: true });
 }
+
+export function workflowExists(
+  jiftConfig: JiftConfig,
+  name: string
+): Promise<boolean> {
+  return fileExists(resolveWorkflow(jiftConfig, name));
+}
+
+export function writeWorkflow(
+  jiftConfig: JiftConfig,
+  name: string,
+  workflow: Workflow
+): Promise<any> {
+  const data = JSON.stringify(workflow, null, 2);
+  return fs.promises.writeFile(resolveWorkflow(jiftConfig, name), data, "utf8");
+}

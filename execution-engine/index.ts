@@ -13,6 +13,7 @@ import {
   clean,
   complete,
   validate,
+  generateWorkflow,
 } from "./libs/cli/commands";
 
 const program = new Command();
@@ -68,5 +69,14 @@ program
   .command("validate [name]")
   .description("validate this workflow")
   .action(validate);
+
+const generate = program
+  .command("generate")
+  .description("generate parts of a workflow");
+
+generate
+  .command("workflow [name]")
+  .description("generate a workflow")
+  .action(generateWorkflow);
 
 program.parse(process.argv);
