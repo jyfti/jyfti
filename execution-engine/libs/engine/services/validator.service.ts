@@ -13,7 +13,7 @@ export async function validateWorkflow(
   workflow: Workflow
 ): Promise<ErrorObject[]> {
   const ajv = new Ajv({ allErrors: true });
-  const validate = await ajv.compileAsync(await readWorkflowSchema());
+  const validate = ajv.compile(await readWorkflowSchema());
   const valid = validate(workflow);
   return validate.errors || [];
 }
