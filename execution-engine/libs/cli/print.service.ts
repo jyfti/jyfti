@@ -13,18 +13,18 @@ export function printStepResult(
     : "Completed " + chalk.green(stepResult.path);
 }
 
-export function printAllFieldErrors(
+export function printAllInputErrors(
   inputErrors: InputErrors,
   inputs: Inputs
 ): string {
   return Object.keys(inputErrors)
     .map((fieldName) =>
-      printFieldErrors(fieldName, inputs[fieldName], inputErrors[fieldName])
+      printInputErrors(fieldName, inputs[fieldName], inputErrors[fieldName])
     )
     .join("\n\n");
 }
 
-export function printFieldErrors(
+export function printInputErrors(
   fieldName: string,
   value: any,
   errors: ajv.ErrorObject[]

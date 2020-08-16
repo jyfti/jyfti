@@ -10,8 +10,8 @@ import { from } from "rxjs";
 import { promptWorkflow, promptWorkflowInputs } from "../inquirer.service";
 import {
   printStepResult,
-  printFieldErrors,
-  printAllFieldErrors,
+  printInputErrors,
+  printAllInputErrors,
 } from "../print.service";
 import { Workflow } from "../../engine/types/workflow.type";
 import chalk from "chalk";
@@ -38,7 +38,7 @@ export async function run(name?: string, inputList?: string[], cmd?: any) {
       const message =
         chalk.red(
           "The workflow can not be started because some inputs are invalid.\n\n"
-        ) + printAllFieldErrors(inputErrors, inputs);
+        ) + printAllInputErrors(inputErrors, inputs);
       console.error(message);
       process.exit(1);
     } else {
