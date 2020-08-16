@@ -75,16 +75,6 @@ export function readState(
   return readJson(resolveState(jiftConfig, name));
 }
 
-export async function readStateOrInitial(
-  jiftConfig: JiftConfig,
-  name: string,
-  inputs: Dictionary<any>
-): Promise<State> {
-  const statePath = resolveState(jiftConfig, name);
-  const stateExists = await fileExists(statePath);
-  return stateExists ? await readState(jiftConfig, name) : init(inputs);
-}
-
 export function writeState(
   jiftConfig: JiftConfig,
   name: string,
