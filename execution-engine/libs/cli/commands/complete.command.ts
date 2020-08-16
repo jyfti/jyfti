@@ -1,7 +1,5 @@
-import {
-  readJiftConfig,
-  ensureDirExists,
-} from "../files/file.service";
+import { ensureDirExists } from "../files/file.service";
+import { readJiftConfig } from "../files/config-file.service";
 import { createEngine } from "../../engine/services/engine.factory";
 import { last, flatMap, tap } from "rxjs/operators";
 import { from } from "rxjs";

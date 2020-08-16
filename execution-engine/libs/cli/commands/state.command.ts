@@ -1,4 +1,4 @@
-import { readJiftConfig } from "../files/file.service";
+import { readJiftConfig } from "../files/config-file.service";
 import { promptWorkflow } from "../inquirer.service";
 import { readState } from "../files/state-file.service";
 

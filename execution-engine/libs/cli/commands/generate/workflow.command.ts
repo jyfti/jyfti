@@ -1,4 +1,4 @@
-import { readJiftConfig } from "../../files/file.service";
+import { readJiftConfig } from "../../files/config-file.service";
 import inquirer from "inquirer";
 import { Workflow } from "../../../engine/types";
 import {

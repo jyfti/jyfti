@@ -1,5 +1,4 @@
 import * as fs from "fs";
-import { JiftConfig } from "../types/jift-config";
 
 export function fileExists(path: string): Promise<boolean> {
   return fs.promises
@@ -17,20 +16,4 @@ export async function ensureDirExists(path: string) {
 
 export function readJson(path: string) {
   return fs.promises.readFile(path, "utf8").then(JSON.parse);
-}
-
-export const jiftConfigName: string = "jift.json";
-
-export const defaultJiftConfig: JiftConfig = {
-  sourceRoot: "./src",
-  outRoot: "./out",
-};
-
-export function readJiftConfig(): Promise<JiftConfig> {
-  return readJson(jiftConfigName).catch((err) => defaultJiftConfig);
-}
-
-export function writeJiftConfig(jiftConfig: JiftConfig): Promise<any> {
-  const data = JSON.stringify(jiftConfig, null, 2);
-  return fs.promises.writeFile(jiftConfigName, data, "utf8");
 }
