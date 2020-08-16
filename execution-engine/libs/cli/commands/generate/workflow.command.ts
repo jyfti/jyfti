@@ -35,12 +35,17 @@ export function createExampleWorkflow(): Workflow {
   return {
     $schema:
       "https://raw.githubusercontent.com/fboeller/jift/master/workflow-schema.json",
-    name: "",
+    name: "Retrieve README file of a GitHub repository",
     inputs: {
-      exampleInput: {
+      org: {
         type: "string",
-        description:
-          "This is an example input that the workflow will validate to receive and will make available to all steps",
+        description: "The GitHub organization",
+        default: "fboeller",
+      },
+      repo: {
+        type: "string",
+        description: "The GitHub repository",
+        default: "jift",
       },
     },
     steps: [
@@ -49,7 +54,7 @@ export function createExampleWorkflow(): Workflow {
         request: {
           method: "GET",
           url:
-            "https://raw.githubusercontent.com/fboeller/jift/master/README.md",
+            "https://raw.githubusercontent.com/${org}/${repo}/master/README.md",
         },
       },
     ],
