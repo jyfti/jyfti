@@ -6,7 +6,7 @@ It allows to define workflows via json and to run them step-by-step.
 ## Installation
 
 ```
-    $ npm install -g @jyfti/cli
+$ npm install -g @jyfti/cli
 ```
 
 ## Quickstart
@@ -14,7 +14,7 @@ It allows to define workflows via json and to run them step-by-step.
 Running your first workflow is easy.
 
 ```
-    $ jyfti run start --complete https://raw.githubusercontent.com/jyfti/jyfti/master/workflows/retrieve-readme.json
+$ jyfti run start --complete https://raw.githubusercontent.com/jyfti/jyfti/master/workflows/retrieve-readme.json
 ```
 
 Jyfti runs workflows from anywhere in the web, but the preferred way of developing workflows is within a local Jyfti project.
@@ -27,7 +27,7 @@ Jyfti has an interactive CLI that helps you setting up a Jyfti project.
 First, initialize a Jyfti project within your current directory.
 
 ```
-    $ jyfti init
+$ jyfti init
 ```
 
 This results in a `jyfti.json` to be created where the configuration for your Jyfti project resides.
@@ -35,7 +35,7 @@ This results in a `jyfti.json` to be created where the configuration for your Jy
 Then, generate your first workflow.
 
 ```
-    $ jyfti generate workflow retrieve-readme
+$ jyfti generate workflow retrieve-readme
 ```
 
 The workflow is generated into the `sourceRoot` directory as `retrieve-readme.json`.
@@ -44,16 +44,16 @@ It serves you as a foundation to create your first productive workflow.
 Run the workflow to completion.
 
 ```
-    $ jyfti run start --complete retrieve-readme
-    ? The GitHub organization (jyfti)
-    ? The GitHub repository (jyfti)
+$ jyfti run start --complete retrieve-readme
+? The GitHub organization (jyfti)
+? The GitHub repository (jyfti)
 ```
 
 Jyfti prompts for inputs that the workflow expects.
 Note that inputs can also be passed directly.
 
 ```
-    $ jyfti run start --complete retrieve-readme jyfti jyfti
+$ jyfti run start --complete retrieve-readme jyfti jyfti
 ```
 
 ## The Jyfti format
