@@ -10,4 +10,5 @@ export * from "./clean.command";
 export * from "./complete.command";
 export * from "./validate.command";
 export * from "./vars.command";
+export * from "./install.command";
 export * from "./generate/workflow.command";

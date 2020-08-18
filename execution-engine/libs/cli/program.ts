@@ -12,6 +12,7 @@ import {
   complete,
   validate,
   vars,
+  install,
 } from "./commands";
 import { addGenerateSubCommands } from "./generate";
 import { addRunSubCommands } from "./run";
@@ -24,6 +25,11 @@ export function createProgram(): commander.Command {
     .command("init")
     .description("init this directory for jyfti")
     .action(init);
+
+  program
+    .command("install <url>")
+    .description("install a workflow from a url")
+    .action(install);
 
   program.command("list").description("list workflows").action(list);
 
