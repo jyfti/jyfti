@@ -38,3 +38,13 @@ export function validateInputsOrTerminate(
     process.exit(1);
   }
 }
+
+export function createInputs(workflow: Workflow, inputList: string[]): Inputs {
+  return Object.keys(workflow?.inputs || {}).reduce(
+    (inputs, inputName, index) => ({
+      ...inputs,
+      [inputName]: inputList[index],
+    }),
+    {}
+  );
+}

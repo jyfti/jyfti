@@ -4,19 +4,13 @@ import { createEngine } from "../../../engine/services/engine.factory";
 import { last, flatMap, tap } from "rxjs/operators";
 import { from } from "rxjs";
 import { promptWorkflow, promptWorkflowInputs } from "../../inquirer.service";
-import {
-  printStepResult,
-  printAllInputErrors,
-  printJson,
-  printOutput,
-} from "../../print.service";
-import chalk from "chalk";
-import { Workflow, Inputs } from "../../../engine/types";
+import { printStepResult, printJson, printOutput } from "../../print.service";
 import {
   readWorkflowOrTerminate,
   extractWorkflowName,
   isUrl,
   validateInputsOrTerminate,
+  createInputs,
 } from "../../files/workflow.service";
 import { writeState } from "../../files/state-file.service";
 import { install } from "../../install.service";
@@ -63,14 +57,4 @@ export async function start(name?: string, inputList?: string[], cmd?: any) {
         .subscribe();
     }
   }
-}
-
-export function createInputs(workflow: Workflow, inputList: string[]): Inputs {
-  return Object.keys(workflow?.inputs || {}).reduce(
-    (inputs, inputName, index) => ({
-      ...inputs,
-      [inputName]: inputList[index],
-    }),
-    {}
-  );
 }
