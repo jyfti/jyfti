@@ -11,7 +11,14 @@ It allows to define workflows via json and to run them step-by-step.
 
 ## Quickstart
 
-// TODO: Describe and introduce command to run workflow from url
+Running your first workflow is easy.
+
+```
+    $ jyfti run start --complete https://raw.githubusercontent.com/jyfti/jyfti/master/workflows/retrieve-readme.json
+```
+
+Jyfti runs workflows from anywhere in the web, but the preferred way of developing workflows is within a local Jyfti project.
+Go ahead to develop your first workflow within a local Jyfti project.
 
 ## Usage
 
