@@ -29,6 +29,7 @@ export function createProgram(): commander.Command {
   program
     .command("install <url>")
     .description("install a workflow from a url")
+    .option("-y --yes", "overwrite an existing workflow with the same name")
     .action(install);
 
   program.command("list").description("list workflows").action(list);
