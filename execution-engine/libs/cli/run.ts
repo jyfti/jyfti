@@ -3,11 +3,17 @@ import { state, vars, status, start, complete, step, reset } from "./commands";
 
 export function addRunSubCommands(command: commander.Command) {
   command
+    .command("create [name] [inputs...]")
+    .description("creates the initial state of a run of this workflow")
+    .option("-v --verbose", "print created initial state")
+    .option("-y --yes", "automatically answer confirmation questions with yes")
+    .action(start);
+
+  command
     .command("start [name] [inputs...]", { isDefault: true })
     .description("start a run of this workflow")
     .option("-v --verbose", "print step results")
-    .option("-c --complete", "run to completion")
-    .option("-y --yes", "overwrite an existing workflow with the same name")
+    .option("-y --yes", "automatically answer confirmation questions with yes")
     .action(start);
 
   command
