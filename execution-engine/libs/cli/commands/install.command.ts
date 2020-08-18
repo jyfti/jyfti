@@ -1,27 +1,20 @@
 import { readConfig } from "../files/config-file.service";
 
-import bent from "bent";
 import {
   writeWorkflow,
   readWorkflowSchemaOrTerminate,
   workflowExists,
 } from "../files/workflow-file.service";
-import { Workflow } from "../../engine/types";
 import { validateWorkflow } from "../../engine/services/validator.service";
 import { printValidationErrors } from "../print.service";
 import chalk from "chalk";
 import inquirer from "inquirer";
-
-const getJson = bent("json");
+import { readWorkflowOrTerminate } from "../files/workflow-http.service";
 
 export async function install(url: string, name?: string, cmd?: any) {
   const config = await readConfig();
   const schema = await readWorkflowSchemaOrTerminate();
-  const workflow = (await getJson(url).catch((err) => {
-    console.error(chalk.red("The workflow could not be retrieved."));
-    console.error(err);
-    return null;
-  })) as Workflow | null;
+  const workflow = await readWorkflowOrTerminate(config, url);
   if (workflow) {
     const errors = validateWorkflow(workflow, schema);
     if (errors.length !== 0) {
