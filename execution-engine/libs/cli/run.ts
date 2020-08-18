@@ -7,6 +7,7 @@ export function addRunSubCommands(command: commander.Command) {
     .description("start a run of this workflow")
     .option("-v --verbose", "print step results")
     .option("-c --complete", "run to completion")
+    .option("-y --yes", "overwrite an existing workflow with the same name")
     .action(start);
 
   command

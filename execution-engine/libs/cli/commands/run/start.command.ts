@@ -12,17 +12,28 @@ import {
 } from "../../print.service";
 import chalk from "chalk";
 import { Workflow, Inputs } from "../../../engine/types";
-import { readWorkflowOrTerminate } from "../../files/workflow-file.service";
+import {
+  readWorkflowOrTerminate,
+  extractWorkflowName,
+  isUrl,
+} from "../../files/workflow.service";
 import { writeState } from "../../files/state-file.service";
+import { install } from "../../install.service";
+import { readWorkflowSchemaOrTerminate } from "../../../cli/files/workflow-file.service";
 
 export async function start(name?: string, inputList?: string[], cmd?: any) {
   const config = await readConfig();
+  const schema = await readWorkflowSchemaOrTerminate();
   if (!name) {
     name = await promptWorkflow(config, "Which workflow do you want to start?");
   }
   if (name) {
     await ensureDirExists(config.outRoot);
     const workflow = await readWorkflowOrTerminate(config, name);
+    if (isUrl(name)) {
+      name = extractWorkflowName(name);
+      await install(config, workflow, schema, name, cmd?.yes);
+    }
     if ((inputList || []).length === 0) {
       inputList = await promptWorkflowInputs(workflow);
     }

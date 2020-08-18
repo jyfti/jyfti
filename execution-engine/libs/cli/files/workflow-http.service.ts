@@ -5,6 +5,14 @@ import { Workflow } from "../../engine/types";
 
 const getJson = bent("json");
 
+export function extractWorkflowName(url: string): string {
+  const segments = new URL(url).pathname.split("/");
+  const lastSegment = segments[segments.length - 1];
+  return lastSegment.endsWith(".json")
+    ? lastSegment.substring(0, lastSegment.length - ".json".length)
+    : lastSegment;
+}
+
 export async function readWorkflowOrTerminate(
   config: Config,
   url: string
