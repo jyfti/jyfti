@@ -1,8 +1,8 @@
-import { readConfig } from "../files/config-file.service";
+import { readConfig } from "../../files/config-file.service";
 import chalk from "chalk";
-import { State } from "../../engine/types";
-import { readWorkflowNames } from "../files/workflow-file.service";
-import { readState } from "../files/state-file.service";
+import { State } from "../../../engine/types";
+import { readWorkflowNames } from "../../files/workflow-file.service";
+import { readState } from "../../files/state-file.service";
 
 export async function status(name: string) {
   const config = await readConfig();

@@ -1,12 +1,12 @@
-import { ensureDirExists } from "../files/file.service";
-import { readConfig } from "../files/config-file.service";
-import { createEngine } from "../../engine/services/engine.factory";
+import { ensureDirExists } from "../../files/file.service";
+import { readConfig } from "../../files/config-file.service";
+import { createEngine } from "../../../engine/services/engine.factory";
 import { map, flatMap, tap } from "rxjs/operators";
 import { from } from "rxjs";
-import { promptWorkflow } from "../inquirer.service";
-import { readWorkflowOrTerminate } from "../files/workflow-file.service";
-import { writeState, readStateOrTerminate } from "../files/state-file.service";
-import { printStepResult } from "../print.service";
+import { promptWorkflow } from "../../inquirer.service";
+import { readWorkflowOrTerminate } from "../../files/workflow-file.service";
+import { writeState, readStateOrTerminate } from "../../files/state-file.service";
+import { printStepResult } from "../../print.service";
 
 export async function step(name?: string, cmd?: any) {
   const config = await readConfig();

@@ -1,6 +1,6 @@
-import { readConfig } from "../files/config-file.service";
-import { promptWorkflow } from "../inquirer.service";
-import { deleteState } from "../files/state-file.service";
+import { readConfig } from "../../files/config-file.service";
+import { promptWorkflow } from "../../inquirer.service";
+import { deleteState } from "../../files/state-file.service";
 
 export async function reset(name?: string) {
   const config = await readConfig();
