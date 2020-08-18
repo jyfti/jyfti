@@ -47,28 +47,27 @@ export async function start(name?: string, inputList?: string[], cmd?: any) {
         ) + printAllInputErrors(inputErrors, inputs);
       console.error(message);
       process.exit(1);
+    }
+    const initialState = engine.init(inputs);
+    console.log("Created state.");
+    if (cmd?.verbose) {
+      console.log(printJson(initialState));
+    }
+    if (!cmd?.complete) {
+      await writeState(config, name, initialState);
     } else {
-      const initialState = engine.init(inputs);
-      console.log("Created state.");
-      if (cmd?.verbose) {
-        console.log(printJson(initialState));
-      }
-      if (!cmd?.complete) {
-        await writeState(config, name, initialState);
-      } else {
-        engine
-          .complete(initialState)
-          .pipe(
-            tap((stepResult) =>
-              console.log(printStepResult(cmd?.verbose, stepResult))
-            ),
-            engine.toStates(inputs),
-            last(),
-            tap((state) => console.log(printOutput(engine.getOutput(state)))),
-            flatMap((state) => from(writeState(config, name!, state)))
-          )
-          .subscribe();
-      }
+      engine
+        .complete(initialState)
+        .pipe(
+          tap((stepResult) =>
+            console.log(printStepResult(cmd?.verbose, stepResult))
+          ),
+          engine.toStates(inputs),
+          last(),
+          tap((state) => console.log(printOutput(engine.getOutput(state)))),
+          flatMap((state) => from(writeState(config, name!, state)))
+        )
+        .subscribe();
     }
   }
 }
