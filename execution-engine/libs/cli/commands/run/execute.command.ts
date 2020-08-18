@@ -14,9 +14,9 @@ import {
 } from "../../files/workflow.service";
 import { writeState } from "../../files/state-file.service";
 import { install } from "../../install.service";
-import { readWorkflowSchemaOrTerminate } from "../../../cli/files/workflow-file.service";
+import { readWorkflowSchemaOrTerminate } from "../../files/workflow-file.service";
 
-export async function start(name?: string, inputList?: string[], cmd?: any) {
+export async function execute(name?: string, inputList?: string[], cmd?: any) {
   const config = await readConfig();
   const schema = await readWorkflowSchemaOrTerminate();
   if (!name) {

@@ -1,5 +1,5 @@
 export * from "./run/create.command";
-export * from "./run/start.command";
+export * from "./run/execute.command";
 export * from "./run/step.command";
 export * from "./run/reset.command";
 export * from "./run/status.command";

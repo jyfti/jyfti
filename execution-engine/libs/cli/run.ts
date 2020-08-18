@@ -1,5 +1,5 @@
 import commander from "commander";
-import { state, vars, status, start, complete, step, reset } from "./commands";
+import { state, vars, status, execute, complete, step, reset } from "./commands";
 
 export function addRunSubCommands(command: commander.Command) {
   command
@@ -7,14 +7,14 @@ export function addRunSubCommands(command: commander.Command) {
     .description("creates the initial state of a run of this workflow")
     .option("-v --verbose", "print created initial state")
     .option("-y --yes", "automatically answer confirmation questions with yes")
-    .action(start);
+    .action(execute);
 
   command
-    .command("start [name] [inputs...]", { isDefault: true })
-    .description("start a run of this workflow")
+    .command("execute [name] [inputs...]", { isDefault: true })
+    .description("execute a run of this workflow")
     .option("-v --verbose", "print step results")
     .option("-y --yes", "automatically answer confirmation questions with yes")
-    .action(start);
+    .action(execute);
 
   command
     .command("step [name]")

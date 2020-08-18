@@ -1,19 +1,5 @@
 import commander, { Command } from "commander";
-import {
-  init,
-  start,
-  step,
-  reset,
-  view,
-  state,
-  status,
-  list,
-  clean,
-  complete,
-  validate,
-  vars,
-  install,
-} from "./commands";
+import { init, view, list, clean, validate, install } from "./commands";
 import { addGenerateSubCommands } from "./generate";
 import { addRunSubCommands } from "./run";
 
