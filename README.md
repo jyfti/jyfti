@@ -14,7 +14,7 @@ $ npm install -g @jyfti/cli
 Running your first workflow is easy.
 
 ```
-$ jyfti run start --complete https://raw.githubusercontent.com/jyfti/jyfti/master/workflows/retrieve-readme.json
+$ jyfti run --complete https://raw.githubusercontent.com/jyfti/jyfti/master/workflows/retrieve-readme.json
 ```
 
 Jyfti runs workflows from anywhere in the web, but the preferred way of developing workflows is within a local Jyfti project.
