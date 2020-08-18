@@ -14,7 +14,7 @@ import inquirer from "inquirer";
 
 const getJson = bent("json");
 
-export async function install(url: string, cmd?: any) {
+export async function install(url: string, name?: string, cmd?: any) {
   const config = await readConfig();
   const schema = await readWorkflowSchemaOrTerminate();
   const workflow = (await getJson(url).catch((err) => {
@@ -29,7 +29,7 @@ export async function install(url: string, cmd?: any) {
       console.error(printValidationErrors(errors));
       process.exit(1);
     }
-    const name = extractWorkflowName(url);
+    name = name || extractWorkflowName(url);
     const exists = await workflowExists(config, name);
     const write = !exists || cmd?.yes || (await promptOverwriteDecision());
     if (write) {
