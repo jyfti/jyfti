@@ -16,6 +16,7 @@ import {
   readWorkflowOrTerminate,
   extractWorkflowName,
   isUrl,
+  validateInputsOrTerminate,
 } from "../../files/workflow.service";
 import { writeState } from "../../files/state-file.service";
 import { install } from "../../install.service";
@@ -38,16 +39,8 @@ export async function start(name?: string, inputList?: string[], cmd?: any) {
       inputList = await promptWorkflowInputs(workflow);
     }
     const inputs = createInputs(workflow, inputList || []);
+    validateInputsOrTerminate(workflow, inputs);
     const engine = createEngine(workflow);
-    const inputErrors = engine.validate(inputs);
-    if (Object.keys(inputErrors).length !== 0) {
-      const message =
-        chalk.red(
-          "The workflow can not be started because some inputs are invalid.\n\n"
-        ) + printAllInputErrors(inputErrors, inputs);
-      console.error(message);
-      process.exit(1);
-    }
     const initialState = engine.init(inputs);
     console.log("Created state.");
     if (cmd?.verbose) {
