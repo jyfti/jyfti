@@ -85,7 +85,7 @@ export class StepExecutionService {
       url: evaluate(variables, template.url),
       method: evaluate(variables, template.method) as HttpMethod,
       body: evaluate(variables, template.body),
-      // headers: evaluate(variables, template.headers),
+      headers: evaluate(variables, template.headers),
     };
   }
 
