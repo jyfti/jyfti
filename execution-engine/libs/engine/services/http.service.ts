@@ -1,46 +1,23 @@
 import { from, Observable } from "rxjs";
-import { HttpRequest } from "../types";
+import { HttpRequest, Headers } from "../types";
+import bent from "bent";
+import { map, flatMap } from "rxjs/operators";
 
 export class HttpService {
   readonly timeoutMillis = 10000;
-  /**
-   * An http request without any external dependencies.
-   * https://www.tomas-dvorak.cz/posts/nodejs-request-without-dependencies/
-   */
+
   request(
     requestInfo: HttpRequest<any>
   ): Observable<{ request: HttpRequest<any>; body: any }> {
-    const data = JSON.stringify(requestInfo.body);
-    requestInfo = this.attachHeaders(requestInfo, data);
-    const lib =
-      requestInfo.protocol === "https:" ? require("https") : require("http");
-    return from(
-      new Promise<{ request: HttpRequest<any>; body: any }>(
-        (resolve, reject) => {
-          const request = lib.request(requestInfo, (response: any) => {
-            response.setEncoding("utf8");
-            if (response.statusCode < 200 || response.statusCode > 299) {
-              const message = "Failed to load, status code: ";
-              reject(new Error(message + response.statusCode));
-            }
-            const body: any[] = [];
-            response.on("data", (chunk: any) => body.push(chunk));
-            response.on("end", () =>
-              resolve({
-                request: requestInfo,
-                body: this.parseJsonOrString(body.join("")),
-              })
-            );
-          });
-          request.on("error", (err: any) => reject(err));
-          request.setTimeout(this.timeoutMillis, () => {
-            request.abort();
-            reject("Request Timeout");
-          });
-          request.write(data);
-          request.end();
-        }
-      )
+    const getStream = bent(requestInfo.method);
+    const headers = this.addDefaultHeaders(requestInfo.headers || {});
+    const body = requestInfo.body
+      ? Buffer.from(JSON.stringify(requestInfo.body))
+      : undefined;
+    return from(getStream(requestInfo.url, body, headers)).pipe(
+      flatMap((stream: any) => from<string>(stream.text())),
+      map((body) => this.parseJsonOrString(body)),
+      map((body) => ({ request: requestInfo, body }))
     );
   }
 
@@ -53,18 +30,10 @@ export class HttpService {
     }
   }
 
-  private attachHeaders(
-    requestInfo: HttpRequest<any>,
-    data: string
-  ): HttpRequest<any> {
+  private addDefaultHeaders(headers: Headers): Headers {
     return {
-      ...requestInfo,
-      headers: {
-        "User-Agent": "jyfti/0.0.1",
-        "Content-Type": "application/json",
-        "Content-Length": data.length,
-        ...requestInfo.headers,
-      },
+      "User-Agent": "jyfti/0.0.1",
+      ...headers,
     };
   }
 }

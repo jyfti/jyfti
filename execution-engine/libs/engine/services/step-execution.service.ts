@@ -1,7 +1,6 @@
 import jsone from "json-e";
 import { Observable, of } from "rxjs";
 import { catchError, flatMap, map } from "rxjs/operators";
-import * as url from "url";
 
 import { HttpService } from "./http.service";
 import { evaluate } from "./evaluation.service";
@@ -13,7 +12,6 @@ import {
   HttpRequestTemplate,
   JsonExpression,
   HttpRequest,
-  HttpProtocol,
   HttpMethod,
 } from "../types";
 
@@ -83,15 +81,11 @@ export class StepExecutionService {
     template: HttpRequestTemplate,
     variables: VariableMap
   ): HttpRequest<any> {
-    const requestUrl = evaluate(variables, template.url);
-    const parsedRequestUrl = url.parse(requestUrl, true);
     return {
-      protocol: (parsedRequestUrl.protocol || "https:") as HttpProtocol,
+      url: evaluate(variables, template.url),
       method: evaluate(variables, template.method) as HttpMethod,
-      hostname: parsedRequestUrl.hostname || "",
-      path: parsedRequestUrl.path || "",
       body: evaluate(variables, template.body),
-      // headers: this.evaluate(variables, template.headers),
+      // headers: evaluate(variables, template.headers),
     };
   }
 
