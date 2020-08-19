@@ -43,7 +43,7 @@ It serves you as a foundation to create your first productive workflow.
 Run the workflow to completion.
 
 ```
-$ jyfti run start --complete retrieve-readme
+$ jyfti run retrieve-readme
 ? The GitHub organization (jyfti)
 ? The GitHub repository (jyfti)
 ```
@@ -52,7 +52,7 @@ Jyfti prompts for inputs that the workflow expects.
 Note that inputs can also be passed directly.
 
 ```
-$ jyfti run start --complete retrieve-readme jyfti jyfti
+$ jyfti run retrieve-readme jyfti jyfti
 ```
 
 ## The Jyfti format
