@@ -132,7 +132,36 @@ The `output` field defines the [JSON-e expression](https://json-e.js.org/) that 
 }
 ```
 
-## Debugging a workflow
+## Step-by-step execution
+
+While `jyfti run <name>` executes a workflow from start to finish, Jifty can also execute a workflow step-by-step persisting intermediate states to disk.
+
+A step-by-step workflow run is created via the `create` subcommand.
+
+```bash
+$ jyfti run create retrieve-readme jyfti jyfti
+```
+
+The `create` subcommand validates the input and writes the initial state to disk.
+The run can get advanced with the `step` subcommand.
+
+```bash
+$ jyfti run step retrieve-readme
+```
+
+At any point, the status, the state and the variables can be requested.
+
+```bash
+$ jyfti run status retrieve-readme
+$ jyfti run state retrieve-readme
+$ jyfti run vars retrieve-readme
+```
+
+A call to `complete` runs it to completion.
+
+```bash
+$ jyfti run complete retrieve-readme
+```
 
 ## Steps
 
