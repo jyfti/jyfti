@@ -140,6 +140,7 @@ A step-by-step workflow run is created via the `create` subcommand.
 
 ```bash
 $ jyfti run create retrieve-readme jyfti jyfti
+Created state.
 ```
 
 The `create` subcommand validates the input and writes the initial state to disk.
@@ -147,20 +148,37 @@ The run can get advanced with the `step` subcommand.
 
 ```bash
 $ jyfti run step retrieve-readme
+Completed 0
 ```
 
 At any point, the status, the state and the variables can be requested.
 
 ```bash
 $ jyfti run status retrieve-readme
+[Pending] At step [0]
 $ jyfti run state retrieve-readme
+{
+  "path": [
+    0
+  ],
+  "inputs": {
+    "org": "jyfti",
+    "repo": "jyfti"
+  },
+  "evaluations": []
+}
 $ jyfti run vars retrieve-readme
+{
+  "org": "jyfti",
+  "repo": "jyfti"
+}
 ```
 
 A call to `complete` runs it to completion.
 
 ```bash
 $ jyfti run complete retrieve-readme
+Completed 0
 ```
 
 ## Steps
