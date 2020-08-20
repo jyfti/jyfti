@@ -9,7 +9,7 @@ It allows to define workflows via json and to run them step-by-step.
 $ npm install -g @jyfti/cli
 ```
 
-## Quickstart
+## Usage
 
 Run your first workflow.
 
@@ -19,9 +19,6 @@ $ jyfti run https://raw.githubusercontent.com/jyfti/jyfti/master/workflows/retri
 
 Jyfti runs remote and local workflows.
 The preferred way of developing workflows is within a local Jyfti project.
-The usage section describes how to set you up for developing your first workflow.
-
-## Usage
 
 Initialize a Jyfti project within your current directory.
 
@@ -55,9 +52,138 @@ Note that inputs can also be passed directly.
 $ jyfti run retrieve-readme jyfti jyfti
 ```
 
-## The Jyfti format
+## Creating a workflow
 
-// TODO: Describe
+Let's inspect the generated `retrieve-readme` workflow.
+
+```json
+$ jyfti view retrieve-readme
+{
+  "$schema": "https://raw.githubusercontent.com/jyfti/jyfti/master/workflow-schema.json",
+  "name": "Retrieve README file of a GitHub repository",
+  "inputs": {
+    "org": {
+      "type": "string",
+      "description": "The GitHub organization",
+      "default": "jyfti"
+    },
+    "repo": {
+      "type": "string",
+      "description": "The GitHub repository",
+      "default": "jyfti"
+    }
+  },
+  "output": {
+    "$eval": "readmeResponse.body"
+  },
+  "steps": [
+    {
+      "assignTo": "readmeResponse",
+      "request": {
+        "method": "GET",
+        "url": "https://raw.githubusercontent.com/${org}/${repo}/master/README.md"
+      }
+    }
+  ]
+}
+```
+
+The `$schema` field allows editors like VSCode to validate your workflow against a schema and to autocomplete.
+
+```json
+{
+  "$schema": "https://raw.githubusercontent.com/jyfti/jyfti/master/workflow-schema.json"
+}
+```
+
+The `inputs` field defines a list of inputs to your workflow.
+Each input is assigned a [json schema](https://json-schema.org/) that Jyfti uses to validate and prompt for input.
+Note that inputs can be defined to be arbitrary json, but the CLI of Jyfti only reads flat inputs like strings and numbers.
+
+```json
+{
+  "inputs": {
+    "org": {
+      "type": "string",
+      "description": "The GitHub organization",
+      "default": "jyfti"
+    },
+    "repo": {
+      "type": "string",
+      "description": "The GitHub repository",
+      "default": "jyfti"
+    }
+  }
+}
+```
+
+The `steps` field defines a sequence of steps that are executed one after the other.
+Each step evaluates to a value that can be assigned to a variable with `assignTo`.
+A step can access the variables populated by all previous step.
+Read more about steps in the [steps section](#steps).
+
+The `output` field defines the [JSON-e expression](https://json-e.js.org/) that is returned after the workflow completed all steps.
+
+```json
+{
+  "output": {
+    "$eval": "readmeResponse.body"
+  }
+}
+```
+
+## Debugging a workflow
+
+## Steps
+
+There are three different types of steps.
+
+- Request steps
+- Expression steps
+- For-comprehensions
+
+### Request steps
+
+A request step defines a single http request.
+
+```json
+{
+  "assignTo": "readmeResponse",
+  "request": {
+    "method": "GET",
+    "url": "https://raw.githubusercontent.com/${org}/${repo}/master/README.md",
+    "body": {
+      "$eval": "${previousResponse.body}"
+    },
+    "headers": {
+      "Authorization": "Bearer ${token}"
+    }
+  }
+}
+```
+
+It requires a `url` and optionally accepts a `method`, `body` and `headers`.
+Each of these fields is evaluated as a [JSON-e expression](https://json-e.js.org/).
+
+### Expression steps
+
+An expression defines a transformation from one json object into another.
+It is useful to transform the output of one request step into the input of another request step.
+
+```json
+{
+  "assignTo": "variable",
+  "expression": {
+    "e": "${a.b}"
+  }
+}
+```
+
+The value of the `expression` field is defined as a [JSON-e expression](https://json-e.js.org/).
+
+### For-comprehensions
+
+// TODO: Describe via REST example
 
 ## The execution engine
 
