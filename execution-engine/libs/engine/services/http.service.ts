@@ -11,7 +11,6 @@ export class HttpService {
   ): Observable<{ request: HttpRequest<any>; body: any }> {
     const getStream = bent(requestInfo.method);
     const headers = this.addDefaultHeaders(requestInfo.headers || {});
-    console.log(headers);
     const body = requestInfo.body
       ? Buffer.from(JSON.stringify(requestInfo.body))
       : undefined;
