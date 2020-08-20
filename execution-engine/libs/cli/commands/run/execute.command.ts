@@ -11,8 +11,10 @@ import {
   isUrl,
   validateInputsOrTerminate,
   createInputs,
+  validateWorkflowOrTerminate,
 } from "../../files/workflow.service";
 import { writeState } from "../../files/state-file.service";
+import { readWorkflowSchemaOrTerminate } from "../../files/workflow-file.service";
 
 export async function execute(name?: string, inputList?: string[], cmd?: any) {
   const config = await readConfig();
@@ -22,6 +24,8 @@ export async function execute(name?: string, inputList?: string[], cmd?: any) {
   if (name) {
     await ensureDirExists(config.outRoot);
     const workflow = await readWorkflowOrTerminate(config, name);
+    const schema = await readWorkflowSchemaOrTerminate();
+    validateWorkflowOrTerminate(workflow, schema);
     name = isUrl(name) ? extractWorkflowName(name) : name;
     if ((inputList || []).length === 0) {
       inputList = await promptWorkflowInputs(workflow);

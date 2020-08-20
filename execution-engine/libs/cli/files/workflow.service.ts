@@ -1,10 +1,13 @@
 import { Config } from "../types/config";
-import { Workflow, Inputs } from "../../engine/types";
+import { Workflow, Inputs, JsonSchema } from "../../engine/types";
 import * as http from "./workflow-http.service";
 import * as file from "./workflow-file.service";
 import chalk from "chalk";
-import { printAllInputErrors } from "../print.service";
-import { validateInputs } from "../../engine/services/validator.service";
+import { printAllInputErrors, printValidationErrors } from "../print.service";
+import {
+  validateInputs,
+  validateWorkflow,
+} from "../../engine/services/validator.service";
 
 export function isUrl(name: string): boolean {
   return name.startsWith("http://") || name.startsWith("https://");
@@ -22,6 +25,18 @@ export function readWorkflowOrTerminate(
     ? http.readWorkflowOrTerminate
     : file.readWorkflowOrTerminate;
   return readWorkflowOrTerminate(config, name);
+}
+
+export function validateWorkflowOrTerminate(
+  workflow: Workflow,
+  schema: JsonSchema
+): void {
+  const errors = validateWorkflow(workflow, schema);
+  if (errors.length !== 0) {
+    console.error(chalk.red("The workflow is invalid."));
+    console.error(printValidationErrors(errors));
+    process.exit(1);
+  }
 }
 
 export function validateInputsOrTerminate(

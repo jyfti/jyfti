@@ -9,6 +9,7 @@ import {
   isUrl,
   validateInputsOrTerminate,
   createInputs,
+  validateWorkflowOrTerminate,
 } from "../../files/workflow.service";
 import { writeState } from "../../files/state-file.service";
 import { install } from "../../install.service";
@@ -16,13 +17,14 @@ import { readWorkflowSchemaOrTerminate } from "../../../cli/files/workflow-file.
 
 export async function create(name?: string, inputList?: string[], cmd?: any) {
   const config = await readConfig();
-  const schema = await readWorkflowSchemaOrTerminate();
   if (!name) {
     name = await promptWorkflow(config, "Which workflow do you want to start?");
   }
   if (name) {
     await ensureDirExists(config.outRoot);
     const workflow = await readWorkflowOrTerminate(config, name);
+    const schema = await readWorkflowSchemaOrTerminate();
+    validateWorkflowOrTerminate(workflow, schema);
     if (isUrl(name)) {
       name = extractWorkflowName(name);
       await install(config, workflow, schema, name, cmd?.yes);
