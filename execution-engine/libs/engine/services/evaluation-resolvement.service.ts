@@ -28,21 +28,31 @@ export class EvaluationResolvementService {
         "Can not modify sub evaluations of other than the current or next evaluation"
       );
     }
-    if (path.length == 1) {
-      if (path[0] == evaluations.length) {
+    if (path.length === 1) {
+      if (path[0] === evaluations.length) {
         return evaluations.concat([evaluation]);
       } else {
         // Current evaluation hold a sub scope before and will now hold the return of the subscope
         return dropRight(1)(evaluations).concat([evaluation]);
       }
     } else {
-      return evaluations.concat([
-        this.addEvaluation(
-          tail(path),
-          path[0] == evaluations.length - 1 ? evaluations[path[0]] : [],
-          evaluation
-        ),
-      ]);
+      if (path[0] === evaluations.length) {
+        return evaluations.concat([
+          this.addEvaluation(
+            tail(path),
+            path[0] == evaluations.length - 1 ? evaluations[path[0]] : [],
+            evaluation
+          ),
+        ]);
+      } else {
+        return dropRight(1)(evaluations).concat([
+          this.addEvaluation(
+            tail(path),
+            path[0] == evaluations.length - 1 ? evaluations[path[0]] : [],
+            evaluation
+          ),
+        ]);
+      }
     }
   }
 }
