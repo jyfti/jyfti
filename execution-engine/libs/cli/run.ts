@@ -23,6 +23,11 @@ export function addRunSubCommands(command: commander.Command) {
     .description("execute a run of this workflow")
     .option("-v --verbose", "print step results")
     .option("-y --yes", "automatically answer confirmation questions with yes")
+    .option(
+      "-e --environment <environment>",
+      "the name of the environment",
+      "default"
+    )
     .action(execute);
 
   command
