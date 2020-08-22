@@ -41,7 +41,7 @@ describe("Engine", () => {
       },
       {
         assignTo: "var4",
-        expression: [1, 2, 3, 4]
+        expression: [1, 2, 3, 4],
       },
       {
         assignTo: "var5",
@@ -56,9 +56,9 @@ describe("Engine", () => {
               }
             }
           ],
-          return: "var6"
-        }
-      }
+          return: "var6",
+        },
+      },
     ],
   };
   const engine = new Engine(workflow, service);

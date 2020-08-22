@@ -45,4 +45,24 @@ export class StepResolvementService {
       }
     }
   }
+
+  /**
+   * Resolves the position within the iterated array of all nested loops at the path.
+   */
+  resolveLoopPositions(steps: Step[], path: Path): number[] {
+    if (path.length == 0) {
+      throw new Error(`Can not resolve empty path`);
+    } else if (path.length == 1) {
+      return [];
+    } else {
+      const step = steps[path[0]];
+      if (step?.for?.do) {
+        return [path[1]].concat(
+          this.resolveLoopPositions(step.for.do, path.slice(2))
+        );
+      } else {
+        throw new Error(`Can not resolve path ${path} at flat step ${step}`);
+      }
+    }
+  }
 }

@@ -110,4 +110,36 @@ describe("StepResolvementService", () => {
       ]);
     });
   });
+
+  describe("resolving loop positions under a path", () => {
+    it("should resolve to empty array in a flat workflow", () => {
+      const steps: Step[] = [
+        {
+          assignTo: "var1",
+          expression: 1,
+        },
+      ];
+      expect(service.resolveLoopPositions(steps, [0])).toEqual([]);
+    });
+
+    it("should resolve a loop recursively", () => {
+      const steps: Step[] = [
+        {
+          assignTo: "var1",
+          for: {
+            const: "loopVar",
+            in: "listVar",
+            do: [
+              {
+                assignTo: "var2",
+                expression: 2,
+              },
+            ],
+            return: "loopVar",
+          },
+        },
+      ];
+      expect(service.resolveLoopPositions(steps, [0, 0, 0])).toEqual([0]);
+    });
+  });
 });

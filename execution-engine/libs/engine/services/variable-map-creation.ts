@@ -1,5 +1,6 @@
 import { Step, Evaluation, VariableMap, Workflow, State, Path } from "../types";
 import { StepResolvementService } from "./step-resolvement.service";
+import { workflowExists } from "libs/cli/files/workflow-file.service";
 
 export function createVariableMapFromState(
   workflow: Workflow,
@@ -21,12 +22,27 @@ function resolveLoopVariables(
   variables: VariableMap
 ): VariableMap {
   const steps = new StepResolvementService().resolveAllSteps(workflow, path);
+  const loopPositions = new StepResolvementService().resolveLoopPositions(
+    workflow.steps,
+    path
+  );
   return steps
     .filter((step) => step.for)
     .reduce(
-      (acc, step) => ({ ...acc, [step.for!.const]: variables[step.for!.in] }),
+      (acc, step, i) => ({
+        ...acc,
+        [step.for!.const]: getLoopList(variables, step)[loopPositions[i]],
+      }),
       {}
     );
+}
+
+function getLoopList(variables: VariableMap, step: Step): any {
+  if (!step.for || !variables[step.for!.in]) {
+    throw new Error(`The variable '${step.for?.in}' is not defined`);
+  } else {
+    return variables[step.for.in];
+  }
 }
 
 export function toVariableMap(
