@@ -1,4 +1,9 @@
-import { ExecutionService } from "./execution.service";
+import {
+  inputDefaults,
+  nextStep,
+  toOutput,
+  nextState,
+} from "./execution.service";
 import { Observable, empty, OperatorFunction } from "rxjs";
 import { flatMap, startWith, map, scan } from "rxjs/operators";
 import { validateInputs } from "./validator.service";
@@ -13,7 +18,7 @@ import {
 import { createVariableMapFromState } from "./variable-map-creation";
 
 export class Engine {
-  constructor(private workflow: Workflow, public service: ExecutionService) {}
+  constructor(private workflow: Workflow) {}
 
   validate(inputs: Inputs): InputErrors {
     return validateInputs(this.workflow.inputs || {}, inputs);
@@ -22,7 +27,7 @@ export class Engine {
   init(inputs: Inputs): State {
     return {
       path: [0],
-      inputs: { ...this.service.inputDefaults(this.workflow), ...inputs },
+      inputs: { ...inputDefaults(this.workflow), ...inputs },
       evaluations: [],
     };
   }
@@ -54,9 +59,9 @@ export class Engine {
    * @returns A cold observable of a single step result.
    */
   step(state: State): Observable<StepResult> {
-    return this.service
-      .nextStep(this.workflow, state)
-      .pipe(map((evaluation) => ({ path: state.path, evaluation })));
+    return nextStep(this.workflow, state).pipe(
+      map((evaluation) => ({ path: state.path, evaluation }))
+    );
   }
 
   /**
@@ -70,7 +75,7 @@ export class Engine {
   }
 
   getOutput(state: State): any | undefined {
-    return this.service.toOutput(this.workflow, state);
+    return toOutput(this.workflow, state);
   }
 
   getVariableMap(state: State): VariableMap {
@@ -94,6 +99,6 @@ export class Engine {
    * @returns The next state
    */
   toState(state: State, stepResult: StepResult): State {
-    return this.service.nextState(this.workflow, state, stepResult.evaluation);
+    return nextState(this.workflow, state, stepResult.evaluation);
   }
 }

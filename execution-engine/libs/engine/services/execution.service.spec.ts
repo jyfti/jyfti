@@ -1,17 +1,11 @@
 import { cold } from "jest-marbles";
 
-import { ExecutionService } from "./execution.service";
 import { Workflow } from "../types";
+import { nextStep } from "./execution.service";
 
 jest.mock("./http.service");
 
-describe("ExecutionService", () => {
-  let service = new ExecutionService();
-
-  it("should be created", () => {
-    expect(service).toBeTruthy();
-  });
-
+describe("the execution of workflows", () => {
   describe("the execution of the next step", () => {
     it("should execute the first step", () => {
       const workflow: Workflow = {
@@ -25,7 +19,7 @@ describe("ExecutionService", () => {
         ],
       };
       expect(
-        service.nextStep(workflow, { path: [0], inputs: {}, evaluations: [] })
+        nextStep(workflow, { path: [0], inputs: {}, evaluations: [] })
       ).toBeObservable(cold("(a|)", { a: 1 }));
     });
 
@@ -47,7 +41,7 @@ describe("ExecutionService", () => {
         ],
       };
       expect(
-        service.nextStep(workflow, { path: [1], inputs: {}, evaluations: [42] })
+        nextStep(workflow, { path: [1], inputs: {}, evaluations: [42] })
       ).toBeObservable(cold("(a|)", { a: 42 }));
     });
 
@@ -77,7 +71,7 @@ describe("ExecutionService", () => {
 
       it("should evaluate the return value with no loop iteration to an empty list", () => {
         expect(
-          service.nextStep(workflow, {
+          nextStep(workflow, {
             path: [0],
             inputs: { listVar: [1] },
             evaluations: [],
@@ -87,7 +81,7 @@ describe("ExecutionService", () => {
 
       it("should evaluate the return value with a single loop iteration to a single element list", () => {
         expect(
-          service.nextStep(workflow, {
+          nextStep(workflow, {
             path: [0],
             inputs: { listVar: [1] },
             evaluations: [[["a"]]],
@@ -97,7 +91,7 @@ describe("ExecutionService", () => {
 
       it("should evaluate the return value with multiple loop iterations to list of the size of the iterations", () => {
         expect(
-          service.nextStep(workflow, {
+          nextStep(workflow, {
             path: [0],
             inputs: { listVar: [1] },
             evaluations: [[["a"], ["b"], ["c"]]],
@@ -140,7 +134,7 @@ describe("ExecutionService", () => {
 
       it("should evaluate the return value with no loop iteration to an empty list", () => {
         expect(
-          service.nextStep(workflow, {
+          nextStep(workflow, {
             path: [0],
             inputs: { listVar: [1] },
             evaluations: [],
@@ -150,7 +144,7 @@ describe("ExecutionService", () => {
 
       it("should evaluate the return value with a single loop iteration to a single element list", () => {
         expect(
-          service.nextStep(workflow, {
+          nextStep(workflow, {
             path: [0],
             inputs: { listVar: [1] },
             evaluations: [[[10, 20, 30]]],
@@ -160,7 +154,7 @@ describe("ExecutionService", () => {
 
       it("should evaluate the return value with multiple loop iterations to list of the size of the iterations", () => {
         expect(
-          service.nextStep(workflow, {
+          nextStep(workflow, {
             path: [0],
             inputs: { listVar: [1] },
             evaluations: [

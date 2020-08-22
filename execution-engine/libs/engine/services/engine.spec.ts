@@ -1,12 +1,10 @@
 import { cold } from "jest-marbles";
-import { ExecutionService } from "./execution.service";
 import { Engine } from "./engine";
 import { Workflow } from "../types";
 
 jest.mock("./http.service");
 
 describe("Engine", () => {
-  const service = new ExecutionService();
   const workflow: Workflow = {
     name: "MyWorkflow",
     inputs: {},
@@ -49,7 +47,7 @@ describe("Engine", () => {
       },
     ],
   };
-  const engine = new Engine(workflow, service);
+  const engine = new Engine(workflow);
 
   it("should be created", () => {
     expect(engine).toBeTruthy();
