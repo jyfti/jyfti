@@ -18,11 +18,17 @@
   },
   "steps": [
     {
+      "assignTo": "headers",
+      "expression": {
+        "Authorization": "token ${env.github.token}"
+      }
+    },
+    {
       "assignTo": "issueResponse",
       "request": {
         "url": "https://api.github.com/repos/${org}/${repo}/issues",
         "headers": {
-          "Authorization": "token ${env.github.token}"
+          "$eval": "headers"
         }
       }
     },
@@ -46,10 +52,10 @@
           {
             "assignTo": "comments",
             "request": {
-              "url": "${commentsUrl}"
-            },
-            "headers": {
-              "Authorization": "token ${env.github.token}"
+              "url": "${commentsUrl}",
+              "headers": {
+                "$eval": "headers"
+              }
             }
           }
         ],
