@@ -10,7 +10,7 @@ import {
   Evaluation,
   VariableMap,
   Inputs,
-  Evaluations,
+  Path,
 } from "../types";
 import { evaluate } from "./evaluation.service";
 
@@ -31,7 +31,11 @@ export class ExecutionService {
     const nextPath = this.pathAdvancementService.advancePath(
       workflow,
       state.path,
-      this.toVariableMap(workflow, state.inputs, nextEvaluations)
+      this.toVariableMap(workflow, {
+        path: state.path,
+        inputs: state.inputs,
+        evaluations: nextEvaluations,
+      })
     );
     return {
       path: nextPath,
@@ -47,28 +51,42 @@ export class ExecutionService {
         state.evaluations,
         state.path
       ),
-      this.toVariableMap(workflow, state.inputs, state.evaluations)
+      this.toVariableMap(workflow, state)
     );
   }
 
   toOutput(workflow: Workflow, state: State): any | undefined {
     return workflow.output
-      ? evaluate(
-          this.toVariableMap(workflow, state.inputs, state.evaluations),
-          workflow.output
-        )
+      ? evaluate(this.toVariableMap(workflow, state), workflow.output)
       : undefined;
   }
 
-  toVariableMap(
-    workflow: Workflow,
-    inputs: Inputs,
-    evaluations: Evaluations
-  ): VariableMap {
-    return {
-      ...inputs,
-      ...this.stepExecutionService.toVariableMap(workflow.steps, evaluations),
+  toVariableMap(workflow: Workflow, state: State): VariableMap {
+    const variables = {
+      ...state.inputs,
+      ...this.stepExecutionService.toVariableMap(
+        workflow.steps,
+        state.evaluations
+      ),
     };
+    return {
+      ...variables,
+      ...this.resolveLoopVariables(workflow, state.path, variables),
+    };
+  }
+
+  resolveLoopVariables(
+    workflow: Workflow,
+    path: Path,
+    variables: VariableMap
+  ): VariableMap {
+    const steps = this.stepResolvementService.resolveAllSteps(workflow, path);
+    return steps
+      .filter((step) => step.for)
+      .reduce(
+        (acc, step) => ({ ...acc, [step.for!.const]: variables[step.for!.in] }),
+        {}
+      );
   }
 
   inputDefaults(workflow: Workflow): Inputs {
