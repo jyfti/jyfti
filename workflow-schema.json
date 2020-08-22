@@ -25,32 +25,41 @@
       "$ref": "http://json-schema.org/draft-07/schema#"
     },
     "step": {
-      "allOf": [
-        {
-          "properties": {
-            "assignTo": {
-              "type": "string"
-            }
-          },
-          "required": ["assignTo"]
-        },
-        {
-          "anyOf": [
-            { "$ref": "#/definitions/expressionStep" },
-            { "$ref": "#/definitions/requestStep" },
-            { "$ref": "#/definitions/forStep" }
-          ]
-        }
+      "oneOf": [
+        { "$ref": "#/definitions/expressionStep" },
+        { "$ref": "#/definitions/requestStep" },
+        { "$ref": "#/definitions/forStep" }
       ]
     },
     "expressionStep": {
-      "properties": { "expression": { "$ref": "#/definitions/jsone" } }
+      "properties": {
+        "assignTo": {
+          "type": "string"
+        },
+        "expression": { "$ref": "#/definitions/jsone" }
+      },
+      "required": ["assignTo", "expression"],
+      "additionalProperties": false
     },
     "forStep": {
-      "properties": { "for": { "$ref": "#/definitions/forLoop" } }
+      "properties": {
+        "assignTo": {
+          "type": "string"
+        },
+        "for": { "$ref": "#/definitions/forLoop" }
+      },
+      "required": ["assignTo", "for"],
+      "additionalProperties": false
     },
     "requestStep": {
-      "properties": { "request": { "$ref": "#/definitions/request" } }
+      "properties": {
+        "assignTo": {
+          "type": "string"
+        },
+        "request": { "$ref": "#/definitions/request" }
+      },
+      "required": ["assignTo", "request"],
+      "additionalProperties": false
     },
     "jsone": {
       "type": "object"
@@ -64,14 +73,11 @@
         "url": {
           "type": "string"
         },
-        "body": {
-          "type": "object"
-        },
-        "headers": {
-          "type": "object"
-        }
+        "body": { "$ref": "#/definitions/jsone" },
+        "headers": { "$ref": "#/definitions/jsone" }
       },
-      "required": ["method", "url"]
+      "additionalProperties": false,
+      "required": ["url"]
     },
     "forLoop": {
       "type": "object",
@@ -90,6 +96,7 @@
           "type": "string"
         }
       },
+      "additionalProperties": false,
       "required": ["const", "in", "do", "return"]
     }
   }
