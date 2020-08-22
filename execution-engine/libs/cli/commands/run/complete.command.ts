@@ -23,7 +23,7 @@ export async function complete(name?: string, cmd?: any) {
   if (name) {
     const workflow = await readWorkflowOrTerminate(config, name);
     const state = await readStateOrTerminate(config, name);
-    const environment = await readEnvironmentOrTerminate(config, undefined);
+    const environment = await readEnvironmentOrTerminate(config, cmd?.environment);
     validateEnvironmentOrTerminate(workflow, environment);
     const engine = createEngine(workflow, environment);
     engine

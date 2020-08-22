@@ -34,7 +34,7 @@ export async function create(name?: string, inputList?: string[], cmd?: any) {
     }
     const inputs = createInputs(workflow, inputList || []);
     validateInputsOrTerminate(workflow, inputs);
-    const environment = await readEnvironmentOrTerminate(config, undefined);
+    const environment = await readEnvironmentOrTerminate(config, cmd?.environment);
     validateEnvironmentOrTerminate(workflow, environment);
     const initialState = createEngine(workflow, environment).init(inputs);
     await writeState(config, name, initialState);

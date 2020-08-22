@@ -16,6 +16,11 @@ export function addRunSubCommands(command: commander.Command) {
     .description("creates the initial state of a run of this workflow")
     .option("-v --verbose", "print created initial state")
     .option("-y --yes", "automatically answer confirmation questions with yes")
+    .option(
+      "-e --environment <environment>",
+      "the name of the environment",
+      "default"
+    )
     .action(create);
 
   command
@@ -34,12 +39,22 @@ export function addRunSubCommands(command: commander.Command) {
     .command("step [name]")
     .description("execute the next step of this workflow run")
     .option("-v --verbose", "print step result")
+    .option(
+      "-e --environment <environment>",
+      "the name of the environment",
+      "default"
+    )
     .action(step);
 
   command
     .command("complete [name]")
     .description("complete the run of this workflow from its current state")
     .option("-v --verbose", "print step results")
+    .option(
+      "-e --environment <environment>",
+      "the name of the environment",
+      "default"
+    )
     .action(complete);
 
   command
