@@ -1,0 +1,54 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jyfti/jyfti/master/workflow-schema.json",
+  "name": "Retrieve the comments on the issues of a GitHub repository",
+  "inputs": {
+    "org": {
+      "type": "string",
+      "description": "The GitHub organization",
+      "default": "jyfti"
+    },
+    "repo": {
+      "type": "string",
+      "description": "The GitHub repository",
+      "default": "jyfti"
+    }
+  },
+  "output": {
+    "$eval": "comments"
+  },
+  "steps": [
+    {
+      "assignTo": "issueResponse",
+      "request": {
+        "url": "https://api.github.com/repos/${org}/${repo}/issues"
+      }
+    },
+    {
+      "assignTo": "commentsUrls",
+      "expression": {
+        "$map": {
+          "$eval": "issueResponse.body"
+        },
+        "each(issue)": {
+          "$eval": "issue.comments_url"
+        }
+      }
+    },
+    {
+      "assignTo": "comments",
+      "for": {
+        "const": "commentsUrl",
+        "in": "commentsUrls",
+        "do": [
+          {
+            "assignTo": "comments",
+            "request": {
+              "url": "${commentsUrl}"
+            }
+          }
+        ],
+        "return": "comments"
+      }
+    }
+  ]
+}

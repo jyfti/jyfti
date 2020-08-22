@@ -4,7 +4,14 @@ import { EvaluationResolvementService } from "./evaluation-resolvement.service";
 import { PathAdvancementService } from "./path-advancement.service";
 import { StepExecutionService } from "./step-execution.service";
 import { StepResolvementService } from "./step-resolvement.service";
-import { State, Workflow, Evaluation, VariableMap, Inputs } from "../types";
+import {
+  State,
+  Workflow,
+  Evaluation,
+  VariableMap,
+  Inputs,
+  Evaluations,
+} from "../types";
 import { evaluate } from "./evaluation.service";
 
 export class ExecutionService {
@@ -16,15 +23,15 @@ export class ExecutionService {
   ) {}
 
   nextState(workflow: Workflow, state: State, evaluation: Evaluation): State {
-    const nextPath = this.pathAdvancementService.advancePath(
-      workflow,
-      state.path,
-      this.toVariableMap(workflow, state)
-    );
     const nextEvaluations = this.evaluationResolvementService.addEvaluation(
       state.path,
       state.evaluations,
       evaluation
+    );
+    const nextPath = this.pathAdvancementService.advancePath(
+      workflow,
+      state.path,
+      this.toVariableMap(workflow, state.inputs, nextEvaluations)
     );
     return {
       path: nextPath,
@@ -40,23 +47,27 @@ export class ExecutionService {
         state.evaluations,
         state.path
       ),
-      this.toVariableMap(workflow, state)
+      this.toVariableMap(workflow, state.inputs, state.evaluations)
     );
   }
 
   toOutput(workflow: Workflow, state: State): any | undefined {
     return workflow.output
-      ? evaluate(this.toVariableMap(workflow, state), workflow.output)
+      ? evaluate(
+          this.toVariableMap(workflow, state.inputs, state.evaluations),
+          workflow.output
+        )
       : undefined;
   }
 
-  toVariableMap(workflow: Workflow, state: State): VariableMap {
+  toVariableMap(
+    workflow: Workflow,
+    inputs: Inputs,
+    evaluations: Evaluations
+  ): VariableMap {
     return {
-      ...state.inputs,
-      ...this.stepExecutionService.toVariableMap(
-        workflow.steps,
-        state.evaluations
-      ),
+      ...inputs,
+      ...this.stepExecutionService.toVariableMap(workflow.steps, evaluations),
     };
   }
 

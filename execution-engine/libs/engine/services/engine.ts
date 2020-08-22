@@ -73,7 +73,11 @@ export class Engine {
   }
 
   getVariableMap(state: State): VariableMap {
-    return this.service.toVariableMap(this.workflow, state);
+    return this.service.toVariableMap(
+      this.workflow,
+      state.inputs,
+      state.evaluations
+    );
   }
 
   /**

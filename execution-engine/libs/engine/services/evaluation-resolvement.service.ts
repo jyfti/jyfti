@@ -8,7 +8,7 @@ export class EvaluationResolvementService {
     evaluations: Evaluation | Evaluations,
     path: Path
   ): Evaluation | Evaluations {
-    if (path.length == 0) {
+    if (path.length === 0 || !evaluations) {
       return evaluations;
     } else {
       return this.resolveEvaluation(evaluations[path[0]], tail(path));
@@ -20,7 +20,7 @@ export class EvaluationResolvementService {
     evaluations: Evaluations,
     evaluation: Evaluation
   ): Evaluations {
-    if (path.length == 0) {
+    if (path.length === 0) {
       return evaluations.concat([evaluation]);
     }
     if (path[0] < evaluations.length - 1) {
