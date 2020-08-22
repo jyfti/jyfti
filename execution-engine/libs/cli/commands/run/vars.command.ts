@@ -4,7 +4,7 @@ import { readStateOrTerminate } from "../../files/state-file.service";
 import { printJson } from "../../print.service";
 import { createEngine } from "../../../engine/services/engine";
 import { readWorkflowOrTerminate } from "../../files/workflow-file.service";
-import { readEnvironment } from "../../../cli/files/environment-file.service";
+import { readEnvironmentOrTerminate } from "../../../cli/files/environment-file.service";
 
 export async function vars(name?: string) {
   const config = await readConfig();
@@ -17,7 +17,7 @@ export async function vars(name?: string) {
   if (name) {
     const workflow = await readWorkflowOrTerminate(config, name);
     const state = await readStateOrTerminate(config, name);
-    const environment = await readEnvironment(config, undefined);
+    const environment = await readEnvironmentOrTerminate(config, undefined);
     const engine = createEngine(workflow, environment);
     console.log(printJson(engine.getVariableMap(state)));
   }

@@ -9,7 +9,7 @@ import {
   writeState,
   readStateOrTerminate,
 } from "../../files/state-file.service";
-import { readEnvironment } from "../../../cli/files/environment-file.service";
+import { readEnvironmentOrTerminate } from "../../../cli/files/environment-file.service";
 import { validateEnvironmentOrTerminate } from "../../../cli/files/workflow.service";
 
 export async function complete(name?: string, cmd?: any) {
@@ -23,7 +23,7 @@ export async function complete(name?: string, cmd?: any) {
   if (name) {
     const workflow = await readWorkflowOrTerminate(config, name);
     const state = await readStateOrTerminate(config, name);
-    const environment = await readEnvironment(config, undefined);
+    const environment = await readEnvironmentOrTerminate(config, undefined);
     validateEnvironmentOrTerminate(workflow, environment);
     const engine = createEngine(workflow, environment);
     engine

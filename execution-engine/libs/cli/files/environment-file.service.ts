@@ -11,13 +11,11 @@ export function resolveEnvironment(config: Config, name: string) {
   return nodePath.resolve(config.envRoot, name + ".json");
 }
 
-export async function readEnvironment(
+function readEnvironment(
   config: Config,
   name: string | undefined
 ): Promise<VariableMap> {
-  return await readJson(
-    resolveEnvironment(config, name || defaultEnvironmentName)
-  ).catch(() => ({}));
+  return readJson(resolveEnvironment(config, name || defaultEnvironmentName));
 }
 
 export function environmentExists(
@@ -38,7 +36,7 @@ export function writeEnvironment(
 
 export async function readEnvironmentOrTerminate(
   config: Config,
-  name: string
+  name: string | undefined
 ): Promise<VariableMap> {
   const environment = await readEnvironment(config, name).catch(
     () => undefined
