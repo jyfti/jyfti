@@ -6,9 +6,7 @@
       "assignTo": "words_response",
       "request": {
         "method": "GET",
-        "url": "https://wordsapiv1.p.mashape.com/words/example/synonyms",
-        "body": null,
-        "headers": null
+        "url": "https://wordsapiv1.p.mashape.com/words/example/synonyms"
       }
     }
   ]

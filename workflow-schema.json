@@ -46,7 +46,26 @@
         "assignTo": {
           "type": "string"
         },
-        "for": { "$ref": "#/definitions/forLoop" }
+        "for": {
+          "type": "object",
+          "properties": {
+            "const": {
+              "type": "string"
+            },
+            "in": {
+              "type": "string"
+            },
+            "do": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/step" }
+            },
+            "return": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false,
+          "required": ["const", "in", "do", "return"]
+        }
       },
       "required": ["assignTo", "for"],
       "additionalProperties": false
@@ -56,48 +75,27 @@
         "assignTo": {
           "type": "string"
         },
-        "request": { "$ref": "#/definitions/request" }
+        "request": {
+          "type": "object",
+          "properties": {
+            "method": {
+              "type": "string"
+            },
+            "url": {
+              "type": "string"
+            },
+            "body": { "$ref": "#/definitions/jsone" },
+            "headers": { "$ref": "#/definitions/jsone" }
+          },
+          "additionalProperties": false,
+          "required": ["url"]
+        }
       },
       "required": ["assignTo", "request"],
       "additionalProperties": false
     },
     "jsone": {
       "type": "object"
-    },
-    "request": {
-      "type": "object",
-      "properties": {
-        "method": {
-          "type": "string"
-        },
-        "url": {
-          "type": "string"
-        },
-        "body": { "$ref": "#/definitions/jsone" },
-        "headers": { "$ref": "#/definitions/jsone" }
-      },
-      "additionalProperties": false,
-      "required": ["url"]
-    },
-    "forLoop": {
-      "type": "object",
-      "properties": {
-        "const": {
-          "type": "string"
-        },
-        "in": {
-          "type": "string"
-        },
-        "do": {
-          "type": "array",
-          "items": { "$ref": "#/definitions/step" }
-        },
-        "return": {
-          "type": "string"
-        }
-      },
-      "additionalProperties": false,
-      "required": ["const", "in", "do", "return"]
     }
   }
 }
