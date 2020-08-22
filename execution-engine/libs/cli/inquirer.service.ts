@@ -2,6 +2,7 @@ import { Config } from "./types/config";
 import { readWorkflowNames } from "./files/workflow-file.service";
 import inquirer from "inquirer";
 import { Workflow } from "../engine/types";
+import { readEnvironmentNames } from "./files/environment-file.service";
 
 export async function promptWorkflow(
   config: Config,
@@ -17,6 +18,22 @@ export async function promptWorkflow(
     },
   ]);
   return answers.workflow;
+}
+
+export async function promptEnvironment(
+  config: Config,
+  question: string
+): Promise<string | undefined> {
+  const names = await readEnvironmentNames(config);
+  const answers = await inquirer.prompt([
+    {
+      name: "environment",
+      message: question,
+      type: "list",
+      choices: names,
+    },
+  ]);
+  return answers.environment;
 }
 
 export async function promptWorkflowInputs(

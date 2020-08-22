@@ -2,6 +2,7 @@ import commander, { Command } from "commander";
 import { init, view, list, clean, validate, install } from "./commands";
 import { addGenerateSubCommands } from "./generate";
 import { addRunSubCommands } from "./run";
+import { addEnvironmentSubCommands } from "./environment";
 
 export function createProgram(): commander.Command {
   const program = new Command();
@@ -38,13 +39,19 @@ export function createProgram(): commander.Command {
 
   const generate = program
     .command("generate")
-    .description("generate parts of a workflow");
+    .description("generate workflows and environments");
 
   addGenerateSubCommands(generate);
 
   const run = program.command("run").description("run a workflow");
 
   addRunSubCommands(run);
+
+  const environment = program
+    .command("environment")
+    .description("act on environments");
+
+  addEnvironmentSubCommands(environment);
 
   return program;
 }
