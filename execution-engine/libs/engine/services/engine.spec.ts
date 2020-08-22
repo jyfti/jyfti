@@ -51,7 +51,9 @@ describe("Engine", () => {
           do: [
             {
               assignTo: "var6",
-              expression: "${loopVar * 2}"
+              expression: {
+                $eval: "loopVar * 2"
+              }
             }
           ],
           return: "var6"
