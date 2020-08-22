@@ -2,6 +2,11 @@
 
 import { createProgram } from "./libs/cli/program";
 
-const program = createProgram();
-
-program.parse(process.argv);
+(async () => {
+  try {
+    const program = createProgram();
+    await program.parseAsync(process.argv);
+  } catch (err) {
+      console.error(err);
+  }
+})();
