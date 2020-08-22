@@ -10,20 +10,19 @@
       "description": "The inputs of the workflow",
       "type": "object",
       "additionalProperties": {
-        "$ref": "#/definitions/input"
+        "$ref": "http://json-schema.org/draft-07/schema#"
       }
     },
     "steps": {
       "description": "A sequence of steps that are executed one after the other and where the results of a previous step can be used in later steps",
       "type": "array",
-      "items": { "$ref": "#/definitions/step" }
+      "items": {
+        "$ref": "#/definitions/step"
+      }
     }
   },
   "required": ["name", "steps"],
   "definitions": {
-    "input": {
-      "$ref": "http://json-schema.org/draft-07/schema#"
-    },
     "step": {
       "oneOf": [
         { "$ref": "#/definitions/expressionStep" },
