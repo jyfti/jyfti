@@ -38,8 +38,8 @@ export async function readEnvironmentOrTerminate(
   config: Config,
   name: string | undefined
 ): Promise<VariableMap> {
-  const environment = await readEnvironment(config, name).catch(
-    () => undefined
+  const environment = await readEnvironment(config, name).catch(() =>
+    !name || name === defaultEnvironmentName ? {} : undefined
   );
   if (!environment) {
     console.error(chalk.red("Environment does not exist."));
