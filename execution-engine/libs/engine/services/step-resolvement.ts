@@ -28,7 +28,7 @@ export function resolveAllSteps(workflow: Workflow, path: Path): Step[] {
 
 export function resolveAllStepsRec(steps: Step[], path: Path): Step[] {
   if (path.length == 0) {
-    throw new Error(`Can not resolve empty path`);
+    return [];
   } else if (path.length == 1) {
     return [steps[path[0]]];
   } else {
@@ -46,7 +46,7 @@ export function resolveAllStepsRec(steps: Step[], path: Path): Step[] {
  */
 export function resolveLoopPositions(steps: Step[], path: Path): number[] {
   if (path.length == 0) {
-    throw new Error(`Can not resolve empty path`);
+    return [];
   } else if (path.length == 1) {
     return [];
   } else {
