@@ -7,7 +7,7 @@ import { printAllInputErrors, printValidationErrors } from "../print.service";
 import {
   validateInputs,
   validateWorkflow,
-} from "../../engine/services/validator.service";
+} from "../../engine/services/validator";
 
 export function isUrl(name: string): boolean {
   return name.startsWith("http://") || name.startsWith("https://");

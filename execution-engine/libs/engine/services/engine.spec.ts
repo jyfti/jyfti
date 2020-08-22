@@ -2,7 +2,7 @@ import { cold } from "jest-marbles";
 import { Engine } from "./engine";
 import { Workflow } from "../types";
 
-jest.mock("./http.service");
+jest.mock("./http");
 
 describe("Engine", () => {
   const workflow: Workflow = {

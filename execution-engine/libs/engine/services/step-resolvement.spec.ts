@@ -3,7 +3,7 @@ import {
   resolveStepRec,
   resolveAllStepsRec,
   resolveLoopPositions,
-} from "./step-resolvement.service";
+} from "./step-resolvement";
 
 describe("the resolvement of steps", () => {
   describe("resolving the deepest step at a path", () => {

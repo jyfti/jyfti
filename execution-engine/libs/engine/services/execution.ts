@@ -1,15 +1,12 @@
 import { Observable } from "rxjs";
 
 import { State, Workflow, Evaluation, Inputs } from "../types";
-import { evaluate } from "./evaluation.service";
+import { evaluate } from "./evaluation";
 import { createVariableMapFromState } from "./variable-map-creation";
-import { executeStep } from "./step-execution.service";
-import { advancePath } from "./path-advancement.service";
-import { resolveStep } from "./step-resolvement.service";
-import {
-  addEvaluation,
-  resolveEvaluation,
-} from "./evaluation-resolvement.service";
+import { executeStep } from "./step-execution";
+import { advancePath } from "./path-advancement";
+import { resolveStep } from "./step-resolvement";
+import { addEvaluation, resolveEvaluation } from "./evaluation-resolvement";
 
 export function nextState(
   workflow: Workflow,

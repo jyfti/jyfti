@@ -1,8 +1,5 @@
 import { Step, Evaluation, VariableMap, Workflow, State, Path } from "../types";
-import {
-  resolveAllSteps,
-  resolveLoopPositions,
-} from "./step-resolvement.service";
+import { resolveAllSteps, resolveLoopPositions } from "./step-resolvement";
 
 export function createVariableMapFromState(
   workflow: Workflow,

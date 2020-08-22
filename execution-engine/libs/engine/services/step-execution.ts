@@ -2,7 +2,7 @@ import jsone from "json-e";
 import { Observable, of } from "rxjs";
 import { catchError, flatMap, map } from "rxjs/operators";
 
-import { evaluate } from "./evaluation.service";
+import { evaluate } from "./evaluation";
 import {
   Step,
   Evaluation,
@@ -14,7 +14,7 @@ import {
   HttpMethod,
 } from "../types";
 import { toVariableMap } from "./variable-map-creation";
-import { http } from "./http.service";
+import { http } from "./http";
 
 export function executeStep(
   step: Step,

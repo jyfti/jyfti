@@ -1,6 +1,6 @@
 import { Config } from "./types/config";
 import { Workflow, JsonSchema } from "libs/engine/types";
-import { validateWorkflow } from "../engine/services/validator.service";
+import { validateWorkflow } from "../engine/services/validator";
 import chalk from "chalk";
 import { printValidationErrors } from "./print.service";
 import { workflowExists, writeWorkflow } from "./files/workflow-file.service";

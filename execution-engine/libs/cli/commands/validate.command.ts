@@ -1,6 +1,6 @@
 import { readConfig } from "../files/config-file.service";
 import { promptWorkflow } from "../inquirer.service";
-import { validateWorkflow } from "../../engine/services/validator.service";
+import { validateWorkflow } from "../../engine/services/validator";
 import { printValidationErrors } from "../print.service";
 import {
   readWorkflowOrTerminate,

@@ -1,9 +1,9 @@
 import { cold } from "jest-marbles";
 
 import { Workflow } from "../types";
-import { nextStep } from "./execution.service";
+import { nextStep } from "./execution";
 
-jest.mock("./http.service");
+jest.mock("./http");
 
 describe("the execution of workflows", () => {
   describe("the execution of the next step", () => {

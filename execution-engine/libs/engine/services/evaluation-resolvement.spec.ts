@@ -1,7 +1,4 @@
-import {
-  resolveEvaluation,
-  addEvaluation,
-} from "./evaluation-resolvement.service";
+import { resolveEvaluation, addEvaluation } from "./evaluation-resolvement";
 
 describe("the resolvement of evaluations", () => {
   it.each([

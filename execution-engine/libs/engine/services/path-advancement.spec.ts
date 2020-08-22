@@ -1,5 +1,5 @@
 import { Step, Workflow } from "../types";
-import { advancePath, advancePathRec } from "./path-advancement.service";
+import { advancePath, advancePathRec } from "./path-advancement";
 
 describe("the advancement of paths", () => {
   describe("with one level", () => {

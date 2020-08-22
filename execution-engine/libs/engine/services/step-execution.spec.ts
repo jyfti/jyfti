@@ -1,7 +1,7 @@
-import { executeRequestStep } from "./step-execution.service";
+import { executeRequestStep } from "./step-execution";
 import { cold } from "jest-marbles";
 
-jest.mock("./http.service");
+jest.mock("./http");
 
 describe("The execution of steps", () => {
   describe("a request step", () => {

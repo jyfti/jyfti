@@ -1,12 +1,7 @@
-import {
-  inputDefaults,
-  nextStep,
-  toOutput,
-  nextState,
-} from "./execution.service";
+import { inputDefaults, nextStep, toOutput, nextState } from "./execution";
 import { Observable, empty, OperatorFunction } from "rxjs";
 import { flatMap, startWith, map, scan } from "rxjs/operators";
-import { validateInputs } from "./validator.service";
+import { validateInputs } from "./validator";
 import {
   StepResult,
   InputErrors,
