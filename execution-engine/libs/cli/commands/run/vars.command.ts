@@ -2,7 +2,7 @@ import { readConfig } from "../../files/config-file.service";
 import { promptWorkflow } from "../../inquirer.service";
 import { readStateOrTerminate } from "../../files/state-file.service";
 import { printJson } from "../../print.service";
-import { createEngine } from "../../../engine/services/engine.factory";
+import { createEngine } from "../../../engine/services/engine";
 import { readWorkflowOrTerminate } from "../../files/workflow-file.service";
 
 export async function vars(name?: string) {

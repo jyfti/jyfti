@@ -12,6 +12,10 @@ import {
 } from "../types";
 import { createVariableMapFromState } from "./variable-map-creation";
 
+export function createEngine(workflow: Workflow): Engine {
+  return new Engine(workflow);
+}
+
 export class Engine {
   constructor(private workflow: Workflow) {}
 

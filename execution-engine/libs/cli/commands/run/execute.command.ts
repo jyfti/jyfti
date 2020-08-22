@@ -1,6 +1,6 @@
 import { ensureDirExists } from "../../files/file.service";
 import { readConfig } from "../../files/config-file.service";
-import { createEngine } from "../../../engine/services/engine.factory";
+import { createEngine } from "../../../engine/services/engine";
 import { last, flatMap, tap } from "rxjs/operators";
 import { from } from "rxjs";
 import { promptWorkflow, promptWorkflowInputs } from "../../inquirer.service";
