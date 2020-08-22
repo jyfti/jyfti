@@ -3,18 +3,16 @@ import { of } from "rxjs";
 
 import { ExecutionService } from "./execution.service";
 import { StepExecutionService } from "./step-execution.service";
-import { HttpService } from "./http.service";
 import { EvaluationResolvementService } from "./evaluation-resolvement.service";
 import { PathAdvancementService } from "./path-advancement.service";
 import { StepResolvementService } from "./step-resolvement.service";
 import { Workflow } from "../types";
 
+jest.mock("./http.service");
+
 describe("ExecutionService", () => {
-  const httpClientStub: Partial<HttpService> = {
-    request: (request) => of({ request, body: { field: "value" } }),
-  };
   let service = new ExecutionService(
-    new StepExecutionService(httpClientStub as HttpService),
+    new StepExecutionService(),
     new EvaluationResolvementService(),
     new PathAdvancementService(),
     new StepResolvementService()

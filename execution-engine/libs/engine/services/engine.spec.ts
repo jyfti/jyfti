@@ -1,6 +1,4 @@
 import { cold } from "jest-marbles";
-import { HttpService } from "./http.service";
-import { of } from "rxjs";
 import { ExecutionService } from "./execution.service";
 import { StepExecutionService } from "./step-execution.service";
 import { EvaluationResolvementService } from "./evaluation-resolvement.service";
@@ -9,12 +7,11 @@ import { StepResolvementService } from "./step-resolvement.service";
 import { Engine } from "./engine";
 import { Workflow } from "../types";
 
+jest.mock("./http.service");
+
 describe("Engine", () => {
-  const httpClientStub: Partial<HttpService> = {
-    request: (request) => of({ request, body: { field: "value" } }),
-  };
   const service = new ExecutionService(
-    new StepExecutionService(httpClientStub as HttpService),
+    new StepExecutionService(),
     new EvaluationResolvementService(),
     new PathAdvancementService(),
     new StepResolvementService()
@@ -52,9 +49,9 @@ describe("Engine", () => {
             {
               assignTo: "var6",
               expression: {
-                $eval: "loopVar * 2"
-              }
-            }
+                $eval: "loopVar * 2",
+              },
+            },
           ],
           return: "var6",
         },

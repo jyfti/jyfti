@@ -2,7 +2,6 @@ import jsone from "json-e";
 import { Observable, of } from "rxjs";
 import { catchError, flatMap, map } from "rxjs/operators";
 
-import { HttpService } from "./http.service";
 import { evaluate } from "./evaluation.service";
 import {
   Step,
@@ -15,10 +14,9 @@ import {
   HttpMethod,
 } from "../types";
 import { toVariableMap } from "./variable-map-creation";
+import { http } from "./http.service";
 
 export class StepExecutionService {
-  constructor(private http: HttpService) {}
-
   executeStep(
     step: Step,
     localEvaluations: Evaluation | Evaluations,
@@ -43,7 +41,7 @@ export class StepExecutionService {
     variables: VariableMap
   ): Observable<Evaluation> {
     return of(this.createHttpRequest(request, variables)).pipe(
-      flatMap((request) => this.http.request(request)),
+      flatMap((request) => http(request)),
       catchError((response) => of(response))
     );
   }

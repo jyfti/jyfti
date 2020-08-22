@@ -1,6 +1,5 @@
 import { Step, Evaluation, VariableMap, Workflow, State, Path } from "../types";
 import { StepResolvementService } from "./step-resolvement.service";
-import { workflowExists } from "libs/cli/files/workflow-file.service";
 
 export function createVariableMapFromState(
   workflow: Workflow,
