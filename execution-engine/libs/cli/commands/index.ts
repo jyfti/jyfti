@@ -14,4 +14,5 @@ export * from "./validate.command";
 export * from "./install.command";
 export * from "./generate/workflow.command";
 export * from "./generate/environment.command";
+export * from "./environment/list.command";
 export * from "./environment/view.command";
