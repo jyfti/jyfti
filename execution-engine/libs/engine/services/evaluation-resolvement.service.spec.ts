@@ -1,12 +1,9 @@
-import { EvaluationResolvementService } from "./evaluation-resolvement.service";
+import {
+  resolveEvaluation,
+  addEvaluation,
+} from "./evaluation-resolvement.service";
 
-describe("EvaluationResolvementService", () => {
-  let service = new EvaluationResolvementService();
-
-  it("should be created", () => {
-    expect(service).toBeTruthy();
-  });
-
+describe("the resolvement of evaluations", () => {
   it.each([
     ["a", [], "a"],
     [["a"], [0], "a"],
@@ -14,7 +11,7 @@ describe("EvaluationResolvementService", () => {
     [["a", ["b", "c"]], [1], ["b", "c"]],
     [["a", ["b", "c"]], [1, 1], "c"],
   ])("resolveEvaluation(%s, %s)=%s", (evaluations, path, expectation) => {
-    expect(service.resolveEvaluation(evaluations, path)).toEqual(expectation);
+    expect(resolveEvaluation(evaluations, path)).toEqual(expectation);
   });
 
   it.each([
@@ -26,14 +23,22 @@ describe("EvaluationResolvementService", () => {
     [[0, 0, 1], [[["a"]]], "b", [[["a", "b"]]]],
     [[0, 1, 0], [[["a"]]], "b", [[["a"], ["b"]]]],
     [[0, 1, 0], [[["a", "b"]]], "c", [[["a", "b"], ["c"]]]],
-    [[0, 1, 1], [[["a", "b"], ["c"]]], "d", [[["a", "b"], ["c", "d"]]]],
+    [
+      [0, 1, 1],
+      [[["a", "b"], ["c"]]],
+      "d",
+      [
+        [
+          ["a", "b"],
+          ["c", "d"],
+        ],
+      ],
+    ],
     [[0], [[["a"]]], "b", ["b"]],
   ])(
     "addEvaluation(%s, %s, %s)=%s",
     (path, evaluations, evaluation, expectation) => {
-      expect(service.addEvaluation(path, evaluations, evaluation)).toEqual(
-        expectation
-      );
+      expect(addEvaluation(path, evaluations, evaluation)).toEqual(expectation);
     }
   );
 });

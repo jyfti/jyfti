@@ -1,13 +1,12 @@
 import { cold } from "jest-marbles";
 import { ExecutionService } from "./execution.service";
-import { EvaluationResolvementService } from "./evaluation-resolvement.service";
 import { Engine } from "./engine";
 import { Workflow } from "../types";
 
 jest.mock("./http.service");
 
 describe("Engine", () => {
-  const service = new ExecutionService(new EvaluationResolvementService());
+  const service = new ExecutionService();
   const workflow: Workflow = {
     name: "MyWorkflow",
     inputs: {},

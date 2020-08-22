@@ -1,13 +1,12 @@
 import { cold } from "jest-marbles";
 
 import { ExecutionService } from "./execution.service";
-import { EvaluationResolvementService } from "./evaluation-resolvement.service";
 import { Workflow } from "../types";
 
 jest.mock("./http.service");
 
 describe("ExecutionService", () => {
-  let service = new ExecutionService(new EvaluationResolvementService());
+  let service = new ExecutionService();
 
   it("should be created", () => {
     expect(service).toBeTruthy();
