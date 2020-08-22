@@ -10,6 +10,7 @@ import {
   Workflow,
   VariableMap,
 } from "../types";
+import { createVariableMapFromState } from "./variable-map-creation";
 
 export class Engine {
   constructor(private workflow: Workflow, public service: ExecutionService) {}
@@ -73,7 +74,7 @@ export class Engine {
   }
 
   getVariableMap(state: State): VariableMap {
-    return this.service.toVariableMap(this.workflow, state);
+    return createVariableMapFromState(this.workflow, state);
   }
 
   /**

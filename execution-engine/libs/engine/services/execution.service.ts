@@ -4,15 +4,9 @@ import { EvaluationResolvementService } from "./evaluation-resolvement.service";
 import { PathAdvancementService } from "./path-advancement.service";
 import { StepExecutionService } from "./step-execution.service";
 import { StepResolvementService } from "./step-resolvement.service";
-import {
-  State,
-  Workflow,
-  Evaluation,
-  VariableMap,
-  Inputs,
-  Path,
-} from "../types";
+import { State, Workflow, Evaluation, Inputs } from "../types";
 import { evaluate } from "./evaluation.service";
+import { createVariableMapFromState } from "./variable-map-creation";
 
 export class ExecutionService {
   constructor(
@@ -31,7 +25,7 @@ export class ExecutionService {
     const nextPath = this.pathAdvancementService.advancePath(
       workflow,
       state.path,
-      this.toVariableMap(workflow, {
+      createVariableMapFromState(workflow, {
         path: state.path,
         inputs: state.inputs,
         evaluations: nextEvaluations,
@@ -51,42 +45,14 @@ export class ExecutionService {
         state.evaluations,
         state.path
       ),
-      this.toVariableMap(workflow, state)
+      createVariableMapFromState(workflow, state)
     );
   }
 
   toOutput(workflow: Workflow, state: State): any | undefined {
     return workflow.output
-      ? evaluate(this.toVariableMap(workflow, state), workflow.output)
+      ? evaluate(createVariableMapFromState(workflow, state), workflow.output)
       : undefined;
-  }
-
-  toVariableMap(workflow: Workflow, state: State): VariableMap {
-    const variables = {
-      ...state.inputs,
-      ...this.stepExecutionService.toVariableMap(
-        workflow.steps,
-        state.evaluations
-      ),
-    };
-    return {
-      ...variables,
-      ...this.resolveLoopVariables(workflow, state.path, variables),
-    };
-  }
-
-  resolveLoopVariables(
-    workflow: Workflow,
-    path: Path,
-    variables: VariableMap
-  ): VariableMap {
-    const steps = this.stepResolvementService.resolveAllSteps(workflow, path);
-    return steps
-      .filter((step) => step.for)
-      .reduce(
-        (acc, step) => ({ ...acc, [step.for!.const]: variables[step.for!.in] }),
-        {}
-      );
   }
 
   inputDefaults(workflow: Workflow): Inputs {

@@ -14,6 +14,7 @@ import {
   HttpRequest,
   HttpMethod,
 } from "../types";
+import { toVariableMap } from "./variable-map-creation";
 
 export class StepExecutionService {
   constructor(private http: HttpService) {}
@@ -68,7 +69,7 @@ export class StepExecutionService {
     }
     const loopReturn: Evaluation[] = (localEvaluations || [])
       .map((loopIterationEvaluation: any) =>
-        this.toVariableMap(step.for!.do, loopIterationEvaluation)
+        toVariableMap(step.for!.do, loopIterationEvaluation)
       )
       .map(
         (loopIterationVariables: any) =>
@@ -87,18 +88,5 @@ export class StepExecutionService {
       body: evaluate(variables, template.body),
       headers: evaluate(variables, template.headers),
     };
-  }
-
-  toVariableMap(steps: Step[], evaluations: Evaluation[]): VariableMap {
-    return steps
-      .map((step, index) => ({ step, evaluation: evaluations[index] }))
-      .filter(({ evaluation }) => evaluation)
-      .reduce(
-        (variables: VariableMap, { step, evaluation }) => ({
-          ...variables,
-          [step.assignTo]: evaluation,
-        }),
-        {}
-      );
   }
 }
