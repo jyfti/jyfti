@@ -3,7 +3,7 @@ import { generateWorkflow, generateEnvironment } from "./commands";
 
 export function addGenerateSubCommands(command: commander.Command) {
   command
-    .command("workflow [name]")
+    .command("workflow [name]", { isDefault: true })
     .description("generate a workflow")
     .action(generateWorkflow);
 
