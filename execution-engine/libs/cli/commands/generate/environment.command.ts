@@ -14,7 +14,7 @@ export async function generateEnvironment(name?: string) {
         name: "name",
         message: "What shall be the name of the environment?",
         type: "string",
-        default: "prod",
+        default: "default",
       },
     ]);
     name = answers.name;
