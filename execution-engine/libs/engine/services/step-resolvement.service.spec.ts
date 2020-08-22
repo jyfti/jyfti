@@ -1,13 +1,11 @@
-import { StepResolvementService } from "./step-resolvement.service";
 import { Step } from "../types";
+import {
+  resolveStepRec,
+  resolveAllStepsRec,
+  resolveLoopPositions,
+} from "./step-resolvement.service";
 
-describe("StepResolvementService", () => {
-  let service = new StepResolvementService();
-
-  it("should be created", () => {
-    expect(service).toBeTruthy();
-  });
-
+describe("the resolvement of steps", () => {
   describe("resolving the deepest step at a path", () => {
     it("should resolve the first step of a flat workflow", () => {
       const steps: Step[] = [
@@ -16,7 +14,7 @@ describe("StepResolvementService", () => {
           expression: 1,
         },
       ];
-      expect(service.resolveStepRec(steps, [0])).toEqual(steps[0]);
+      expect(resolveStepRec(steps, [0])).toEqual(steps[0]);
     });
 
     it("should resolve the second step of a workflow", () => {
@@ -30,7 +28,7 @@ describe("StepResolvementService", () => {
           expression: 2,
         },
       ];
-      expect(service.resolveStepRec(steps, [1])).toEqual(steps[1]);
+      expect(resolveStepRec(steps, [1])).toEqual(steps[1]);
     });
 
     it("should resolve the first step of a loop", () => {
@@ -50,9 +48,7 @@ describe("StepResolvementService", () => {
           },
         },
       ];
-      expect(service.resolveStepRec(steps, [0, 0, 0])).toEqual(
-        steps[0].for?.do[0]
-      );
+      expect(resolveStepRec(steps, [0, 0, 0])).toEqual(steps[0].for?.do[0]);
     });
 
     it("should resolve a loop itself", () => {
@@ -72,7 +68,7 @@ describe("StepResolvementService", () => {
           },
         },
       ];
-      expect(service.resolveStepRec(steps, [0])).toEqual(steps[0]);
+      expect(resolveStepRec(steps, [0])).toEqual(steps[0]);
     });
   });
 
@@ -84,7 +80,7 @@ describe("StepResolvementService", () => {
           expression: 1,
         },
       ];
-      expect(service.resolveAllStepsRec(steps, [0])).toEqual([steps[0]]);
+      expect(resolveAllStepsRec(steps, [0])).toEqual([steps[0]]);
     });
 
     it("should resolve a loop recursively", () => {
@@ -104,7 +100,7 @@ describe("StepResolvementService", () => {
           },
         },
       ];
-      expect(service.resolveAllStepsRec(steps, [0, 0, 0])).toEqual([
+      expect(resolveAllStepsRec(steps, [0, 0, 0])).toEqual([
         steps[0],
         steps[0].for?.do[0],
       ]);
@@ -119,7 +115,7 @@ describe("StepResolvementService", () => {
           expression: 1,
         },
       ];
-      expect(service.resolveLoopPositions(steps, [0])).toEqual([]);
+      expect(resolveLoopPositions(steps, [0])).toEqual([]);
     });
 
     it("should resolve a loop recursively", () => {
@@ -139,7 +135,7 @@ describe("StepResolvementService", () => {
           },
         },
       ];
-      expect(service.resolveLoopPositions(steps, [0, 0, 0])).toEqual([0]);
+      expect(resolveLoopPositions(steps, [0, 0, 0])).toEqual([0]);
     });
   });
 });

@@ -1,5 +1,8 @@
 import { Step, Evaluation, VariableMap, Workflow, State, Path } from "../types";
-import { StepResolvementService } from "./step-resolvement.service";
+import {
+  resolveAllSteps,
+  resolveLoopPositions,
+} from "./step-resolvement.service";
 
 export function createVariableMapFromState(
   workflow: Workflow,
@@ -20,11 +23,8 @@ function resolveLoopVariables(
   path: Path,
   variables: VariableMap
 ): VariableMap {
-  const steps = new StepResolvementService().resolveAllSteps(workflow, path);
-  const loopPositions = new StepResolvementService().resolveLoopPositions(
-    workflow.steps,
-    path
-  );
+  const steps = resolveAllSteps(workflow, path);
+  const loopPositions = resolveLoopPositions(workflow.steps, path);
   return steps
     .filter((step) => step.for)
     .reduce(

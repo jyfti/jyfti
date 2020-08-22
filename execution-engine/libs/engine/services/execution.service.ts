@@ -1,17 +1,16 @@
 import { Observable } from "rxjs";
 
 import { EvaluationResolvementService } from "./evaluation-resolvement.service";
-import { StepResolvementService } from "./step-resolvement.service";
 import { State, Workflow, Evaluation, Inputs } from "../types";
 import { evaluate } from "./evaluation.service";
 import { createVariableMapFromState } from "./variable-map-creation";
 import { executeStep } from "./step-execution.service";
 import { advancePath } from "./path-advancement.service";
+import { resolveStep } from "./step-resolvement.service";
 
 export class ExecutionService {
   constructor(
-    private evaluationResolvementService: EvaluationResolvementService,
-    private stepResolvementService: StepResolvementService
+    private evaluationResolvementService: EvaluationResolvementService
   ) {}
 
   nextState(workflow: Workflow, state: State, evaluation: Evaluation): State {
@@ -38,7 +37,7 @@ export class ExecutionService {
 
   nextStep(workflow: Workflow, state: State): Observable<Evaluation> {
     return executeStep(
-      this.stepResolvementService.resolveStep(workflow, state.path),
+      resolveStep(workflow, state.path),
       this.evaluationResolvementService.resolveEvaluation(
         state.evaluations,
         state.path
