@@ -3,10 +3,12 @@ import { resolveAllSteps, resolveLoopPositions } from "./step-resolvement";
 
 export function createVariableMapFromState(
   workflow: Workflow,
-  state: State
+  state: State,
+  environment: VariableMap
 ): VariableMap {
   const variables = {
     ...state.inputs,
+    env: environment,
     ...toVariableMap(workflow.steps, state.evaluations),
   };
   return {

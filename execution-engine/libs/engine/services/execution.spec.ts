@@ -19,7 +19,15 @@ describe("the execution of workflows", () => {
         ],
       };
       expect(
-        nextStep(workflow, { path: [0], inputs: {}, evaluations: [] })
+        nextStep(
+          workflow,
+          {
+            path: [0],
+            inputs: {},
+            evaluations: [],
+          },
+          {}
+        )
       ).toBeObservable(cold("(a|)", { a: 1 }));
     });
 
@@ -41,7 +49,15 @@ describe("the execution of workflows", () => {
         ],
       };
       expect(
-        nextStep(workflow, { path: [1], inputs: {}, evaluations: [42] })
+        nextStep(
+          workflow,
+          {
+            path: [1],
+            inputs: {},
+            evaluations: [42],
+          },
+          {}
+        )
       ).toBeObservable(cold("(a|)", { a: 42 }));
     });
 
@@ -71,31 +87,43 @@ describe("the execution of workflows", () => {
 
       it("should evaluate the return value with no loop iteration to an empty list", () => {
         expect(
-          nextStep(workflow, {
-            path: [0],
-            inputs: { listVar: [1] },
-            evaluations: [],
-          })
+          nextStep(
+            workflow,
+            {
+              path: [0],
+              inputs: { listVar: [1] },
+              evaluations: [],
+            },
+            {}
+          )
         ).toBeObservable(cold("(a|)", { a: [] }));
       });
 
       it("should evaluate the return value with a single loop iteration to a single element list", () => {
         expect(
-          nextStep(workflow, {
-            path: [0],
-            inputs: { listVar: [1] },
-            evaluations: [[["a"]]],
-          })
+          nextStep(
+            workflow,
+            {
+              path: [0],
+              inputs: { listVar: [1] },
+              evaluations: [[["a"]]],
+            },
+            {}
+          )
         ).toBeObservable(cold("(a|)", { a: ["a"] }));
       });
 
       it("should evaluate the return value with multiple loop iterations to list of the size of the iterations", () => {
         expect(
-          nextStep(workflow, {
-            path: [0],
-            inputs: { listVar: [1] },
-            evaluations: [[["a"], ["b"], ["c"]]],
-          })
+          nextStep(
+            workflow,
+            {
+              path: [0],
+              inputs: { listVar: [1] },
+              evaluations: [[["a"], ["b"], ["c"]]],
+            },
+            {}
+          )
         ).toBeObservable(cold("(a|)", { a: ["a", "b", "c"] }));
       });
     });
@@ -134,37 +162,49 @@ describe("the execution of workflows", () => {
 
       it("should evaluate the return value with no loop iteration to an empty list", () => {
         expect(
-          nextStep(workflow, {
-            path: [0],
-            inputs: { listVar: [1] },
-            evaluations: [],
-          })
+          nextStep(
+            workflow,
+            {
+              path: [0],
+              inputs: { listVar: [1] },
+              evaluations: [],
+            },
+            {}
+          )
         ).toBeObservable(cold("(a|)", { a: [] }));
       });
 
       it("should evaluate the return value with a single loop iteration to a single element list", () => {
         expect(
-          nextStep(workflow, {
-            path: [0],
-            inputs: { listVar: [1] },
-            evaluations: [[[10, 20, 30]]],
-          })
+          nextStep(
+            workflow,
+            {
+              path: [0],
+              inputs: { listVar: [1] },
+              evaluations: [[[10, 20, 30]]],
+            },
+            {}
+          )
         ).toBeObservable(cold("(a|)", { a: [30] }));
       });
 
       it("should evaluate the return value with multiple loop iterations to list of the size of the iterations", () => {
         expect(
-          nextStep(workflow, {
-            path: [0],
-            inputs: { listVar: [1] },
-            evaluations: [
-              [
-                [10, 20, 30],
-                [10, 20, 30],
-                [10, 20, 30],
+          nextStep(
+            workflow,
+            {
+              path: [0],
+              inputs: { listVar: [1] },
+              evaluations: [
+                [
+                  [10, 20, 30],
+                  [10, 20, 30],
+                  [10, 20, 30],
+                ],
               ],
-            ],
-          })
+            },
+            {}
+          )
         ).toBeObservable(cold("(a|)", { a: [30, 30, 30] }));
       });
     });

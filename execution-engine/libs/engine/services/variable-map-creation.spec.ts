@@ -53,7 +53,7 @@ describe("The creation of variable maps", () => {
       inputs: { listVar: ["a", "b"] },
       evaluations: [1, 2],
     };
-    expect(createVariableMapFromState(workflow, state)).toHaveProperty(
+    expect(createVariableMapFromState(workflow, state, {})).toHaveProperty(
       "loopVar",
       "b"
     );

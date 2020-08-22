@@ -1,4 +1,3 @@
-import { ensureDirExists } from "../../files/file.service";
 import { readConfig } from "../../files/config-file.service";
 import { createEngine } from "../../../engine/services/engine";
 import { last, flatMap, tap } from "rxjs/operators";
@@ -15,6 +14,7 @@ import {
 } from "../../files/workflow.service";
 import { writeState } from "../../files/state-file.service";
 import { readWorkflowSchemaOrTerminate } from "../../files/workflow-file.service";
+import { readEnvironment } from "../../../cli/files/environment-file.service";
 
 export async function execute(name?: string, inputList?: string[], cmd?: any) {
   const config = await readConfig();
@@ -22,7 +22,6 @@ export async function execute(name?: string, inputList?: string[], cmd?: any) {
     name = await promptWorkflow(config, "Which workflow do you want to start?");
   }
   if (name) {
-    await ensureDirExists(config.outRoot);
     const workflow = await readWorkflowOrTerminate(config, name);
     const schema = await readWorkflowSchemaOrTerminate();
     validateWorkflowOrTerminate(workflow, schema);
@@ -32,7 +31,8 @@ export async function execute(name?: string, inputList?: string[], cmd?: any) {
     }
     const inputs = createInputs(workflow, inputList || []);
     validateInputsOrTerminate(workflow, inputs);
-    const engine = createEngine(workflow);
+    const environment = await readEnvironment(config, undefined);
+    const engine = createEngine(workflow, environment);
     const initialState = engine.init(inputs);
     console.log("Created state.");
     if (cmd?.verbose) {

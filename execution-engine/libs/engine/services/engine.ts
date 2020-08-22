@@ -12,12 +12,15 @@ import {
 } from "../types";
 import { createVariableMapFromState } from "./variable-map-creation";
 
-export function createEngine(workflow: Workflow): Engine {
-  return new Engine(workflow);
+export function createEngine(
+  workflow: Workflow,
+  environment: VariableMap
+): Engine {
+  return new Engine(workflow, environment);
 }
 
 export class Engine {
-  constructor(private workflow: Workflow) {}
+  constructor(private workflow: Workflow, private environment: VariableMap) {}
 
   validate(inputs: Inputs): InputErrors {
     return validateInputs(this.workflow.inputs || {}, inputs);
@@ -58,7 +61,7 @@ export class Engine {
    * @returns A cold observable of a single step result.
    */
   step(state: State): Observable<StepResult> {
-    return nextStep(this.workflow, state).pipe(
+    return nextStep(this.workflow, state, this.environment).pipe(
       map((evaluation) => ({ path: state.path, evaluation }))
     );
   }
@@ -74,11 +77,11 @@ export class Engine {
   }
 
   getOutput(state: State): any | undefined {
-    return toOutput(this.workflow, state);
+    return toOutput(this.workflow, state, this.environment);
   }
 
   getVariableMap(state: State): VariableMap {
-    return createVariableMapFromState(this.workflow, state);
+    return createVariableMapFromState(this.workflow, state, this.environment);
   }
 
   /**
@@ -98,6 +101,11 @@ export class Engine {
    * @returns The next state
    */
   toState(state: State, stepResult: StepResult): State {
-    return nextState(this.workflow, state, stepResult.evaluation);
+    return nextState(
+      this.workflow,
+      state,
+      stepResult.evaluation,
+      this.environment
+    );
   }
 }

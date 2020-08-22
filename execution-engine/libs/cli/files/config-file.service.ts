@@ -1,16 +1,20 @@
 import * as fs from "fs";
 import { Config } from "../types/config";
-import { readJson } from "./file.service";
+import { readJson, ensureDirExists } from "./file.service";
 
 export const configName: string = "jyfti.json";
 
 export const defaultConfig: Config = {
   sourceRoot: "./src",
   outRoot: "./out",
+  envRoot: "./environments",
 };
 
-export function readConfig(): Promise<Config> {
-  return readJson(configName).catch(() => defaultConfig);
+export async function readConfig(): Promise<Config> {
+  const config = await readJson(configName).catch(() => defaultConfig);
+  await ensureDirExists(config.outRoot);
+  await ensureDirExists(config.envRoot);
+  return config;
 }
 
 export function writeConfig(config: Config): Promise<any> {

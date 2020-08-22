@@ -1,6 +1,6 @@
 import { Observable } from "rxjs";
 
-import { State, Workflow, Evaluation, Inputs } from "../types";
+import { State, Workflow, Evaluation, Inputs, VariableMap } from "../types";
 import { evaluate } from "./evaluation";
 import { createVariableMapFromState } from "./variable-map-creation";
 import { executeStep } from "./step-execution";
@@ -11,7 +11,8 @@ import { addEvaluation, resolveEvaluation } from "./evaluation-resolvement";
 export function nextState(
   workflow: Workflow,
   state: State,
-  evaluation: Evaluation
+  evaluation: Evaluation,
+  environment: VariableMap
 ): State {
   const nextEvaluations = addEvaluation(
     state.path,
@@ -21,11 +22,15 @@ export function nextState(
   const nextPath = advancePath(
     workflow,
     state.path,
-    createVariableMapFromState(workflow, {
-      path: state.path,
-      inputs: state.inputs,
-      evaluations: nextEvaluations,
-    })
+    createVariableMapFromState(
+      workflow,
+      {
+        path: state.path,
+        inputs: state.inputs,
+        evaluations: nextEvaluations,
+      },
+      environment
+    )
   );
   return {
     path: nextPath,
@@ -36,18 +41,26 @@ export function nextState(
 
 export function nextStep(
   workflow: Workflow,
-  state: State
+  state: State,
+  environment: VariableMap
 ): Observable<Evaluation> {
   return executeStep(
     resolveStep(workflow, state.path),
     resolveEvaluation(state.evaluations, state.path),
-    createVariableMapFromState(workflow, state)
+    createVariableMapFromState(workflow, state, environment)
   );
 }
 
-export function toOutput(workflow: Workflow, state: State): any | undefined {
+export function toOutput(
+  workflow: Workflow,
+  state: State,
+  environment: VariableMap
+): any | undefined {
   return workflow.output
-    ? evaluate(createVariableMapFromState(workflow, state), workflow.output)
+    ? evaluate(
+        createVariableMapFromState(workflow, state, environment),
+        workflow.output
+      )
     : undefined;
 }
 

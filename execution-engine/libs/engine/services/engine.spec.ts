@@ -47,7 +47,7 @@ describe("Engine", () => {
       },
     ],
   };
-  const engine = new Engine(workflow);
+  const engine = new Engine(workflow, {});
 
   it("should be created", () => {
     expect(engine).toBeTruthy();
