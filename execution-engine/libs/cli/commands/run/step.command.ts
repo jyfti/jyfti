@@ -10,6 +10,7 @@ import {
 } from "../../files/state-file.service";
 import { printStepResult } from "../../print.service";
 import { readEnvironment } from "../../../cli/files/environment-file.service";
+import { validateEnvironmentOrTerminate } from "../../../cli/files/workflow.service";
 
 export async function step(name?: string, cmd?: any) {
   const config = await readConfig();
@@ -23,6 +24,7 @@ export async function step(name?: string, cmd?: any) {
     const workflow = await readWorkflowOrTerminate(config, name);
     const state = await readStateOrTerminate(config, name);
     const environment = await readEnvironment(config, undefined);
+    validateEnvironmentOrTerminate(workflow, environment);
     const engine = createEngine(workflow, environment);
     if (engine.isComplete(state)) {
       console.log("Workflow execution already completed");

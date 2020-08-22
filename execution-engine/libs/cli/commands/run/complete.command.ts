@@ -10,6 +10,7 @@ import {
   readStateOrTerminate,
 } from "../../files/state-file.service";
 import { readEnvironment } from "../../../cli/files/environment-file.service";
+import { validateEnvironmentOrTerminate } from "../../../cli/files/workflow.service";
 
 export async function complete(name?: string, cmd?: any) {
   const config = await readConfig();
@@ -23,6 +24,7 @@ export async function complete(name?: string, cmd?: any) {
     const workflow = await readWorkflowOrTerminate(config, name);
     const state = await readStateOrTerminate(config, name);
     const environment = await readEnvironment(config, undefined);
+    validateEnvironmentOrTerminate(workflow, environment);
     const engine = createEngine(workflow, environment);
     engine
       .complete(state)

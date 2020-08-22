@@ -1,6 +1,17 @@
 {
   "$schema": "https://raw.githubusercontent.com/jyfti/jyfti/master/workflow-schema.json",
   "name": "Get GitHub issues of a repo",
+  "env": {
+    "github": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string"
+        }
+      },
+      "required": ["token"]
+    }
+  },
   "inputs": {
     "org": {
       "type": "string",

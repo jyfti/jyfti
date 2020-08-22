@@ -1,7 +1,7 @@
 import { inputDefaults, nextStep, toOutput, nextState } from "./execution";
 import { Observable, empty, OperatorFunction } from "rxjs";
 import { flatMap, startWith, map, scan } from "rxjs/operators";
-import { validateInputs } from "./validator";
+import { validateSchemaMap } from "./validator";
 import {
   StepResult,
   InputErrors,
@@ -23,7 +23,7 @@ export class Engine {
   constructor(private workflow: Workflow, private environment: VariableMap) {}
 
   validate(inputs: Inputs): InputErrors {
-    return validateInputs(this.workflow.inputs || {}, inputs);
+    return validateSchemaMap(this.workflow.inputs || {}, inputs);
   }
 
   init(inputs: Inputs): State {

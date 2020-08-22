@@ -1,11 +1,5 @@
 import Ajv, { ErrorObject } from "ajv";
-import {
-  InputErrors,
-  Inputs,
-  Workflow,
-  InputDefinitions,
-  JsonSchema,
-} from "../types";
+import { InputErrors, Workflow, SchemaMap, JsonSchema } from "../types";
 
 export function validateWorkflow(
   workflow: Workflow,
@@ -17,14 +11,14 @@ export function validateWorkflow(
   return validate.errors || [];
 }
 
-export function validateInputs(
-  inputDefinitions: InputDefinitions,
-  inputs: Inputs
+export function validateSchemaMap(
+  schemaMap: SchemaMap,
+  inputs: { [name: string]: any }
 ): InputErrors {
-  const results = Object.keys(inputDefinitions)
+  const results = Object.keys(schemaMap)
     .map((fieldName) => ({
       fieldName,
-      errors: validateInput(inputDefinitions[fieldName], inputs[fieldName]),
+      errors: validateInput(schemaMap[fieldName], inputs[fieldName]),
     }))
     .filter((result) => result.errors.length != 0);
   return results.reduce(

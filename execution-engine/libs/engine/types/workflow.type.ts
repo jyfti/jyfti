@@ -1,12 +1,11 @@
 import { Step, JsonExpression } from "./step.type";
-import { Dictionary } from "lodash";
-import { JsonSchema } from "./json-schema.type";
-import { InputDefinitions } from "./input-definitions.type";
+import { SchemaMap } from "./schema-map.type";
 
 export interface Workflow {
   $schema?: string;
   name: string;
-  inputs?: InputDefinitions;
+  env?: SchemaMap;
+  inputs?: SchemaMap;
   output?: JsonExpression;
   steps: Step[];
 }

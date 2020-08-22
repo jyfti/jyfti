@@ -37,7 +37,7 @@ export function printInputErrors(
 ): string {
   return (
     `Input: ${chalk.yellow(fieldName)}\n` +
-    `Value: ${chalk.yellow(value)}\n` +
+    `Value: ${chalk.yellow(JSON.stringify(value, null, 0))}\n` +
     `${printValidationErrors(errors)}`
   );
 }

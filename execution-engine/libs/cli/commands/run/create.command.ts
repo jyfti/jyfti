@@ -9,6 +9,7 @@ import {
   validateInputsOrTerminate,
   createInputs,
   validateWorkflowOrTerminate,
+  validateEnvironmentOrTerminate,
 } from "../../files/workflow.service";
 import { writeState } from "../../files/state-file.service";
 import { install } from "../../install.service";
@@ -34,6 +35,7 @@ export async function create(name?: string, inputList?: string[], cmd?: any) {
     const inputs = createInputs(workflow, inputList || []);
     validateInputsOrTerminate(workflow, inputs);
     const environment = await readEnvironment(config, undefined);
+    validateEnvironmentOrTerminate(workflow, environment);
     const initialState = createEngine(workflow, environment).init(inputs);
     await writeState(config, name, initialState);
     console.log("Created state.");

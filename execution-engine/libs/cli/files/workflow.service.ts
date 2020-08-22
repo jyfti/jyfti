@@ -1,11 +1,14 @@
 import { Config } from "../types/config";
-import { Workflow, Inputs, JsonSchema } from "../../engine/types";
+import { Workflow, Inputs, JsonSchema, VariableMap } from "../../engine/types";
 import * as http from "./workflow-http.service";
 import * as file from "./workflow-file.service";
 import chalk from "chalk";
-import { printAllInputErrors, printValidationErrors } from "../print.service";
 import {
-  validateInputs,
+  printAllInputErrors as printAllErrors,
+  printValidationErrors,
+} from "../print.service";
+import {
+  validateSchemaMap,
   validateWorkflow,
 } from "../../engine/services/validator";
 
@@ -43,12 +46,27 @@ export function validateInputsOrTerminate(
   workflow: Workflow,
   inputs: Inputs
 ): void {
-  const inputErrors = validateInputs(workflow.inputs || {}, inputs);
+  const inputErrors = validateSchemaMap(workflow.inputs || {}, inputs);
   if (Object.keys(inputErrors).length !== 0) {
     const message =
       chalk.red(
         "The workflow can not be started because some inputs are invalid.\n\n"
-      ) + printAllInputErrors(inputErrors, inputs);
+      ) + printAllErrors(inputErrors, inputs);
+    console.error(message);
+    process.exit(1);
+  }
+}
+
+export function validateEnvironmentOrTerminate(
+  workflow: Workflow,
+  environment: VariableMap
+): void {
+  const environmentErrors = validateSchemaMap(workflow.env || {}, environment);
+  if (Object.keys(environmentErrors).length !== 0) {
+    const message =
+      chalk.red(
+        "The workflow can not be started because the environment does not meet the requirements.\n\n"
+      ) + printAllErrors(environmentErrors, environment);
     console.error(message);
     process.exit(1);
   }
