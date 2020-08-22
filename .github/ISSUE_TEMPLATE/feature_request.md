@@ -2,7 +2,7 @@
 name: Feature request
 about: Suggest an idea for Jyfti
 title: ''
-labels: ''
+labels: enhancement
 assignees: ''
 
 ---
