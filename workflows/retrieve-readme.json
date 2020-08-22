@@ -21,7 +21,7 @@
       "assignTo": "readmeResponse",
       "request": {
         "method": "GET",
-        "url": "https://raw.githubusercontent.com/${org}/${repo}/master/README.md"
+        "url": "https://raw.githubusercontent.com/${inputs.org}/${inputs.repo}/master/README.md"
       }
     }
   ]

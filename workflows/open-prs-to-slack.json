@@ -21,7 +21,7 @@
       "assignTo": "pullResponse",
       "request": {
         "method": "GET",
-        "url": "https://api.github.com/repos/${org}/${repo}/pulls"
+        "url": "https://api.github.com/repos/${inputs.org}/${inputs.repo}/pulls"
       }
     },
     {

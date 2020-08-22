@@ -7,7 +7,7 @@ export function createVariableMapFromState(
   environment: VariableMap
 ): VariableMap {
   const variables = {
-    ...state.inputs,
+    inputs: state.inputs,
     env: environment,
     ...toVariableMap(workflow.steps, state.evaluations),
   };
