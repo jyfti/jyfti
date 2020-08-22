@@ -20,7 +20,10 @@
     {
       "assignTo": "issueResponse",
       "request": {
-        "url": "https://api.github.com/repos/${org}/${repo}/issues"
+        "url": "https://api.github.com/repos/${org}/${repo}/issues",
+        "headers": {
+          "Authorization": "token ${env.github.token}"
+        }
       }
     },
     {
@@ -44,6 +47,9 @@
             "assignTo": "comments",
             "request": {
               "url": "${commentsUrl}"
+            },
+            "headers": {
+              "Authorization": "token ${env.github.token}"
             }
           }
         ],
