@@ -1,13 +1,7 @@
-import { PathAdvancementService } from "./path-advancement.service";
 import { Step, Workflow } from "../types";
+import { advancePath, advancePathRec } from "./path-advancement.service";
 
-describe("PathAdvancementService", () => {
-  let service = new PathAdvancementService();
-
-  it("should be created", () => {
-    expect(service).toBeTruthy();
-  });
-
+describe("the advancement of paths", () => {
   describe("with one level", () => {
     const workflow: Workflow = {
       name: "MyWorkflow",
@@ -25,11 +19,11 @@ describe("PathAdvancementService", () => {
     };
 
     it("should advance a path on root", () => {
-      expect(service.advancePath(workflow, [0], {})).toEqual([1]);
+      expect(advancePath(workflow, [0], {})).toEqual([1]);
     });
 
     it("should return empty list on last step of root", () => {
-      expect(service.advancePath(workflow, [1], {})).toEqual([]);
+      expect(advancePath(workflow, [1], {})).toEqual([]);
     });
   });
 
@@ -52,7 +46,7 @@ describe("PathAdvancementService", () => {
     ];
 
     it("should finish the loop immediately if the list does not have elements", () => {
-      expect(service.advancePathRec(steps, [], { listVar: [] })).toEqual([0]);
+      expect(advancePathRec(steps, [], { listVar: [] })).toEqual([0]);
     });
 
     const variables = {
@@ -60,19 +54,15 @@ describe("PathAdvancementService", () => {
     };
 
     it("should go to the first step within the loop at the start", () => {
-      expect(service.advancePathRec(steps, [], variables)).toEqual([0, 0, 0]);
+      expect(advancePathRec(steps, [], variables)).toEqual([0, 0, 0]);
     });
 
     it("should go to the first step of the second variable after the last step of the first variable", () => {
-      expect(service.advancePathRec(steps, [0, 0, 0], variables)).toEqual([
-        0,
-        1,
-        0,
-      ]);
+      expect(advancePathRec(steps, [0, 0, 0], variables)).toEqual([0, 1, 0]);
     });
 
     it("should go to the loop itself once the loop is over", () => {
-      expect(service.advancePathRec(steps, [0, 1, 0], variables)).toEqual([0]);
+      expect(advancePathRec(steps, [0, 1, 0], variables)).toEqual([0]);
     });
   });
 
@@ -166,7 +156,7 @@ describe("PathAdvancementService", () => {
         [3],
       ],
     ])("%s", (text, inPath, outPath) => {
-      expect(service.advancePath(workflow, inPath, variables)).toEqual(outPath);
+      expect(advancePath(workflow, inPath, variables)).toEqual(outPath);
     });
   });
 });

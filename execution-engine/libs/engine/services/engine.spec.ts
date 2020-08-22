@@ -1,7 +1,6 @@
 import { cold } from "jest-marbles";
 import { ExecutionService } from "./execution.service";
 import { EvaluationResolvementService } from "./evaluation-resolvement.service";
-import { PathAdvancementService } from "./path-advancement.service";
 import { StepResolvementService } from "./step-resolvement.service";
 import { Engine } from "./engine";
 import { Workflow } from "../types";
@@ -11,7 +10,6 @@ jest.mock("./http.service");
 describe("Engine", () => {
   const service = new ExecutionService(
     new EvaluationResolvementService(),
-    new PathAdvancementService(),
     new StepResolvementService()
   );
   const workflow: Workflow = {
