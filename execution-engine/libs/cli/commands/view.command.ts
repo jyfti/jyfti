@@ -1,6 +1,6 @@
 import { readConfig } from "../files/config-file.service";
 import { promptWorkflow } from "../inquirer.service";
-import { readWorkflowOrTerminate } from "../files/workflow-file.service";
+import { readWorkflowOrTerminate } from "../files/workflow.service";
 import { printJson } from "../print.service";
 
 export async function view(name?: string) {
