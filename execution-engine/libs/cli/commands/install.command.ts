@@ -3,7 +3,7 @@ import { readConfig } from "../files/config-file.service";
 import { readWorkflowSchemaOrTerminate } from "../files/workflow-file.service";
 import { readWorkflowOrTerminate } from "../files/workflow-http.service";
 import * as installer from "../install.service";
-import { extractWorkflowName } from "../files/workflow.service";
+import { extractWorkflowName } from "../files/workflow.util";
 
 export async function install(url: string, name?: string, cmd?: any) {
   const config = await readConfig();

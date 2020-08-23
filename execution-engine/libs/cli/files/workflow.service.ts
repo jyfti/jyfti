@@ -11,14 +11,7 @@ import {
   validateSchemaMap,
   validateWorkflow,
 } from "../../engine/services/validator";
-
-export function isUrl(name: string): boolean {
-  return name.startsWith("http://") || name.startsWith("https://");
-}
-
-export function extractWorkflowName(name: string): string {
-  return isUrl(name) ? http.extractWorkflowName(name) : name;
-}
+import { isUrl } from "./workflow.util";
 
 export function readWorkflowOrTerminate(
   config: Config,
@@ -70,14 +63,4 @@ export function validateEnvironmentOrTerminate(
     console.error(message);
     process.exit(1);
   }
-}
-
-export function createInputs(workflow: Workflow, inputList: string[]): Inputs {
-  return Object.keys(workflow?.inputs || {}).reduce(
-    (inputs, inputName, index) => ({
-      ...inputs,
-      [inputName]: inputList[index],
-    }),
-    {}
-  );
 }

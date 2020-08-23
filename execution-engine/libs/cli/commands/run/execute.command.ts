@@ -6,16 +6,18 @@ import { promptWorkflow, promptWorkflowInputs } from "../../inquirer.service";
 import { printStepResult, printJson, printOutput } from "../../print.service";
 import {
   readWorkflowOrTerminate,
-  extractWorkflowName,
-  isUrl,
   validateInputsOrTerminate,
-  createInputs,
   validateWorkflowOrTerminate,
   validateEnvironmentOrTerminate,
 } from "../../files/workflow.service";
 import { writeState } from "../../files/state-file.service";
 import { readWorkflowSchemaOrTerminate } from "../../files/workflow-file.service";
 import { readEnvironmentOrTerminate } from "../../../cli/files/environment-file.service";
+import {
+  isUrl,
+  extractWorkflowName,
+  createInputs,
+} from "../../../cli/files/workflow.util";
 
 export async function execute(name?: string, inputList?: string[], cmd?: any) {
   const config = await readConfig();
@@ -32,7 +34,10 @@ export async function execute(name?: string, inputList?: string[], cmd?: any) {
     }
     const inputs = createInputs(workflow, inputList || []);
     validateInputsOrTerminate(workflow, inputs);
-    const environment = await readEnvironmentOrTerminate(config, cmd?.environment);
+    const environment = await readEnvironmentOrTerminate(
+      config,
+      cmd?.environment
+    );
     validateEnvironmentOrTerminate(workflow, environment);
     const engine = createEngine(workflow, environment);
     const initialState = engine.init(inputs);
