@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import ajv from "ajv";
+import { ErrorObject } from "ajv";
 import { StepResult, InputErrors, Inputs } from "../engine/types";
 
 export function printOutput(output: any): string {
@@ -45,7 +45,7 @@ export function printAllInputErrors(
 export function printInputErrors(
   fieldName: string,
   value: any,
-  errors: ajv.ErrorObject[]
+  errors: ErrorObject[]
 ): string {
   return (
     `Input: ${printValue(fieldName)}\n` +
@@ -54,10 +54,10 @@ export function printInputErrors(
   );
 }
 
-export function printValidationErrors(errors: ajv.ErrorObject[]): string {
+export function printValidationErrors(errors: ErrorObject[]): string {
   return errors.map(printValidationError).join("\n");
 }
 
-export function printValidationError(error: ajv.ErrorObject): string {
+export function printValidationError(error: ErrorObject): string {
   return error.dataPath !== "" ? printJson(error) : "It " + error.message;
 }
