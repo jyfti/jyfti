@@ -1,0 +1,47 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jyfti/jyfti/master/workflow-schema.json",
+  "name": "Write the coverage of all repositories of a GitHub repository to Slack",
+  "env": {
+    "slackWebhookUrl": {
+      "type": "string",
+      "description": "The authenticated slack webhook that allows posting messages to a specific channel in slack"
+    }
+  },
+  "inputs": {
+    "org": {
+      "type": "string",
+      "description": "The GitHub organization",
+      "default": "jyfti"
+    }
+  },
+  "output": {
+    "$eval": "slackResponse"
+  },
+  "steps": [
+    {
+      "assignTo": "repoResponse",
+      "request": {
+        "url": "https://codecov.io/api/gh/${inputs.org}"
+      }
+    },
+    {
+      "assignTo": "coverages",
+      "expression": {
+        "$map": {
+          "$eval": "repoResponse.body.repos"
+        },
+        "each(repo)": "${repo.name}: ${repo.coverage}%"
+      }
+    },
+    {
+      "assignTo": "slackResponse",
+      "request": {
+        "method": "POST",
+        "url": "${env.slackWebhookUrl}",
+        "body": {
+          "text": "${join(coverages, '\n')}"
+        }
+      }
+    }
+  ]
+}
