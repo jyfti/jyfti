@@ -4,7 +4,7 @@ import { readStateOrTerminate } from "../../files/state-file.service";
 import { printJson } from "../../print.service";
 import { createEngine } from "../../../engine/services/engine";
 import { readWorkflowOrTerminate } from "../../files/workflow-file.service";
-import { readEnvironmentOrTerminate } from "../../../cli/files/environment-file.service";
+import { readEnvironmentOrTerminate } from "../../files/environment-file.service";
 
 export async function vars(name?: string) {
   const config = await readConfig();

@@ -1,17 +1,19 @@
-import { Engine } from "../engine";
 import { empty } from "rxjs";
-import { Workflow, VariableMap } from "../../../engine/types";
+import { VariableMap } from "libs/engine/types";
 
 const state = { path: [0], inputs: {}, evaluations: [] };
 
-export function createEngine(
-  workflow: Workflow,
-  environment: VariableMap
-): Engine {
-  return new EngineStub(workflow, environment);
+let variableMap: VariableMap = {};
+
+export function __setVariableMap(pVariableMap: VariableMap): void {
+  variableMap = pVariableMap;
 }
 
-class EngineStub extends Engine {
+export function createEngine() {
+  return new EngineStub();
+}
+
+class EngineStub {
   complete() {
     return empty();
   }
@@ -22,7 +24,7 @@ class EngineStub extends Engine {
     return {};
   }
   getVariableMap() {
-    return {};
+    return variableMap;
   }
   init() {
     return state;
