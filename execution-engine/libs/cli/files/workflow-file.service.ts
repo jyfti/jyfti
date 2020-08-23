@@ -4,7 +4,7 @@ import { Workflow, JsonSchema } from "../../engine/types";
 import { readJson, fileExists, writeJson, listDirFiles } from "./file.service";
 import { printError } from "../print.service";
 
-export function resolveWorkflow(config: Config, name: string) {
+function resolveWorkflow(config: Config, name: string) {
   return nodePath.resolve(config.sourceRoot, name + ".json");
 }
 
@@ -53,6 +53,6 @@ export function writeWorkflow(
   config: Config,
   name: string,
   workflow: Workflow
-): Promise<any> {
+): Promise<void> {
   return writeJson(resolveWorkflow(config, name), workflow);
 }
