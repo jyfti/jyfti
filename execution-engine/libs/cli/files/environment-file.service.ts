@@ -6,7 +6,7 @@ import { printError } from "../print.service";
 
 export const defaultEnvironmentName: string = "default";
 
-export function resolveEnvironment(config: Config, name: string) {
+function resolveEnvironment(config: Config, name: string) {
   return nodePath.resolve(config.envRoot, name + ".json");
 }
 
@@ -28,7 +28,7 @@ export function writeEnvironment(
   config: Config,
   name: string,
   environment: VariableMap
-): Promise<any> {
+): Promise<void> {
   return writeJson(resolveEnvironment(config, name), environment);
 }
 
