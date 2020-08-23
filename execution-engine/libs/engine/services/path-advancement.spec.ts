@@ -33,7 +33,7 @@ describe("the advancement of paths", () => {
         assignTo: "var1",
         for: {
           const: "loopVar",
-          in: "listVar",
+          in: { $eval: "listVar" },
           do: [
             {
               assignTo: "var2",
@@ -83,7 +83,7 @@ describe("the advancement of paths", () => {
           assignTo: "var1",
           for: {
             const: "loopVar1",
-            in: "listVar1",
+            in: { $eval: "listVar1" },
             do: [
               {
                 assignTo: "var2",
@@ -97,7 +97,9 @@ describe("the advancement of paths", () => {
                 assignTo: "var4",
                 for: {
                   const: "loopVar2",
-                  in: "listVar2",
+                  in: {
+                    $eval: "listVar2",
+                  },
                   do: [
                     {
                       assignTo: "var5",

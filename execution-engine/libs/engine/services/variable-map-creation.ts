@@ -1,5 +1,7 @@
 import { Step, Evaluation, VariableMap, Workflow, State, Path } from "../types";
 import { resolveAllSteps, resolveLoopPositions } from "./step-resolvement";
+import { evaluate } from "./evaluation";
+import { isArray } from "lodash/fp";
 
 export function createVariableMapFromState(
   workflow: Workflow,
@@ -36,10 +38,16 @@ function resolveLoopVariables(
 }
 
 function getLoopList(variables: VariableMap, step: Step): any {
-  if (!step.for || !variables[step.for!.in]) {
-    throw new Error(`The variable '${step.for?.in}' is not defined`);
+  if (!step.for) {
+    throw new Error("The step is not a for-comprehension");
+  }
+  const loopList = evaluate(variables, step.for!.in);
+  if (!loopList || !isArray(loopList)) {
+    throw new Error(
+      `The expression '${step.for?.in}' does not resolve to a list`
+    );
   } else {
-    return variables[step.for.in];
+    return loopList;
   }
 }
 

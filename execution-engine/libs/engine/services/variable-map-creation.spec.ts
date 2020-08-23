@@ -33,7 +33,7 @@ describe("The creation of variable maps", () => {
         assignTo: "varA",
         for: {
           const: "loopVar",
-          in: "listVar",
+          in: { $eval: "inputs.listVar" },
           do: [
             {
               assignTo: "varB",

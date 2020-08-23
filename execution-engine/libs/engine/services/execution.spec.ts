@@ -72,7 +72,7 @@ describe("the execution of workflows", () => {
             assignTo: "outVar",
             for: {
               const: "loopVar",
-              in: "listVar",
+              in: { $eval: "inputs.listVar" },
               do: [
                 {
                   assignTo: "innerVar",
@@ -137,7 +137,7 @@ describe("the execution of workflows", () => {
             assignTo: "outVar",
             for: {
               const: "loopVar",
-              in: "listVar",
+              in: { $eval: "inputs.listVar" },
               do: [
                 {
                   assignTo: "var1",

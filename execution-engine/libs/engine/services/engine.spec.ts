@@ -33,7 +33,7 @@ describe("Engine", () => {
         assignTo: "var5",
         for: {
           const: "loopVar",
-          in: "var4",
+          in: { $eval: "var4" },
           do: [
             {
               assignTo: "var6",
