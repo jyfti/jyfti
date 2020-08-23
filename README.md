@@ -6,7 +6,7 @@ Jyfti is a project for building, running and sharing workflows easily.
 
 - **Json-based** — Workflows are just JSON files. They can be checked into source control and compared via diffing tools.
 
-- **Validation with json schema** — Workflows adhere to a JSON schema, such that common editors are able to provide auto-completion and validation. Workflow inputs and environments can be specified to adhere to a json schema, enabling validation and prompting for inputs in CLI.
+- **Validation with json schema** — Workflows adhere to a JSON schema. That way common editors are able to provide auto-completion and validation. Workflow inputs and environments can be specified to adhere to a json schema, enabling validation and prompting for inputs in CLI.
 
 - **Execute anywhere** — Jyfti is stateless by default. This allows local execution, easy sharing of workflows and reproduction of issues in other environments like CI servers.
 
