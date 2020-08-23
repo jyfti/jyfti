@@ -5,7 +5,7 @@ export function __setResponse(pSuccess: boolean): void {
 }
 
 export function fileExists(_path: string): Promise<boolean> {
-  return success ? Promise.resolve(true) : Promise.reject();
+  return Promise.resolve(success);
 }
 
 export function ensureDirExists(_path: string): Promise<void> {
@@ -13,7 +13,9 @@ export function ensureDirExists(_path: string): Promise<void> {
 }
 
 export function listDirFiles(path: string): Promise<string[]> {
-  return success ? Promise.resolve(["a.json", "b.json", "c.js"]) : Promise.reject();
+  return success
+    ? Promise.resolve(["a.json", "b.json", "c.js"])
+    : Promise.reject();
 }
 
 export function readJson(_path: string): Promise<any> {
