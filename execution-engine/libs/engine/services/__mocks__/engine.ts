@@ -1,5 +1,5 @@
-import { empty } from "rxjs";
-import { VariableMap } from "libs/engine/types";
+import { empty, of } from "rxjs";
+import { VariableMap, StepResult } from "libs/engine/types";
 
 const state = { path: [0], inputs: {}, evaluations: [] };
 
@@ -9,36 +9,22 @@ export function __setVariableMap(pVariableMap: VariableMap): void {
   variableMap = pVariableMap;
 }
 
-export function createEngine() {
-  return new EngineStub();
+let stepResult: StepResult = { path: [], evaluation: "a" };
+
+export function __setStepResult(pStepResult: StepResult): void {
+  stepResult = pStepResult;
 }
 
-class EngineStub {
-  complete() {
-    return empty();
-  }
-  isComplete() {
-    return true;
-  }
-  getOutput() {
-    return {};
-  }
-  getVariableMap() {
-    return variableMap;
-  }
-  init() {
-    return state;
-  }
-  step() {
-    return empty();
-  }
-  toState() {
-    return state;
-  }
-  toStates() {
-    return () => empty();
-  }
-  validate() {
-    return {};
-  }
+export function createEngine() {
+  return {
+    complete: () => empty(),
+    isComplete: () => stepResult.path.length === 0,
+    getOutput: () => ({}),
+    getVariableMap: () => variableMap,
+    init: () => state,
+    step: () => of(stepResult),
+    toState: () => state,
+    toStates: () => empty(),
+    validate: () => ({}),
+  };
 }
