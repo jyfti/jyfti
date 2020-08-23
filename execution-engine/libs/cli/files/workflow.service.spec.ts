@@ -1,4 +1,9 @@
-import { validateWorkflowOrTerminate, validateInputsOrTerminate, validateEnvironmentOrTerminate } from "./workflow.service";
+import {
+  validateWorkflowOrTerminate,
+  validateInputsOrTerminate,
+  validateEnvironmentOrTerminate,
+  createInputs,
+} from "./workflow.service";
 import { Workflow } from "../../engine/types";
 
 jest.mock("../../engine/services/validator");
@@ -47,5 +52,18 @@ describe("interacting with workflows via http and files", () => {
     require("../../engine/services/validator").__setResponse(false);
     validateEnvironmentOrTerminate({} as Workflow, {});
     expect(mockExit).toHaveBeenCalledWith(1);
+  });
+
+  it("create inputs from a list", () => {
+    expect(
+      createInputs(
+        {
+          name: "MyWorkflow",
+          inputs: { a: { type: "string" }, b: { type: "string" } },
+          steps: [],
+        },
+        ["value1", "value2"]
+      )
+    ).toEqual({ a: "value1", b: "value2" });
   });
 });
