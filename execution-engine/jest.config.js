@@ -3,5 +3,6 @@ module.exports = {
   moduleFileExtensions: [...defaults.moduleFileExtensions, "ts", "tsx"],
   collectCoverage: true,
   collectCoverageFrom: ['./libs/**/*.ts'],
-  roots: ['./libs']
+  roots: ['./libs'],
+  clearMocks: true
 };
