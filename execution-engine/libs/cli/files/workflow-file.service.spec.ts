@@ -2,6 +2,7 @@ import {
   readWorkflow,
   readWorkflowOrTerminate,
   readWorkflowSchemaOrTerminate,
+  readWorkflowNames,
 } from "./workflow-file.service";
 import { Config } from "../types/config";
 
@@ -47,5 +48,17 @@ describe("interacting with workflow files", () => {
     require("./file.service").__setResponse(false);
     await readWorkflowSchemaOrTerminate();
     expect(mockExit).toHaveBeenCalledWith(1);
+  });
+
+  it("reads the list of workflow files", async () => {
+    require("./file.service").__setResponse(true);
+    expect(await readWorkflowNames(config)).toEqual(["a", "b"]);
+  });
+
+  it("propagates an error from reading the workflow files", async () => {
+    require("./file.service").__setResponse(false);
+    await readWorkflowNames(config)
+      .then(() => fail())
+      .catch(() => {});
   });
 });

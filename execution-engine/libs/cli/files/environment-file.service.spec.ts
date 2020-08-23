@@ -1,5 +1,8 @@
 import { Config } from "../types/config";
-import { readEnvironmentOrTerminate } from "./environment-file.service";
+import {
+  readEnvironmentOrTerminate,
+  readEnvironmentNames,
+} from "./environment-file.service";
 
 jest.mock("./file.service");
 
@@ -23,5 +26,17 @@ describe("interacting with environment files", () => {
     require("./file.service").__setResponse(false);
     await readEnvironmentOrTerminate(config, "my-workflow");
     expect(mockExit).toHaveBeenCalledWith(1);
+  });
+
+  it("reads the list of environment files", async () => {
+    require("./file.service").__setResponse(true);
+    expect(await readEnvironmentNames(config)).toEqual(["a", "b"]);
+  });
+
+  it("propagates an error from reading the environment files", async () => {
+    require("./file.service").__setResponse(false);
+    await readEnvironmentNames(config)
+      .then(() => fail())
+      .catch(() => {});
   });
 });

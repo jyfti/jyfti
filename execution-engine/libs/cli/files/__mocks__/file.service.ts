@@ -13,7 +13,7 @@ export function ensureDirExists(_path: string): Promise<void> {
 }
 
 export function listDirFiles(path: string): Promise<string[]> {
-  return success ? Promise.resolve([]) : Promise.reject();
+  return success ? Promise.resolve(["a.json", "b.json", "c.js"]) : Promise.reject();
 }
 
 export function readJson(_path: string): Promise<any> {
