@@ -5,7 +5,7 @@ import { State } from "../../engine/types";
 import { readJson, writeJson } from "./file.service";
 import { printError } from "../print.service";
 
-export function resolveState(config: Config, name: string) {
+function resolveState(config: Config, name: string) {
   return nodePath.resolve(config.outRoot, name + ".state.json");
 }
 
@@ -29,14 +29,14 @@ export function writeState(
   config: Config,
   name: string,
   state: State
-): Promise<any> {
+): Promise<void> {
   return writeJson(resolveState(config, name), state);
 }
 
-export function deleteState(config: Config, name: string): Promise<any> {
+export function deleteState(config: Config, name: string): Promise<void> {
   return fs.promises.unlink(resolveState(config, name));
 }
 
-export async function deleteAllStates(config: Config): Promise<any> {
+export async function deleteAllStates(config: Config): Promise<void> {
   return fs.promises.rmdir(config.outRoot, { recursive: true });
 }
