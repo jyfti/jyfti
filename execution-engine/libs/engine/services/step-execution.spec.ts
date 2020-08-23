@@ -50,4 +50,29 @@ describe("The execution of steps", () => {
       );
     });
   });
+  describe("a loop return evaluation step", () => {
+    it("should return the http response", () => {
+      const step: Step = {
+        assignTo: "myVar",
+        for: {
+          const: "loopVar",
+          in: {
+            $eval: "listVar",
+          },
+          do: [
+            {
+              assignTo: "innerVar",
+              expression: 2,
+            },
+          ],
+          return: "innerVar",
+        },
+      };
+      expect(
+        executeStep(step, [[2], [2], [2], [2], [2]], {
+          listVar: ["a", "b", "c", "d", "e"],
+        })
+      ).toBeObservable(cold("(a|)", { a: [2, 2, 2, 2, 2] }));
+    });
+  });
 });
