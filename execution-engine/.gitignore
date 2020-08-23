@@ -3,3 +3,4 @@ build
 jyfti.state.json
 out
 environments
+coverage
