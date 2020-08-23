@@ -1,15 +1,27 @@
 import { Workflow } from "../../engine/types";
 
-export async function promptWorkflow(): Promise<string | undefined> {
-  return "my-workflow";
+let returnsContent: boolean = true;
+
+export function __setReturnsContent(pReturnsContent: boolean) {
+  returnsContent = pReturnsContent;
 }
 
-export async function promptEnvironment(): Promise<string | undefined> {
-  return "my-environment";
+export function promptWorkflow(): Promise<string | undefined> {
+  return Promise.resolve(returnsContent ? "my-workflow" : undefined);
 }
 
-export async function promptWorkflowInputs(
-  workflow: Workflow
-): Promise<string[]> {
-  return Object.keys(workflow.inputs || {}).map((_in, i) => "my-input-" + i);
+export function promptEnvironment(): Promise<string | undefined> {
+  return Promise.resolve(returnsContent ? "my-environment" : undefined);
+}
+
+export function promptWorkflowInputs(workflow: Workflow): Promise<string[]> {
+  return Promise.resolve(
+    returnsContent
+      ? Object.keys(workflow.inputs || {}).map((_in, i) => "my-input-" + i)
+      : []
+  );
+}
+
+export function promptOverwriteDecision(): Promise<boolean> {
+  return Promise.resolve(returnsContent);
 }

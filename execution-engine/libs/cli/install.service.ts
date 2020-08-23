@@ -1,9 +1,9 @@
 import { Config } from "./types/config";
-import { Workflow, JsonSchema } from "libs/engine/types";
+import { Workflow, JsonSchema } from "../engine/types";
 import { validateWorkflow } from "../engine/services/validator";
 import { printValidationErrors, printError } from "./print.service";
 import { workflowExists, writeWorkflow } from "./files/workflow-file.service";
-import inquirer from "inquirer";
+import { promptOverwriteDecision } from "./inquirer.service";
 
 export async function install(
   config: Config,
@@ -27,14 +27,4 @@ export async function install(
   } else {
     console.log("The workflow has not been saved.");
   }
-}
-
-async function promptOverwriteDecision(): Promise<boolean> {
-  const answers = await inquirer.prompt({
-    name: "yes",
-    message: "Do you want to overwrite the existing workflow?",
-    type: "confirm",
-    default: false,
-  });
-  return answers.yes;
 }

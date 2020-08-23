@@ -51,3 +51,13 @@ export async function promptWorkflowInputs(
   );
   return Object.keys(inputs).map((fieldName) => answers[fieldName]);
 }
+
+export async function promptOverwriteDecision(): Promise<boolean> {
+  const answers = await inquirer.prompt({
+    name: "yes",
+    message: "Do you want to overwrite the existing workflow?",
+    type: "confirm",
+    default: false,
+  });
+  return answers.yes;
+}
