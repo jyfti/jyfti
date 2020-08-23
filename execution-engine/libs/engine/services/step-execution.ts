@@ -34,7 +34,7 @@ export function executeStep(
   }
 }
 
-export function executeRequestStep(
+function executeRequestStep(
   request: HttpRequestTemplate,
   variables: VariableMap
 ): Observable<Evaluation> {
@@ -44,7 +44,7 @@ export function executeRequestStep(
   );
 }
 
-export function executeExpressionStep(
+function executeExpressionStep(
   expression: JsonExpression,
   variables: VariableMap
 ): Observable<Evaluation> {
@@ -73,7 +73,7 @@ function evaluateLoopReturn(
   return of(loopReturn);
 }
 
-export function createHttpRequest(
+function createHttpRequest(
   template: HttpRequestTemplate,
   variables: VariableMap
 ): HttpRequest<any> {
