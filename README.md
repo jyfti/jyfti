@@ -1,5 +1,7 @@
 # Jyfti
 
+![License](https://img.shields.io/github/license/jyfti/jyfti) ![Build](https://img.shields.io/github/workflow/status/jyfti/jyfti/CI) ![Code Coverage](https://img.shields.io/codecov/c/github/jyfti/jyfti)
+
 Jyfti is a json-based, light-weight workflow engine that makes it easy to connect APIs.
 It allows to define workflows via json and to run them step-by-step.
 
