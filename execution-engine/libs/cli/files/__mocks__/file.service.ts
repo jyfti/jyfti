@@ -12,6 +12,10 @@ export function ensureDirExists(_path: string): Promise<void> {
   return success ? Promise.resolve() : Promise.reject();
 }
 
+export function listDirFiles(path: string): Promise<string[]> {
+  return success ? Promise.resolve([]) : Promise.reject();
+}
+
 export function readJson(_path: string): Promise<any> {
   return success ? Promise.resolve({}) : Promise.reject();
 }

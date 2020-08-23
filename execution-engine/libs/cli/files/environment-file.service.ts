@@ -1,8 +1,7 @@
 import { VariableMap } from "libs/engine/types";
-import { readJson, fileExists, writeJson } from "./file.service";
+import { readJson, fileExists, writeJson, listDirFiles } from "./file.service";
 import { Config } from "../types/config";
 import * as nodePath from "path";
-import * as fs from "fs";
 import { printError } from "../print.service";
 
 export const defaultEnvironmentName: string = "default";
@@ -48,7 +47,7 @@ export async function readEnvironmentOrTerminate(
 }
 
 export async function readEnvironmentNames(config: Config): Promise<string[]> {
-  const fileNames = await fs.promises.readdir(config.envRoot);
+  const fileNames = await listDirFiles(config.envRoot);
   return fileNames
     .filter((fileName) => fileName.endsWith(".json"))
     .map((fileName) => fileName.substring(0, fileName.length - ".json".length));

@@ -1,8 +1,7 @@
-import * as fs from "fs";
 import * as nodePath from "path";
 import { Config } from "../types/config";
 import { Workflow, JsonSchema } from "../../engine/types";
-import { readJson, fileExists, writeJson } from "./file.service";
+import { readJson, fileExists, writeJson, listDirFiles } from "./file.service";
 import { printError } from "../print.service";
 
 export function resolveWorkflow(config: Config, name: string) {
@@ -10,7 +9,7 @@ export function resolveWorkflow(config: Config, name: string) {
 }
 
 export async function readWorkflowNames(config: Config): Promise<string[]> {
-  const fileNames = await fs.promises.readdir(config.sourceRoot);
+  const fileNames = await listDirFiles(config.sourceRoot);
   return fileNames
     .filter((fileName) => fileName.endsWith(".json"))
     .map((fileName) => fileName.substring(0, fileName.length - ".json".length));

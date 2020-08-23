@@ -14,6 +14,10 @@ export async function ensureDirExists(path: string): Promise<void> {
   }
 }
 
+export function listDirFiles(path: string): Promise<string[]> {
+  return fs.promises.readdir(path);
+}
+
 export function readJson(path: string): Promise<any> {
   return fs.promises.readFile(path, "utf8").then(JSON.parse);
 }
