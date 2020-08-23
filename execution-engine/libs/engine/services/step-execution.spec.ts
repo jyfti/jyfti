@@ -51,7 +51,7 @@ describe("The execution of steps", () => {
     });
   });
   describe("a loop return evaluation step", () => {
-    it("should return the http response", () => {
+    it("should return the collection of all inner variable values of the return variable", () => {
       const step: Step = {
         assignTo: "myVar",
         for: {
