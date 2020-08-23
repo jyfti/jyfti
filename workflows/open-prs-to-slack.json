@@ -1,6 +1,12 @@
 {
   "$schema": "https://raw.githubusercontent.com/jyfti/jyfti/master/workflow-schema.json",
   "name": "Write open PRs to Slack",
+  "env": {
+    "slackWebhookUrl": {
+      "type": "string",
+      "description": "The authenticated slack webhook that allows posting messages to a specific channel in slack"
+    }
+  },
   "inputs": {
     "org": {
       "type": "string",
@@ -39,7 +45,7 @@
       "assignTo": "slackResponse",
       "request": {
         "method": "POST",
-        "url": "",
+        "url": "${env.slackWebhookUrl}",
         "body": {
           "text": "${join(titles, '\n')}"
         }
