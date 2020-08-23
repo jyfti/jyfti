@@ -1,7 +1,13 @@
-import { Workflow, Inputs } from "../../../engine/types";
+import { Workflow } from "../../../engine/types";
+
+let workflow: Workflow;
+
+export function __setWorkflow(pWorkflow: Workflow): void {
+  workflow = pWorkflow;
+}
 
 export function readWorkflowOrTerminate(): Promise<Workflow> {
-  return Promise.resolve({ name: "my-workflow", steps: [] });
+  return workflow ? Promise.resolve(workflow) : Promise.reject();
 }
 
 export function validateWorkflowOrTerminate(): void {}

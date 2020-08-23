@@ -16,6 +16,6 @@ export async function readConfig(): Promise<Config> {
   return config;
 }
 
-export function writeConfig(config: Config): Promise<any> {
+export function writeConfig(config: Config): Promise<void> {
   return writeJson(configName, config);
 }
