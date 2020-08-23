@@ -3,7 +3,7 @@ import { readState, readStateOrTerminate } from "./state-file.service";
 
 jest.mock("./file.service");
 
-describe("interacting with workflow files", () => {
+describe("interacting with state files", () => {
   const config: Config = {
     envRoot: "",
     outRoot: "",
