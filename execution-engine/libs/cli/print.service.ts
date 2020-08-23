@@ -10,13 +10,25 @@ export function printJson(json: any): string {
   return JSON.stringify(json, null, 2);
 }
 
+export function printValue(message: string | undefined): string {
+  return chalk.yellow(message);
+}
+
+export function printError(message: string | undefined): string {
+  return chalk.red(message);
+}
+
+export function printSuccess(message: string | undefined): string {
+  return chalk.green(message);
+}
+
 export function printStepResult(
   verbose: boolean,
   stepResult: StepResult
 ): string {
   return verbose
     ? printJson(stepResult)
-    : "Completed " + chalk.green(stepResult.path);
+    : "Completed " + printSuccess(JSON.stringify(stepResult.path, null, 0));
 }
 
 export function printAllInputErrors(
@@ -36,8 +48,8 @@ export function printInputErrors(
   errors: ajv.ErrorObject[]
 ): string {
   return (
-    `Input: ${chalk.yellow(fieldName)}\n` +
-    `Value: ${chalk.yellow(JSON.stringify(value, null, 0))}\n` +
+    `Input: ${printValue(fieldName)}\n` +
+    `Value: ${printValue(JSON.stringify(value, null, 0))}\n` +
     `${printValidationErrors(errors)}`
   );
 }

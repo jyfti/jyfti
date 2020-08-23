@@ -3,7 +3,7 @@ import * as nodePath from "path";
 import { Config } from "../types/config";
 import { Workflow, JsonSchema } from "../../engine/types";
 import { readJson, fileExists } from "./file.service";
-import chalk from "chalk";
+import { printError } from "../print.service";
 
 export function resolveWorkflow(config: Config, name: string) {
   return nodePath.resolve(config.sourceRoot, name + ".json");
@@ -26,7 +26,7 @@ export async function readWorkflowOrTerminate(
 ): Promise<Workflow> {
   const workflow = await readWorkflow(config, name).catch(() => undefined);
   if (!workflow) {
-    console.error(chalk.red("Workflow does not exist."));
+    console.error(printError("Workflow does not exist."));
     process.exit(1);
   }
   return workflow;
@@ -40,7 +40,7 @@ export function readWorkflowSchema(): Promise<JsonSchema> {
 export async function readWorkflowSchemaOrTerminate(): Promise<JsonSchema> {
   const schema = await readWorkflowSchema().catch(() => undefined);
   if (!schema) {
-    console.error(chalk.red("Workflow schema can not be found."));
+    console.error(printError("Workflow schema can not be found."));
     process.exit(1);
   }
   return schema;

@@ -1,13 +1,12 @@
 import { readConfig } from "../files/config-file.service";
 import { promptWorkflow } from "../inquirer.service";
 import { validateWorkflow } from "../../engine/services/validator";
-import { printValidationErrors } from "../print.service";
+import { printValidationErrors, printValue } from "../print.service";
 import {
   readWorkflowOrTerminate,
   readWorkflowSchemaOrTerminate,
   readWorkflowNames,
 } from "../files/workflow-file.service";
-import chalk from "chalk";
 
 export async function validate(name?: string, cmd?: any) {
   const config = await readConfig();
@@ -37,7 +36,7 @@ export async function validate(name?: string, cmd?: any) {
     .filter(({ errors }) => errors.length !== 0)
     .map(
       ({ name, errors }) =>
-        "In " + chalk.yellow(name) + ":\n" + printValidationErrors(errors)
+        "In " + printValue(name) + ":\n" + printValidationErrors(errors)
     );
   if (allErrorMessages.length !== 0) {
     console.log(allErrorMessages.join("\n\n"));

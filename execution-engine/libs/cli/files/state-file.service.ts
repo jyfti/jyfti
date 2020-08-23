@@ -3,7 +3,7 @@ import * as nodePath from "path";
 import { Config } from "../types/config";
 import { State } from "../../engine/types";
 import { readJson } from "./file.service";
-import chalk from "chalk";
+import { printError } from "../print.service";
 
 export function resolveState(config: Config, name: string) {
   return nodePath.resolve(config.outRoot, name + ".state.json");
@@ -19,7 +19,7 @@ export async function readStateOrTerminate(
 ): Promise<State> {
   const state = await readState(config, name).catch(() => undefined);
   if (!state) {
-    console.error(chalk.red("Workflow execution is not running."));
+    console.error(printError("Workflow execution is not running."));
     process.exit(1);
   }
   return state;

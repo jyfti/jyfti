@@ -1,8 +1,8 @@
 import { readConfig } from "../../files/config-file.service";
-import chalk from "chalk";
 import { State } from "../../../engine/types";
 import { readWorkflowNames } from "../../files/workflow-file.service";
 import { readState } from "../../files/state-file.service";
+import { printValue } from "../../../cli/print.service";
 
 export async function status(name: string) {
   const config = await readConfig();
@@ -28,5 +28,5 @@ function printState(promisedState: Promise<State>): Promise<string> {
 }
 
 function printStatus(status: string): string {
-  return chalk.yellow(`[${status}]`);
+  return printValue(`[${status}]`);
 }

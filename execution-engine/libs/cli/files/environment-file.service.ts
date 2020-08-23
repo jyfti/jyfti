@@ -3,7 +3,7 @@ import { readJson, fileExists } from "./file.service";
 import { Config } from "../types/config";
 import * as nodePath from "path";
 import * as fs from "fs";
-import chalk from "chalk";
+import { printError } from "../print.service";
 
 export const defaultEnvironmentName: string = "default";
 
@@ -42,7 +42,7 @@ export async function readEnvironmentOrTerminate(
     !name || name === defaultEnvironmentName ? {} : undefined
   );
   if (!environment) {
-    console.error(chalk.red("Environment does not exist."));
+    console.error(printError("Environment does not exist."));
     process.exit(1);
   }
   return environment;
