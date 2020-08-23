@@ -12,7 +12,8 @@ export async function validate(name?: string, cmd?: any) {
   const config = await readConfig();
   if (name && cmd?.all) {
     console.error("Only of [name] and option --all can be specified at once.");
-    process.exit(1);
+    process.exitCode = 1;
+    return;
   }
   const names = name
     ? [name]
@@ -40,6 +41,6 @@ export async function validate(name?: string, cmd?: any) {
     );
   if (allErrorMessages.length !== 0) {
     console.log(allErrorMessages.join("\n\n"));
-    process.exit(1);
+    process.exitCode = 1;
   }
 }

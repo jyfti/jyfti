@@ -16,7 +16,8 @@ export async function install(
   if (errors.length !== 0) {
     console.error(printError("The workflow is not valid."));
     console.error(printValidationErrors(errors));
-    process.exit(1);
+    process.exitCode = 1;
+    return;
   }
   const exists = await workflowExists(config, name);
   const write = !exists || overwrite || (await promptOverwriteDecision());

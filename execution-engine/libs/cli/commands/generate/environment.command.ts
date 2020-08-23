@@ -24,7 +24,8 @@ export async function generateEnvironment(name?: string) {
       console.error(
         "The environment already exists. Please delete the environment first."
       );
-      process.exit(1);
+      process.exitCode = 1;
+      return;
     }
     const workflow = createExampleEnvironment();
     await writeEnvironment(config, name, workflow);

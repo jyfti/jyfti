@@ -24,7 +24,8 @@ export async function generateWorkflow(name?: string) {
       console.error(
         "The workflow already exists. Please delete the workflow first."
       );
-      process.exit(1);
+      process.exitCode = 1;
+      return;
     }
     const workflow = createExampleWorkflow();
     await writeWorkflow(config, name, workflow);
