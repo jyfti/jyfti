@@ -33,3 +33,7 @@ jobs:
     - name: Test
       run: npm run test
       working-directory: execution-engine
+
+    - name: Code coverage
+      run: bash <(curl -s https://codecov.io/bash)
+      working-directory: execution-engine
