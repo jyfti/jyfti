@@ -2,7 +2,7 @@ import * as fs from "fs";
 import * as nodePath from "path";
 import { Config } from "../types/config";
 import { Workflow, JsonSchema } from "../../engine/types";
-import { readJson, fileExists } from "./file.service";
+import { readJson, fileExists, writeJson } from "./file.service";
 import { printError } from "../print.service";
 
 export function resolveWorkflow(config: Config, name: string) {
@@ -55,6 +55,5 @@ export function writeWorkflow(
   name: string,
   workflow: Workflow
 ): Promise<any> {
-  const data = JSON.stringify(workflow, null, 2);
-  return fs.promises.writeFile(resolveWorkflow(config, name), data, "utf8");
+  return writeJson(resolveWorkflow(config, name), workflow);
 }

@@ -17,3 +17,8 @@ export async function ensureDirExists(path: string) {
 export function readJson(path: string) {
   return fs.promises.readFile(path, "utf8").then(JSON.parse);
 }
+
+export function writeJson(path: string, json: any): Promise<any> {
+  const data = JSON.stringify(json, null, 2);
+  return fs.promises.writeFile(path, data, "utf8");
+}

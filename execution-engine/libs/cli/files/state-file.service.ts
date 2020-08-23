@@ -2,7 +2,7 @@ import * as fs from "fs";
 import * as nodePath from "path";
 import { Config } from "../types/config";
 import { State } from "../../engine/types";
-import { readJson } from "./file.service";
+import { readJson, writeJson } from "./file.service";
 import { printError } from "../print.service";
 
 export function resolveState(config: Config, name: string) {
@@ -30,8 +30,7 @@ export function writeState(
   name: string,
   state: State
 ): Promise<any> {
-  const data = JSON.stringify(state, null, 2);
-  return fs.promises.writeFile(resolveState(config, name), data, "utf8");
+  return writeJson(resolveState(config, name), state);
 }
 
 export function deleteState(config: Config, name: string): Promise<any> {
