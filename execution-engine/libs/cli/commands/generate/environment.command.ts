@@ -1,23 +1,15 @@
 import { readConfig } from "../../files/config-file.service";
-import inquirer from "inquirer";
 import { VariableMap } from "../../../engine/types";
 import {
   environmentExists,
   writeEnvironment,
 } from "../../../cli/files/environment-file.service";
+import { promptName } from "../../../cli/inquirer.service";
 
 export async function generateEnvironment(name?: string) {
   const config = await readConfig();
   if (!name) {
-    const answers = await inquirer.prompt([
-      {
-        name: "name",
-        message: "What shall be the name of the environment?",
-        type: "string",
-        default: "default",
-      },
-    ]);
-    name = answers.name;
+    name = await promptName("environment");
   }
   if (name) {
     if (await environmentExists(config, name)) {

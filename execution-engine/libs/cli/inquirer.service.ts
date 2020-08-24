@@ -4,6 +4,18 @@ import inquirer from "inquirer";
 import { Workflow } from "../engine/types";
 import { readEnvironmentNames } from "./files/environment-file.service";
 
+export async function promptName(entity: string): Promise<string> {
+  const answers = await inquirer.prompt([
+    {
+      name: "name",
+      message: `What shall be the name of the ${entity}?`,
+      type: "string",
+      default: "default",
+    },
+  ]);
+  return answers.name;
+}
+
 export async function promptWorkflow(
   config: Config,
   question: string

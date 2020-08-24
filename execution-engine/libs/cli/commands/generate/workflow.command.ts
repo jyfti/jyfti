@@ -1,23 +1,15 @@
 import { readConfig } from "../../files/config-file.service";
-import inquirer from "inquirer";
 import { Workflow } from "../../../engine/types";
 import {
   workflowExists,
   writeWorkflow,
 } from "../../files/workflow-file.service";
+import { promptName } from "../../../cli/inquirer.service";
 
 export async function generateWorkflow(name?: string) {
   const config = await readConfig();
   if (!name) {
-    const answers = await inquirer.prompt([
-      {
-        name: "name",
-        message: "What shall be the name of the workflow?",
-        type: "string",
-        default: "example-workflow",
-      },
-    ]);
-    name = answers.name;
+    name = await promptName('workflow');
   }
   if (name) {
     if (await workflowExists(config, name)) {
