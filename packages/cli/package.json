@@ -1,6 +1,6 @@
 {
   "name": "@jyfti/cli",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Jyfti is a json-based, light-weight workflow engine for software engineers. Jyfti makes it easy to connect APIs via transparently executed workflows.",
   "main": "index.ts",
   "bin": {
@@ -47,7 +47,7 @@
     "typescript": "^3.9.7"
   },
   "dependencies": {
-    "@jyfti/engine": "^0.0.2",
+    "@jyfti/engine": "^0.0.3",
     "ajv": "^6.12.4",
     "bent": "^7.3.9",
     "chalk": "^4.1.0",
