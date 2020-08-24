@@ -1,6 +1,6 @@
 {
   "name": "@jyfti/engine",
-  "version": "0.0.3",
+  "version": "0.0.2",
   "description": "Jyfti is a json-based, light-weight workflow engine for software engineers. Jyfti makes it easy to connect APIs via transparently executed workflows.",
   "main": "index.ts",
   "repository": {
@@ -47,5 +47,6 @@
     "json-e": "^4.1.0",
     "lodash": "^4.17.19",
     "rxjs": "^6.6.2"
-  }
+  },
+  "gitHead": "e33460d186abe1f847fdc8fb2ed43e93cec60d32"
 }

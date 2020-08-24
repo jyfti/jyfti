@@ -24,16 +24,15 @@ jobs:
     
     - name: Install npm packages
       run: npm install
-      working-directory: execution-engine
+
+    - name: Bootstrap lerna
+      run: lerna bootstrap --ci
 
     - name: Build
-      run: npm run build
-      working-directory: execution-engine
+      run: lerna run build
 
     - name: Test
-      run: npm run test
-      working-directory: execution-engine
+      run: lerna run test
 
     - name: Code coverage
       run: bash <(curl -s https://codecov.io/bash)
-      working-directory: execution-engine
