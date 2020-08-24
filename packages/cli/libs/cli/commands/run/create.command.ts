@@ -1,5 +1,5 @@
 import { readConfig } from "../../files/config-file.service";
-import { createEngine } from "../../../engine/services/engine";
+import { createEngine } from "@jyfti/engine";
 import { promptWorkflow, promptWorkflowInputs } from "../../inquirer.service";
 import { printJson, printValue } from "../../print.service";
 import {

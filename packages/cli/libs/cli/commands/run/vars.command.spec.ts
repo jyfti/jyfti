@@ -1,12 +1,14 @@
 import { vars } from "./vars.command";
 import { printJson } from "../../print.service";
 
-jest.mock("../../../engine/services/engine");
 jest.mock("../../files/workflow-file.service");
 jest.mock("../../files/config-file.service");
 jest.mock("../../files/state-file.service");
 jest.mock("../../files/environment-file.service");
 jest.mock("../../inquirer.service");
+jest.mock("@jyfti/engine", () =>
+  require("../../../../__mocks__/@jyfti/engine")
+);
 
 describe("the vars command", () => {
   const variableMap = { var1: "a" };
@@ -27,7 +29,7 @@ describe("the vars command", () => {
     require("../../files/environment-file.service").__setEnvironment(
       environment
     );
-    require("../../../engine/services/engine").__setVariableMap(variableMap);
+    require("@jyfti/engine").__setVariableMap(variableMap);
   });
 
   it("should print the variables of a workflow", async () => {

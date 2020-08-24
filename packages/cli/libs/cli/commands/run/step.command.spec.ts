@@ -7,7 +7,9 @@ jest.mock("../../files/environment-file.service");
 jest.mock("../../files/workflow.service");
 jest.mock("../../files/workflow-file.service");
 jest.mock("../../inquirer.service");
-jest.mock("../../../engine/services/engine");
+jest.mock("@jyfti/engine", () =>
+  require("../../../../__mocks__/@jyfti/engine")
+);
 
 describe("the step command", () => {
   let logSpy: any;
@@ -25,7 +27,7 @@ describe("the step command", () => {
       evaluations: [],
     });
     require("../../files/environment-file.service").__setEnvironment({});
-    require("../../../engine/services/engine").__setStepResult({
+    require("@jyfti/engine").__setStepResult({
       path: [0],
       evaluation: "a",
     });
@@ -41,7 +43,7 @@ describe("the step command", () => {
       evaluations: [],
     });
     require("../../files/environment-file.service").__setEnvironment({});
-    require("../../../engine/services/engine").__setStepResult({
+    require("@jyfti/engine").__setStepResult({
       path: [],
       evaluation: "a",
     });

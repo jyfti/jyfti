@@ -2,7 +2,7 @@ import { readConfig } from "../../files/config-file.service";
 import { promptWorkflow } from "../../inquirer.service";
 import { readStateOrTerminate } from "../../files/state-file.service";
 import { printJson } from "../../print.service";
-import { createEngine } from "../../../engine/services/engine";
+import { createEngine } from "@jyfti/engine";
 import { readWorkflowOrTerminate } from "../../files/workflow-file.service";
 import { readEnvironmentOrTerminate } from "../../files/environment-file.service";
 

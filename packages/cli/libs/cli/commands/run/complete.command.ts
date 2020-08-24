@@ -1,5 +1,5 @@
 import { readConfig } from "../../files/config-file.service";
-import { createEngine } from "../../../engine/services/engine";
+import { createEngine } from "@jyfti/engine";
 import { last, flatMap, tap } from "rxjs/operators";
 import { from } from "rxjs";
 import { promptWorkflow } from "../../inquirer.service";

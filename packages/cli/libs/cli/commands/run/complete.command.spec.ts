@@ -7,7 +7,9 @@ jest.mock("../../files/state-file.service");
 jest.mock("../../files/environment-file.service");
 jest.mock("../../files/workflow.service");
 jest.mock("../../inquirer.service");
-jest.mock("../../../engine/services/engine");
+jest.mock("@jyfti/engine", () =>
+  require("../../../../__mocks__/@jyfti/engine")
+);
 
 describe("the complete command", () => {
   const state = {
@@ -31,7 +33,7 @@ describe("the complete command", () => {
     );
     require("../../files/workflow-file.service").__setWorkflow(workflow);
     require("../../files/workflow.service").__setWorkflow(workflow);
-    require("../../../engine/services/engine").__setStepResult(stepResult);
+    require("@jyfti/engine").__setStepResult(stepResult);
   });
 
   it("should complete a workflow", async () => {

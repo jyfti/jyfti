@@ -8,7 +8,9 @@ jest.mock("../../files/environment-file.service");
 jest.mock("../../files/workflow.service");
 jest.mock("../../install.service");
 jest.mock("../../inquirer.service");
-jest.mock("../../../engine/services/engine");
+jest.mock("@jyfti/engine", () =>
+  require("../../../../__mocks__/@jyfti/engine")
+);
 
 describe("the create command", () => {
   const state = {
