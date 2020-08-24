@@ -12,12 +12,12 @@ import {
 } from "../../files/workflow.service";
 import { writeState } from "../../files/state-file.service";
 import { readWorkflowSchemaOrTerminate } from "../../files/workflow-file.service";
-import { readEnvironmentOrTerminate } from "../../../cli/files/environment-file.service";
+import { readEnvironmentOrTerminate } from "../../files/environment-file.service";
 import {
   isUrl,
   extractWorkflowName,
   createInputs,
-} from "../../../cli/files/workflow.util";
+} from "../../files/workflow.util";
 
 export async function execute(name?: string, inputList?: string[], cmd?: any) {
   const config = await readConfig();

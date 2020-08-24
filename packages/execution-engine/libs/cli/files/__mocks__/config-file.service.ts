@@ -1,4 +1,4 @@
-import { Config } from "../../../cli/types/config";
+import { Config } from "../../types/config";
 
 export const configName: string = "jyfti.json";
 

@@ -1,5 +1,5 @@
 import { create } from "./create.command";
-import { printValue } from "../../../cli/print.service";
+import { printValue } from "../../print.service";
 
 jest.mock("../../files/workflow-file.service");
 jest.mock("../../files/config-file.service");

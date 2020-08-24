@@ -1,4 +1,4 @@
-import { printValue } from "../../../cli/print.service";
+import { printValue } from "../../print.service";
 import { status } from "./status.command";
 
 jest.mock("../../files/config-file.service");

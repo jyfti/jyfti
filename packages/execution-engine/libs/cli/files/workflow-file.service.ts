@@ -33,7 +33,7 @@ export async function readWorkflowOrTerminate(
 
 export function readWorkflowSchema(): Promise<JsonSchema> {
   // TODO Make flexible
-  return readJson("../workflow-schema.json");
+  return readJson("../../workflow-schema.json");
 }
 
 export async function readWorkflowSchemaOrTerminate(): Promise<JsonSchema> {

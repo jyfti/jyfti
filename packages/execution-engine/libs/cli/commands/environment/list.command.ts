@@ -1,5 +1,5 @@
 import { readConfig } from "../../files/config-file.service";
-import { readEnvironmentNames } from "../../../cli/files/environment-file.service";
+import { readEnvironmentNames } from "../../files/environment-file.service";
 
 export async function listEnvironments() {
   const config = await readConfig();

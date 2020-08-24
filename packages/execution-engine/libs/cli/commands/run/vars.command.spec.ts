@@ -1,5 +1,5 @@
 import { vars } from "./vars.command";
-import { printJson } from "../../../cli/print.service";
+import { printJson } from "../../print.service";
 
 jest.mock("../../../engine/services/engine");
 jest.mock("../../files/workflow-file.service");

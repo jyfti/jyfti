@@ -9,8 +9,8 @@ import {
   readStateOrTerminate,
 } from "../../files/state-file.service";
 import { printStepResult } from "../../print.service";
-import { readEnvironmentOrTerminate } from "../../../cli/files/environment-file.service";
-import { validateEnvironmentOrTerminate } from "../../../cli/files/workflow.service";
+import { readEnvironmentOrTerminate } from "../../files/environment-file.service";
+import { validateEnvironmentOrTerminate } from "../../files/workflow.service";
 
 export async function step(name?: string, cmd?: any) {
   const config = await readConfig();

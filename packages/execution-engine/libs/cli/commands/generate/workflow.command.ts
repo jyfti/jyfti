@@ -4,7 +4,7 @@ import {
   workflowExists,
   writeWorkflow,
 } from "../../files/workflow-file.service";
-import { promptName } from "../../../cli/inquirer.service";
+import { promptName } from "../../inquirer.service";
 
 export async function generateWorkflow(name?: string) {
   const config = await readConfig();

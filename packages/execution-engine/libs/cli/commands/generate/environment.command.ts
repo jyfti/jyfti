@@ -3,8 +3,8 @@ import { VariableMap } from "../../../engine/types";
 import {
   environmentExists,
   writeEnvironment,
-} from "../../../cli/files/environment-file.service";
-import { promptName } from "../../../cli/inquirer.service";
+} from "../../files/environment-file.service";
+import { promptName } from "../../inquirer.service";
 
 export async function generateEnvironment(name?: string) {
   const config = await readConfig();

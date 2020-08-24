@@ -10,13 +10,13 @@ import {
 } from "../../files/workflow.service";
 import { writeState } from "../../files/state-file.service";
 import { install } from "../../install.service";
-import { readWorkflowSchemaOrTerminate } from "../../../cli/files/workflow-file.service";
-import { readEnvironmentOrTerminate } from "../../../cli/files/environment-file.service";
+import { readWorkflowSchemaOrTerminate } from "../../files/workflow-file.service";
+import { readEnvironmentOrTerminate } from "../../files/environment-file.service";
 import {
   isUrl,
   extractWorkflowName,
   createInputs,
-} from "../../../cli/files/workflow.util";
+} from "../../files/workflow.util";
 
 export async function create(name?: string, inputList?: string[], cmd?: any) {
   const config = await readConfig();

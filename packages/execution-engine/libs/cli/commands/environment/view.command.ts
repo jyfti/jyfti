@@ -1,7 +1,7 @@
 import { readConfig } from "../../files/config-file.service";
 import { printJson } from "../../print.service";
-import { readEnvironmentOrTerminate } from "../../../cli/files/environment-file.service";
-import { promptEnvironment } from "../../../cli/inquirer.service";
+import { readEnvironmentOrTerminate } from "../../files/environment-file.service";
+import { promptEnvironment } from "../../inquirer.service";
 
 export async function viewEnvironment(name?: string) {
   const config = await readConfig();

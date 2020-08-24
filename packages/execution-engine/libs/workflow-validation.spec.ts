@@ -8,7 +8,7 @@ import { Config } from "./cli/types/config";
 
 describe("the validation of workflows", () => {
   const config: Config = {
-    sourceRoot: "../workflows",
+    sourceRoot: "../../workflows",
     envRoot: "",
     outRoot: "",
   };

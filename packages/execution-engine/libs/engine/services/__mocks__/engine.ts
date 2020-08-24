@@ -1,5 +1,5 @@
 import { of } from "rxjs";
-import { VariableMap, StepResult } from "../../../engine/types";
+import { VariableMap, StepResult } from "../../types";
 import { map } from "rxjs/operators";
 
 const state = { path: [0], inputs: {}, evaluations: [] };

@@ -2,7 +2,7 @@ import { readConfig } from "../../files/config-file.service";
 import { State } from "../../../engine/types";
 import { readWorkflowNames } from "../../files/workflow-file.service";
 import { readState } from "../../files/state-file.service";
-import { printValue } from "../../../cli/print.service";
+import { printValue } from "../../print.service";
 
 export async function status(name?: string) {
   const config = await readConfig();

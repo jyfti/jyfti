@@ -1,5 +1,5 @@
 import { state } from "./state.command";
-import { printJson } from "../../../cli/print.service";
+import { printJson } from "../../print.service";
 
 jest.mock("../../files/config-file.service");
 jest.mock("../../files/state-file.service");
