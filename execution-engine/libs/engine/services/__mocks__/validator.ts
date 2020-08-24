@@ -14,7 +14,7 @@ export const error = {
   params: {},
 };
 
-export function validateWorkflow(): ErrorObject[] {
+export function validate(): ErrorObject[] {
   return success ? [] : [error];
 }
 
@@ -24,8 +24,4 @@ export function validateSchemaMap(): InputErrors {
     : {
         input: [error],
       };
-}
-
-export function validateInput(): ErrorObject[] {
-  return success ? [] : [error];
 }

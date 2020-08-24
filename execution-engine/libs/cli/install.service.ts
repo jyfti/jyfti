@@ -1,6 +1,6 @@
 import { Config } from "./types/config";
 import { Workflow, JsonSchema } from "../engine/types";
-import { validateWorkflow } from "../engine/services/validator";
+import { validate } from "../engine/services/validator";
 import { printValidationErrors, printError } from "./print.service";
 import { workflowExists, writeWorkflow } from "./files/workflow-file.service";
 import { promptOverwriteDecision } from "./inquirer.service";
@@ -12,7 +12,7 @@ export async function install(
   name: string,
   overwrite: boolean
 ) {
-  const errors = validateWorkflow(workflow, schema);
+  const errors = validate(workflow, schema);
   if (errors.length !== 0) {
     console.error(printError("The workflow is not valid."));
     console.error(printValidationErrors(errors));

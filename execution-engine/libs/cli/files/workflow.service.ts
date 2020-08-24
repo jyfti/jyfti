@@ -7,10 +7,7 @@ import {
   printValidationErrors,
   printError,
 } from "../print.service";
-import {
-  validateSchemaMap,
-  validateWorkflow,
-} from "../../engine/services/validator";
+import { validateSchemaMap, validate } from "../../engine/services/validator";
 import { isUrl } from "./workflow.util";
 
 export function readWorkflowOrTerminate(
@@ -27,7 +24,7 @@ export function validateWorkflowOrTerminate(
   workflow: Workflow,
   schema: JsonSchema
 ): void {
-  const errors = validateWorkflow(workflow, schema);
+  const errors = validate(workflow, schema);
   if (errors.length !== 0) {
     console.error(printError("The workflow is invalid."));
     console.error(printValidationErrors(errors));

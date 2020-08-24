@@ -3,7 +3,7 @@ import {
   readWorkflowSchema,
   readWorkflow,
 } from "./cli/files/workflow-file.service";
-import { validateWorkflow } from "./engine/services/validator";
+import { validate } from "./engine/services/validator";
 import { Config } from "./cli/types/config";
 
 describe("the validation of workflows", () => {
@@ -20,7 +20,7 @@ describe("the validation of workflows", () => {
       names.map((name) => readWorkflow(config, name))
     );
     workflows.forEach((workflow) => {
-      expect(validateWorkflow(workflow, schema)).toEqual([]);
+      expect(validate(workflow, schema)).toEqual([]);
     });
   });
 });

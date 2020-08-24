@@ -1,7 +1,7 @@
 import Ajv, { ErrorObject } from "ajv";
 import { InputErrors, Workflow, SchemaMap, JsonSchema } from "../types";
 
-export function validateWorkflow(
+export function validate(
   workflow: Workflow,
   schema: JsonSchema
 ): ErrorObject[] {
@@ -18,18 +18,11 @@ export function validateSchemaMap(
   const results = Object.keys(schemaMap)
     .map((fieldName) => ({
       fieldName,
-      errors: validateInput(schemaMap[fieldName], inputs[fieldName]),
+      errors: validate(inputs[fieldName], schemaMap[fieldName]),
     }))
     .filter((result) => result.errors.length != 0);
   return results.reduce(
     (acc, result) => ({ ...acc, [result.fieldName]: result.errors }),
     {}
   );
-}
-
-export function validateInput(schema: JsonSchema, input: any): ErrorObject[] {
-  const ajv = new Ajv({ allErrors: true });
-  const validate = ajv.compile(schema);
-  const valid = validate(input);
-  return validate.errors || [];
 }
