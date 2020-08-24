@@ -7,7 +7,7 @@ import {
   printValidationErrors,
   printError,
 } from "../print.service";
-import { validateSchemaMap, validate } from "../../engine/services/validator";
+import { validateSchemaMap, validate } from "@jyfti/engine";
 import { isUrl } from "./workflow.util";
 
 export function readWorkflowOrTerminate(

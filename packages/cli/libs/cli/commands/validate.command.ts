@@ -1,6 +1,6 @@
 import { readConfig } from "../files/config-file.service";
 import { promptWorkflow } from "../inquirer.service";
-import { validate as validateWorkflow } from "../../engine/services/validator";
+import { validate as validateWorkflow } from "@jyfti/engine";
 import { printValidationErrors, printValue } from "../print.service";
 import {
   readWorkflowOrTerminate,

@@ -3,7 +3,7 @@ import { printJson, printValue } from "../print.service";
 
 jest.mock("../files/config-file.service");
 jest.mock("../files/workflow-file.service");
-jest.mock("../../engine/services/validator");
+jest.mock("@jyfti/engine", () => require("../../../__mocks__/@jyfti/validator"));
 jest.mock("../inquirer.service");
 
 describe("the validate command", () => {
@@ -26,7 +26,7 @@ describe("the validate command", () => {
   });
 
   it("should validate a single valid workflow without output", async () => {
-    require("../../engine/services/validator").__setResponse(true);
+    require("@jyfti/engine").__setResponse(true);
     await validate("my-workflow", { all: false });
     expect(errorSpy).toHaveBeenCalledTimes(0);
     expect(logSpy).toHaveBeenCalledTimes(0);
@@ -34,8 +34,8 @@ describe("the validate command", () => {
   });
 
   it("should validate a single invalid workflow with errors", async () => {
-    const error = require("../../engine/services/validator").error;
-    require("../../engine/services/validator").__setResponse(false);
+    const error = require("@jyfti/engine").error;
+    require("@jyfti/engine").__setResponse(false);
     await validate("my-workflow", { all: false });
     expect(errorSpy).toHaveBeenCalledTimes(0);
     expect(logSpy).toHaveBeenCalledWith(
@@ -45,7 +45,7 @@ describe("the validate command", () => {
   });
 
   it("should validate all workflows with option --all without output if all are valid", async () => {
-    require("../../engine/services/validator").__setResponse(true);
+    require("@jyfti/engine").__setResponse(true);
     require("../files/workflow-file.service").__setWorkflowNames([
       "my-workflow",
       "my-other-workflow",
@@ -57,8 +57,8 @@ describe("the validate command", () => {
   });
 
   it("should validate all workflows with option --all and print errors", async () => {
-    const error = require("../../engine/services/validator").error;
-    require("../../engine/services/validator").__setResponse(false);
+    const error = require("@jyfti/engine").error;
+    require("@jyfti/engine").__setResponse(false);
     require("../files/workflow-file.service").__setWorkflowNames([
       "my-workflow",
       "my-other-workflow",

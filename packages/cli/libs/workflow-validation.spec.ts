@@ -3,7 +3,7 @@ import {
   readWorkflowSchema,
   readWorkflow,
 } from "./cli/files/workflow-file.service";
-import { validate } from "./engine/services/validator";
+import { validate } from "@jyfti/engine";
 import { Config } from "./cli/types/config";
 
 describe("the validation of workflows", () => {

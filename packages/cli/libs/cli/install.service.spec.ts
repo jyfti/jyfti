@@ -4,7 +4,7 @@ import { Workflow, JsonSchema } from "@jyfti/engine";
 import { printError } from "./print.service";
 
 jest.mock("./files/workflow-file.service");
-jest.mock("../engine/services/validator");
+jest.mock("@jyfti/engine", () => require("../../__mocks__/@jyfti/validator"));
 jest.mock("./inquirer.service");
 
 describe("the installation of a workflow", () => {
@@ -32,7 +32,7 @@ describe("the installation of a workflow", () => {
   });
 
   it("should fail if the workflow has errors", async () => {
-    require("../engine/services/validator").__setResponse(false);
+    require("@jyfti/engine").__setResponse(false);
     await install(config, workflow, schema, "my-workflow", true);
     expect(logSpy).toHaveBeenCalledTimes(0);
     expect(errorSpy).toHaveBeenCalledWith(
@@ -42,7 +42,7 @@ describe("the installation of a workflow", () => {
   });
 
   it("should overwrite an existing workflow if --yes is set", async () => {
-    require("../engine/services/validator").__setResponse(true);
+    require("@jyfti/engine").__setResponse(true);
     require("./inquirer.service").__setReturnsContent(true);
     await install(config, workflow, schema, "my-workflow", true);
     expect(logSpy).toHaveBeenCalledWith("Successfully saved.");
@@ -50,7 +50,7 @@ describe("the installation of a workflow", () => {
   });
 
   it("should overwrite an existing workflow if the user answers yes on the prompt", async () => {
-    require("../engine/services/validator").__setResponse(true);
+    require("@jyfti/engine").__setResponse(true);
     require("./inquirer.service").__setReturnsContent(true);
     await install(config, workflow, schema, "my-workflow", false);
     expect(logSpy).toHaveBeenCalledWith("Successfully saved.");
@@ -58,7 +58,7 @@ describe("the installation of a workflow", () => {
   });
 
   it("should not overwrite an existing workflow if the user answers no on the prompt", async () => {
-    require("../engine/services/validator").__setResponse(true);
+    require("@jyfti/engine").__setResponse(true);
     require("./inquirer.service").__setReturnsContent(false);
     await install(config, workflow, schema, "my-workflow", false);
     expect(logSpy).toHaveBeenCalledWith("The workflow has not been saved.");
