@@ -1,0 +1,59 @@
+{
+  "name": "@jyfti/engine",
+  "version": "0.0.2",
+  "description": "Jyfti is a json-based, light-weight workflow engine for software engineers. Jyfti makes it easy to connect APIs via transparently executed workflows.",
+  "main": "index.ts",
+  "bin": {
+    "jyfti": "build/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jyfti/jyfti.git"
+  },
+  "author": "Fabian Böller",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jyfti/jyfti/issues"
+  },
+  "keywords": [
+    "jyfti",
+    "jyfti-cli",
+    "workflow",
+    "engine"
+  ],
+  "homepage": "https://github.com/jyfti/jyfti",
+  "scripts": {
+    "test": "jest",
+    "dev": "nodemon",
+    "build": "rm -rf ./build && npx tsc",
+    "start": "npm run --silent build && node -r tsconfig-paths/register build/index.js"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.11.1",
+    "@babel/preset-env": "^7.11.0",
+    "@babel/preset-typescript": "^7.10.4",
+    "@types/bent": "^7.3.0",
+    "@types/inquirer": "^7.3.0",
+    "@types/jest": "^26.0.9",
+    "@types/lodash": "^4.14.159",
+    "@types/node": "^14.0.27",
+    "@types/rx": "^4.1.2",
+    "babel-jest": "^26.3.0",
+    "jest": "^26.3.0",
+    "jest-marbles": "^2.5.1",
+    "nodemon": "^2.0.4",
+    "ts-node": "^8.10.2",
+    "tsconfig-paths": "^3.9.0",
+    "typescript": "^3.9.7"
+  },
+  "dependencies": {
+    "ajv": "^6.12.4",
+    "bent": "^7.3.9",
+    "chalk": "^4.1.0",
+    "commander": "^6.0.0",
+    "inquirer": "^7.3.3",
+    "json-e": "^4.1.0",
+    "lodash": "^4.17.19",
+    "rxjs": "^6.6.2"
+  }
+}
