@@ -6,6 +6,10 @@ export function __setReturnsContent(pReturnsContent: boolean) {
   returnsContent = pReturnsContent;
 }
 
+export function promptName(): Promise<string | undefined> {
+  return Promise.resolve(returnsContent ? "my-name" : undefined);
+}
+
 export function promptWorkflow(): Promise<string | undefined> {
   return Promise.resolve(returnsContent ? "my-workflow" : undefined);
 }
