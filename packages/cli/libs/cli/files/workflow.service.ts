@@ -1,5 +1,5 @@
 import { Config } from "../types/config";
-import { Workflow, Inputs, JsonSchema, VariableMap } from "../../engine/types";
+import { Workflow, Inputs, JsonSchema, VariableMap } from "@jyfti/engine";
 import * as http from "./workflow-http.service";
 import * as file from "./workflow-file.service";
 import {

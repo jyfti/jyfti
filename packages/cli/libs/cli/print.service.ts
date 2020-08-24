@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import { ErrorObject } from "ajv";
-import { StepResult, InputErrors, Inputs } from "../engine/types";
+import { StepResult, InputErrors, Inputs } from "@jyfti/engine";
 
 export function printOutput(output: any): string {
   return typeof output === "string" ? output : printJson(output);

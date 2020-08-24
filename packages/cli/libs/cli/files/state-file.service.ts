@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as nodePath from "path";
 import { Config } from "../types/config";
-import { State } from "../../engine/types";
+import { State } from "@jyfti/engine";
 import { readJson, writeJson } from "./file.service";
 import { printError } from "../print.service";
 

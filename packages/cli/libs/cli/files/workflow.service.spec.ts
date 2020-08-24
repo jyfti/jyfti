@@ -3,7 +3,7 @@ import {
   validateInputsOrTerminate,
   validateEnvironmentOrTerminate,
 } from "./workflow.service";
-import { Workflow } from "../../engine/types";
+import { Workflow } from "@jyfti/engine";
 
 jest.mock("../../engine/services/validator");
 

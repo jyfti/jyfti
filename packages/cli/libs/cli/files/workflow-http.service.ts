@@ -1,6 +1,6 @@
 import bent from "bent";
 import { Config } from "../types/config";
-import { Workflow } from "../../engine/types";
+import { Workflow } from "@jyfti/engine";
 import { printError } from "../print.service";
 
 const getJson = bent("json");

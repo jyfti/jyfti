@@ -1,5 +1,5 @@
 import { readConfig } from "../../files/config-file.service";
-import { VariableMap } from "../../../engine/types";
+import { VariableMap } from "@jyfti/engine";
 import {
   environmentExists,
   writeEnvironment,

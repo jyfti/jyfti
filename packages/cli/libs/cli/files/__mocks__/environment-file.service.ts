@@ -1,4 +1,4 @@
-import { VariableMap } from "../../../engine/types";
+import { VariableMap } from "@jyfti/engine";
 
 let environmentNames: string[] | undefined;
 

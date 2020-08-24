@@ -1,4 +1,4 @@
-import { Workflow, Inputs } from "../../engine/types";
+import { Workflow, Inputs } from "@jyfti/engine";
 
 export function isUrl(name: string): boolean {
   return name.startsWith("http://") || name.startsWith("https://");

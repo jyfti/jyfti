@@ -1,4 +1,4 @@
-import { Workflow } from "../../engine/types";
+import { Workflow } from "@jyfti/engine";
 
 let returnsContent: boolean = true;
 

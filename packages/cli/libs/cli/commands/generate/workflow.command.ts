@@ -1,5 +1,5 @@
 import { readConfig } from "../../files/config-file.service";
-import { Workflow } from "../../../engine/types";
+import { Workflow } from "@jyfti/engine";
 import {
   workflowExists,
   writeWorkflow,

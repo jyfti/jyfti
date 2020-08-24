@@ -1,5 +1,5 @@
 import { Config } from "./types/config";
-import { Workflow, JsonSchema } from "../engine/types";
+import { Workflow, JsonSchema } from "@jyfti/engine";
 import { validate } from "../engine/services/validator";
 import { printValidationErrors, printError } from "./print.service";
 import { workflowExists, writeWorkflow } from "./files/workflow-file.service";

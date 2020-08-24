@@ -1,4 +1,4 @@
-import { State } from "../../../engine/types";
+import { State } from "@jyfti/engine";
 
 let state: State | undefined;
 

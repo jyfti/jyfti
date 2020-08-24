@@ -1,6 +1,6 @@
 import { install } from "./install.service";
 import { Config } from "./types/config";
-import { Workflow, JsonSchema } from "../engine/types";
+import { Workflow, JsonSchema } from "@jyfti/engine";
 import { printError } from "./print.service";
 
 jest.mock("./files/workflow-file.service");

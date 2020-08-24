@@ -1,4 +1,4 @@
-import { VariableMap } from "libs/engine/types";
+import { VariableMap } from "@jyfti/engine";
 import { readJson, fileExists, writeJson, listDirFiles } from "./file.service";
 import { Config } from "../types/config";
 import * as nodePath from "path";

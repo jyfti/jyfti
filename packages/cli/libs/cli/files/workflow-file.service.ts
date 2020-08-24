@@ -1,6 +1,6 @@
 import * as nodePath from "path";
 import { Config } from "../types/config";
-import { Workflow, JsonSchema } from "../../engine/types";
+import { Workflow, JsonSchema } from "@jyfti/engine";
 import { readJson, fileExists, writeJson, listDirFiles } from "./file.service";
 import { printError } from "../print.service";
 

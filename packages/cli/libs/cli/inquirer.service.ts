@@ -1,7 +1,7 @@
 import { Config } from "./types/config";
 import { readWorkflowNames } from "./files/workflow-file.service";
 import inquirer from "inquirer";
-import { Workflow } from "../engine/types";
+import { Workflow } from "@jyfti/engine";
 import { readEnvironmentNames } from "./files/environment-file.service";
 
 export async function promptName(entity: string): Promise<string> {

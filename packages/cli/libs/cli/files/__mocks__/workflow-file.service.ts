@@ -1,4 +1,4 @@
-import { Workflow, JsonSchema } from "../../../engine/types";
+import { Workflow, JsonSchema } from "@jyfti/engine";
 
 let workflowNames: string[] | undefined;
 
