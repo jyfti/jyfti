@@ -1,5 +1,6 @@
-import { empty, of } from "rxjs";
-import { VariableMap, StepResult } from "libs/engine/types";
+import { of } from "rxjs";
+import { VariableMap, StepResult } from "../../../engine/types";
+import { map } from "rxjs/operators";
 
 const state = { path: [0], inputs: {}, evaluations: [] };
 
@@ -17,14 +18,14 @@ export function __setStepResult(pStepResult: StepResult): void {
 
 export function createEngine() {
   return {
-    complete: () => empty(),
+    complete: () => of(stepResult),
     isComplete: () => stepResult.path.length === 0,
-    getOutput: () => ({}),
+    getOutput: () => ({ myOutput: "output" }),
     getVariableMap: () => variableMap,
     init: () => state,
     step: () => of(stepResult),
     toState: () => state,
-    toStates: () => empty(),
+    toStates: () => (stepResult$: any) => stepResult$.pipe(map(() => state)),
     validate: () => ({}),
   };
 }
