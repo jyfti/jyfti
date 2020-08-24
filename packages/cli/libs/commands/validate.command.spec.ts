@@ -3,7 +3,7 @@ import { printJson, printValue } from "../print.service";
 
 jest.mock("../files/config-file.service");
 jest.mock("../files/workflow-file.service");
-jest.mock("@jyfti/engine", () => require("../../../__mocks__/@jyfti/validator"));
+jest.mock("@jyfti/engine", () => require("../../__mocks__/@jyfti/validator"));
 jest.mock("../inquirer.service");
 
 describe("the validate command", () => {

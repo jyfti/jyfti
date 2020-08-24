@@ -4,7 +4,7 @@ import { Workflow, JsonSchema } from "@jyfti/engine";
 import { printError } from "./print.service";
 
 jest.mock("./files/workflow-file.service");
-jest.mock("@jyfti/engine", () => require("../../__mocks__/@jyfti/validator"));
+jest.mock("@jyfti/engine", () => require("../__mocks__/@jyfti/validator"));
 jest.mock("./inquirer.service");
 
 describe("the installation of a workflow", () => {

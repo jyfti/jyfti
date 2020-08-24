@@ -7,7 +7,7 @@ jest.mock("../../files/state-file.service");
 jest.mock("../../files/environment-file.service");
 jest.mock("../../inquirer.service");
 jest.mock("@jyfti/engine", () =>
-  require("../../../../__mocks__/@jyfti/engine")
+  require("../../../__mocks__/@jyfti/engine")
 );
 
 describe("the vars command", () => {

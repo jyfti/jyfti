@@ -8,7 +8,7 @@ jest.mock("../../files/workflow.service");
 jest.mock("../../files/workflow-file.service");
 jest.mock("../../inquirer.service");
 jest.mock("@jyfti/engine", () =>
-  require("../../../../__mocks__/@jyfti/engine")
+  require("../../../__mocks__/@jyfti/engine")
 );
 
 describe("the step command", () => {

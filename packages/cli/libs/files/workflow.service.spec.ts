@@ -5,7 +5,7 @@ import {
 } from "./workflow.service";
 import { Workflow } from "@jyfti/engine";
 
-jest.mock("@jyfti/engine", () => require("../../../__mocks__/@jyfti/validator"));
+jest.mock("@jyfti/engine", () => require("../../__mocks__/@jyfti/validator"));
 
 describe("interacting with workflows via http and files", () => {
   let mockExit: any;
