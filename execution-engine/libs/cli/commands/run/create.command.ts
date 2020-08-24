@@ -1,7 +1,7 @@
 import { readConfig } from "../../files/config-file.service";
 import { createEngine } from "../../../engine/services/engine";
 import { promptWorkflow, promptWorkflowInputs } from "../../inquirer.service";
-import { printJson } from "../../print.service";
+import { printJson, printValue } from "../../print.service";
 import {
   readWorkflowOrTerminate,
   validateInputsOrTerminate,
@@ -30,6 +30,7 @@ export async function create(name?: string, inputList?: string[], cmd?: any) {
     if (isUrl(name)) {
       name = extractWorkflowName(name);
       await install(config, workflow, schema, name, cmd?.yes);
+      console.log(`Installed ${printValue(name)} .`);
     }
     if ((inputList || []).length === 0) {
       inputList = await promptWorkflowInputs(workflow);
