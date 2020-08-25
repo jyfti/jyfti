@@ -2,7 +2,7 @@ module.exports = {
   title: "Jyfti",
   tagline: "Building, running and sharing workflows easily",
   url: "https://jyfti.github.io",
-  baseUrl: "/",
+  baseUrl: "/jyfti/",
   onBrokenLinks: "throw",
   favicon: "img/favicon.ico",
   organizationName: "jyfti",

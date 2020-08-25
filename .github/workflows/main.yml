@@ -36,3 +36,9 @@ jobs:
 
     - name: Code coverage
       run: bash <(curl -s https://codecov.io/bash)
+
+    - name: Publish docs
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./packages/docs/build
