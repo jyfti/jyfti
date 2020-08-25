@@ -1,6 +1,22 @@
 {
-  "name": "docs",
+  "name": "@jyfti/docs",
   "version": "0.0.5",
+  "description": "Jyfti is a project for building, running and sharing workflows easily. Jyfti Docs is the documentation hosted on GitHub pages.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jyfti/jyfti.git"
+  },
+  "author": "Fabian Böller",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jyfti/jyfti/issues"
+  },
+  "keywords": [
+    "jyfti",
+    "workflow",
+    "engine"
+  ],
+  "homepage": "https://jyfti.github.io/jyfti/",
   "scripts": {
     "docusaurus": "docusaurus",
     "start": "docusaurus start",

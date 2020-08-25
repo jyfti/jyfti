@@ -1,7 +1,7 @@
 {
   "name": "@jyfti/cli",
   "version": "0.0.5",
-  "description": "Jyfti is a json-based, light-weight workflow engine for software engineers. Jyfti makes it easy to connect APIs via transparently executed workflows.",
+  "description": "Jyfti is a project for building, running and sharing workflows easily. The Jyfti CLI is the terminal interface to the Jyfti engine.",
   "main": "index.ts",
   "bin": {
     "jyfti": "build/index.js"
@@ -21,7 +21,7 @@
     "workflow",
     "engine"
   ],
-  "homepage": "https://github.com/jyfti/jyfti",
+  "homepage": "https://jyfti.github.io/jyfti/",
   "scripts": {
     "test": "jest",
     "dev": "nodemon",
