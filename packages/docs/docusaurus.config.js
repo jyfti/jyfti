@@ -1,81 +1,88 @@
 module.exports = {
-  title: 'Jyfti',
-  tagline: 'Building, running and sharing workflows easily',
-  url: 'https://your-docusaurus-test-site.com',
-  baseUrl: '/',
-  onBrokenLinks: 'throw',
-  favicon: 'img/favicon.ico',
-  organizationName: 'jyfti',
-  projectName: 'jyfti',
+  title: "Jyfti",
+  tagline: "Building, running and sharing workflows easily",
+  url: "https://jyfti.github.io",
+  baseUrl: "/",
+  onBrokenLinks: "throw",
+  favicon: "img/favicon.ico",
+  organizationName: "jyfti",
+  projectName: "jyfti",
   themeConfig: {
     navbar: {
-      title: 'Jyfti',
-      logo: {
-        alt: 'My Site Logo',
-        src: 'img/logo.svg',
-      },
+      title: "Jyfti",
       items: [
         {
-          to: 'docs/',
-          activeBasePath: 'docs',
-          label: 'Docs',
-          position: 'left',
+          to: "docs/",
+          activeBasePath: "docs",
+          label: "Docs",
+          position: "left",
         },
         {
-          href: 'https://github.com/jyfti/jyfti',
-          label: 'GitHub',
-          position: 'right',
+          href: "https://github.com/jyfti/jyfti",
+          label: "GitHub",
+          position: "right",
         },
       ],
     },
     footer: {
-      style: 'dark',
+      style: "dark",
       links: [
         {
-          title: 'Docs',
+          title: "Docs",
           items: [
             {
-              label: 'Jyfti',
-              to: 'docs/',
+              label: "Introduction",
+              to: "docs/",
+            },
+            {
+              label: "Installation",
+              to: "docs/installation",
+            },
+            {
+              label: "Usage",
+              to: "docs/usage",
+            },
+          ],
+        },
+        {
+          title: "Community",
+          items: [
+            {
+              label: "Stack Overflow",
+              href: "https://stackoverflow.com/questions/tagged/jyfti",
             }
           ],
         },
         {
-          title: 'Community',
+          title: "More",
           items: [
             {
-              label: 'Stack Overflow',
-              href: 'https://stackoverflow.com/questions/tagged/jyfti',
-            }
-          ],
-        },
-        {
-          title: 'More',
-          items: [
+              label: "GitHub",
+              href: "https://github.com/jyfti/jyfti",
+            },
             {
-              label: 'GitHub',
-              href: 'https://github.com/jyfti/jyfti',
+              label: "NPM",
+              href: "https://www.npmjs.com/package/@jyfti/cli",
             },
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+      copyright: `Copyright © ${new Date().getFullYear()} Fabian Boeller. Built with Docusaurus.`,
     },
   },
   presets: [
     [
-      '@docusaurus/preset-classic',
+      "@docusaurus/preset-classic",
       {
         docs: {
           // It is recommended to set document id as docs home page (`docs/` path).
-          homePageId: 'introduction',
-          sidebarPath: require.resolve('./sidebars.js'),
+          homePageId: "introduction",
+          sidebarPath: require.resolve("./sidebars.js"),
           // Please change this to your repo.
-          editUrl:
-            'https://github.com/facebook/docusaurus/edit/master/website/',
+          editUrl: "https://github.com/jyfti/jyfti/edit/master/website/",
         },
         theme: {
-          customCss: require.resolve('./src/css/custom.css'),
+          customCss: require.resolve("./src/css/custom.css"),
         },
       },
     ],
