@@ -1,5 +1,5 @@
 import { step } from "./step.command";
-import { printSuccess } from "../../print.service";
+import { printSuccess, printError } from "../../print.service";
 
 jest.mock("../../files/config-file.service");
 jest.mock("../../files/state-file.service");
@@ -7,9 +7,7 @@ jest.mock("../../files/environment-file.service");
 jest.mock("../../files/workflow.service");
 jest.mock("../../files/workflow-file.service");
 jest.mock("../../inquirer.service");
-jest.mock("@jyfti/engine", () =>
-  require("../../../__mocks__/@jyfti/engine")
-);
+jest.mock("@jyfti/engine", () => require("../../../__mocks__/@jyfti/engine"));
 
 describe("the step command", () => {
   let logSpy: any;
@@ -50,5 +48,20 @@ describe("the step command", () => {
     await step("my-workflow", { verbose: false });
     expect(logSpy).toHaveBeenCalledWith("Workflow execution already completed");
     expect(errorSpy).toHaveBeenCalledTimes(0);
+  });
+
+  it("should log a failed state if the engine returns an error", async () => {
+    require("../../files/state-file.service").__setState({
+      path: [0],
+      inputs: {},
+      evaluations: [],
+    });
+    require("../../files/environment-file.service").__setEnvironment({});
+    require("@jyfti/engine").__setStepResult(undefined);
+    await step("my-workflow", { verbose: false });
+    expect(logSpy).toHaveBeenCalledTimes(0);
+    expect(errorSpy).toHaveBeenCalledWith(
+      "Failed " + printError("Something went wrong.")
+    );
   });
 });

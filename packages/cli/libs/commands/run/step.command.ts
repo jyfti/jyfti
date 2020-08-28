@@ -8,7 +8,7 @@ import {
   writeState,
   readStateOrTerminate,
 } from "../../files/state-file.service";
-import { printStepResult } from "../../print.service";
+import { printStepResult, printError } from "../../print.service";
 import { readEnvironmentOrTerminate } from "../../files/environment-file.service";
 import { validateEnvironmentOrTerminate } from "../../files/workflow.service";
 
@@ -35,8 +35,10 @@ export async function step(name?: string, cmd?: any) {
       engine
         .step(state)
         .pipe(
-          tap((stepResult) =>
-            console.log(printStepResult(cmd?.verbose, stepResult))
+          tap(
+            (stepResult) =>
+              console.log(printStepResult(cmd?.verbose, stepResult)),
+            (error) => console.error("Failed " + printError(error))
           ),
           map((stepResult) => engine.toState(state, stepResult)),
           flatMap((state) => from(writeState(config, name!, state)))

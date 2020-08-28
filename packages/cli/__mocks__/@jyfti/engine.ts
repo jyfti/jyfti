@@ -1,4 +1,4 @@
-import { of } from "rxjs";
+import { of, throwError } from "rxjs";
 import { map } from "rxjs/operators";
 
 const state = { path: [0], inputs: {}, evaluations: [] };
@@ -17,12 +17,14 @@ export function __setStepResult(pStepResult: any): void {
 
 export function createEngine() {
   return {
-    complete: () => of(stepResult),
-    isComplete: () => stepResult.path.length === 0,
+    complete: () =>
+      stepResult ? of(stepResult) : throwError("Something went wrong."),
+    isComplete: () => stepResult?.path?.length === 0,
     getOutput: () => ({ myOutput: "output" }),
     getVariableMap: () => variableMap,
     init: () => state,
-    step: () => of(stepResult),
+    step: () =>
+      stepResult ? of(stepResult) : throwError("Something went wrong."),
     toState: () => state,
     toStates: () => (stepResult$: any) => stepResult$.pipe(map(() => state)),
     validate: () => ({}),
