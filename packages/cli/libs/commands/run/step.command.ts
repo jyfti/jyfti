@@ -43,7 +43,11 @@ export async function step(name?: string, cmd?: any) {
           map((stepResult) => engine.toState(state, stepResult)),
           flatMap((state) => from(writeState(config, name!, state)))
         )
-        .subscribe();
+        .subscribe(
+          () => {},
+          () => {},
+          () => {}
+        );
     }
   }
 }
