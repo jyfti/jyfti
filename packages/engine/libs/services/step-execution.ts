@@ -1,5 +1,5 @@
 import jsone from "json-e";
-import { Observable, of } from "rxjs";
+import { Observable, of, throwError } from "rxjs";
 import { catchError, flatMap, map } from "rxjs/operators";
 
 import { evaluate } from "./evaluation";
@@ -28,9 +28,9 @@ export function executeStep(
   } else if (step?.for) {
     return evaluateLoopReturn(localEvaluations, step);
   } else {
-    return of({
-      error: "Step does not contain any of 'request', 'expression' and 'for'.",
-    });
+    return throwError(
+      "Step does not contain any of 'request', 'expression' and 'for'."
+    );
   }
 }
 
@@ -40,7 +40,7 @@ function executeRequestStep(
 ): Observable<Evaluation> {
   return of(createHttpRequest(request, variables)).pipe(
     flatMap((request) => http(request)),
-    catchError((response) => of(response))
+    catchError(() => throwError("The http request execution failed."))
   );
 }
 
@@ -50,7 +50,7 @@ function executeExpressionStep(
 ): Observable<Evaluation> {
   return of(expression).pipe(
     map((expression) => jsone(expression, variables)),
-    catchError((error) => of({ error: error.toString() }))
+    catchError((error) => throwError(error.toString()))
   );
 }
 
@@ -59,7 +59,7 @@ function evaluateLoopReturn(
   step: Step
 ): Observable<Evaluation[]> {
   if (localEvaluations && !Array.isArray(localEvaluations)) {
-    throw new Error(
+    return throwError(
       "Expected list of loop iteration evaluations, but got a single evaluation"
     );
   }
