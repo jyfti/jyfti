@@ -1,5 +1,5 @@
 import { execute } from "./execute.command";
-import { printJson, printSuccess } from "../../print.service";
+import { printJson, printSuccess, printError } from "../../print.service";
 
 jest.mock("../../files/workflow-file.service");
 jest.mock("../../files/config-file.service");
@@ -7,9 +7,7 @@ jest.mock("../../files/state-file.service");
 jest.mock("../../files/environment-file.service");
 jest.mock("../../files/workflow.service");
 jest.mock("../../inquirer.service");
-jest.mock("@jyfti/engine", () =>
-  require("../../../__mocks__/@jyfti/engine")
-);
+jest.mock("@jyfti/engine", () => require("../../../__mocks__/@jyfti/engine"));
 
 describe("the execute command", () => {
   const state = {
@@ -33,10 +31,10 @@ describe("the execute command", () => {
     );
     require("../../files/workflow-file.service").__setWorkflow(workflow);
     require("../../files/workflow.service").__setWorkflow(workflow);
-    require("@jyfti/engine").__setStepResult(stepResult);
   });
 
   it("should run of a workflow with no inputs to completion", async () => {
+    require("@jyfti/engine").__setStepResult(stepResult);
     await execute("my-workflow");
     expect(logSpy).toHaveBeenNthCalledWith(1, "Created state.");
     expect(logSpy).toHaveBeenNthCalledWith(
@@ -51,6 +49,7 @@ describe("the execute command", () => {
   });
 
   it("should prompt for workflow name and continue", async () => {
+    require("@jyfti/engine").__setStepResult(stepResult);
     await execute(undefined);
     expect(logSpy).toHaveBeenNthCalledWith(1, "Created state.");
     expect(logSpy).toHaveBeenNthCalledWith(
@@ -65,6 +64,7 @@ describe("the execute command", () => {
   });
 
   it("should give more output in verbose mode", async () => {
+    require("@jyfti/engine").__setStepResult(stepResult);
     await execute("my-workflow", [], { verbose: true });
     expect(logSpy).toHaveBeenNthCalledWith(1, "Created state.");
     expect(logSpy).toHaveBeenNthCalledWith(2, printJson(state));
@@ -74,5 +74,15 @@ describe("the execute command", () => {
       printJson({ myOutput: "output" })
     );
     expect(errorSpy).toHaveBeenCalledTimes(0);
+  });
+
+  it("should print an error if the engine reports an error", async () => {
+    require("@jyfti/engine").__setStepResult(undefined);
+    await execute("my-workflow");
+    expect(logSpy).toHaveBeenNthCalledWith(1, "Created state.");
+    expect(errorSpy).toHaveBeenNthCalledWith(
+      1,
+      "Failed " + printError("Something went wrong.")
+    );
   });
 });

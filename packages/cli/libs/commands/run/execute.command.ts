@@ -3,7 +3,12 @@ import { createEngine } from "@jyfti/engine";
 import { last, flatMap, tap } from "rxjs/operators";
 import { from } from "rxjs";
 import { promptWorkflow, promptWorkflowInputs } from "../../inquirer.service";
-import { printStepResult, printJson, printOutput } from "../../print.service";
+import {
+  printStepResult,
+  printJson,
+  printOutput,
+  printError,
+} from "../../print.service";
 import {
   readWorkflowOrTerminate,
   validateInputsOrTerminate,
@@ -48,14 +53,20 @@ export async function execute(name?: string, inputList?: string[], cmd?: any) {
     engine
       .complete(initialState)
       .pipe(
-        tap((stepResult) =>
-          console.log(printStepResult(cmd?.verbose, stepResult))
+        tap(
+          (stepResult) =>
+            console.log(printStepResult(cmd?.verbose, stepResult)),
+          (error) => console.error("Failed " + printError(error))
         ),
         engine.toStates(inputs),
         last(),
         tap((state) => console.log(printOutput(engine.getOutput(state)))),
         flatMap((state) => from(writeState(config, name!, state)))
       )
-      .subscribe();
+      .subscribe(
+        () => {},
+        () => {},
+        () => {}
+      );
   }
 }
