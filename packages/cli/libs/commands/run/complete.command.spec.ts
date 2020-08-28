@@ -1,4 +1,4 @@
-import { printJson, printSuccess } from "../../print.service";
+import { printJson, printSuccess, printError } from "../../print.service";
 import { complete } from "./complete.command";
 
 jest.mock("../../files/workflow-file.service");
@@ -7,9 +7,7 @@ jest.mock("../../files/state-file.service");
 jest.mock("../../files/environment-file.service");
 jest.mock("../../files/workflow.service");
 jest.mock("../../inquirer.service");
-jest.mock("@jyfti/engine", () =>
-  require("../../../__mocks__/@jyfti/engine")
-);
+jest.mock("@jyfti/engine", () => require("../../../__mocks__/@jyfti/engine"));
 
 describe("the complete command", () => {
   const state = {
@@ -33,10 +31,10 @@ describe("the complete command", () => {
     );
     require("../../files/workflow-file.service").__setWorkflow(workflow);
     require("../../files/workflow.service").__setWorkflow(workflow);
-    require("@jyfti/engine").__setStepResult(stepResult);
   });
 
   it("should complete a workflow", async () => {
+    require("@jyfti/engine").__setStepResult(stepResult);
     await complete("my-workflow");
     expect(logSpy).toHaveBeenNthCalledWith(
       1,
@@ -46,6 +44,7 @@ describe("the complete command", () => {
   });
 
   it("should prompt for workflow name and continue", async () => {
+    require("@jyfti/engine").__setStepResult(stepResult);
     await complete(undefined);
     expect(logSpy).toHaveBeenNthCalledWith(
       1,
@@ -55,8 +54,19 @@ describe("the complete command", () => {
   });
 
   it("should give more output in verbose mode", async () => {
+    require("@jyfti/engine").__setStepResult(stepResult);
     await complete("my-workflow", { verbose: true });
     expect(logSpy).toHaveBeenNthCalledWith(1, printJson(stepResult));
     expect(errorSpy).toHaveBeenCalledTimes(0);
+  });
+
+  it("should print an error if the engine reports an error", async () => {
+    require("@jyfti/engine").__setStepResult(undefined);
+    await complete("my-workflow");
+    expect(logSpy).toHaveBeenCalledTimes(0);
+    expect(errorSpy).toHaveBeenNthCalledWith(
+      1,
+      "Failed " + printError("Something went wrong.")
+    );
   });
 });

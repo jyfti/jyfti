@@ -3,7 +3,7 @@ import { createEngine } from "@jyfti/engine";
 import { last, flatMap, tap } from "rxjs/operators";
 import { from } from "rxjs";
 import { promptWorkflow } from "../../inquirer.service";
-import { printStepResult } from "../../print.service";
+import { printStepResult, printError } from "../../print.service";
 import { readWorkflowOrTerminate } from "../../files/workflow-file.service";
 import {
   writeState,
@@ -23,19 +23,28 @@ export async function complete(name?: string, cmd?: any) {
   if (name) {
     const workflow = await readWorkflowOrTerminate(config, name);
     const state = await readStateOrTerminate(config, name);
-    const environment = await readEnvironmentOrTerminate(config, cmd?.environment);
+    const environment = await readEnvironmentOrTerminate(
+      config,
+      cmd?.environment
+    );
     validateEnvironmentOrTerminate(workflow, environment);
     const engine = createEngine(workflow, environment);
     engine
       .complete(state)
       .pipe(
-        tap((stepResult) =>
-          console.log(printStepResult(cmd?.verbose, stepResult))
+        tap(
+          (stepResult) =>
+            console.log(printStepResult(cmd?.verbose, stepResult)),
+          (error) => console.error("Failed " + printError(error))
         ),
         engine.toStates(state.inputs),
         last(),
         flatMap((state) => from(writeState(config, name!, state)))
       )
-      .subscribe();
+      .subscribe(
+        () => {},
+        () => {},
+        () => {}
+      );
   }
 }
