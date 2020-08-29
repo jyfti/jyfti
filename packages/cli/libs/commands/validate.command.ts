@@ -7,6 +7,7 @@ import {
   readWorkflowNamesOrTerminate,
 } from "../files/workflow-file.service";
 import { readWorkflowSchemaOrTerminate } from "../files/workflow-schema.service";
+import { Config } from "../types/config";
 
 export async function validate(
   name?: string,
@@ -18,13 +19,7 @@ export async function validate(
     process.exitCode = 1;
     return;
   }
-  const names: string[] = name
-    ? [name]
-    : cmd?.all
-    ? await readWorkflowNamesOrTerminate(config)
-    : asList(
-        await promptWorkflow(config, "Which workflow do you want to validate?")
-      );
+  const names = await determineNames(config, cmd?.all);
   const schema = await readWorkflowSchemaOrTerminate();
   const workflows = await Promise.all(
     names
@@ -48,6 +43,21 @@ export async function validate(
     console.log(allErrorMessages.join("\n\n"));
     process.exitCode = 1;
   }
+}
+
+async function determineNames(
+  config: Config,
+  all?: boolean
+): Promise<string[]> {
+  if (name) {
+    return [name];
+  }
+  const names = await readWorkflowNamesOrTerminate(config);
+  return all
+    ? names
+    : asList(
+        await promptWorkflow(names, "Which workflow do you want to validate?")
+      );
 }
 
 function asList<T>(value: T | undefined): T[] {

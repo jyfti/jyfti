@@ -2,7 +2,10 @@
 import { execute } from "./execute.command";
 import { printJson, printSuccess, printError } from "../../print.service";
 
-jest.mock("../../files/workflow-file.service");
+jest.mock("../../files/workflow-file.service", () => ({
+  readWorkflowOrTerminate: () => Promise.resolve("my-workflow"),
+  readWorkflowNamesOrTerminate: () => Promise.resolve(["my-workflow"]),
+}));
 jest.mock("../../files/config-file.service");
 jest.mock("../../files/state-file.service");
 jest.mock("../../files/environment-file.service");
@@ -30,7 +33,6 @@ describe("the execute command", () => {
     require("../../files/environment-file.service").__setEnvironment(
       environment
     );
-    require("../../files/workflow-file.service").__setWorkflow(workflow);
     require("../../files/workflow.service").__setWorkflow(workflow);
   });
 

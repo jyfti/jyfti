@@ -24,6 +24,7 @@ import {
   createInputs,
 } from "../../files/workflow.util";
 import { Config } from "../../types/config";
+import { readWorkflowNamesOrTerminate } from "../../files/workflow-file.service";
 
 export async function execute(
   name?: string,
@@ -32,7 +33,8 @@ export async function execute(
 ): Promise<void> {
   const config = await readConfig();
   if (!name) {
-    name = await promptWorkflow(config, "Which workflow do you want to start?");
+    const names = await readWorkflowNamesOrTerminate(config);
+    name = await promptWorkflow(names, "Which workflow do you want to start?");
   }
   if (name) {
     const workflow = await readWorkflowOrTerminate(config, name);

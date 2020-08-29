@@ -4,7 +4,10 @@ import { last, flatMap, tap } from "rxjs/operators";
 import { from, OperatorFunction } from "rxjs";
 import { promptWorkflow } from "../../inquirer.service";
 import { printStepResult, printError } from "../../print.service";
-import { readWorkflowOrTerminate } from "../../files/workflow-file.service";
+import {
+  readWorkflowOrTerminate,
+  readWorkflowNamesOrTerminate,
+} from "../../files/workflow-file.service";
 import {
   writeState,
   readStateOrTerminate,
@@ -19,8 +22,9 @@ export async function complete(
 ): Promise<void> {
   const config = await readConfig();
   if (!name) {
+    const workflowNames = await readWorkflowNamesOrTerminate(config);
     name = await promptWorkflow(
-      config,
+      workflowNames,
       "Which workflow do you want to complete?"
     );
   }

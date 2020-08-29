@@ -3,7 +3,10 @@ import { createEngine, StepResult, State, Engine } from "@jyfti/engine";
 import { map, flatMap, tap } from "rxjs/operators";
 import { from, OperatorFunction } from "rxjs";
 import { promptWorkflow } from "../../inquirer.service";
-import { readWorkflowOrTerminate } from "../../files/workflow-file.service";
+import {
+  readWorkflowOrTerminate,
+  readWorkflowNamesOrTerminate,
+} from "../../files/workflow-file.service";
 import {
   writeState,
   readStateOrTerminate,
@@ -19,8 +22,9 @@ export async function step(
 ): Promise<void> {
   const config = await readConfig();
   if (!name) {
+    const names = await readWorkflowNamesOrTerminate(config);
     name = await promptWorkflow(
-      config,
+      names,
       "Which workflow do you want to progress?"
     );
   }
