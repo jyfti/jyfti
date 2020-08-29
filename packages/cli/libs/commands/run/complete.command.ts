@@ -37,7 +37,7 @@ export async function complete(name?: string, cmd?: any) {
             console.log(printStepResult(cmd?.verbose, stepResult)),
           (error) => console.error("Failed " + printError(error))
         ),
-        engine.toStates(state.inputs),
+        engine.toStates(state),
         last(),
         flatMap((state) => from(writeState(config, name!, state)))
       )

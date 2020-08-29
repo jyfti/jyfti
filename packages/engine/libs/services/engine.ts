@@ -88,9 +88,9 @@ export class Engine {
    * Transitions an observable of step results into an observable of states.
    * This is useful, if you do not only want to track results of individual steps, but the accumulated results of all steps up to a specific step.
    */
-  toStates(inputs: Inputs): OperatorFunction<StepResult, State> {
+  toStates(state: State): OperatorFunction<StepResult, State> {
     return (stepResult$) =>
-      stepResult$.pipe(scan(this.toState.bind(this), this.init(inputs)));
+      stepResult$.pipe(scan(this.toState.bind(this), state));
   }
 
   /**
