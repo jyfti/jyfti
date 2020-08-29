@@ -1,1 +1,1 @@
-export function install() {}
+export function install(): void {}

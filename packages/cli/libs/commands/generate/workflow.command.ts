@@ -6,7 +6,7 @@ import {
 } from "../../files/workflow-file.service";
 import { promptName } from "../../inquirer.service";
 
-export async function generateWorkflow(name?: string) {
+export async function generateWorkflow(name?: string): Promise<void> {
   const config = await readConfig();
   if (!name) {
     name = await promptName("workflow");

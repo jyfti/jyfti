@@ -10,7 +10,7 @@ import {
   create,
 } from "./commands";
 
-export function addRunSubCommands(command: commander.Command) {
+export function addRunSubCommands(command: commander.Command): void {
   command
     .command("create [name] [inputs...]")
     .description("creates the initial state of a run of this workflow")

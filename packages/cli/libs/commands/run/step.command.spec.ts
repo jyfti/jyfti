@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { step } from "./step.command";
 import { printSuccess, printError } from "../../print.service";
 

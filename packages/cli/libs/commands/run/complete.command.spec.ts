@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { printJson, printSuccess, printError } from "../../print.service";
 import { complete } from "./complete.command";
 

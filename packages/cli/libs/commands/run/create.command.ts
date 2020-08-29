@@ -18,7 +18,11 @@ import {
   createInputs,
 } from "../../files/workflow.util";
 
-export async function create(name?: string, inputList?: string[], cmd?: any) {
+export async function create(
+  name?: string,
+  inputList?: string[],
+  cmd?: { yes?: boolean; environment?: string; verbose?: boolean }
+): Promise<void> {
   const config = await readConfig();
   if (!name) {
     name = await promptWorkflow(config, "Which workflow do you want to start?");
@@ -29,7 +33,7 @@ export async function create(name?: string, inputList?: string[], cmd?: any) {
     validateWorkflowOrTerminate(workflow, schema);
     if (isUrl(name)) {
       name = extractWorkflowName(name);
-      await install(config, workflow, schema, name, cmd?.yes);
+      await install(config, workflow, schema, name, cmd?.yes || false);
       console.log(`Installed ${printValue(name)} .`);
     }
     if ((inputList || []).length === 0) {

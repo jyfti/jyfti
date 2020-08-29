@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { install } from "./install.service";
 import { Config } from "./types/config";
 import { Workflow, JsonSchema } from "@jyfti/engine";

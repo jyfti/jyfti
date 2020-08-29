@@ -3,7 +3,7 @@ import { promptWorkflow } from "../inquirer.service";
 import { readWorkflowOrTerminate } from "../files/workflow.service";
 import { printJson } from "../print.service";
 
-export async function view(name?: string) {
+export async function view(name?: string): Promise<void> {
   const config = await readConfig();
   if (!name) {
     name = await promptWorkflow(config, "Which workflow do you want to view?");

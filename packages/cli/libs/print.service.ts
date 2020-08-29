@@ -2,11 +2,11 @@ import chalk from "chalk";
 import { ErrorObject } from "ajv";
 import { StepResult, InputErrors, Inputs } from "@jyfti/engine";
 
-export function printOutput(output: any): string {
+export function printOutput(output: unknown): string {
   return typeof output === "string" ? output : printJson(output);
 }
 
-export function printJson(json: any): string {
+export function printJson(json: unknown): string {
   return JSON.stringify(json, null, 2);
 }
 
@@ -44,7 +44,7 @@ export function printAllInputErrors(
 
 export function printInputErrors(
   fieldName: string,
-  value: any,
+  value: unknown,
   errors: ErrorObject[]
 ): string {
   return (

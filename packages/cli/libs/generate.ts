@@ -1,7 +1,7 @@
 import commander from "commander";
 import { generateWorkflow, generateEnvironment } from "./commands";
 
-export function addGenerateSubCommands(command: commander.Command) {
+export function addGenerateSubCommands(command: commander.Command): void {
   command
     .command("workflow [name]", { isDefault: true })
     .description("generate a workflow")

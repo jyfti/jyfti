@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { validate } from "./validate.command";
 import { printJson, printValue } from "../print.service";
 

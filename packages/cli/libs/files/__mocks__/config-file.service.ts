@@ -1,6 +1,6 @@
 import { Config } from "../../types/config";
 
-export const configName: string = "jyfti.json";
+export const configName = "jyfti.json";
 
 export const defaultConfig: Config = {
   sourceRoot: "./src",

@@ -11,7 +11,7 @@ export async function install(
   schema: JsonSchema,
   name: string,
   overwrite: boolean
-) {
+): Promise<void> {
   const errors = validate(workflow, schema);
   if (errors.length !== 0) {
     console.error(printError("The workflow is not valid."));

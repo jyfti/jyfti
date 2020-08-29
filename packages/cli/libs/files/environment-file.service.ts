@@ -4,17 +4,29 @@ import { Config } from "../types/config";
 import * as nodePath from "path";
 import { printError } from "../print.service";
 
-export const defaultEnvironmentName: string = "default";
+export const defaultEnvironmentName = "default";
 
 function resolveEnvironment(config: Config, name: string) {
   return nodePath.resolve(config.envRoot, name + ".json");
 }
 
-function readEnvironment(
+async function readEnvironment(
   config: Config,
   name: string | undefined
 ): Promise<Environment> {
-  return readJson(resolveEnvironment(config, name || defaultEnvironmentName));
+  const environment = await readJson(
+    resolveEnvironment(config, name || defaultEnvironmentName)
+  );
+  if (!isEnvironment(environment)) {
+    return Promise.reject(
+      "The environment file does not represent a valid environment"
+    );
+  }
+  return environment;
+}
+
+function isEnvironment(object: unknown): object is Environment {
+  return typeof object === "object";
 }
 
 export function environmentExists(

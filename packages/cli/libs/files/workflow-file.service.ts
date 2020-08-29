@@ -15,8 +15,21 @@ export async function readWorkflowNames(config: Config): Promise<string[]> {
     .map((fileName) => fileName.substring(0, fileName.length - ".json".length));
 }
 
-export function readWorkflow(config: Config, name: string): Promise<Workflow> {
-  return readJson(resolveWorkflow(config, name));
+export async function readWorkflow(
+  config: Config,
+  name: string
+): Promise<Workflow> {
+  const workflow = await readJson(resolveWorkflow(config, name));
+  if (!isWorkflow(workflow)) {
+    return Promise.reject(
+      "The workflow file does not represent a valid workflow"
+    );
+  }
+  return workflow;
+}
+
+function isWorkflow(object: unknown): object is Workflow {
+  return typeof object === "object";
 }
 
 export async function readWorkflowOrTerminate(
@@ -31,9 +44,19 @@ export async function readWorkflowOrTerminate(
   return workflow;
 }
 
-export function readWorkflowSchema(): Promise<JsonSchema> {
+export async function readWorkflowSchema(): Promise<JsonSchema> {
   // TODO Make flexible
-  return readJson("../../workflow-schema.json");
+  const schema = await readJson("../../workflow-schema.json");
+  if (!isWorkflowSchema(schema)) {
+    return Promise.reject(
+      "The workflow schema file does not represent a valid schema"
+    );
+  }
+  return schema;
+}
+
+function isWorkflowSchema(object: unknown): object is JsonSchema {
+  return typeof object === "object";
 }
 
 export async function readWorkflowSchemaOrTerminate(): Promise<JsonSchema> {

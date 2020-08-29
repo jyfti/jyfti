@@ -1,6 +1,7 @@
 import { ErrorObject } from "ajv";
+import { InputErrors } from "@jyfti/engine";
 
-let success: boolean = true;
+let success = true;
 
 export function __setResponse(pSuccess: boolean): void {
   success = pSuccess;
@@ -17,7 +18,7 @@ export function validate(): ErrorObject[] {
   return success ? [] : [error];
 }
 
-export function validateSchemaMap() {
+export function validateSchemaMap(): InputErrors {
   return success
     ? {}
     : {

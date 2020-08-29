@@ -1,8 +1,8 @@
 import { Workflow } from "@jyfti/engine";
 
-let returnsContent: boolean = true;
+let returnsContent = true;
 
-export function __setReturnsContent(pReturnsContent: boolean) {
+export function __setReturnsContent(pReturnsContent: boolean): void {
   returnsContent = pReturnsContent;
 }
 

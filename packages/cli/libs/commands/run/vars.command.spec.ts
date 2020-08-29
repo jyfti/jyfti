@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { vars } from "./vars.command";
 import { printJson } from "../../print.service";
 
@@ -6,9 +7,7 @@ jest.mock("../../files/config-file.service");
 jest.mock("../../files/state-file.service");
 jest.mock("../../files/environment-file.service");
 jest.mock("../../inquirer.service");
-jest.mock("@jyfti/engine", () =>
-  require("../../../__mocks__/@jyfti/engine")
-);
+jest.mock("@jyfti/engine", () => require("../../../__mocks__/@jyfti/engine"));
 
 describe("the vars command", () => {
   const variableMap = { var1: "a" };

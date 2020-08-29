@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { generateWorkflow } from "./workflow.command";
 
 jest.mock("../../files/config-file.service");

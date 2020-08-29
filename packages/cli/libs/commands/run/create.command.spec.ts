@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { create } from "./create.command";
 import { printValue } from "../../print.service";
 

@@ -1,21 +1,23 @@
 import { of, throwError } from "rxjs";
 import { map } from "rxjs/operators";
+import { VariableMap, StepResult, Engine } from "@jyfti/engine";
+import { Observable } from "rxjs";
 
 const state = { path: [0], inputs: {}, evaluations: [] };
 
-let variableMap = {};
+let variableMap: VariableMap = {};
 
-export function __setVariableMap(pVariableMap: any): void {
+export function __setVariableMap(pVariableMap: VariableMap): void {
   variableMap = pVariableMap;
 }
 
-let stepResult = { path: [], evaluation: "a" };
+let stepResult: StepResult = { path: [], evaluation: "a" };
 
-export function __setStepResult(pStepResult: any): void {
+export function __setStepResult(pStepResult: StepResult): void {
   stepResult = pStepResult;
 }
 
-export function createEngine() {
+export function createEngine(): Partial<Engine> {
   return {
     complete: () =>
       stepResult ? of(stepResult) : throwError("Something went wrong."),
@@ -26,7 +28,7 @@ export function createEngine() {
     step: () =>
       stepResult ? of(stepResult) : throwError("Something went wrong."),
     transition: () => state,
-    transitionFrom: () => (stepResult$: any) =>
+    transitionFrom: () => (stepResult$: Observable<StepResult>) =>
       stepResult$.pipe(map(() => state)),
     validate: () => ({}),
   };

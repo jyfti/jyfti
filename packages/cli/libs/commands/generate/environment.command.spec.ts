@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { generateEnvironment } from "./environment.command";
 
 jest.mock("../../files/config-file.service");

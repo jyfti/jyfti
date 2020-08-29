@@ -1,27 +1,27 @@
-let success: boolean = true;
+let success = true;
 
 export function __setResponse(pSuccess: boolean): void {
   success = pSuccess;
 }
 
-export function fileExists(_path: string): Promise<boolean> {
+export function fileExists(): Promise<boolean> {
   return Promise.resolve(success);
 }
 
-export function ensureDirExists(_path: string): Promise<void> {
+export function ensureDirExists(): Promise<void> {
   return success ? Promise.resolve() : Promise.reject();
 }
 
-export function listDirFiles(path: string): Promise<string[]> {
+export function listDirFiles(): Promise<string[]> {
   return success
     ? Promise.resolve(["a.json", "b.json", "c.js"])
     : Promise.reject();
 }
 
-export function readJson(_path: string): Promise<any> {
+export function readJson(): Promise<unknown> {
   return success ? Promise.resolve({}) : Promise.reject();
 }
 
-export function writeJson(_path: string, _json: any): Promise<void> {
+export function writeJson(): Promise<void> {
   return success ? Promise.resolve() : Promise.reject();
 }

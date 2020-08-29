@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { init } from "./init.command";
 
 jest.mock("../files/config-file.service");

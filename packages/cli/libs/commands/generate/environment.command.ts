@@ -6,7 +6,7 @@ import {
 } from "../../files/environment-file.service";
 import { promptName } from "../../inquirer.service";
 
-export async function generateEnvironment(name?: string) {
+export async function generateEnvironment(name?: string): Promise<void> {
   const config = await readConfig();
   if (!name) {
     name = await promptName("environment");

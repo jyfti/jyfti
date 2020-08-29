@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { printValue } from "../../print.service";
 import { status } from "./status.command";
 

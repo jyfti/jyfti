@@ -6,7 +6,7 @@ import { createEngine } from "@jyfti/engine";
 import { readWorkflowOrTerminate } from "../../files/workflow-file.service";
 import { readEnvironmentOrTerminate } from "../../files/environment-file.service";
 
-export async function vars(name?: string) {
+export async function vars(name?: string): Promise<void> {
   const config = await readConfig();
   if (!name) {
     name = await promptWorkflow(

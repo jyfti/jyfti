@@ -9,8 +9,16 @@ function resolveState(config: Config, name: string) {
   return nodePath.resolve(config.outRoot, name + ".state.json");
 }
 
-export function readState(config: Config, name: string): Promise<State> {
-  return readJson(resolveState(config, name));
+export async function readState(config: Config, name: string): Promise<State> {
+  const state = await readJson(resolveState(config, name));
+  if (!isState(state)) {
+    return Promise.reject("The state file does not represent a valid state");
+  }
+  return state;
+}
+
+function isState(object: unknown): object is State {
+  return typeof object === "object";
 }
 
 export async function readStateOrTerminate(

@@ -3,7 +3,7 @@ import { promptWorkflow } from "../../inquirer.service";
 import { readStateOrTerminate } from "../../files/state-file.service";
 import { printJson } from "../../print.service";
 
-export async function state(name?: string) {
+export async function state(name?: string): Promise<void> {
   const config = await readConfig();
   if (!name) {
     name = await promptWorkflow(

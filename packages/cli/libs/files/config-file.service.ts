@@ -1,7 +1,7 @@
 import { Config } from "../types/config";
 import { readJson, ensureDirExists, writeJson } from "./file.service";
 
-export const configName: string = "jyfti.json";
+export const configName = "jyfti.json";
 
 export const defaultConfig: Config = {
   sourceRoot: "./src",
@@ -10,12 +10,20 @@ export const defaultConfig: Config = {
 };
 
 export async function readConfig(): Promise<Config> {
-  const config = await readJson(configName).catch(() => defaultConfig);
-  await ensureDirExists(config.outRoot);
-  await ensureDirExists(config.envRoot);
-  return config;
+  const config = await readJson(configName).catch(() => ({}));
+  if (!isPartialConfig(config)) {
+    return Promise.reject("The config file is not a valid config");
+  }
+  const configWithDefaults: Config = { ...defaultConfig, ...config };
+  await ensureDirExists(configWithDefaults.outRoot);
+  await ensureDirExists(configWithDefaults.envRoot);
+  return configWithDefaults;
 }
 
 export function writeConfig(config: Config): Promise<void> {
   return writeJson(configName, config);
+}
+
+function isPartialConfig(object: unknown): object is Partial<Config> {
+  return typeof object === "object";
 }
