@@ -58,7 +58,7 @@ export async function execute(name?: string, inputList?: string[], cmd?: any) {
             console.log(printStepResult(cmd?.verbose, stepResult)),
           (error) => console.error("Failed " + printError(error))
         ),
-        engine.toStates(initialState),
+        engine.transitionFrom(initialState),
         last(),
         tap((state) => console.log(printOutput(engine.getOutput(state)))),
         flatMap((state) => from(writeState(config, name!, state)))

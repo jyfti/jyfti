@@ -43,7 +43,7 @@ export class Engine {
   complete(state: State): Observable<StepResult> {
     return this.step(state).pipe(
       flatMap((stepResult) => {
-        const nextState = this.toState(state, stepResult);
+        const nextState = this.transition(state, stepResult);
         const nextStepResults = this.isComplete(nextState)
           ? empty()
           : this.complete(nextState);
@@ -88,9 +88,9 @@ export class Engine {
    * Transitions an observable of step results into an observable of states.
    * This is useful, if you do not only want to track results of individual steps, but the accumulated results of all steps up to a specific step.
    */
-  toStates(state: State): OperatorFunction<StepResult, State> {
+  transitionFrom(state: State): OperatorFunction<StepResult, State> {
     return (stepResult$) =>
-      stepResult$.pipe(scan(this.toState.bind(this), state));
+      stepResult$.pipe(scan(this.transition.bind(this), state));
   }
 
   /**
@@ -100,7 +100,7 @@ export class Engine {
    * @param stepResult The result of the last step following the current state
    * @returns The next state
    */
-  toState(state: State, stepResult: StepResult): State {
+  transition(state: State, stepResult: StepResult): State {
     return nextState(
       this.workflow,
       state,

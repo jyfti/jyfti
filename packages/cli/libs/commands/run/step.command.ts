@@ -40,7 +40,7 @@ export async function step(name?: string, cmd?: any) {
               console.log(printStepResult(cmd?.verbose, stepResult)),
             (error) => console.error("Failed " + printError(error))
           ),
-          map((stepResult) => engine.toState(state, stepResult)),
+          map((stepResult) => engine.transition(state, stepResult)),
           flatMap((state) => from(writeState(config, name!, state)))
         )
         .subscribe(

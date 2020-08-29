@@ -25,8 +25,9 @@ export function createEngine() {
     init: () => state,
     step: () =>
       stepResult ? of(stepResult) : throwError("Something went wrong."),
-    toState: () => state,
-    toStates: () => (stepResult$: any) => stepResult$.pipe(map(() => state)),
+    transition: () => state,
+    transitionFrom: () => (stepResult$: any) =>
+      stepResult$.pipe(map(() => state)),
     validate: () => ({}),
   };
 }

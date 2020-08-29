@@ -24,8 +24,9 @@ export function createEngine() {
     getVariableMap: () => variableMap,
     init: () => state,
     step: () => of(stepResult),
-    toState: () => state,
-    toStates: () => (stepResult$: any) => stepResult$.pipe(map(() => state)),
+    transition: () => state,
+    transitionFrom: () => (stepResult$: any) =>
+      stepResult$.pipe(map(() => state)),
     validate: () => ({}),
   };
 }
