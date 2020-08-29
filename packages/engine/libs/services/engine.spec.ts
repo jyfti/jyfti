@@ -1,6 +1,6 @@
 import { cold } from "jest-marbles";
 import { Engine } from "./engine";
-import { Workflow } from "../types";
+import { Workflow, ExpressionStep, ForStep } from "../types";
 
 jest.mock("./http");
 
@@ -12,23 +12,23 @@ describe("Engine", () => {
       {
         assignTo: "var1",
         expression: 5,
-      },
+      } as ExpressionStep,
       {
         assignTo: "var2",
         expression: {
           $eval: "var1 * 2",
         },
-      },
+      } as ExpressionStep,
       {
         assignTo: "var3",
         expression: {
           $eval: "var1 * var2",
         },
-      },
+      } as ExpressionStep,
       {
         assignTo: "var4",
         expression: [1, 2, 3, 4],
-      },
+      } as ExpressionStep,
       {
         assignTo: "var5",
         for: {
@@ -40,11 +40,11 @@ describe("Engine", () => {
               expression: {
                 $eval: "loopVar * 2",
               },
-            },
+            } as ExpressionStep,
           ],
           return: "var6",
         },
-      },
+      } as ForStep,
     ],
   };
   const engine = new Engine(workflow, {});

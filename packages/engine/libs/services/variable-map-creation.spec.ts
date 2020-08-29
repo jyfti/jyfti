@@ -1,4 +1,4 @@
-import { Step, Workflow, State } from "../types";
+import { Step, Workflow, State, ExpressionStep, ForStep } from "../types";
 import {
   toVariableMap,
   createVariableMapFromState,
@@ -6,7 +6,7 @@ import {
 
 describe("The creation of variable maps", () => {
   it("should zip steps and incompleted evaluations to a variable map", () => {
-    const steps: Step[] = [
+    const steps: ExpressionStep[] = [
       {
         assignTo: "varA",
         expression: 1,
@@ -38,11 +38,11 @@ describe("The creation of variable maps", () => {
             {
               assignTo: "varB",
               expression: 1,
-            },
+            } as ExpressionStep,
           ],
           return: "varB",
         },
-      },
+      } as ForStep,
     ];
     const workflow: Workflow = {
       name: "Workflow",

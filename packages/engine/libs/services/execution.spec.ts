@@ -1,6 +1,6 @@
 import { cold } from "jest-marbles";
 
-import { Workflow } from "../types";
+import { Workflow, ForStep, ExpressionStep } from "../types";
 import { nextStep } from "./execution";
 
 jest.mock("./http");
@@ -15,7 +15,7 @@ describe("the execution of workflows", () => {
           {
             assignTo: "outVar",
             expression: 1,
-          },
+          } as ExpressionStep,
         ],
       };
       expect(
@@ -39,13 +39,13 @@ describe("the execution of workflows", () => {
           {
             assignTo: "var1",
             expression: 5,
-          },
+          } as ExpressionStep,
           {
             assignTo: "var2",
             expression: {
               $eval: "var1",
             },
-          },
+          } as ExpressionStep,
         ],
       };
       expect(
@@ -77,11 +77,11 @@ describe("the execution of workflows", () => {
                 {
                   assignTo: "innerVar",
                   expression: "a",
-                },
+                } as ExpressionStep,
               ],
               return: "innerVar",
             },
-          },
+          } as ForStep,
         ],
       };
 
@@ -152,11 +152,11 @@ describe("the execution of workflows", () => {
                   expression: {
                     $eval: "var1 + var2",
                   },
-                },
+                } as ExpressionStep,
               ],
               return: "var3",
             },
-          },
+          } as ForStep,
         ],
       };
 

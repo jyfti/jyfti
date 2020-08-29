@@ -1,21 +1,26 @@
 import { executeStep } from "./step-execution";
 import { cold } from "jest-marbles";
-import { Step, VariableMap } from "../types";
+import {
+  Step,
+  VariableMap,
+  RequestStep,
+  ExpressionStep,
+  ForStep,
+} from "../types";
 
 jest.mock("./http");
 
 describe("The execution of steps", () => {
-
   it("should return an error if no known step type is given", () => {
     const step: Step = {
-      assignTo: "myVar"
+      assignTo: "myVar",
     };
     expect(executeStep(step, [], {})).toBeObservable(cold("#"));
   });
 
   describe("a request step", () => {
     it("should return the http response", () => {
-      const step: Step = {
+      const step: RequestStep = {
         assignTo: "myVar",
         request: { method: "GET", url: "abc", body: null, headers: null },
       };
@@ -27,7 +32,7 @@ describe("The execution of steps", () => {
 
   describe("an expression step", () => {
     it("should evaluate an expression", () => {
-      const step: Step = {
+      const step: ExpressionStep = {
         assignTo: "myVar",
         expression: {
           $eval: "listVar",
@@ -42,7 +47,7 @@ describe("The execution of steps", () => {
     });
 
     it("should return an error if the evaluation fails", () => {
-      const step: Step = {
+      const step: ExpressionStep = {
         assignTo: "myVar",
         expression: "${listVar}",
       };
@@ -53,7 +58,7 @@ describe("The execution of steps", () => {
     });
   });
   describe("a loop return evaluation step", () => {
-    const step: Step = {
+    const step: ForStep = {
       assignTo: "myVar",
       for: {
         const: "loopVar",
@@ -64,7 +69,7 @@ describe("The execution of steps", () => {
           {
             assignTo: "innerVar",
             expression: 2,
-          },
+          } as ExpressionStep,
         ],
         return: "innerVar",
       },

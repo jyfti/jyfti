@@ -1,5 +1,5 @@
 import { readConfig } from "../../files/config-file.service";
-import { Workflow } from "@jyfti/engine";
+import { Workflow, RequestStep } from "@jyfti/engine";
 import {
   workflowExists,
   writeWorkflow,
@@ -9,7 +9,7 @@ import { promptName } from "../../inquirer.service";
 export async function generateWorkflow(name?: string) {
   const config = await readConfig();
   if (!name) {
-    name = await promptName('workflow');
+    name = await promptName("workflow");
   }
   if (name) {
     if (await workflowExists(config, name)) {
@@ -52,7 +52,7 @@ export function createExampleWorkflow(): Workflow {
           url:
             "https://raw.githubusercontent.com/${org}/${repo}/master/README.md",
         },
-      },
+      } as RequestStep,
     ],
   };
 }

@@ -1,7 +1,16 @@
-import { Step, Evaluation, VariableMap, Workflow, State, Path, Environment } from "../types";
+import {
+  Step,
+  Evaluation,
+  VariableMap,
+  Workflow,
+  State,
+  Path,
+  Environment,
+  isForStep,
+  ForStep,
+} from "../types";
 import { resolveAllSteps, resolveLoopPositions } from "./step-resolvement";
 import { evaluate } from "./evaluation";
-import { isArray } from "lodash/fp";
 
 export function createVariableMapFromState(
   workflow: Workflow,
@@ -26,25 +35,20 @@ function resolveLoopVariables(
 ): VariableMap {
   const steps = resolveAllSteps(workflow, path);
   const loopPositions = resolveLoopPositions(workflow.steps, path);
-  return steps
-    .filter((step) => step.for)
-    .reduce(
-      (acc, step, i) => ({
-        ...acc,
-        [step.for!.const]: getLoopList(variables, step)[loopPositions[i]],
-      }),
-      {}
-    );
+  return steps.filter(isForStep).reduce(
+    (acc, step, i) => ({
+      ...acc,
+      [step.for.const]: getLoopList(variables, step)[loopPositions[i]],
+    }),
+    {}
+  );
 }
 
-function getLoopList(variables: VariableMap, step: Step): any {
-  if (!step.for) {
-    throw new Error("The step is not a for-comprehension");
-  }
-  const loopList = evaluate(variables, step.for!.in);
-  if (!loopList || !isArray(loopList)) {
+function getLoopList(variables: VariableMap, step: ForStep): any {
+  const loopList = evaluate(variables, step.for.in);
+  if (!loopList || !Array.isArray(loopList)) {
     throw new Error(
-      `The expression '${step.for?.in}' does not resolve to a list`
+      `The expression '${step.for.in}' does not resolve to a list`
     );
   } else {
     return loopList;

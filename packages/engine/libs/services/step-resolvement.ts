@@ -1,4 +1,4 @@
-import { Workflow, Path, Step } from "../types";
+import { Workflow, Path, Step, isForStep } from "../types";
 
 export function resolveStep(workflow: Workflow, path: Path): Step {
   return resolveStepRec(workflow.steps, path);
@@ -11,7 +11,7 @@ export function resolveStepRec(steps: Step[], path: Path): Step {
     return steps[path[0]];
   } else {
     const step = steps[path[0]];
-    if (step?.for?.do) {
+    if (isForStep(step)) {
       return resolveStepRec(step.for.do, path.slice(2));
     } else {
       throw new Error(`Can not resolve path ${path} at flat step ${step}`);
@@ -33,8 +33,10 @@ export function resolveAllStepsRec(steps: Step[], path: Path): Step[] {
     return [steps[path[0]]];
   } else {
     const step = steps[path[0]];
-    if (step?.for?.do) {
-      return [step].concat(resolveAllStepsRec(step.for.do, path.slice(2)));
+    if (isForStep(step)) {
+      return [step as Step].concat(
+        resolveAllStepsRec(step.for.do, path.slice(2))
+      );
     } else {
       throw new Error(`Can not resolve path ${path} at flat step ${step}`);
     }
@@ -51,7 +53,7 @@ export function resolveLoopPositions(steps: Step[], path: Path): number[] {
     return [];
   } else {
     const step = steps[path[0]];
-    if (step?.for?.do) {
+    if (isForStep(step)) {
       return [path[1]].concat(resolveLoopPositions(step.for.do, path.slice(2)));
     } else {
       throw new Error(`Can not resolve path ${path} at flat step ${step}`);

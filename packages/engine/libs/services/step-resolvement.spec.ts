@@ -1,4 +1,4 @@
-import { Step } from "../types";
+import { Step, ExpressionStep, ForStep } from "../types";
 import {
   resolveStepRec,
   resolveAllStepsRec,
@@ -8,7 +8,7 @@ import {
 describe("the resolvement of steps", () => {
   describe("resolving the deepest step at a path", () => {
     it("should resolve the first step of a flat workflow", () => {
-      const steps: Step[] = [
+      const steps: ExpressionStep[] = [
         {
           assignTo: "var1",
           expression: 1,
@@ -18,7 +18,7 @@ describe("the resolvement of steps", () => {
     });
 
     it("should resolve the second step of a workflow", () => {
-      const steps: Step[] = [
+      const steps: ExpressionStep[] = [
         {
           assignTo: "var1",
           expression: 1,
@@ -32,7 +32,7 @@ describe("the resolvement of steps", () => {
     });
 
     it("should resolve the first step of a loop", () => {
-      const steps: Step[] = [
+      const steps: ForStep[] = [
         {
           assignTo: "var1",
           for: {
@@ -42,7 +42,7 @@ describe("the resolvement of steps", () => {
               {
                 assignTo: "var2",
                 expression: 2,
-              },
+              } as ExpressionStep,
             ],
             return: "loopVar",
           },
@@ -62,11 +62,11 @@ describe("the resolvement of steps", () => {
               {
                 assignTo: "var2",
                 expression: 2,
-              },
+              } as ExpressionStep,
             ],
             return: "loopVar",
           },
-        },
+        } as ForStep,
       ];
       expect(resolveStepRec(steps, [0])).toEqual(steps[0]);
     });
@@ -74,7 +74,7 @@ describe("the resolvement of steps", () => {
 
   describe("resolving all steps under a path", () => {
     it("should resolve the first step of a flat workflow", () => {
-      const steps: Step[] = [
+      const steps: ExpressionStep[] = [
         {
           assignTo: "var1",
           expression: 1,
@@ -84,7 +84,7 @@ describe("the resolvement of steps", () => {
     });
 
     it("should resolve a loop recursively", () => {
-      const steps: Step[] = [
+      const steps: ForStep[] = [
         {
           assignTo: "var1",
           for: {
@@ -94,7 +94,7 @@ describe("the resolvement of steps", () => {
               {
                 assignTo: "var2",
                 expression: 2,
-              },
+              } as ExpressionStep,
             ],
             return: "loopVar",
           },
@@ -109,7 +109,7 @@ describe("the resolvement of steps", () => {
 
   describe("resolving loop positions under a path", () => {
     it("should resolve to empty array in a flat workflow", () => {
-      const steps: Step[] = [
+      const steps: ExpressionStep[] = [
         {
           assignTo: "var1",
           expression: 1,
@@ -119,7 +119,7 @@ describe("the resolvement of steps", () => {
     });
 
     it("should resolve a loop recursively", () => {
-      const steps: Step[] = [
+      const steps: ForStep[] = [
         {
           assignTo: "var1",
           for: {
@@ -129,7 +129,7 @@ describe("the resolvement of steps", () => {
               {
                 assignTo: "var2",
                 expression: 2,
-              },
+              } as ExpressionStep,
             ],
             return: "loopVar",
           },

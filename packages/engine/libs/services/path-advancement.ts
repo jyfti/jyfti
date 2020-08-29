@@ -1,5 +1,12 @@
-import { concat, get, isNil, tail } from "lodash/fp";
-import { Workflow, Path, VariableMap, Step } from "../types";
+import { concat, isNil, tail } from "lodash/fp";
+import {
+  Workflow,
+  Path,
+  VariableMap,
+  Step,
+  isForStep,
+  ForStep,
+} from "../types";
 import { evaluate } from "./evaluation";
 
 export function advancePath(
@@ -10,29 +17,25 @@ export function advancePath(
   return advancePathRec(workflow.steps, path, variables);
 }
 
-export function isForStep(step: Step) {
-  return !isNil(get("for", step));
-}
-
 function createStartingPath(step: Step, variables: VariableMap): Path {
   return isForStep(step) &&
-    step.for!.do.length != 0 &&
-    evaluate(variables, step.for!.in)?.length > 0
-    ? concat([0, 0], createStartingPath(step.for!.do[0], variables))
+    step.for.do.length != 0 &&
+    evaluate(variables, step.for.in)?.length > 0
+    ? concat([0, 0], createStartingPath(step.for.do[0], variables))
     : [];
 }
 
 function advancePathForLoop(
-  step: Step,
+  step: ForStep,
   path: Path,
   variables: VariableMap
 ): Path {
   const currentVariableIndex = path[0];
   const subPath = tail(path);
-  const nextLoopPath = advancePathRec(step.for!.do, subPath, variables);
+  const nextLoopPath = advancePathRec(step.for.do, subPath, variables);
   if (nextLoopPath.length == 0) {
     // All steps within the for loop are done, go to next variable of list
-    const loopVariables = evaluate(variables, step.for!.in);
+    const loopVariables = evaluate(variables, step.for.in);
     const nextVariableIndex = advancePathFlat(
       loopVariables,
       currentVariableIndex
@@ -41,7 +44,7 @@ function advancePathForLoop(
       ? [] // Loop over
       : concat(
           [nextVariableIndex, 0],
-          createStartingPath(step.for!.do[0], variables)
+          createStartingPath(step.for.do[0], variables)
         );
   } else {
     return concat([currentVariableIndex], nextLoopPath);

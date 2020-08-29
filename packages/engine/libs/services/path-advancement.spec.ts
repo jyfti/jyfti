@@ -1,4 +1,4 @@
-import { Step, Workflow } from "../types";
+import { Step, Workflow, ExpressionStep, ForStep } from "../types";
 import { advancePath, advancePathRec } from "./path-advancement";
 
 describe("the advancement of paths", () => {
@@ -10,11 +10,11 @@ describe("the advancement of paths", () => {
         {
           assignTo: "var1",
           expression: 1,
-        },
+        } as ExpressionStep,
         {
           assignTo: "var2",
           expression: 2,
-        },
+        } as ExpressionStep,
       ],
     };
 
@@ -38,11 +38,11 @@ describe("the advancement of paths", () => {
             {
               assignTo: "var2",
               expression: 2,
-            },
+            } as ExpressionStep,
           ],
           return: "loopVar",
         },
-      },
+      } as ForStep,
     ];
 
     it("should finish the loop immediately if the list does not have elements", () => {
@@ -74,11 +74,11 @@ describe("the advancement of paths", () => {
         {
           assignTo: "listVar1",
           expression: ["a", "b"],
-        },
+        } as ExpressionStep,
         {
           assignTo: "listVar2",
           expression: [true, false],
-        },
+        } as ExpressionStep,
         {
           assignTo: "var1",
           for: {
@@ -104,15 +104,15 @@ describe("the advancement of paths", () => {
                     {
                       assignTo: "var5",
                       expression: 5,
-                    },
+                    } as ExpressionStep,
                   ],
                   return: "loopVar2",
                 },
-              },
+              } as ForStep,
             ],
             return: "loopVar1",
           },
-        },
+        } as ForStep,
         {
           assignTo: "var6",
           expression: 6,

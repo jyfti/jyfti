@@ -12,6 +12,10 @@ import {
   JsonExpression,
   HttpRequest,
   HttpMethod,
+  isRequestStep,
+  isExpressionStep,
+  isForStep,
+  ForStep,
 } from "../types";
 import { toVariableMap } from "./variable-map-creation";
 import { http } from "./http";
@@ -21,11 +25,11 @@ export function executeStep(
   localEvaluations: Evaluation | Evaluations,
   variables: VariableMap
 ): Observable<Evaluation> {
-  if (step?.request) {
+  if (isRequestStep(step)) {
     return executeRequestStep(step.request, variables);
-  } else if (step?.expression) {
+  } else if (isExpressionStep(step)) {
     return executeExpressionStep(step.expression, variables);
-  } else if (step?.for) {
+  } else if (isForStep(step)) {
     return evaluateLoopReturn(localEvaluations, step);
   } else {
     return throwError(
@@ -56,7 +60,7 @@ function executeExpressionStep(
 
 function evaluateLoopReturn(
   localEvaluations: Evaluation | Evaluations,
-  step: Step
+  step: ForStep
 ): Observable<Evaluation[]> {
   if (localEvaluations && !Array.isArray(localEvaluations)) {
     return throwError(
@@ -65,10 +69,10 @@ function evaluateLoopReturn(
   }
   const loopReturn: Evaluation[] = (localEvaluations || [])
     .map((loopIterationEvaluation: any) =>
-      toVariableMap(step.for!.do, loopIterationEvaluation)
+      toVariableMap(step.for.do, loopIterationEvaluation)
     )
     .map(
-      (loopIterationVariables: any) => loopIterationVariables[step.for!.return]
+      (loopIterationVariables: any) => loopIterationVariables[step.for.return]
     );
   return of(loopReturn);
 }
