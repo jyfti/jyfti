@@ -1,4 +1,3 @@
-import { concat, isNil, tail } from "lodash/fp";
 import {
   Workflow,
   Path,
@@ -21,7 +20,7 @@ function createStartingPath(step: Step, variables: VariableMap): Path {
   return isForStep(step) &&
     step.for.do.length != 0 &&
     evaluate(variables, step.for.in)?.length > 0
-    ? concat([0, 0], createStartingPath(step.for.do[0], variables))
+    ? [0, 0].concat(createStartingPath(step.for.do[0], variables))
     : [];
 }
 
@@ -31,7 +30,7 @@ function advancePathForLoop(
   variables: VariableMap
 ): Path {
   const currentVariableIndex = path[0];
-  const subPath = tail(path);
+  const subPath = path.slice(1);
   const nextLoopPath = advancePathRec(step.for.do, subPath, variables);
   if (nextLoopPath.length == 0) {
     // All steps within the for loop are done, go to next variable of list
@@ -40,14 +39,13 @@ function advancePathForLoop(
       loopVariables,
       currentVariableIndex
     );
-    return isNil(nextVariableIndex)
+    return nextVariableIndex === null
       ? [] // Loop over
-      : concat(
-          [nextVariableIndex, 0],
+      : [nextVariableIndex, 0].concat(
           createStartingPath(step.for.do[0], variables)
         );
   } else {
-    return concat([currentVariableIndex], nextLoopPath);
+    return [currentVariableIndex].concat(nextLoopPath);
   }
 }
 
@@ -61,33 +59,31 @@ export function advancePathRec(
   variables: VariableMap
 ): Path {
   if (path.length == 0) {
-    return concat([0], createStartingPath(steps[0], variables));
+    return [0].concat(createStartingPath(steps[0], variables));
   }
   const currentPosition = path[0];
   const currentStep = steps[currentPosition];
   if (isForStep(currentStep)) {
-    const subPath = tail(path);
+    const subPath = path.slice(1);
     if (subPath.length == 0) {
       // Loop just ended
       const nextPosition = advancePathFlat(steps, currentPosition);
-      return isNil(nextPosition)
+      return nextPosition === null
         ? []
-        : concat(
-            [nextPosition],
+        : [nextPosition].concat(
             createStartingPath(steps[nextPosition], variables)
           );
     } else {
       const nextLoopPath = advancePathForLoop(currentStep, subPath, variables);
       return nextLoopPath.length == 0
         ? [currentPosition] // Loop over
-        : concat([currentPosition], nextLoopPath);
+        : [currentPosition].concat(nextLoopPath);
     }
   } else {
     const nextPosition = advancePathFlat(steps, currentPosition);
-    return isNil(nextPosition)
+    return nextPosition === null
       ? []
-      : concat(
-          [nextPosition],
+      : [nextPosition].concat(
           createStartingPath(steps[nextPosition], variables)
         );
   }

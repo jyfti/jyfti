@@ -1,4 +1,3 @@
-import { dropRight, tail } from "lodash/fp";
 import { Evaluation, Evaluations, Path } from "../types";
 
 export function resolveEvaluation(
@@ -8,7 +7,7 @@ export function resolveEvaluation(
   if (path.length === 0 || !evaluations) {
     return evaluations;
   } else {
-    return resolveEvaluation(evaluations[path[0]], tail(path));
+    return resolveEvaluation(evaluations[path[0]], path.slice(1));
   }
 }
 
@@ -30,25 +29,27 @@ export function addEvaluation(
       return evaluations.concat([evaluation]);
     } else {
       // Current evaluation hold a sub scope before and will now hold the return of the subscope
-      return dropRight(1)(evaluations).concat([evaluation]);
+      return evaluations.slice(0, evaluations.length - 1).concat([evaluation]);
     }
   } else {
     if (path[0] === evaluations.length) {
       return evaluations.concat([
         addEvaluation(
-          tail(path),
+          path.slice(1),
           path[0] == evaluations.length - 1 ? evaluations[path[0]] : [],
           evaluation
         ),
       ]);
     } else {
-      return dropRight(1)(evaluations).concat([
-        addEvaluation(
-          tail(path),
-          path[0] == evaluations.length - 1 ? evaluations[path[0]] : [],
-          evaluation
-        ),
-      ]);
+      return evaluations
+        .slice(0, evaluations.length - 1)
+        .concat([
+          addEvaluation(
+            path.slice(1),
+            path[0] == evaluations.length - 1 ? evaluations[path[0]] : [],
+            evaluation
+          ),
+        ]);
     }
   }
 }
