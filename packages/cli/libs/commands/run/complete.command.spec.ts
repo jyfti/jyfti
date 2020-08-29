@@ -8,7 +8,9 @@ jest.mock("../../files/workflow-file.service", () => ({
 }));
 jest.mock("../../files/config-file.service");
 jest.mock("../../files/state-file.service");
-jest.mock("../../files/environment-file.service");
+jest.mock("../../files/environment-file.service", () => ({
+  readEnvironmentOrTerminate: () => Promise.resolve({}),
+}));
 jest.mock("../../files/workflow.service");
 jest.mock("../../inquirer.service");
 jest.mock("@jyfti/engine", () => require("../../../__mocks__/@jyfti/engine"));
@@ -19,7 +21,6 @@ describe("the complete command", () => {
     inputs: {},
     evaluations: [],
   };
-  const environment = {};
   const workflow = { name: "my-workflow", steps: [] };
   const stepResult = { path: [], evaluation: "a" };
 
@@ -30,9 +31,6 @@ describe("the complete command", () => {
     logSpy = jest.spyOn(console, "log").mockImplementation(() => {});
     errorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
     require("../../files/state-file.service").__setState(state);
-    require("../../files/environment-file.service").__setEnvironment(
-      environment
-    );
     require("../../files/workflow.service").__setWorkflow(workflow);
   });
 

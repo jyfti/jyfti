@@ -8,7 +8,9 @@ jest.mock("../../files/workflow-file.service", () => ({
 }));
 jest.mock("../../files/config-file.service");
 jest.mock("../../files/state-file.service");
-jest.mock("../../files/environment-file.service");
+jest.mock("../../files/environment-file.service", () => ({
+  readEnvironmentOrTerminate: () => Promise.resolve({}),
+}));
 jest.mock("../../files/workflow.service");
 jest.mock("../../install.service");
 jest.mock("../../inquirer.service");
@@ -20,7 +22,6 @@ describe("the create command", () => {
     inputs: {},
     evaluations: [],
   };
-  const environment = {};
   const workflow = { name: "my-workflow", steps: [] };
 
   let logSpy: any;
@@ -30,9 +31,6 @@ describe("the create command", () => {
     logSpy = jest.spyOn(console, "log").mockImplementation(() => {});
     errorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
     require("../../files/state-file.service").__setState(state);
-    require("../../files/environment-file.service").__setEnvironment(
-      environment
-    );
     require("../../files/workflow.service").__setWorkflow(workflow);
   });
 

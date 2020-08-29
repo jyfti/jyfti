@@ -4,7 +4,9 @@ import { printSuccess, printError } from "../../print.service";
 
 jest.mock("../../files/config-file.service");
 jest.mock("../../files/state-file.service");
-jest.mock("../../files/environment-file.service");
+jest.mock("../../files/environment-file.service", () => ({
+  readEnvironmentOrTerminate: () => Promise.resolve({}),
+}));
 jest.mock("../../files/workflow.service");
 jest.mock("../../files/workflow-file.service");
 jest.mock("../../inquirer.service");
@@ -25,7 +27,6 @@ describe("the step command", () => {
       inputs: {},
       evaluations: [],
     });
-    require("../../files/environment-file.service").__setEnvironment({});
     require("@jyfti/engine").__setStepResult({
       path: [0],
       evaluation: "a",
@@ -41,7 +42,6 @@ describe("the step command", () => {
       inputs: {},
       evaluations: [],
     });
-    require("../../files/environment-file.service").__setEnvironment({});
     require("@jyfti/engine").__setStepResult({
       path: [],
       evaluation: "a",
@@ -57,7 +57,6 @@ describe("the step command", () => {
       inputs: {},
       evaluations: [],
     });
-    require("../../files/environment-file.service").__setEnvironment({});
     require("@jyfti/engine").__setStepResult(undefined);
     await step("my-workflow", { verbose: false });
     expect(logSpy).toHaveBeenCalledTimes(0);

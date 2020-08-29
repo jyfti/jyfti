@@ -2,7 +2,10 @@
 import { generateEnvironment } from "./environment.command";
 
 jest.mock("../../files/config-file.service");
-jest.mock("../../files/environment-file.service");
+jest.mock("../../files/environment-file.service", () => ({
+  writeEnvironment: () => Promise.resolve(),
+  environmentExists: jest.fn(() => Promise.resolve(true)),
+}));
 jest.mock("../../inquirer.service");
 
 describe("the generate environment command", () => {
@@ -19,7 +22,9 @@ describe("the generate environment command", () => {
   });
 
   it("should fail if the environment already exists", async () => {
-    require("../../files/environment-file.service").__setEnvironment({});
+    require("../../files/environment-file.service").environmentExists.mockImplementation(
+      () => Promise.resolve(true)
+    );
     await generateEnvironment("my-environment");
     expect(logSpy).toHaveBeenCalledTimes(0);
     expect(errorSpy).toHaveBeenCalledWith(
@@ -29,7 +34,9 @@ describe("the generate environment command", () => {
   });
 
   it("should succeed if the environment does not already exists", async () => {
-    require("../../files/environment-file.service").__setEnvironment(undefined);
+    require("../../files/environment-file.service").environmentExists.mockImplementation(
+      () => Promise.resolve(false)
+    );
     await generateEnvironment("my-environment");
     expect(logSpy).toHaveBeenCalledTimes(0);
     expect(errorSpy).toHaveBeenCalledTimes(0);
@@ -37,7 +44,6 @@ describe("the generate environment command", () => {
   });
 
   it("should prompt for an environment name if not provided", async () => {
-    require("../../files/environment-file.service").__setEnvironment(undefined);
     await generateEnvironment(undefined);
     expect(logSpy).toHaveBeenCalledTimes(0);
     expect(errorSpy).toHaveBeenCalledTimes(0);
