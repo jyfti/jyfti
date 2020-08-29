@@ -1,4 +1,4 @@
-import { VariableMap } from "@jyfti/engine";
+import { Environment } from "@jyfti/engine";
 import { readJson, fileExists, writeJson, listDirFiles } from "./file.service";
 import { Config } from "../types/config";
 import * as nodePath from "path";
@@ -13,7 +13,7 @@ function resolveEnvironment(config: Config, name: string) {
 function readEnvironment(
   config: Config,
   name: string | undefined
-): Promise<VariableMap> {
+): Promise<Environment> {
   return readJson(resolveEnvironment(config, name || defaultEnvironmentName));
 }
 
@@ -27,7 +27,7 @@ export function environmentExists(
 export function writeEnvironment(
   config: Config,
   name: string,
-  environment: VariableMap
+  environment: Environment
 ): Promise<void> {
   return writeJson(resolveEnvironment(config, name), environment);
 }
@@ -35,7 +35,7 @@ export function writeEnvironment(
 export async function readEnvironmentOrTerminate(
   config: Config,
   name: string | undefined
-): Promise<VariableMap> {
+): Promise<Environment> {
   const environment = await readEnvironment(config, name).catch(() =>
     !name || name === defaultEnvironmentName ? {} : undefined
   );

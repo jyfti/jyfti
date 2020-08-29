@@ -1,6 +1,6 @@
 import { Observable } from "rxjs";
 
-import { State, Workflow, Evaluation, Inputs, VariableMap } from "../types";
+import { State, Workflow, Evaluation, Inputs, Environment } from "../types";
 import { evaluate } from "./evaluation";
 import { createVariableMapFromState } from "./variable-map-creation";
 import { executeStep } from "./step-execution";
@@ -12,7 +12,7 @@ export function nextState(
   workflow: Workflow,
   state: State,
   evaluation: Evaluation,
-  environment: VariableMap
+  environment: Environment
 ): State {
   const nextEvaluations = addEvaluation(
     state.path,
@@ -42,7 +42,7 @@ export function nextState(
 export function nextStep(
   workflow: Workflow,
   state: State,
-  environment: VariableMap
+  environment: Environment
 ): Observable<Evaluation> {
   return executeStep(
     resolveStep(workflow, state.path),
@@ -54,7 +54,7 @@ export function nextStep(
 export function toOutput(
   workflow: Workflow,
   state: State,
-  environment: VariableMap
+  environment: Environment
 ): any | undefined {
   return workflow.output
     ? evaluate(

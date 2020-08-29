@@ -1,4 +1,4 @@
-import { Step, Evaluation, VariableMap, Workflow, State, Path } from "../types";
+import { Step, Evaluation, VariableMap, Workflow, State, Path, Environment } from "../types";
 import { resolveAllSteps, resolveLoopPositions } from "./step-resolvement";
 import { evaluate } from "./evaluation";
 import { isArray } from "lodash/fp";
@@ -6,7 +6,7 @@ import { isArray } from "lodash/fp";
 export function createVariableMapFromState(
   workflow: Workflow,
   state: State,
-  environment: VariableMap
+  environment: Environment
 ): VariableMap {
   const variables = {
     inputs: state.inputs,

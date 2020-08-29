@@ -9,6 +9,7 @@ import {
   State,
   Workflow,
   VariableMap,
+  Environment,
 } from "../types";
 import { createVariableMapFromState } from "./variable-map-creation";
 
@@ -20,7 +21,7 @@ import { createVariableMapFromState } from "./variable-map-creation";
  */
 export function createEngine(
   workflow: Workflow,
-  environment: VariableMap
+  environment: Environment
 ): Engine {
   return new Engine(workflow, environment);
 }
@@ -34,7 +35,7 @@ export class Engine {
    */
   constructor(
     private readonly workflow: Workflow,
-    private readonly environment: VariableMap
+    private readonly environment: Environment
   ) {}
 
   /**

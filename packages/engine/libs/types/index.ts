@@ -1,3 +1,4 @@
+export * from "./environment.type";
 export * from "./evaluations.type";
 export * from "./http-request-template.type";
 export * from "./http-request.type";
