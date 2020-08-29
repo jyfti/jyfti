@@ -10,7 +10,9 @@ describe("the environment view command", () => {
     const environment = {
       a: "b",
     };
-    require("../../files/environment-file.service").__setEnvironment(environment);
+    require("../../files/environment-file.service").__setEnvironment(
+      environment
+    );
     const logSpy = jest.spyOn(console, "log").mockImplementation(() => {});
     await viewEnvironment("my-environment");
     expect(logSpy).toHaveBeenCalledWith(printJson(environment));
@@ -20,7 +22,9 @@ describe("the environment view command", () => {
     const environment = {
       a: "b",
     };
-    require("../../files/environment-file.service").__setEnvironment(environment);
+    require("../../files/environment-file.service").__setEnvironment(
+      environment
+    );
     const logSpy = jest.spyOn(console, "log").mockImplementation(() => {});
     await viewEnvironment(undefined);
     expect(logSpy).toHaveBeenCalledWith(printJson(environment));

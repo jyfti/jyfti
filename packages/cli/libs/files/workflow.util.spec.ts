@@ -6,7 +6,7 @@ describe("workflow utility functions", () => {
       extractWorkflowName("https://localhost:8080/group/my-workflow.json")
     ).toEqual("my-workflow");
   });
-  
+
   it("create inputs from a list", () => {
     expect(
       createInputs(

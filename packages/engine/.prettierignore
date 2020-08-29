@@ -1,0 +1,6 @@
+node_modules
+build
+jyfti.state.json
+out
+environments
+coverage
