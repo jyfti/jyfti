@@ -1,6 +1,6 @@
 {
   "name": "@jyfti/engine",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Jyfti is a project for building, running and sharing workflows easily. The Jyfti engine is a JS libary to run workflows.",
   "main": "build/index.js",
   "typings": "build/index.d.ts",
