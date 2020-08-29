@@ -2,7 +2,10 @@
 import { generateWorkflow } from "./workflow.command";
 
 jest.mock("../../files/config-file.service");
-jest.mock("../../files/workflow-file.service");
+jest.mock("../../files/workflow-file.service", () => ({
+  workflowExists: jest.fn(() => Promise.resolve(true)),
+  writeWorkflow: () => Promise.resolve(),
+}));
 jest.mock("../../inquirer.service");
 
 describe("the generate workflow command", () => {
@@ -19,10 +22,9 @@ describe("the generate workflow command", () => {
   });
 
   it("should fail if the workflow already exists", async () => {
-    require("../../files/workflow-file.service").__setWorkflow({
-      name: "my-workflow",
-      steps: [],
-    });
+    require("../../files/workflow-file.service").workflowExists.mockImplementation(
+      () => Promise.resolve(true)
+    );
     await generateWorkflow("my-workflow");
     expect(logSpy).toHaveBeenCalledTimes(0);
     expect(errorSpy).toHaveBeenCalledWith(
@@ -32,7 +34,9 @@ describe("the generate workflow command", () => {
   });
 
   it("should succeed if the workflow does not already exists", async () => {
-    require("../../files/workflow-file.service").__setWorkflow(undefined);
+    require("../../files/workflow-file.service").workflowExists.mockImplementation(
+      () => Promise.resolve(false)
+    );
     await generateWorkflow("my-workflow");
     expect(logSpy).toHaveBeenCalledTimes(0);
     expect(errorSpy).toHaveBeenCalledTimes(0);
@@ -40,7 +44,9 @@ describe("the generate workflow command", () => {
   });
 
   it("should prompt for a workflow name if not provided", async () => {
-    require("../../files/workflow-file.service").__setWorkflow(undefined);
+    require("../../files/workflow-file.service").workflowExists.mockImplementation(
+      () => Promise.resolve(false)
+    );
     await generateWorkflow(undefined);
     expect(logSpy).toHaveBeenCalledTimes(0);
     expect(errorSpy).toHaveBeenCalledTimes(0);

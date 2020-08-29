@@ -4,7 +4,10 @@ import { Config } from "./types/config";
 import { Workflow, JsonSchema } from "@jyfti/engine";
 import { printError } from "./print.service";
 
-jest.mock("./files/workflow-file.service");
+jest.mock("./files/workflow-file.service", () => ({
+  workflowExists: () => Promise.resolve(true),
+  writeWorkflow: () => Promise.resolve(),
+}));
 jest.mock("@jyfti/engine", () => require("../__mocks__/@jyfti/validator"));
 jest.mock("inquirer", () => ({
   prompt: jest.fn(() => Promise.resolve({ yes: true })),

@@ -6,7 +6,10 @@ jest.mock("../../files/config-file.service");
 jest.mock("../../files/state-file.service", () => ({
   readState: jest.fn(() => Promise.resolve({})),
 }));
-jest.mock("../../files/workflow-file.service");
+jest.mock("../../files/workflow-file.service", () => ({
+  readWorkflowNamesOrTerminate: () =>
+    Promise.resolve(["my-workflow", "my-other-workflow"]),
+}));
 
 describe("the status command", () => {
   let logSpy: any;
@@ -62,10 +65,6 @@ describe("the status command", () => {
         evaluations: [],
       })
     );
-    require("../../files/workflow-file.service").__setWorkflowNames([
-      "my-workflow",
-      "my-other-workflow",
-    ]);
     await status(undefined);
     expect(logSpy).toHaveBeenCalledWith(
       "my-workflow " +
