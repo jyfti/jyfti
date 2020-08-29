@@ -3,6 +3,14 @@ import { init } from "./init.command";
 
 jest.mock("../files/config-file.service");
 jest.mock("../files/file.service");
+jest.mock("inquirer", () => ({
+  prompt: () =>
+    Promise.resolve({
+      envRoot: "envRootValue",
+      sourceRoot: "sourceRootValue",
+      outRoot: "outRootValue",
+    }),
+}));
 
 describe("the init command", () => {
   const files = require("../files/file.service");
@@ -19,7 +27,7 @@ describe("the init command", () => {
     files.fileExists = () => Promise.resolve(false);
     files.ensureDirExists = () => Promise.resolve();
     await init();
-    expect(logSpy).toHaveBeenCalledTimes(0);
+    expect(logSpy).toHaveBeenCalledWith("Initialized Jyfti project.");
     expect(errorSpy).toHaveBeenCalledTimes(0);
   });
 

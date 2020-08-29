@@ -1,18 +1,46 @@
 import { fileExists, ensureDirExists } from "../files/file.service";
-import {
-  configName,
-  writeConfig,
-  defaultConfig,
-} from "../files/config-file.service";
+import { configName, writeConfig } from "../files/config-file.service";
+import inquirer from "inquirer";
+import { Config } from "../types/config";
 
 export async function init(): Promise<void> {
   const configExists = await fileExists(configName);
   if (configExists) {
     console.log("This directory is already initialized.");
   } else {
-    await writeConfig(defaultConfig);
-    await ensureDirExists(defaultConfig.sourceRoot);
-    await ensureDirExists(defaultConfig.envRoot);
-    await ensureDirExists(defaultConfig.outRoot);
+    const config = await promptConfig();
+    await writeConfig(config);
+    await ensureDirExists(config.sourceRoot);
+    await ensureDirExists(config.envRoot);
+    await ensureDirExists(config.outRoot);
+    console.log("Initialized Jyfti project.");
   }
+}
+
+export async function promptConfig(): Promise<Config> {
+  const answers = await inquirer.prompt([
+    {
+      name: "sourceRoot",
+      message: `Where do you want to put the workflows?`,
+      type: "string",
+      default: "./src",
+    },
+    {
+      name: "envRoot",
+      message: `Where do you want to put the environments?`,
+      type: "string",
+      default: "./environments",
+    },
+    {
+      name: "outRoot",
+      message: `Where should the execution states be stored?`,
+      type: "string",
+      default: "./out",
+    },
+  ]);
+  return {
+    sourceRoot: answers.sourceRoot,
+    envRoot: answers.envRoot,
+    outRoot: answers.outRoot,
+  };
 }

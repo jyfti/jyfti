@@ -1,5 +1,5 @@
 {
   "sourceRoot": "../../workflows",
-  "outRoot": "./out",
-  "envRoot": "./environments"
+  "envRoot": "./environments",
+  "outRoot": "./out"
 }
