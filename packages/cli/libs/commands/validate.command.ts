@@ -5,7 +5,7 @@ import { printValidationErrors, printValue } from "../print.service";
 import {
   readWorkflowOrTerminate,
   readWorkflowSchemaOrTerminate,
-  readWorkflowNames,
+  readWorkflowNamesOrTerminate,
 } from "../files/workflow-file.service";
 
 export async function validate(
@@ -21,7 +21,7 @@ export async function validate(
   const names: string[] = name
     ? [name]
     : cmd?.all
-    ? await readWorkflowNames(config)
+    ? await readWorkflowNamesOrTerminate(config)
     : asList(
         await promptWorkflow(config, "Which workflow do you want to validate?")
       );

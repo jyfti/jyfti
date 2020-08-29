@@ -1,5 +1,5 @@
 import { Config } from "./types/config";
-import { readWorkflowNames } from "./files/workflow-file.service";
+import { readWorkflowNamesOrTerminate } from "./files/workflow-file.service";
 import inquirer from "inquirer";
 import { Workflow } from "@jyfti/engine";
 import { readEnvironmentNames } from "./files/environment-file.service";
@@ -20,7 +20,7 @@ export async function promptWorkflow(
   config: Config,
   question: string
 ): Promise<string | undefined> {
-  const workflowNames = await readWorkflowNames(config);
+  const workflowNames = await readWorkflowNamesOrTerminate(config);
   const answers = await inquirer.prompt([
     {
       name: "workflow",

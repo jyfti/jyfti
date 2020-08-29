@@ -15,6 +15,23 @@ export async function readWorkflowNames(config: Config): Promise<string[]> {
     .map((fileName) => fileName.substring(0, fileName.length - ".json".length));
 }
 
+export async function readWorkflowNamesOrTerminate(
+  config: Config
+): Promise<string[]> {
+  const workflow = await readWorkflowNames(config).catch(() => undefined);
+  if (!workflow) {
+    console.error(
+      printError(
+        "The workflow names can't be read from the source root '" +
+          config.sourceRoot +
+          "'"
+      )
+    );
+    process.exit(1);
+  }
+  return workflow;
+}
+
 export async function readWorkflow(
   config: Config,
   name: string

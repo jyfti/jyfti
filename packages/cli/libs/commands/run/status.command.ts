@@ -1,12 +1,14 @@
 import { readConfig } from "../../files/config-file.service";
 import { State } from "@jyfti/engine";
-import { readWorkflowNames } from "../../files/workflow-file.service";
+import { readWorkflowNamesOrTerminate } from "../../files/workflow-file.service";
 import { readState } from "../../files/state-file.service";
 import { printValue } from "../../print.service";
 
 export async function status(name?: string): Promise<void> {
   const config = await readConfig();
-  const workflowNames = name ? [name] : await readWorkflowNames(config);
+  const workflowNames = name
+    ? [name]
+    : await readWorkflowNamesOrTerminate(config);
   const statusList = await Promise.all(
     workflowNames.map(async (workflowName) => {
       const message = await printState(readState(config, workflowName));

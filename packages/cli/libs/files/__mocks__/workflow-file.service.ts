@@ -16,6 +16,10 @@ export async function readWorkflowNames(): Promise<string[]> {
   return workflowNames ? Promise.resolve(workflowNames) : Promise.reject();
 }
 
+export async function readWorkflowNamesOrTerminate(): Promise<string[]> {
+  return workflowNames ? Promise.resolve(workflowNames) : Promise.reject();
+}
+
 export function readWorkflow(): Promise<Workflow> {
   return workflow ? Promise.resolve(workflow) : Promise.reject();
 }
