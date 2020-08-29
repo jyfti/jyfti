@@ -12,6 +12,12 @@ import {
 } from "../types";
 import { createVariableMapFromState } from "./variable-map-creation";
 
+/**
+ * Creates an execution engine for a specific workflow in a specific environment.
+ *
+ * @param workflow The workflow
+ * @param environment The environment
+ */
 export function createEngine(
   workflow: Workflow,
   environment: VariableMap
@@ -20,12 +26,32 @@ export function createEngine(
 }
 
 export class Engine {
-  constructor(private workflow: Workflow, private environment: VariableMap) {}
+  /**
+   * Creates an execution engine for a specific workflow in a specific environment.
+   *
+   * @param workflow The workflow
+   * @param environment The environment
+   */
+  constructor(
+    private readonly workflow: Workflow,
+    private readonly environment: VariableMap
+  ) {}
 
+  /**
+   * Validates the inputs against the input requirements defined by the workflow.
+   *
+   * @param inputs A map assigning variable names arbitrary values.
+   * @returns A map assigning each input a list of errors. If all lists are empty, then all inputs are valid.
+   */
   validate(inputs: Inputs): InputErrors {
     return validateSchemaMap(this.workflow.inputs || {}, inputs);
   }
 
+  /**
+   * Creates an initial state with the given inputs.
+   *
+   * @param inputs The input values of the workflow
+   */
   init(inputs: Inputs): State {
     return {
       path: [0],
@@ -76,10 +102,23 @@ export class Engine {
     return state.path.length == 0;
   }
 
+  /**
+   * Returns the evaluation of the output against the passed state.
+   * Returns undefined if the workflow does not define an output.
+   *
+   * @param state The state
+   */
   getOutput(state: State): any | undefined {
     return toOutput(this.workflow, state, this.environment);
   }
 
+  /**
+   * Returns the map of variable values that the state defines at the current path.
+   * This variable map can contain input values and values defined via `assignTo` or `const`.
+   * It considers the scope a variable is defined in.
+   *
+   * @param state The state
+   */
   getVariableMap(state: State): VariableMap {
     return createVariableMapFromState(this.workflow, state, this.environment);
   }
