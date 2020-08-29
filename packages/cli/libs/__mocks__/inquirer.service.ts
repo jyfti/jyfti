@@ -14,10 +14,6 @@ export function promptWorkflow(): Promise<string | undefined> {
   return Promise.resolve(returnsContent ? "my-workflow" : undefined);
 }
 
-export function promptEnvironment(): Promise<string | undefined> {
-  return Promise.resolve(returnsContent ? "my-environment" : undefined);
-}
-
 export function promptWorkflowInputs(workflow: Workflow): Promise<string[]> {
   return Promise.resolve(
     returnsContent

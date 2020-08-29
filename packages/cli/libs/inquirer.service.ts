@@ -32,22 +32,6 @@ export async function promptWorkflow(
   return answers.workflow;
 }
 
-export async function promptEnvironment(
-  config: Config,
-  question: string
-): Promise<string | undefined> {
-  const names = await readEnvironmentNames(config);
-  const answers = await inquirer.prompt([
-    {
-      name: "environment",
-      message: question,
-      type: "list",
-      choices: names,
-    },
-  ]);
-  return answers.environment;
-}
-
 export async function promptWorkflowInputs(
   workflow: Workflow
 ): Promise<string[]> {

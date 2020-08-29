@@ -2,8 +2,10 @@ import { viewEnvironment } from "./view.command";
 import { printJson } from "../../print.service";
 
 jest.mock("../../files/config-file.service");
-jest.mock("../../inquirer.service");
 jest.mock("../../files/environment-file.service");
+jest.mock("inquirer", () => ({
+  prompt: () => Promise.resolve({ environment: "my-environment" }),
+}));
 
 describe("the environment view command", () => {
   it("should read an environment via name and print it", async () => {
@@ -22,6 +24,9 @@ describe("the environment view command", () => {
     const environment = {
       a: "b",
     };
+    require("../../files/environment-file.service").__setEnvironmentNames([
+      "my-environment",
+    ]);
     require("../../files/environment-file.service").__setEnvironment(
       environment
     );
