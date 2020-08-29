@@ -7,7 +7,9 @@ jest.mock("../../files/workflow-file.service", () => ({
   readWorkflowNamesOrTerminate: () => Promise.resolve(["my-workflow"]),
 }));
 jest.mock("../../files/config-file.service");
-jest.mock("../../files/state-file.service");
+jest.mock("../../files/state-file.service", () => ({
+  readStateOrTerminate: () => Promise.resolve({}),
+}));
 jest.mock("../../files/environment-file.service", () => ({
   readEnvironmentOrTerminate: () => Promise.resolve({}),
 }));
@@ -16,11 +18,6 @@ jest.mock("@jyfti/engine", () => require("../../../__mocks__/@jyfti/engine"));
 
 describe("the vars command", () => {
   const variableMap = { var1: "a" };
-  const state = {
-    path: [0],
-    inputs: {},
-    evaluations: [],
-  };
 
   let logSpy: any;
   let errorSpy: any;
@@ -28,7 +25,6 @@ describe("the vars command", () => {
   beforeEach(() => {
     logSpy = jest.spyOn(console, "log").mockImplementation(() => {});
     errorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
-    require("../../files/state-file.service").__setState(state);
     require("@jyfti/engine").__setVariableMap(variableMap);
   });
 

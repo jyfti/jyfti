@@ -7,7 +7,14 @@ jest.mock("../../files/workflow-file.service", () => ({
   readWorkflowNamesOrTerminate: () => Promise.resolve(["my-workflow"]),
 }));
 jest.mock("../../files/config-file.service");
-jest.mock("../../files/state-file.service");
+jest.mock("../../files/state-file.service", () => ({
+  readStateOrTerminate: () =>
+    Promise.resolve({
+      path: [0],
+      inputs: {},
+      evaluations: [],
+    }),
+}));
 jest.mock("../../files/environment-file.service", () => ({
   readEnvironmentOrTerminate: () => Promise.resolve({}),
 }));
@@ -16,11 +23,6 @@ jest.mock("../../inquirer.service");
 jest.mock("@jyfti/engine", () => require("../../../__mocks__/@jyfti/engine"));
 
 describe("the execute command", () => {
-  const state = {
-    path: [0],
-    inputs: {},
-    evaluations: [],
-  };
   const workflow = { name: "my-workflow", steps: [] };
   const stepResult = { path: [], evaluation: "a" };
 
@@ -30,7 +32,6 @@ describe("the execute command", () => {
   beforeEach(() => {
     logSpy = jest.spyOn(console, "log").mockImplementation(() => {});
     errorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
-    require("../../files/state-file.service").__setState(state);
     require("../../files/workflow.service").__setWorkflow(workflow);
   });
 
@@ -68,7 +69,14 @@ describe("the execute command", () => {
     require("@jyfti/engine").__setStepResult(stepResult);
     await execute("my-workflow", [], { verbose: true });
     expect(logSpy).toHaveBeenNthCalledWith(1, "Created state.");
-    expect(logSpy).toHaveBeenNthCalledWith(2, printJson(state));
+    expect(logSpy).toHaveBeenNthCalledWith(
+      2,
+      printJson({
+        path: [0],
+        inputs: {},
+        evaluations: [],
+      })
+    );
     expect(logSpy).toHaveBeenNthCalledWith(3, printJson(stepResult));
     expect(logSpy).toHaveBeenNthCalledWith(
       4,

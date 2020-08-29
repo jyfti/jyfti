@@ -3,7 +3,9 @@ import { step } from "./step.command";
 import { printSuccess, printError } from "../../print.service";
 
 jest.mock("../../files/config-file.service");
-jest.mock("../../files/state-file.service");
+jest.mock("../../files/state-file.service", () => ({
+  readStateOrTerminate: jest.fn(() => Promise.resolve({})),
+}));
 jest.mock("../../files/environment-file.service", () => ({
   readEnvironmentOrTerminate: () => Promise.resolve({}),
 }));
@@ -22,11 +24,14 @@ describe("the step command", () => {
   });
 
   it("should execute the next step", async () => {
-    require("../../files/state-file.service").__setState({
-      path: [0],
-      inputs: {},
-      evaluations: [],
-    });
+    require("../../files/state-file.service").readStateOrTerminate.mockImplementation(
+      () =>
+        Promise.resolve({
+          path: [0],
+          inputs: {},
+          evaluations: [],
+        })
+    );
     require("@jyfti/engine").__setStepResult({
       path: [0],
       evaluation: "a",
@@ -37,11 +42,14 @@ describe("the step command", () => {
   });
 
   it("should return if already completed", async () => {
-    require("../../files/state-file.service").__setState({
-      path: [],
-      inputs: {},
-      evaluations: [],
-    });
+    require("../../files/state-file.service").readStateOrTerminate.mockImplementation(
+      () =>
+        Promise.resolve({
+          path: [],
+          inputs: {},
+          evaluations: [],
+        })
+    );
     require("@jyfti/engine").__setStepResult({
       path: [],
       evaluation: "a",
@@ -52,11 +60,14 @@ describe("the step command", () => {
   });
 
   it("should log a failed state if the engine returns an error", async () => {
-    require("../../files/state-file.service").__setState({
-      path: [0],
-      inputs: {},
-      evaluations: [],
-    });
+    require("../../files/state-file.service").readStateOrTerminate.mockImplementation(
+      () =>
+        Promise.resolve({
+          path: [0],
+          inputs: {},
+          evaluations: [],
+        })
+    );
     require("@jyfti/engine").__setStepResult(undefined);
     await step("my-workflow", { verbose: false });
     expect(logSpy).toHaveBeenCalledTimes(0);
