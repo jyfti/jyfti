@@ -18,12 +18,16 @@ jest.mock("../../files/state-file.service", () => ({
 jest.mock("../../files/environment-file.service", () => ({
   readEnvironmentOrTerminate: () => Promise.resolve({}),
 }));
-jest.mock("../../files/workflow.service");
+jest.mock("../../files/workflow.service", () => ({
+  readWorkflowOrTerminate: () => Promise.resolve({}),
+  validateInputsOrTerminate: () => Promise.resolve(),
+  validateWorkflowOrTerminate: () => Promise.resolve(),
+  validateEnvironmentOrTerminate: () => Promise.resolve(),
+}));
 jest.mock("../../inquirer.service");
 jest.mock("@jyfti/engine", () => require("../../../__mocks__/@jyfti/engine"));
 
 describe("the execute command", () => {
-  const workflow = { name: "my-workflow", steps: [] };
   const stepResult = { path: [], evaluation: "a" };
 
   let logSpy: any;
@@ -32,7 +36,6 @@ describe("the execute command", () => {
   beforeEach(() => {
     logSpy = jest.spyOn(console, "log").mockImplementation(() => {});
     errorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
-    require("../../files/workflow.service").__setWorkflow(workflow);
   });
 
   it("should run of a workflow with no inputs to completion", async () => {
