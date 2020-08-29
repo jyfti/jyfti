@@ -2,8 +2,15 @@
 import { install } from "./install.command";
 
 jest.mock("../files/config-file.service");
-jest.mock("../files/workflow-http.service");
-jest.mock("../install.service");
+jest.mock("../files/workflow-http.service", () => ({
+  readWorkflowOrTerminate: () => Promise.resolve({}),
+}));
+jest.mock("../files/workflow-schema.service", () => ({
+  readWorkflowSchemaOrTerminate: () => Promise.resolve({}),
+}));
+jest.mock("../install.service", () => ({
+  install: jest.fn(() => Promise.resolve()),
+}));
 
 describe("the install command", () => {
   let logSpy: any;
@@ -18,5 +25,6 @@ describe("the install command", () => {
     await install("http://localhost:8080/group/my-workflow");
     expect(logSpy).toHaveBeenCalledTimes(0);
     expect(errorSpy).toHaveBeenCalledTimes(0);
+    expect(require("../install.service").install).toHaveBeenCalledTimes(1);
   });
 });
