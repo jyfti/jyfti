@@ -16,7 +16,7 @@ import {
   validateEnvironmentOrTerminate,
 } from "../../files/workflow.service";
 import { writeState } from "../../files/state-file.service";
-import { readWorkflowSchemaOrTerminate } from "../../files/workflow-file.service";
+import { readWorkflowSchemaOrTerminate } from "../../files/workflow-schema.service";
 import { readEnvironmentOrTerminate } from "../../files/environment-file.service";
 import {
   isUrl,

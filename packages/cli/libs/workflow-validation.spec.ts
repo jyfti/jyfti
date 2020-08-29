@@ -1,10 +1,7 @@
-import {
-  readWorkflowNames,
-  readWorkflowSchema,
-  readWorkflow,
-} from "./files/workflow-file.service";
+import { readWorkflowNames, readWorkflow } from "./files/workflow-file.service";
 import { validate } from "@jyfti/engine";
 import { Config } from "./types/config";
+import { readWorkflowSchema } from "./files/workflow-schema.service";
 
 describe("the validation of workflows", () => {
   const config: Config = {

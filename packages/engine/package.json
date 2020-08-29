@@ -34,7 +34,8 @@
     "build": "rm -rf ./build && npx tsc",
     "lint": "npx eslint . --ext .js,.jsx,.ts,.tsx",
     "prettier": "npx prettier --write .",
-    "prettier-check": "npx prettier --check ."
+    "prettier-check": "npx prettier --check .",
+    "check": "npm run build && npm run lint && npm run test && npm run prettier-check"
   },
   "devDependencies": {
     "@babel/core": "^7.11.1",

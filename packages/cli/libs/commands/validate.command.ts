@@ -4,9 +4,9 @@ import { validate as validateWorkflow } from "@jyfti/engine";
 import { printValidationErrors, printValue } from "../print.service";
 import {
   readWorkflowOrTerminate,
-  readWorkflowSchemaOrTerminate,
   readWorkflowNamesOrTerminate,
 } from "../files/workflow-file.service";
+import { readWorkflowSchemaOrTerminate } from "../files/workflow-schema.service";
 
 export async function validate(
   name?: string,

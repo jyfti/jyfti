@@ -1,10 +1,10 @@
 import {
   readWorkflow,
   readWorkflowOrTerminate,
-  readWorkflowSchemaOrTerminate,
   readWorkflowNames,
 } from "./workflow-file.service";
 import { Config } from "../types/config";
+import { readWorkflowSchemaOrTerminate } from "./workflow-schema.service";
 
 jest.mock("./file.service");
 

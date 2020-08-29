@@ -1,4 +1,4 @@
-import { Workflow, JsonSchema } from "@jyfti/engine";
+import { Workflow } from "@jyfti/engine";
 
 let workflowNames: string[] | undefined;
 
@@ -26,14 +26,6 @@ export function readWorkflow(): Promise<Workflow> {
 
 export async function readWorkflowOrTerminate(): Promise<Workflow> {
   return workflow ? Promise.resolve(workflow) : Promise.reject();
-}
-
-export function readWorkflowSchema(): Promise<JsonSchema> {
-  return Promise.resolve({});
-}
-
-export async function readWorkflowSchemaOrTerminate(): Promise<JsonSchema> {
-  return Promise.resolve({});
 }
 
 export function workflowExists(): Promise<boolean> {

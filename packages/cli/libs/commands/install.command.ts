@@ -1,6 +1,6 @@
 import { readConfig } from "../files/config-file.service";
 
-import { readWorkflowSchemaOrTerminate } from "../files/workflow-file.service";
+import { readWorkflowSchemaOrTerminate } from "../files/workflow-schema.service";
 import { readWorkflowOrTerminate } from "../files/workflow-http.service";
 import * as installer from "../install.service";
 import { extractWorkflowName } from "../files/workflow.util";

@@ -1,6 +1,6 @@
 import * as nodePath from "path";
 import { Config } from "../types/config";
-import { Workflow, JsonSchema } from "@jyfti/engine";
+import { Workflow } from "@jyfti/engine";
 import { readJson, fileExists, writeJson, listDirFiles } from "./file.service";
 import { printError } from "../print.service";
 
@@ -59,30 +59,6 @@ export async function readWorkflowOrTerminate(
     process.exit(1);
   }
   return workflow;
-}
-
-export async function readWorkflowSchema(): Promise<JsonSchema> {
-  // TODO Make flexible
-  const schema = await readJson("../../workflow-schema.json");
-  if (!isWorkflowSchema(schema)) {
-    return Promise.reject(
-      "The workflow schema file does not represent a valid schema"
-    );
-  }
-  return schema;
-}
-
-function isWorkflowSchema(object: unknown): object is JsonSchema {
-  return typeof object === "object";
-}
-
-export async function readWorkflowSchemaOrTerminate(): Promise<JsonSchema> {
-  const schema = await readWorkflowSchema().catch(() => undefined);
-  if (!schema) {
-    console.error(printError("Workflow schema can not be found."));
-    process.exit(1);
-  }
-  return schema;
 }
 
 export function workflowExists(config: Config, name: string): Promise<boolean> {
