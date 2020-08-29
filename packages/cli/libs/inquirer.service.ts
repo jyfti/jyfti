@@ -2,7 +2,6 @@ import { Config } from "./types/config";
 import { readWorkflowNamesOrTerminate } from "./files/workflow-file.service";
 import inquirer from "inquirer";
 import { Workflow } from "@jyfti/engine";
-import { readEnvironmentNames } from "./files/environment-file.service";
 
 export async function promptName(entity: string): Promise<string> {
   const answers = await inquirer.prompt([
@@ -46,14 +45,4 @@ export async function promptWorkflowInputs(
     }))
   );
   return Object.keys(inputs).map((fieldName) => answers[fieldName]);
-}
-
-export async function promptOverwriteDecision(): Promise<boolean> {
-  const answers = await inquirer.prompt({
-    name: "yes",
-    message: "Do you want to overwrite the existing workflow?",
-    type: "confirm",
-    default: false,
-  });
-  return answers.yes;
 }

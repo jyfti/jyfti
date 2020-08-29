@@ -21,7 +21,7 @@ export async function viewEnvironment(name?: string): Promise<void> {
   }
 }
 
-export async function promptEnvironment(
+async function promptEnvironment(
   names: string[],
   question: string
 ): Promise<string | undefined> {

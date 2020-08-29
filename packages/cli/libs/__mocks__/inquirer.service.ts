@@ -21,7 +21,3 @@ export function promptWorkflowInputs(workflow: Workflow): Promise<string[]> {
       : []
   );
 }
-
-export function promptOverwriteDecision(): Promise<boolean> {
-  return Promise.resolve(returnsContent);
-}

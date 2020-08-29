@@ -3,7 +3,7 @@ import { Workflow, JsonSchema } from "@jyfti/engine";
 import { validate } from "@jyfti/engine";
 import { printValidationErrors, printError } from "./print.service";
 import { workflowExists, writeWorkflow } from "./files/workflow-file.service";
-import { promptOverwriteDecision } from "./inquirer.service";
+import inquirer from "inquirer";
 
 export async function install(
   config: Config,
@@ -27,4 +27,14 @@ export async function install(
   } else {
     console.log("The workflow has not been saved.");
   }
+}
+
+async function promptOverwriteDecision(): Promise<boolean> {
+  const answers = await inquirer.prompt({
+    name: "yes",
+    message: "Do you want to overwrite the existing workflow?",
+    type: "confirm",
+    default: false,
+  });
+  return answers.yes;
 }

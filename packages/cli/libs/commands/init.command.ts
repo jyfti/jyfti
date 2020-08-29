@@ -17,7 +17,7 @@ export async function init(): Promise<void> {
   }
 }
 
-export async function promptConfig(): Promise<Config> {
+async function promptConfig(): Promise<Config> {
   const answers = await inquirer.prompt([
     {
       name: "sourceRoot",

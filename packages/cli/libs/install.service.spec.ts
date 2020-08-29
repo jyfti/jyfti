@@ -6,7 +6,9 @@ import { printError } from "./print.service";
 
 jest.mock("./files/workflow-file.service");
 jest.mock("@jyfti/engine", () => require("../__mocks__/@jyfti/validator"));
-jest.mock("./inquirer.service");
+jest.mock("inquirer", () => ({
+  prompt: jest.fn(() => Promise.resolve({ yes: true })),
+}));
 
 describe("the installation of a workflow", () => {
   const config: Config = {
@@ -44,7 +46,9 @@ describe("the installation of a workflow", () => {
 
   it("should overwrite an existing workflow if --yes is set", async () => {
     require("@jyfti/engine").__setResponse(true);
-    require("./inquirer.service").__setReturnsContent(true);
+    require("inquirer").prompt.mockImplementation(() =>
+      Promise.resolve({ yes: true })
+    );
     await install(config, workflow, schema, "my-workflow", true);
     expect(logSpy).toHaveBeenCalledWith("Successfully saved.");
     expect(errorSpy).toHaveBeenCalledTimes(0);
@@ -52,7 +56,9 @@ describe("the installation of a workflow", () => {
 
   it("should overwrite an existing workflow if the user answers yes on the prompt", async () => {
     require("@jyfti/engine").__setResponse(true);
-    require("./inquirer.service").__setReturnsContent(true);
+    require("inquirer").prompt.mockImplementation(() =>
+      Promise.resolve({ yes: true })
+    );
     await install(config, workflow, schema, "my-workflow", false);
     expect(logSpy).toHaveBeenCalledWith("Successfully saved.");
     expect(errorSpy).toHaveBeenCalledTimes(0);
@@ -60,7 +66,9 @@ describe("the installation of a workflow", () => {
 
   it("should not overwrite an existing workflow if the user answers no on the prompt", async () => {
     require("@jyfti/engine").__setResponse(true);
-    require("./inquirer.service").__setReturnsContent(false);
+    require("inquirer").prompt.mockImplementation(() =>
+      Promise.resolve({ yes: false })
+    );
     await install(config, workflow, schema, "my-workflow", false);
     expect(logSpy).toHaveBeenCalledWith("The workflow has not been saved.");
     expect(errorSpy).toHaveBeenCalledTimes(0);
