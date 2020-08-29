@@ -12,5 +12,7 @@ export async function init(): Promise<void> {
   } else {
     await writeConfig(defaultConfig);
     await ensureDirExists(defaultConfig.sourceRoot);
+    await ensureDirExists(defaultConfig.envRoot);
+    await ensureDirExists(defaultConfig.outRoot);
   }
 }

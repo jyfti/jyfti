@@ -19,8 +19,8 @@ export async function generateEnvironment(name?: string): Promise<void> {
       process.exitCode = 1;
       return;
     }
-    const workflow = createExampleEnvironment();
-    await writeEnvironment(config, name, workflow);
+    const environment = createExampleEnvironment();
+    await writeEnvironment(config, name, environment);
   }
 }
 

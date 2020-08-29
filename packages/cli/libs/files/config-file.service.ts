@@ -17,6 +17,7 @@ export async function readConfig(): Promise<Config> {
   const configWithDefaults: Config = { ...defaultConfig, ...config };
   await ensureDirExists(configWithDefaults.outRoot);
   await ensureDirExists(configWithDefaults.envRoot);
+  await ensureDirExists(configWithDefaults.sourceRoot);
   return configWithDefaults;
 }
 
