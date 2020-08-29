@@ -5,7 +5,10 @@ import {
 } from "./workflow-file.service";
 import { Config } from "../types/config";
 
-jest.mock("./file.service");
+jest.mock("./file.service", () => ({
+  readJson: jest.fn(() => Promise.resolve({})),
+  listDirFiles: jest.fn(() => Promise.resolve([])),
+}));
 
 describe("interacting with workflow files", () => {
   const config: Config = {
@@ -15,12 +18,10 @@ describe("interacting with workflow files", () => {
   };
 
   it("reads a workflow", async () => {
-    require("./file.service").__setResponse(true);
     expect(await readWorkflow(config, "my-workflow")).toEqual({});
   });
 
   it("reads a workflow and does not terminate if it exists", async () => {
-    require("./file.service").__setResponse(true);
     expect(await readWorkflowOrTerminate(config, "my-workflow")).toEqual({});
   });
 
@@ -29,18 +30,24 @@ describe("interacting with workflow files", () => {
       return undefined as never;
     });
     jest.spyOn(console, "error").mockImplementation(() => {});
-    require("./file.service").__setResponse(false);
+    require("./file.service").readJson.mockImplementation(() =>
+      Promise.reject()
+    );
     await readWorkflowOrTerminate(config, "my-workflow");
     expect(mockExit).toHaveBeenCalledWith(1);
   });
 
   it("reads the list of workflow files", async () => {
-    require("./file.service").__setResponse(true);
+    require("./file.service").listDirFiles.mockImplementation(() =>
+      Promise.resolve(["a.json", "b.json", "c.js"])
+    );
     expect(await readWorkflowNames(config)).toEqual(["a", "b"]);
   });
 
   it("propagates an error from reading the workflow files", async () => {
-    require("./file.service").__setResponse(false);
+    require("./file.service").listDirFiles.mockImplementation(() =>
+      Promise.reject()
+    );
     await readWorkflowNames(config)
       .then(() => fail())
       .catch(() => {});

@@ -4,7 +4,10 @@ import {
   readEnvironmentNames,
 } from "./environment-file.service";
 
-jest.mock("./file.service");
+jest.mock("./file.service", () => ({
+  readJson: jest.fn(() => Promise.resolve({})),
+  listDirFiles: jest.fn(() => Promise.resolve([])),
+}));
 
 describe("interacting with environment files", () => {
   const config: Config = {
@@ -14,7 +17,6 @@ describe("interacting with environment files", () => {
   };
 
   it("reads an environment and does not terminate if it exists", async () => {
-    require("./file.service").__setResponse(true);
     expect(await readEnvironmentOrTerminate(config, "my-workflow")).toEqual({});
   });
 
@@ -23,18 +25,24 @@ describe("interacting with environment files", () => {
       return undefined as never;
     });
     jest.spyOn(console, "error").mockImplementation(() => {});
-    require("./file.service").__setResponse(false);
+    require("./file.service").readJson.mockImplementation(() =>
+      Promise.reject()
+    );
     await readEnvironmentOrTerminate(config, "my-workflow");
     expect(mockExit).toHaveBeenCalledWith(1);
   });
 
   it("reads the list of environment files", async () => {
-    require("./file.service").__setResponse(true);
+    require("./file.service").listDirFiles.mockImplementation(() =>
+      Promise.resolve(["a.json", "b.json", "c.js"])
+    );
     expect(await readEnvironmentNames(config)).toEqual(["a", "b"]);
   });
 
   it("propagates an error from reading the environment files", async () => {
-    require("./file.service").__setResponse(false);
+    require("./file.service").listDirFiles.mockImplementation(() =>
+      Promise.reject()
+    );
     await readEnvironmentNames(config)
       .then(() => fail())
       .catch(() => {});
