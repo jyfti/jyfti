@@ -1,1 +1,1 @@
-export type JsonSchema = any;
+export type JsonSchema = Record<string, unknown>;

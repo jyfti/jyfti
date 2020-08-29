@@ -44,7 +44,7 @@ function resolveLoopVariables(
   );
 }
 
-function getLoopList(variables: VariableMap, step: ForStep): any {
+function getLoopList(variables: VariableMap, step: ForStep): unknown[] {
   const loopList = evaluate(variables, step.for.in);
   if (!loopList || !Array.isArray(loopList)) {
     throw new Error(

@@ -1,16 +1,18 @@
 import jsone from "json-e";
-import { VariableMap } from "../types";
+import { VariableMap, JsonExpression } from "../types";
 
 export const functions = {
-  str: (obj: any) => (obj ? obj.toString() : "null"),
-  join: (array: any[], sep?: string) => array.join(sep),
+  str: (obj: Record<string, unknown> | undefined | null): string =>
+    obj ? obj.toString() : "null",
+  join: (array: unknown[], sep?: string): string => array.join(sep),
 };
 
 export function evaluate(
   variables: VariableMap,
-  expression: string | undefined
-) {
+  expression: JsonExpression | undefined
+): unknown {
   return expression === undefined
     ? null
-    : jsone(expression, { ...variables, ...functions });
+    : // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      jsone(expression as any, { ...variables, ...functions });
 }

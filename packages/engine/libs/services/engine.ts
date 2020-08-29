@@ -109,7 +109,7 @@ export class Engine {
    *
    * @param state The state
    */
-  getOutput(state: State): any | undefined {
+  getOutput(state: State): unknown | undefined {
     return toOutput(this.workflow, state, this.environment);
   }
 

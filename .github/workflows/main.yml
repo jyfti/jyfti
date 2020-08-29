@@ -2,43 +2,46 @@ name: CI
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-      
-    - uses: actions/cache@v2
-      with:
-        path: ~/.npm
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: ${{ runner.os }}-node-
-      
-    - name: Setup Node.js environment
-      uses: actions/setup-node@v1.4.3
-    
-    - name: Install npm packages
-      run: npm install
+      - uses: actions/checkout@v2
 
-    - name: Bootstrap lerna
-      run: npx lerna bootstrap --ci
+      - uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: ${{ runner.os }}-node-
 
-    - name: Build
-      run: npx lerna run build
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v1.4.3
 
-    - name: Test
-      run: npx lerna run test
+      - name: Install npm packages
+        run: npm install
 
-    - name: Code coverage
-      run: bash <(curl -s https://codecov.io/bash)
+      - name: Bootstrap lerna
+        run: npx lerna bootstrap --ci
 
-    - name: Publish docs
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./packages/docs/build
+      - name: Build
+        run: npx lerna run build
+
+      - name: Lint
+        run: npx lerna run lint
+
+      - name: Test
+        run: npx lerna run test
+
+      - name: Code coverage
+        run: bash <(curl -s https://codecov.io/bash)
+
+      - name: Publish docs
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./packages/docs/build

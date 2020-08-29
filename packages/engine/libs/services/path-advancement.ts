@@ -17,9 +17,11 @@ export function advancePath(
 }
 
 function createStartingPath(step: Step, variables: VariableMap): Path {
-  return isForStep(step) &&
-    step.for.do.length != 0 &&
-    evaluate(variables, step.for.in)?.length > 0
+  if (!isForStep(step) || step.for.do.length === 0) {
+    return [];
+  }
+  const evaluation = evaluate(variables, step.for.in);
+  return Array.isArray(evaluation) && evaluation.length > 0
     ? [0, 0].concat(createStartingPath(step.for.do[0], variables))
     : [];
 }
@@ -35,6 +37,11 @@ function advancePathForLoop(
   if (nextLoopPath.length == 0) {
     // All steps within the for loop are done, go to next variable of list
     const loopVariables = evaluate(variables, step.for.in);
+    if (!Array.isArray(loopVariables)) {
+      throw new Error(
+        "Expected an array of loop variables, but got a single value"
+      );
+    }
     const nextVariableIndex = advancePathFlat(
       loopVariables,
       currentVariableIndex
@@ -49,7 +56,7 @@ function advancePathForLoop(
   }
 }
 
-function advancePathFlat(elements: any[], position: number): number | null {
+function advancePathFlat(elements: unknown[], position: number): number | null {
   return position + 1 < elements.length ? position + 1 : null;
 }
 

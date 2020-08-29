@@ -1,12 +1,12 @@
 import { HttpRequestTemplate } from "./http-request-template.type";
 
-export type JsonExpression = any;
+export type JsonExpression = unknown;
 
 export interface ForLoop {
   const: string;
   in: JsonExpression;
   do: Step[];
-  return: JsonExpression;
+  return: string;
 }
 
 export interface Step {

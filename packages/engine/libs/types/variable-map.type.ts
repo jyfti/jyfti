@@ -1,1 +1,1 @@
-export type VariableMap = { [id: string]: any };
+export type VariableMap = { [id: string]: unknown };

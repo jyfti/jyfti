@@ -1,19 +1,16 @@
 import Ajv, { ErrorObject } from "ajv";
-import { InputErrors, Workflow, SchemaMap, JsonSchema } from "../types";
+import { InputErrors, SchemaMap, JsonSchema, Inputs } from "../types";
 
-export function validate(
-  workflow: Workflow,
-  schema: JsonSchema
-): ErrorObject[] {
+export function validate(object: unknown, schema: JsonSchema): ErrorObject[] {
   const ajv = new Ajv({ allErrors: true });
   const validate = ajv.compile(schema);
-  const valid = validate(workflow);
+  validate(object);
   return validate.errors || [];
 }
 
 export function validateSchemaMap(
   schemaMap: SchemaMap,
-  inputs: { [name: string]: any }
+  inputs: Inputs
 ): InputErrors {
   const results = Object.keys(schemaMap)
     .map((fieldName) => ({

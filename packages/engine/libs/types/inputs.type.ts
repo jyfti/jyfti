@@ -1,1 +1,1 @@
-export type Inputs = { [name: string]: any };
+export type Inputs = { [name: string]: unknown };

@@ -1,4 +1,4 @@
-import { of } from "rxjs";
+import { of, Observable } from "rxjs";
 import { VariableMap, StepResult } from "../../types";
 import { map } from "rxjs/operators";
 
@@ -16,7 +16,8 @@ export function __setStepResult(pStepResult: StepResult): void {
   stepResult = pStepResult;
 }
 
-export function createEngine() {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function createEngine(): any {
   return {
     complete: () => of(stepResult),
     isComplete: () => stepResult.path.length === 0,
@@ -25,7 +26,7 @@ export function createEngine() {
     init: () => state,
     step: () => of(stepResult),
     transition: () => state,
-    transitionFrom: () => (stepResult$: any) =>
+    transitionFrom: () => (stepResult$: Observable<StepResult>) =>
       stepResult$.pipe(map(() => state)),
     validate: () => ({}),
   };

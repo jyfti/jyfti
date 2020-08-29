@@ -55,7 +55,7 @@ export function toOutput(
   workflow: Workflow,
   state: State,
   environment: Environment
-): any | undefined {
+): unknown | undefined {
   return workflow.output
     ? evaluate(
         createVariableMapFromState(workflow, state, environment),

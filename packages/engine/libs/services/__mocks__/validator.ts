@@ -1,7 +1,7 @@
 import { ErrorObject } from "ajv";
 import { InputErrors } from "../../types";
 
-let success: boolean = true;
+let success = true;
 
 export function __setResponse(pSuccess: boolean): void {
   success = pSuccess;

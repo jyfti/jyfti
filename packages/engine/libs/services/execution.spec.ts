@@ -34,7 +34,6 @@ describe("the execution of workflows", () => {
     it("should execute the second step considering the evaluation of the first step without evaluating it", () => {
       const workflow: Workflow = {
         name: "MyWorkflow",
-        inputs: {},
         steps: [
           {
             assignTo: "var1",
@@ -64,9 +63,6 @@ describe("the execution of workflows", () => {
     describe("with a single-step loop", () => {
       const workflow: Workflow = {
         name: "MyWorkflow",
-        inputs: {
-          listVar: [1],
-        },
         steps: [
           {
             assignTo: "outVar",
@@ -131,7 +127,6 @@ describe("the execution of workflows", () => {
     describe("with a multi-step loop", () => {
       const workflow: Workflow = {
         name: "MyWorkflow",
-        inputs: { listVar: [1] },
         steps: [
           {
             assignTo: "outVar",
