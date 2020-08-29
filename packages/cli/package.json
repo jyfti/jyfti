@@ -2,9 +2,19 @@
   "name": "@jyfti/cli",
   "version": "0.0.6",
   "description": "Jyfti is a project for building, running and sharing workflows easily. The Jyfti CLI is the terminal interface to the Jyfti engine.",
-  "main": "index.ts",
+  "main": "./build/index.js",
+  "typings": "build/index.d.ts",
   "bin": {
     "jyfti": "build/index.js"
+  },
+  "directories": {
+    "build": "build"
+  },
+  "files": [
+    "build"
+  ],
+  "publishConfig": {
+    "access": "public"
   },
   "repository": {
     "type": "git",
