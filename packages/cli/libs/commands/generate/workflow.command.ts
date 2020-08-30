@@ -47,7 +47,7 @@ export function createExampleWorkflow(): Workflow {
         request: {
           method: "GET",
           url:
-            "https://raw.githubusercontent.com/${org}/${repo}/master/README.md",
+            "https://raw.githubusercontent.com/${inputs.org}/${inputs.repo}/master/README.md",
         },
       } as RequestStep,
     ],
