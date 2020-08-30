@@ -1,4 +1,4 @@
-import { readConfig } from "../../data-access/config-file.service";
+import { readConfig } from "../../data-access/config.dao";
 import { readEnvironmentNames } from "../../data-access/environment-file.service";
 
 export async function listEnvironments(): Promise<void> {

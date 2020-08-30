@@ -3,7 +3,7 @@ import { step } from "./step.command";
 import { printSuccess, printError } from "../../print.service";
 import { of, throwError } from "rxjs";
 
-jest.mock("../../data-access/config-file.service");
+jest.mock("../../data-access/config.dao");
 jest.mock("../../data-access/state-file.service", () => ({
   readStateOrTerminate: () => Promise.resolve({}),
   writeState: jest.fn(() => Promise.resolve()),

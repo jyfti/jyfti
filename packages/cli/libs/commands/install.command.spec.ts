@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { install } from "./install.command";
 
-jest.mock("../data-access/config-file.service");
+jest.mock("../data-access/config.dao");
 jest.mock("../data-access/workflow-file.service", () => ({
   readWorkflowUrlOrTerminate: () => Promise.resolve({}),
 }));

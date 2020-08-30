@@ -1,4 +1,4 @@
-import { readConfig } from "../../data-access/config-file.service";
+import { readConfig } from "../../data-access/config.dao";
 import { Workflow, RequestStep } from "@jyfti/engine";
 import {
   workflowExists,

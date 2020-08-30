@@ -1,4 +1,4 @@
-import { readConfig } from "../../data-access/config-file.service";
+import { readConfig } from "../../data-access/config.dao";
 import { printJson } from "../../print.service";
 import {
   readEnvironmentOrTerminate,

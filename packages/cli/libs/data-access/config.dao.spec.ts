@@ -1,4 +1,4 @@
-import { readConfig, defaultConfig } from "./config-file.service";
+import { readConfig, defaultConfig } from "./config.dao";
 
 jest.mock("./file.service", () => ({
   ensureDirExists: () => Promise.resolve(),

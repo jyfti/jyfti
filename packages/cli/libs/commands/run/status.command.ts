@@ -1,4 +1,4 @@
-import { readConfig } from "../../data-access/config-file.service";
+import { readConfig } from "../../data-access/config.dao";
 import { State } from "@jyfti/engine";
 import { readWorkflowNamesOrTerminate } from "../../data-access/workflow-file.service";
 import { readState } from "../../data-access/state-file.service";

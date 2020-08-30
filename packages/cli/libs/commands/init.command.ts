@@ -1,5 +1,5 @@
 import { fileExists, ensureDirExists } from "../data-access/file.service";
-import { configName, writeConfig } from "../data-access/config-file.service";
+import { configName, writeConfig } from "../data-access/config.dao";
 import inquirer from "inquirer";
 import { Config } from "../types/config";
 

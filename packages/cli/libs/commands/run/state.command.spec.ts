@@ -2,7 +2,7 @@
 import { state } from "./state.command";
 import { printJson } from "../../print.service";
 
-jest.mock("../../data-access/config-file.service");
+jest.mock("../../data-access/config.dao");
 jest.mock("../../data-access/state-file.service", () => ({
   readStateOrTerminate: () =>
     Promise.resolve({

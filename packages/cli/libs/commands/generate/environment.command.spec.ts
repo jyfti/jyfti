@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { generateEnvironment } from "./environment.command";
 
-jest.mock("../../data-access/config-file.service");
+jest.mock("../../data-access/config.dao");
 jest.mock("../../data-access/environment-file.service", () => ({
   writeEnvironment: () => Promise.resolve(),
   environmentExists: jest.fn(() => Promise.resolve(true)),

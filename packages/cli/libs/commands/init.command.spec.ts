@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { init } from "./init.command";
 
-jest.mock("../data-access/config-file.service");
+jest.mock("../data-access/config.dao");
 jest.mock("../data-access/file.service");
 jest.mock("inquirer", () => ({
   prompt: () =>

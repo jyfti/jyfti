@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { clean } from "./clean.command";
 
-jest.mock("../data-access/config-file.service");
+jest.mock("../data-access/config.dao");
 jest.mock("../data-access/state-file.service");
 
 describe("the clean command", () => {

@@ -6,7 +6,7 @@ jest.mock("../../data-access/workflow-file.service", () => ({
   readWorkflowOrTerminate: () => Promise.resolve("my-workflow"),
   readWorkflowNamesOrTerminate: () => Promise.resolve(["my-workflow"]),
 }));
-jest.mock("../../data-access/config-file.service");
+jest.mock("../../data-access/config.dao");
 jest.mock("../../data-access/state-file.service", () => ({
   readStateOrTerminate: () => Promise.resolve({}),
 }));

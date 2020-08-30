@@ -1,4 +1,4 @@
-import { readConfig } from "../data-access/config-file.service";
+import { readConfig } from "../data-access/config.dao";
 import { promptWorkflow } from "../inquirer.service";
 import { validateWorkflow } from "@jyfti/engine";
 import { printValidationErrors, printValue } from "../print.service";

@@ -1,4 +1,4 @@
-import { readConfig } from "../../data-access/config-file.service";
+import { readConfig } from "../../data-access/config.dao";
 import { promptWorkflow } from "../../inquirer.service";
 import { deleteState } from "../../data-access/state-file.service";
 import { readWorkflowNamesOrTerminate } from "../../data-access/workflow-file.service";

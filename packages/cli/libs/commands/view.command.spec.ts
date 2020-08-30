@@ -2,7 +2,7 @@
 import { view } from "./view.command";
 import { printJson } from "../print.service";
 
-jest.mock("../data-access/config-file.service");
+jest.mock("../data-access/config.dao");
 jest.mock("../inquirer.service", () => ({
   promptWorkflow: () =>
     Promise.resolve({

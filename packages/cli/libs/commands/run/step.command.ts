@@ -1,4 +1,4 @@
-import { readConfig } from "../../data-access/config-file.service";
+import { readConfig } from "../../data-access/config.dao";
 import { createEngine, StepResult, State, Engine } from "@jyfti/engine";
 import { map, flatMap, tap } from "rxjs/operators";
 import { from, OperatorFunction } from "rxjs";
