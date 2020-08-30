@@ -1,7 +1,7 @@
 import { readWorkflowNames, readWorkflow } from "./data-access/workflow.dao";
 import { validateWorkflow } from "@jyfti/engine";
 import { Config } from "./types/config";
-import { readWorkflowSchemaOrTerminate } from "./data-access/workflow-schema.service";
+import { readWorkflowSchemaOrTerminate } from "./data-access/schema.dao";
 
 describe("the validation of workflows", () => {
   const config: Config = {

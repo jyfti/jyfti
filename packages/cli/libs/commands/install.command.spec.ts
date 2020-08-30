@@ -5,7 +5,7 @@ jest.mock("../data-access/config.dao");
 jest.mock("../data-access/workflow.dao", () => ({
   readWorkflowUrlOrTerminate: () => Promise.resolve({}),
 }));
-jest.mock("../data-access/workflow-schema.service", () => ({
+jest.mock("../data-access/schema.dao", () => ({
   readWorkflowSchemaOrTerminate: () => Promise.resolve({}),
 }));
 jest.mock("../install.service", () => ({

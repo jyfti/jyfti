@@ -8,7 +8,7 @@ jest.mock("../data-access/workflow.dao", () => ({
   readWorkflowNamesOrTerminate: () =>
     Promise.resolve(["my-workflow", "my-other-workflow"]),
 }));
-jest.mock("../data-access/workflow-schema.service", () => ({
+jest.mock("../data-access/schema.dao", () => ({
   readWorkflowSchemaOrTerminate: () => Promise.resolve({}),
 }));
 jest.mock("@jyfti/engine", () => ({

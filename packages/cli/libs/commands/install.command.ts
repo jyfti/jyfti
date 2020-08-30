@@ -1,6 +1,6 @@
 import { readConfig } from "../data-access/config.dao";
 
-import { readWorkflowSchemaOrTerminate } from "../data-access/workflow-schema.service";
+import { readWorkflowSchemaOrTerminate } from "../data-access/schema.dao";
 import { readWorkflowUrlOrTerminate } from "../data-access/workflow.dao";
 import * as installer from "../install.service";
 import { extractWorkflowName } from "../data-access/workflow.util";

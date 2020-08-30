@@ -6,7 +6,7 @@ import {
   readWorkflowNamesOrTerminate,
   readWorkflowOrTerminate,
 } from "../data-access/workflow.dao";
-import { readWorkflowSchemaOrTerminate } from "../data-access/workflow-schema.service";
+import { readWorkflowSchemaOrTerminate } from "../data-access/schema.dao";
 import { Config } from "../types/config";
 
 export async function validate(

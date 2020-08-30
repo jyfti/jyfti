@@ -1,4 +1,4 @@
-import { readWorkflowSchemaOrTerminate } from "./workflow-schema.service";
+import { readWorkflowSchemaOrTerminate } from "./schema.dao";
 import { Config } from "../types/config";
 
 jest.mock("./file.service", () => ({
