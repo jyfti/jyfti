@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { printValue } from "../../print.service";
+import { printValue, printSuccess, printError } from "../../print.service";
 import { status } from "./status.command";
 
 jest.mock("../../data-access/config.dao");
@@ -39,7 +39,7 @@ describe("the status command", () => {
     );
     await status("my-workflow");
     expect(logSpy).toHaveBeenCalledWith(
-      printValue("[Pending]") + " At step [0]"
+      printValue("[Pending]") + " At step " + printValue("[0]")
     );
     expect(errorSpy).toHaveBeenCalledTimes(0);
   });
@@ -53,7 +53,26 @@ describe("the status command", () => {
       })
     );
     await status("my-workflow");
-    expect(logSpy).toHaveBeenCalledWith(printValue("[Completed]"));
+    expect(logSpy).toHaveBeenCalledWith(printSuccess("[Completed]"));
+    expect(errorSpy).toHaveBeenCalledTimes(0);
+  });
+
+  it("should print the status 'Failed' for a failed workflow", async () => {
+    require("../../data-access/state.dao").readState.mockImplementation(() =>
+      Promise.resolve({
+        path: [0],
+        inputs: {},
+        evaluations: [],
+        error: "Something went wrong.",
+      })
+    );
+    await status("my-workflow");
+    expect(logSpy).toHaveBeenCalledWith(
+      printError("[Failed]") +
+        " At step " +
+        printValue("[0]") +
+        " with error Something went wrong."
+    );
     expect(errorSpy).toHaveBeenCalledTimes(0);
   });
 
@@ -68,10 +87,10 @@ describe("the status command", () => {
     await status(undefined);
     expect(logSpy).toHaveBeenCalledWith(
       "my-workflow " +
-        printValue("[Completed]") +
+        printSuccess("[Completed]") +
         "\n" +
         "my-other-workflow " +
-        printValue("[Completed]")
+        printSuccess("[Completed]")
     );
     expect(errorSpy).toHaveBeenCalledTimes(0);
   });

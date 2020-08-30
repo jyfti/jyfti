@@ -6,4 +6,5 @@ export interface State {
   path: Path;
   inputs: Inputs;
   evaluations: Evaluations;
+  error?: unknown;
 }

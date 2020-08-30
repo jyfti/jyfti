@@ -85,7 +85,12 @@ function process(
       ),
       engine.transitionFrom(initialState),
       last(),
-      tap((state) => console.log(printOutput(engine.getOutput(state)))),
+      tap((state) => {
+        const output = engine.getOutput(state);
+        if (output) {
+          console.log(printOutput(output));
+        }
+      }),
       flatMap((state) => from(writeState(config, name, state)))
     );
 }

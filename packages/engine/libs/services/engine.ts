@@ -1,6 +1,6 @@
 import { inputDefaults, nextStep, toOutput, nextState } from "./execution";
-import { Observable, empty, OperatorFunction } from "rxjs";
-import { flatMap, startWith, map, scan } from "rxjs/operators";
+import { Observable, empty, OperatorFunction, of } from "rxjs";
+import { flatMap, startWith, map, scan, catchError } from "rxjs/operators";
 import {
   StepResult,
   Inputs,
@@ -73,7 +73,7 @@ export class Engine {
    * The behaviour is comparable to the "Step into" behaviour of common debuggers.
    *
    * @param state The state describing which step to execute.
-   * @returns A cold observable of a single step result.
+   * @returns A cold observable completing after a single step result or erroring.
    */
   step(state: State): Observable<StepResult> {
     return nextStep(this.workflow, state, this.environment).pipe(
@@ -118,7 +118,10 @@ export class Engine {
    */
   transitionFrom(state: State): OperatorFunction<StepResult, State> {
     return (stepResult$) =>
-      stepResult$.pipe(scan(this.transition.bind(this), state));
+      stepResult$.pipe(
+        scan(this.transition.bind(this), state),
+        catchError((err) => of({ ...state, error: err }))
+      );
   }
 
   /**
