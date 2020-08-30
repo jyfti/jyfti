@@ -3,6 +3,9 @@ import { reset } from "./reset.command";
 
 jest.mock("../../files/config-file.service");
 jest.mock("../../files/state-file.service");
+jest.mock("../../files/workflow-file.service", () => ({
+  readWorkflowNamesOrTerminate: () => Promise.resolve(["my-workflow"]),
+}));
 jest.mock("../../inquirer.service");
 
 describe("the reset command", () => {

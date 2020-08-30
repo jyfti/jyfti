@@ -31,7 +31,7 @@ export async function create(
   }
   if (name) {
     const workflow = await readWorkflowOrTerminate(config, name);
-    const schema = await readWorkflowSchemaOrTerminate();
+    const schema = await readWorkflowSchemaOrTerminate(config);
     validateWorkflowOrTerminate(workflow, schema);
     if (isUrl(name)) {
       name = extractWorkflowName(name);

@@ -20,6 +20,7 @@ describe("the installation of a workflow", () => {
     sourceRoot: "./",
     envRoot: "./",
     outRoot: "./",
+    schemaLocation: "",
   };
   const workflow: Workflow = {
     name: "my-workflow",

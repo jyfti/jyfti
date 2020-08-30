@@ -37,10 +37,18 @@ async function promptConfig(): Promise<Config> {
       type: "string",
       default: "./out",
     },
+    {
+      name: "schemaLocation",
+      message: `Which workflow schema should be validated against?`,
+      type: "string",
+      default:
+        "https://raw.githubusercontent.com/jyfti/jyfti/master/workflow-schema.json",
+    },
   ]);
   return {
     sourceRoot: answers.sourceRoot,
     envRoot: answers.envRoot,
     outRoot: answers.outRoot,
+    schemaLocation: answers.schemaLocation,
   };
 }

@@ -10,6 +10,7 @@ describe("interacting with state files", () => {
     envRoot: "",
     outRoot: "",
     sourceRoot: "my-workflows/",
+    schemaLocation: "",
   };
 
   it("reads a state", async () => {

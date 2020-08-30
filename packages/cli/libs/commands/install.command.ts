@@ -11,7 +11,7 @@ export async function install(
   cmd?: { yes?: boolean }
 ): Promise<void> {
   const config = await readConfig();
-  const schema = await readWorkflowSchemaOrTerminate();
+  const schema = await readWorkflowSchemaOrTerminate(config);
   const workflow = await readWorkflowOrTerminate(config, url);
   if (workflow) {
     name = name || extractWorkflowName(url);

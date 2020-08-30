@@ -14,6 +14,7 @@ describe("interacting with environment files", () => {
     envRoot: "my-environments/",
     outRoot: "",
     sourceRoot: "",
+    schemaLocation: "",
   };
 
   it("reads an environment and does not terminate if it exists", async () => {

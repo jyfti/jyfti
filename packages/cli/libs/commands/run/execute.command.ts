@@ -38,7 +38,7 @@ export async function execute(
   }
   if (name) {
     const workflow = await readWorkflowOrTerminate(config, name);
-    const schema = await readWorkflowSchemaOrTerminate();
+    const schema = await readWorkflowSchemaOrTerminate(config);
     validateWorkflowOrTerminate(workflow, schema);
     name = isUrl(name) ? extractWorkflowName(name) : name;
     if ((inputList || []).length === 0) {

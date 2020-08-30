@@ -15,6 +15,7 @@ describe("interacting with workflow files", () => {
     envRoot: "",
     outRoot: "",
     sourceRoot: "my-workflows/",
+    schemaLocation: "",
   };
 
   it("reads a workflow", async () => {

@@ -19,8 +19,8 @@ export async function validate(
     process.exitCode = 1;
     return;
   }
-  const names = await determineNames(config, cmd?.all);
-  const schema = await readWorkflowSchemaOrTerminate();
+  const names = await determineNames(config, name, cmd?.all);
+  const schema = await readWorkflowSchemaOrTerminate(config);
   const workflows = await Promise.all(
     names
       .filter((name) => name)
@@ -47,6 +47,7 @@ export async function validate(
 
 async function determineNames(
   config: Config,
+  name?: string,
   all?: boolean
 ): Promise<string[]> {
   if (name) {

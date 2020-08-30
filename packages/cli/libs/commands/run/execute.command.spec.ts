@@ -9,6 +9,9 @@ jest.mock("../../files/workflow-file.service", () => ({
   readWorkflowNamesOrTerminate: () => Promise.resolve(["my-workflow"]),
 }));
 jest.mock("../../files/config-file.service");
+jest.mock("../../files/workflow-schema.service", () => ({
+  readWorkflowSchemaOrTerminate: () => Promise.resolve({}),
+}));
 jest.mock("../../files/state-file.service", () => ({
   readStateOrTerminate: () =>
     Promise.resolve({

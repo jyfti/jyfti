@@ -3,9 +3,10 @@ import { Config } from "../../types/config";
 export const configName = "jyfti.json";
 
 export const defaultConfig: Config = {
-  sourceRoot: "./src",
-  outRoot: "./out",
-  envRoot: "./environments",
+  sourceRoot: "./tmp",
+  outRoot: "./tmp",
+  envRoot: "./tmp",
+  schemaLocation: "./tmp/schema.json",
 };
 
 export async function readConfig(): Promise<Config> {

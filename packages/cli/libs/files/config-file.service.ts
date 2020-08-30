@@ -7,6 +7,8 @@ export const defaultConfig: Config = {
   sourceRoot: "./src",
   outRoot: "./out",
   envRoot: "./environments",
+  schemaLocation:
+    "https://raw.githubusercontent.com/jyfti/jyfti/master/workflow-schema.json",
 };
 
 export async function readConfig(): Promise<Config> {

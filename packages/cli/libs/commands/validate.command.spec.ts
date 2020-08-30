@@ -8,6 +8,9 @@ jest.mock("../files/workflow-file.service", () => ({
   readWorkflowNamesOrTerminate: () =>
     Promise.resolve(["my-workflow", "my-other-workflow"]),
 }));
+jest.mock("../files/workflow-schema.service", () => ({
+  readWorkflowSchemaOrTerminate: () => Promise.resolve({}),
+}));
 jest.mock("@jyfti/engine", () => ({
   validateWorkflow: jest.fn(() => []),
 }));
