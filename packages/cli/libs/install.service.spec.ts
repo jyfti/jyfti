@@ -6,7 +6,7 @@ import { printError } from "./print.service";
 
 jest.mock("./files/workflow-file.service", () => ({
   workflowExists: () => Promise.resolve(true),
-  writeWorkflow: () => Promise.resolve(),
+  writeWorkflow: jest.fn(() => Promise.resolve()),
 }));
 jest.mock("@jyfti/engine", () => ({
   validate: jest.fn(() => []),
@@ -29,10 +29,12 @@ describe("the installation of a workflow", () => {
 
   let logSpy: any;
   let errorSpy: any;
+  let writeWorkflowSpy: any;
 
   beforeEach(() => {
     logSpy = jest.spyOn(console, "log").mockImplementation(() => {});
     errorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
+    writeWorkflowSpy = require("./files/workflow-file.service").writeWorkflow;
   });
 
   afterEach(() => {
@@ -46,6 +48,7 @@ describe("the installation of a workflow", () => {
     expect(errorSpy).toHaveBeenCalledWith(
       printError("The workflow is not valid.")
     );
+    expect(writeWorkflowSpy).toHaveBeenCalledTimes(0);
     expect(process.exitCode).toEqual(1);
   });
 
@@ -57,6 +60,8 @@ describe("the installation of a workflow", () => {
     await install(config, workflow, schema, "my-workflow", true);
     expect(logSpy).toHaveBeenCalledWith("Successfully saved.");
     expect(errorSpy).toHaveBeenCalledTimes(0);
+    expect(writeWorkflowSpy).toHaveBeenCalledTimes(1);
+    expect(process.exitCode).toEqual(0);
   });
 
   it("should overwrite an existing workflow if the user answers yes on the prompt", async () => {
@@ -67,6 +72,8 @@ describe("the installation of a workflow", () => {
     await install(config, workflow, schema, "my-workflow", false);
     expect(logSpy).toHaveBeenCalledWith("Successfully saved.");
     expect(errorSpy).toHaveBeenCalledTimes(0);
+    expect(writeWorkflowSpy).toHaveBeenCalledTimes(1);
+    expect(process.exitCode).toEqual(0);
   });
 
   it("should not overwrite an existing workflow if the user answers no on the prompt", async () => {
@@ -77,5 +84,7 @@ describe("the installation of a workflow", () => {
     await install(config, workflow, schema, "my-workflow", false);
     expect(logSpy).toHaveBeenCalledWith("The workflow has not been saved.");
     expect(errorSpy).toHaveBeenCalledTimes(0);
+    expect(writeWorkflowSpy).toHaveBeenCalledTimes(0);
+    expect(process.exitCode).toEqual(0);
   });
 });

@@ -15,6 +15,7 @@ jest.mock("../../files/state-file.service", () => ({
       inputs: {},
       evaluations: [],
     }),
+  writeState: jest.fn(() => Promise.resolve()),
 }));
 jest.mock("../../files/environment-file.service", () => ({
   readEnvironmentOrTerminate: () => Promise.resolve({}),
@@ -43,10 +44,12 @@ describe("the complete command", () => {
 
   let logSpy: any;
   let errorSpy: any;
+  let writeStateSpy: any;
 
   beforeEach(() => {
     logSpy = jest.spyOn(console, "log").mockImplementation(() => {});
     errorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
+    writeStateSpy = require("../../files/state-file.service").writeState;
   });
 
   it("should complete a workflow", async () => {
@@ -57,6 +60,7 @@ describe("the complete command", () => {
       "Completed " + printSuccess("[]")
     );
     expect(errorSpy).toHaveBeenCalledTimes(0);
+    expect(writeStateSpy).toHaveBeenCalledTimes(1);
   });
 
   it("should prompt for workflow name and continue", async () => {
@@ -67,6 +71,7 @@ describe("the complete command", () => {
       "Completed " + printSuccess("[]")
     );
     expect(errorSpy).toHaveBeenCalledTimes(0);
+    expect(writeStateSpy).toHaveBeenCalledTimes(1);
   });
 
   it("should give more output in verbose mode", async () => {
@@ -74,6 +79,7 @@ describe("the complete command", () => {
     await complete("my-workflow", { verbose: true });
     expect(logSpy).toHaveBeenNthCalledWith(1, printJson(stepResult));
     expect(errorSpy).toHaveBeenCalledTimes(0);
+    expect(writeStateSpy).toHaveBeenCalledTimes(1);
   });
 
   it("should print an error if the engine reports an error", async () => {
@@ -86,5 +92,6 @@ describe("the complete command", () => {
       1,
       "Failed " + printError("Something went wrong.")
     );
+    expect(writeStateSpy).toHaveBeenCalledTimes(0);
   });
 });

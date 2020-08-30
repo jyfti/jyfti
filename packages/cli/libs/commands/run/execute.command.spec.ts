@@ -17,6 +17,7 @@ jest.mock("../../files/state-file.service", () => ({
       inputs: {},
       evaluations: [],
     }),
+  writeState: jest.fn(() => Promise.resolve()),
 }));
 jest.mock("../../files/environment-file.service", () => ({
   readEnvironmentOrTerminate: () => Promise.resolve({}),
@@ -55,17 +56,16 @@ describe("the execute command", () => {
 
   let logSpy: any;
   let errorSpy: any;
+  let writeStateSpy: any;
 
   beforeEach(() => {
     logSpy = jest.spyOn(console, "log").mockImplementation(() => {});
     errorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
+    writeStateSpy = require("../../files/state-file.service").writeState;
   });
 
   it("should run of a workflow with no inputs to completion", async () => {
     require("@jyfti/engine").engine.complete.mockReturnValue(of(stepResult));
-    require("@jyfti/engine").engine.transitionFrom.mockReturnValue(
-      (stepResult$: Observable<StepResult>) => stepResult$.pipe(map(() => ({})))
-    );
     require("@jyfti/engine").engine.getOutput.mockReturnValue(output);
     await execute("my-workflow");
     expect(logSpy).toHaveBeenNthCalledWith(1, "Created state.");
@@ -75,6 +75,7 @@ describe("the execute command", () => {
     );
     expect(logSpy).toHaveBeenNthCalledWith(3, printJson(output));
     expect(errorSpy).toHaveBeenCalledTimes(0);
+    expect(writeStateSpy).toHaveBeenCalledTimes(1);
   });
 
   it("should prompt for workflow name and continue", async () => {
@@ -88,6 +89,7 @@ describe("the execute command", () => {
     );
     expect(logSpy).toHaveBeenNthCalledWith(3, printJson(output));
     expect(errorSpy).toHaveBeenCalledTimes(0);
+    expect(writeStateSpy).toHaveBeenCalledTimes(1);
   });
 
   it("should give more output in verbose mode", async () => {
@@ -105,6 +107,7 @@ describe("the execute command", () => {
     expect(logSpy).toHaveBeenNthCalledWith(3, printJson(stepResult));
     expect(logSpy).toHaveBeenNthCalledWith(4, printJson(output));
     expect(errorSpy).toHaveBeenCalledTimes(0);
+    expect(writeStateSpy).toHaveBeenCalledTimes(1);
   });
 
   it("should print an error if the engine reports an error", async () => {
@@ -117,5 +120,6 @@ describe("the execute command", () => {
       1,
       "Failed " + printError("Something went wrong.")
     );
+    expect(writeStateSpy).toHaveBeenCalledTimes(0);
   });
 });

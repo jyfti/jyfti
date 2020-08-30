@@ -2,6 +2,7 @@
 import { create } from "./create.command";
 import { printValue } from "../../print.service";
 import { Workflow } from "@jyfti/engine";
+import { async } from "rxjs";
 
 jest.mock("../../files/workflow-file.service", () => ({
   readWorkflowOrTerminate: () => Promise.resolve("my-workflow"),
@@ -10,7 +11,7 @@ jest.mock("../../files/workflow-file.service", () => ({
 jest.mock("../../files/config-file.service");
 jest.mock("../../files/state-file.service", () => ({
   readStateOrTerminate: () => Promise.resolve({}),
-  writeState: () => Promise.resolve(),
+  writeState: jest.fn(() => Promise.resolve()),
 }));
 jest.mock("../../files/environment-file.service", () => ({
   readEnvironmentOrTerminate: () => Promise.resolve({}),
@@ -44,22 +45,26 @@ jest.mock("@jyfti/engine", () => {
 describe("the create command", () => {
   let logSpy: any;
   let errorSpy: any;
+  let writeStateSpy: any;
 
   beforeEach(() => {
     logSpy = jest.spyOn(console, "log").mockImplementation(() => {});
     errorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
+    writeStateSpy = require("../../files/state-file.service").writeState;
   });
 
   it("should create a new run of a workflow with no inputs", async () => {
     await create("my-workflow");
     expect(logSpy).toHaveBeenCalledWith("Created state.");
     expect(errorSpy).toHaveBeenCalledTimes(0);
+    expect(writeStateSpy).toHaveBeenCalledTimes(1);
   });
 
   it("should prompt for a name of a workflow if not provided", async () => {
     await create(undefined);
     expect(logSpy).toHaveBeenCalledWith("Created state.");
     expect(errorSpy).toHaveBeenCalledTimes(0);
+    expect(writeStateSpy).toHaveBeenCalledTimes(1);
   });
 
   it("should install if the workflow is a url", async () => {

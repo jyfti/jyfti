@@ -11,16 +11,12 @@ jest.mock("inquirer", () => ({
 
 describe("the inquirer service", () => {
   it("inquires a name of an entity from the user", async () => {
-    require("inquirer").prompt.mockImplementation(() => ({
-      name: "my-entity",
-    }));
+    require("inquirer").prompt.mockReturnValue({ name: "my-entity" });
     expect(await promptName("entity-type")).toEqual("my-entity");
   });
 
   it("inquires a workflow name from a list of names from the user", async () => {
-    require("inquirer").prompt.mockImplementation(() => ({
-      workflow: "my-workflow",
-    }));
+    require("inquirer").prompt.mockReturnValue({ workflow: "my-workflow" });
     expect(
       await promptWorkflow(["my-workflow", "my-other-workflow"], "Which?")
     ).toEqual("my-workflow");
@@ -39,10 +35,10 @@ describe("the inquirer service", () => {
       },
       steps: [],
     };
-    require("inquirer").prompt.mockImplementation(() => ({
+    require("inquirer").prompt.mockReturnValue({
       b: "13",
       a: "my-value",
-    }));
+    });
     expect(await promptWorkflowInputs(workflow)).toEqual(["my-value", "13"]);
   });
 });
