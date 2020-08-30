@@ -40,16 +40,16 @@ export async function create(
       await install(config, workflow, schema, name, cmd?.yes || false);
       console.log(`Installed ${printValue(name)} .`);
     }
-    if ((inputList || []).length === 0) {
-      inputList = await promptWorkflowInputs(workflow);
-    }
-    const inputs = createInputs(workflow, inputList || []);
-    validateInputsOrTerminate(workflow, inputs);
     const environment = await readEnvironmentOrTerminate(
       config,
       cmd?.environment
     );
     validateEnvironmentOrTerminate(workflow, environment);
+    if ((inputList || []).length === 0) {
+      inputList = await promptWorkflowInputs(workflow);
+    }
+    const inputs = createInputs(workflow, inputList || []);
+    validateInputsOrTerminate(workflow, inputs);
     const initialState = createEngine(workflow, environment).init(inputs);
     await writeState(config, name, initialState);
     console.log("Created state.");

@@ -43,16 +43,16 @@ export async function execute(
     const schema = await readWorkflowSchemaOrTerminate(config);
     validateWorkflowOrTerminate(workflow, schema);
     name = isUrl(name) ? extractWorkflowName(name) : name;
-    if ((inputList || []).length === 0) {
-      inputList = await promptWorkflowInputs(workflow);
-    }
-    const inputs = createInputs(workflow, inputList || []);
-    validateInputsOrTerminate(workflow, inputs);
     const environment = await readEnvironmentOrTerminate(
       config,
       cmd?.environment
     );
     validateEnvironmentOrTerminate(workflow, environment);
+    if ((inputList || []).length === 0) {
+      inputList = await promptWorkflowInputs(workflow);
+    }
+    const inputs = createInputs(workflow, inputList || []);
+    validateInputsOrTerminate(workflow, inputs);
     const engine = createEngine(workflow, environment);
     const initialState = engine.init(inputs);
     console.log("Created state.");
