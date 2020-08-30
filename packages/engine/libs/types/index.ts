@@ -2,8 +2,6 @@ export * from "./environment.type";
 export * from "./evaluations.type";
 export * from "./http-request-template.type";
 export * from "./http-request.type";
-export * from "./schema-map.type";
-export * from "./input-errors.type";
 export * from "./inputs.type";
 export * from "./json-schema.type";
 export * from "./path.type";

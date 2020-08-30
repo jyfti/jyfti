@@ -7,7 +7,11 @@ import {
   printValidationErrors,
   printError,
 } from "../print.service";
-import { validateSchemaMap, validate } from "@jyfti/engine";
+import {
+  validateInputs,
+  validateWorkflow,
+  validateEnvironment,
+} from "@jyfti/engine";
 import { isUrl } from "./workflow.util";
 
 export function readWorkflowOrTerminate(
@@ -24,7 +28,7 @@ export function validateWorkflowOrTerminate(
   workflow: Workflow,
   schema: JsonSchema
 ): void {
-  const errors = validate(workflow, schema);
+  const errors = validateWorkflow(workflow, schema);
   if (errors.length !== 0) {
     console.error(printError("The workflow is invalid."));
     console.error(printValidationErrors(errors));
@@ -36,7 +40,7 @@ export function validateInputsOrTerminate(
   workflow: Workflow,
   inputs: Inputs
 ): void {
-  const inputErrors = validateSchemaMap(workflow.inputs || {}, inputs);
+  const inputErrors = validateInputs(inputs, workflow.inputs || {});
   if (Object.keys(inputErrors).length !== 0) {
     const message =
       printError(
@@ -51,7 +55,10 @@ export function validateEnvironmentOrTerminate(
   workflow: Workflow,
   environment: VariableMap
 ): void {
-  const environmentErrors = validateSchemaMap(workflow.env || {}, environment);
+  const environmentErrors = validateEnvironment(
+    environment,
+    workflow.env || {}
+  );
   if (Object.keys(environmentErrors).length !== 0) {
     const message =
       printError(

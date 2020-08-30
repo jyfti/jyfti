@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import { ErrorObject } from "ajv";
-import { StepResult, InputErrors, Inputs } from "@jyfti/engine";
+import { StepResult, Inputs } from "@jyfti/engine";
 
 export function printOutput(output: unknown): string {
   return typeof output === "string" ? output : printJson(output);
@@ -32,7 +32,7 @@ export function printStepResult(
 }
 
 export function printAllInputErrors(
-  inputErrors: InputErrors,
+  inputErrors: Record<string, ErrorObject[]>,
   inputs: Inputs
 ): string {
   return Object.keys(inputErrors)

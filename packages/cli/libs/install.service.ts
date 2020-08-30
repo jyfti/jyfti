@@ -1,6 +1,6 @@
 import { Config } from "./types/config";
 import { Workflow, JsonSchema } from "@jyfti/engine";
-import { validate } from "@jyfti/engine";
+import { validateWorkflow } from "@jyfti/engine";
 import { printValidationErrors, printError } from "./print.service";
 import { workflowExists, writeWorkflow } from "./files/workflow-file.service";
 import inquirer from "inquirer";
@@ -12,7 +12,7 @@ export async function install(
   name: string,
   overwrite: boolean
 ): Promise<void> {
-  const errors = validate(workflow, schema);
+  const errors = validateWorkflow(workflow, schema);
   if (errors.length !== 0) {
     console.error(printError("The workflow is not valid."));
     console.error(printValidationErrors(errors));

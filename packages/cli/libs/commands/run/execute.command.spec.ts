@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { execute } from "./execute.command";
 import { printJson, printSuccess, printError } from "../../print.service";
-import { Workflow, StepResult } from "@jyfti/engine";
-import { of, Observable, throwError } from "rxjs";
-import { map } from "rxjs/operators";
+import { Workflow } from "@jyfti/engine";
+import { of, throwError } from "rxjs";
 
 jest.mock("../../files/workflow-file.service", () => ({
   readWorkflowOrTerminate: () => Promise.resolve("my-workflow"),

@@ -1,11 +1,11 @@
 import { Step, JsonExpression } from "./step.type";
-import { SchemaMap } from "./schema-map.type";
+import { JsonSchema } from "./json-schema.type";
 
 export interface Workflow {
   $schema?: string;
   name: string;
-  env?: SchemaMap;
-  inputs?: SchemaMap;
+  env?: Record<string, JsonSchema>;
+  inputs?: Record<string, JsonSchema>;
   output?: JsonExpression;
   steps: Step[];
 }

@@ -9,7 +9,7 @@ jest.mock("../files/workflow-file.service", () => ({
     Promise.resolve(["my-workflow", "my-other-workflow"]),
 }));
 jest.mock("@jyfti/engine", () => ({
-  validate: jest.fn(() => []),
+  validateWorkflow: jest.fn(() => []),
 }));
 jest.mock("../inquirer.service", () => ({
   promptWorkflow: () => Promise.resolve("my-workflow"),
@@ -42,7 +42,7 @@ describe("the validate command", () => {
   });
 
   it("should validate a single valid workflow without output", async () => {
-    require("@jyfti/engine").validate.mockReturnValue([]);
+    require("@jyfti/engine").validateWorkflow.mockReturnValue([]);
     await validate("my-workflow", { all: false });
     expect(errorSpy).toHaveBeenCalledTimes(0);
     expect(logSpy).toHaveBeenCalledTimes(0);
@@ -50,7 +50,7 @@ describe("the validate command", () => {
   });
 
   it("should validate a single invalid workflow with errors", async () => {
-    require("@jyfti/engine").validate.mockReturnValue([error]);
+    require("@jyfti/engine").validateWorkflow.mockReturnValue([error]);
     await validate("my-workflow", { all: false });
     expect(errorSpy).toHaveBeenCalledTimes(0);
     expect(logSpy).toHaveBeenCalledWith(
@@ -60,7 +60,7 @@ describe("the validate command", () => {
   });
 
   it("should validate all workflows with option --all without output if all are valid", async () => {
-    require("@jyfti/engine").validate.mockReturnValue([]);
+    require("@jyfti/engine").validateWorkflow.mockReturnValue([]);
     await validate(undefined, { all: true });
     expect(errorSpy).toHaveBeenCalledTimes(0);
     expect(logSpy).toHaveBeenCalledTimes(0);
@@ -68,7 +68,7 @@ describe("the validate command", () => {
   });
 
   it("should validate all workflows with option --all and print errors", async () => {
-    require("@jyfti/engine").validate.mockReturnValue([error]);
+    require("@jyfti/engine").validateWorkflow.mockReturnValue([error]);
     await validate(undefined, { all: true });
     expect(errorSpy).toHaveBeenCalledTimes(0);
     expect(logSpy).toHaveBeenCalledWith(

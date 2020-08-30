@@ -1,10 +1,8 @@
 import { inputDefaults, nextStep, toOutput, nextState } from "./execution";
 import { Observable, empty, OperatorFunction } from "rxjs";
 import { flatMap, startWith, map, scan } from "rxjs/operators";
-import { validateSchemaMap } from "./validator";
 import {
   StepResult,
-  InputErrors,
   Inputs,
   State,
   Workflow,
@@ -37,16 +35,6 @@ export class Engine {
     private readonly workflow: Workflow,
     private readonly environment: Environment
   ) {}
-
-  /**
-   * Validates the inputs against the input requirements defined by the workflow.
-   *
-   * @param inputs A map assigning variable names arbitrary values.
-   * @returns A map assigning each input a list of errors. If all lists are empty, then all inputs are valid.
-   */
-  validate(inputs: Inputs): InputErrors {
-    return validateSchemaMap(this.workflow.inputs || {}, inputs);
-  }
 
   /**
    * Creates an initial state with the given inputs.

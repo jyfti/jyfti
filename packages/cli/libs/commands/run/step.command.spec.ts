@@ -2,7 +2,6 @@
 import { step } from "./step.command";
 import { printSuccess, printError } from "../../print.service";
 import { of, throwError } from "rxjs";
-import { writeEnvironment } from "../../files/environment-file.service";
 
 jest.mock("../../files/config-file.service");
 jest.mock("../../files/state-file.service", () => ({

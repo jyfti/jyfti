@@ -1,5 +1,5 @@
 import { readWorkflowNames, readWorkflow } from "./files/workflow-file.service";
-import { validate } from "@jyfti/engine";
+import { validateWorkflow } from "@jyfti/engine";
 import { Config } from "./types/config";
 import { readWorkflowSchema } from "./files/workflow-schema.service";
 
@@ -17,7 +17,7 @@ describe("the validation of workflows", () => {
       names.map((name) => readWorkflow(config, name))
     );
     workflows.forEach((workflow) => {
-      expect(validate(workflow, schema)).toEqual([]);
+      expect(validateWorkflow(workflow, schema)).toEqual([]);
     });
   });
 });

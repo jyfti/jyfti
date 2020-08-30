@@ -9,7 +9,7 @@ jest.mock("./files/workflow-file.service", () => ({
   writeWorkflow: jest.fn(() => Promise.resolve()),
 }));
 jest.mock("@jyfti/engine", () => ({
-  validate: jest.fn(() => []),
+  validateWorkflow: jest.fn(() => []),
 }));
 jest.mock("inquirer", () => ({
   prompt: jest.fn(() => Promise.resolve({ yes: true })),
@@ -42,7 +42,7 @@ describe("the installation of a workflow", () => {
   });
 
   it("should fail if the workflow has errors", async () => {
-    require("@jyfti/engine").validate.mockReturnValue(["error"]);
+    require("@jyfti/engine").validateWorkflow.mockReturnValue(["error"]);
     await install(config, workflow, schema, "my-workflow", true);
     expect(logSpy).toHaveBeenCalledTimes(0);
     expect(errorSpy).toHaveBeenCalledWith(
@@ -53,7 +53,7 @@ describe("the installation of a workflow", () => {
   });
 
   it("should overwrite an existing workflow if --yes is set", async () => {
-    require("@jyfti/engine").validate.mockReturnValue([]);
+    require("@jyfti/engine").validateWorkflow.mockReturnValue([]);
     require("inquirer").prompt.mockImplementation(() =>
       Promise.resolve({ yes: true })
     );
@@ -65,7 +65,7 @@ describe("the installation of a workflow", () => {
   });
 
   it("should overwrite an existing workflow if the user answers yes on the prompt", async () => {
-    require("@jyfti/engine").validate.mockReturnValue([]);
+    require("@jyfti/engine").validateWorkflow.mockReturnValue([]);
     require("inquirer").prompt.mockImplementation(() =>
       Promise.resolve({ yes: true })
     );
@@ -77,7 +77,7 @@ describe("the installation of a workflow", () => {
   });
 
   it("should not overwrite an existing workflow if the user answers no on the prompt", async () => {
-    require("@jyfti/engine").validate.mockReturnValue([]);
+    require("@jyfti/engine").validateWorkflow.mockReturnValue([]);
     require("inquirer").prompt.mockImplementation(() =>
       Promise.resolve({ yes: false })
     );

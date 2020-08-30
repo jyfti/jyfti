@@ -1,9 +1,9 @@
-import { validateSchemaMap } from "./validator";
-import { SchemaMap, Inputs } from "../types";
+import { Inputs, JsonSchema } from "../types";
+import { validateInputs } from "./validator";
 
 describe("validation", () => {
   it("validates a map of schemas against a map of inputs", () => {
-    const schemaMap: SchemaMap = {
+    const schemaMap: Record<string, JsonSchema> = {
       a: {
         type: "string",
       },
@@ -16,6 +16,6 @@ describe("validation", () => {
       b: 42,
       c: ["def"],
     };
-    expect(validateSchemaMap(schemaMap, inputs)).toEqual({});
+    expect(validateInputs(inputs, schemaMap)).toEqual({});
   });
 });

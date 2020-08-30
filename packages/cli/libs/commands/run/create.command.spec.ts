@@ -2,7 +2,6 @@
 import { create } from "./create.command";
 import { printValue } from "../../print.service";
 import { Workflow } from "@jyfti/engine";
-import { async } from "rxjs";
 
 jest.mock("../../files/workflow-file.service", () => ({
   readWorkflowOrTerminate: () => Promise.resolve("my-workflow"),
