@@ -31,7 +31,15 @@ jest.mock("../../inquirer.service", () => ({
       Object.keys(workflow.inputs || {}).map((_in, i) => "my-input-" + i)
     ),
 }));
-jest.mock("@jyfti/engine", () => require("../../../__mocks__/@jyfti/engine"));
+jest.mock("@jyfti/engine", () => {
+  const engine = {
+    init: jest.fn(() => ({})),
+  };
+  return {
+    engine,
+    createEngine: () => engine,
+  };
+});
 
 describe("the create command", () => {
   let logSpy: any;

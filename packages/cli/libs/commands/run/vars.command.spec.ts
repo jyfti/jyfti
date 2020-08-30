@@ -16,7 +16,15 @@ jest.mock("../../files/environment-file.service", () => ({
 jest.mock("../../inquirer.service", () => ({
   promptWorkflow: () => Promise.resolve("my-workflow"),
 }));
-jest.mock("@jyfti/engine", () => require("../../../__mocks__/@jyfti/engine"));
+jest.mock("@jyfti/engine", () => {
+  const engine = {
+    getVariableMap: jest.fn(() => ({})),
+  };
+  return {
+    engine,
+    createEngine: () => engine,
+  };
+});
 
 describe("the vars command", () => {
   const variableMap = { var1: "a" };
@@ -27,7 +35,7 @@ describe("the vars command", () => {
   beforeEach(() => {
     logSpy = jest.spyOn(console, "log").mockImplementation(() => {});
     errorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
-    require("@jyfti/engine").__setVariableMap(variableMap);
+    require("@jyfti/engine").engine.getVariableMap.mockReturnValue(variableMap);
   });
 
   it("should print the variables of a workflow", async () => {
