@@ -62,7 +62,7 @@ function process(
         (stepResult) => console.log(printStepResult(verbose, stepResult)),
         (error) => console.error("Failed " + printError(error))
       ),
-      map((stepResult) => engine.transition(state, stepResult)),
+      engine.transitionFrom(state),
       flatMap((state) => from(writeState(config, name, state)))
     );
 }

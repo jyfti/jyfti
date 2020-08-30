@@ -20,7 +20,9 @@ jest.mock("@jyfti/engine", () => {
   const engine = {
     isComplete: jest.fn(() => true),
     step: jest.fn(() => require("rxjs").empty()),
-    transition: jest.fn(() => ({})),
+    transitionFrom: jest.fn(() => (stepResult$) =>
+      stepResult$.pipe(require("rxjs/operators").map(() => ({})))
+    ),
   };
   return {
     engine,
