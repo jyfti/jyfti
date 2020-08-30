@@ -9,12 +9,7 @@ import {
   printOutput,
   printError,
 } from "../../print.service";
-import {
-  readWorkflowOrTerminate,
-  validateInputsOrTerminate,
-  validateWorkflowOrTerminate,
-  validateEnvironmentOrTerminate,
-} from "../../files/workflow.service";
+import { readWorkflowOrTerminate } from "../../files/workflow.service";
 import { writeState } from "../../files/state-file.service";
 import { readWorkflowSchemaOrTerminate } from "../../files/workflow-schema.service";
 import { readEnvironmentOrTerminate } from "../../files/environment-file.service";
@@ -25,6 +20,11 @@ import {
 } from "../../files/workflow.util";
 import { Config } from "../../types/config";
 import { readWorkflowNamesOrTerminate } from "../../files/workflow-file.service";
+import {
+  validateWorkflowOrTerminate,
+  validateInputsOrTerminate,
+  validateEnvironmentOrTerminate,
+} from "../../validator";
 
 export async function execute(
   name?: string,

@@ -31,13 +31,13 @@ export function printStepResult(
     : "Completed " + printSuccess(JSON.stringify(stepResult.path, null, 0));
 }
 
-export function printAllInputErrors(
-  inputErrors: Record<string, ErrorObject[]>,
+export function printAllErrors(
+  errorMap: Record<string, ErrorObject[]>,
   inputs: Inputs
 ): string {
-  return Object.keys(inputErrors)
+  return Object.keys(errorMap)
     .map((fieldName) =>
-      printInputErrors(fieldName, inputs[fieldName], inputErrors[fieldName])
+      printInputErrors(fieldName, inputs[fieldName], errorMap[fieldName])
     )
     .join("\n\n");
 }

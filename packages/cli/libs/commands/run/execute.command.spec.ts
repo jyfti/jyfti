@@ -23,6 +23,8 @@ jest.mock("../../files/environment-file.service", () => ({
 }));
 jest.mock("../../files/workflow.service", () => ({
   readWorkflowOrTerminate: () => Promise.resolve({}),
+}));
+jest.mock("../../validator", () => ({
   validateInputsOrTerminate: () => Promise.resolve(),
   validateWorkflowOrTerminate: () => Promise.resolve(),
   validateEnvironmentOrTerminate: () => Promise.resolve(),

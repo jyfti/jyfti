@@ -2,12 +2,7 @@ import { readConfig } from "../../files/config-file.service";
 import { createEngine } from "@jyfti/engine";
 import { promptWorkflow, promptWorkflowInputs } from "../../inquirer.service";
 import { printJson, printValue } from "../../print.service";
-import {
-  readWorkflowOrTerminate,
-  validateInputsOrTerminate,
-  validateWorkflowOrTerminate,
-  validateEnvironmentOrTerminate,
-} from "../../files/workflow.service";
+import { readWorkflowOrTerminate } from "../../files/workflow.service";
 import { writeState } from "../../files/state-file.service";
 import { install } from "../../install.service";
 import { readWorkflowSchemaOrTerminate } from "../../files/workflow-schema.service";
@@ -18,6 +13,11 @@ import {
   createInputs,
 } from "../../files/workflow.util";
 import { readWorkflowNamesOrTerminate } from "../../files/workflow-file.service";
+import {
+  validateWorkflowOrTerminate,
+  validateInputsOrTerminate,
+  validateEnvironmentOrTerminate,
+} from "../../validator";
 
 export async function create(
   name?: string,

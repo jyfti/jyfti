@@ -13,7 +13,7 @@ import {
   readStateOrTerminate,
 } from "../../files/state-file.service";
 import { readEnvironmentOrTerminate } from "../../files/environment-file.service";
-import { validateEnvironmentOrTerminate } from "../../files/workflow.service";
+import { validateEnvironmentOrTerminate } from "../../validator";
 import { Config } from "../../types/config";
 
 export async function complete(

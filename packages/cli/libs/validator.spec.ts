@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { Workflow } from "@jyfti/engine";
 import {
   validateWorkflowOrTerminate,
   validateInputsOrTerminate,
   validateEnvironmentOrTerminate,
-} from "./workflow.service";
-import { Workflow } from "@jyfti/engine";
+} from "./validator";
 
 jest.mock("@jyfti/engine", () => ({
   validateWorkflow: jest.fn(() => []),

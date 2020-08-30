@@ -13,7 +13,7 @@ import {
 } from "../../files/state-file.service";
 import { printStepResult, printError } from "../../print.service";
 import { readEnvironmentOrTerminate } from "../../files/environment-file.service";
-import { validateEnvironmentOrTerminate } from "../../files/workflow.service";
+import { validateEnvironmentOrTerminate } from "../../validator";
 import { Config } from "../../types/config";
 
 export async function step(
