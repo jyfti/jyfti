@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { install } from "./install.command";
 
-jest.mock("../files/config-file.service");
-jest.mock("../files/workflow-file.service", () => ({
+jest.mock("../data-access/config-file.service");
+jest.mock("../data-access/workflow-file.service", () => ({
   readWorkflowUrlOrTerminate: () => Promise.resolve({}),
 }));
-jest.mock("../files/workflow-schema.service", () => ({
+jest.mock("../data-access/workflow-schema.service", () => ({
   readWorkflowSchemaOrTerminate: () => Promise.resolve({}),
 }));
 jest.mock("../install.service", () => ({

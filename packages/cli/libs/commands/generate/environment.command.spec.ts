@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { generateEnvironment } from "./environment.command";
 
-jest.mock("../../files/config-file.service");
-jest.mock("../../files/environment-file.service", () => ({
+jest.mock("../../data-access/config-file.service");
+jest.mock("../../data-access/environment-file.service", () => ({
   writeEnvironment: () => Promise.resolve(),
   environmentExists: jest.fn(() => Promise.resolve(true)),
 }));
@@ -22,7 +22,7 @@ describe("the generate environment command", () => {
   });
 
   it("should fail if the environment already exists", async () => {
-    require("../../files/environment-file.service").environmentExists.mockImplementation(
+    require("../../data-access/environment-file.service").environmentExists.mockImplementation(
       () => Promise.resolve(true)
     );
     await generateEnvironment("my-environment");
@@ -34,7 +34,7 @@ describe("the generate environment command", () => {
   });
 
   it("should succeed if the environment does not already exists", async () => {
-    require("../../files/environment-file.service").environmentExists.mockImplementation(
+    require("../../data-access/environment-file.service").environmentExists.mockImplementation(
       () => Promise.resolve(false)
     );
     await generateEnvironment("my-environment");

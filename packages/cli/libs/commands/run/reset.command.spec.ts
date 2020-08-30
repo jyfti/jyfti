@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { reset } from "./reset.command";
 
-jest.mock("../../files/config-file.service");
-jest.mock("../../files/state-file.service");
-jest.mock("../../files/workflow-file.service", () => ({
+jest.mock("../../data-access/config-file.service");
+jest.mock("../../data-access/state-file.service");
+jest.mock("../../data-access/workflow-file.service", () => ({
   readWorkflowNamesOrTerminate: () => Promise.resolve(["my-workflow"]),
 }));
 jest.mock("../../inquirer.service");

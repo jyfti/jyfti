@@ -1,7 +1,7 @@
 import { listEnvironments } from "./list.command";
 
-jest.mock("../../files/config-file.service");
-jest.mock("../../files/environment-file.service", () => ({
+jest.mock("../../data-access/config-file.service");
+jest.mock("../../data-access/environment-file.service", () => ({
   readEnvironmentNames: () =>
     Promise.resolve(["default", "my-other-environment"]),
 }));

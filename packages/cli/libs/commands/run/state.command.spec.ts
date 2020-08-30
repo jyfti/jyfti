@@ -2,8 +2,8 @@
 import { state } from "./state.command";
 import { printJson } from "../../print.service";
 
-jest.mock("../../files/config-file.service");
-jest.mock("../../files/state-file.service", () => ({
+jest.mock("../../data-access/config-file.service");
+jest.mock("../../data-access/state-file.service", () => ({
   readStateOrTerminate: () =>
     Promise.resolve({
       path: [0],
@@ -11,7 +11,7 @@ jest.mock("../../files/state-file.service", () => ({
       evaluations: [],
     }),
 }));
-jest.mock("../../files/workflow-file.service", () => ({
+jest.mock("../../data-access/workflow-file.service", () => ({
   readWorkflowNamesOrTerminate: () => Promise.resolve(["my-workflow"]),
 }));
 jest.mock("../../inquirer.service", () => ({

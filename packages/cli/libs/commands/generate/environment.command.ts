@@ -1,9 +1,9 @@
-import { readConfig } from "../../files/config-file.service";
+import { readConfig } from "../../data-access/config-file.service";
 import { VariableMap } from "@jyfti/engine";
 import {
   environmentExists,
   writeEnvironment,
-} from "../../files/environment-file.service";
+} from "../../data-access/environment-file.service";
 import { promptName } from "../../inquirer.service";
 
 export async function generateEnvironment(name?: string): Promise<void> {

@@ -1,20 +1,20 @@
-import { readConfig } from "../../files/config-file.service";
+import { readConfig } from "../../data-access/config-file.service";
 import { createEngine } from "@jyfti/engine";
 import { promptWorkflow, promptWorkflowInputs } from "../../inquirer.service";
 import { printJson, printValue } from "../../print.service";
 import {
   readWorkflowOrTerminate,
   readWorkflowNamesOrTerminate,
-} from "../../files/workflow-file.service";
-import { writeState } from "../../files/state-file.service";
+} from "../../data-access/workflow-file.service";
+import { writeState } from "../../data-access/state-file.service";
 import { install } from "../../install.service";
-import { readWorkflowSchemaOrTerminate } from "../../files/workflow-schema.service";
-import { readEnvironmentOrTerminate } from "../../files/environment-file.service";
+import { readWorkflowSchemaOrTerminate } from "../../data-access/workflow-schema.service";
+import { readEnvironmentOrTerminate } from "../../data-access/environment-file.service";
 import {
   isUrl,
   extractWorkflowName,
   createInputs,
-} from "../../files/workflow.util";
+} from "../../data-access/workflow.util";
 import {
   validateWorkflowOrTerminate,
   validateInputsOrTerminate,

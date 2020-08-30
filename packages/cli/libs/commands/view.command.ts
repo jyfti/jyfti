@@ -1,9 +1,9 @@
-import { readConfig } from "../files/config-file.service";
+import { readConfig } from "../data-access/config-file.service";
 import { promptWorkflow } from "../inquirer.service";
 import {
   readWorkflowOrTerminate,
   readWorkflowNamesOrTerminate,
-} from "../files/workflow-file.service";
+} from "../data-access/workflow-file.service";
 import { printJson } from "../print.service";
 
 export async function view(name?: string): Promise<void> {

@@ -4,15 +4,15 @@ import { printJson, printSuccess, printError } from "../../print.service";
 import { Workflow } from "@jyfti/engine";
 import { of, throwError } from "rxjs";
 
-jest.mock("../../files/workflow-file.service", () => ({
+jest.mock("../../data-access/workflow-file.service", () => ({
   readWorkflowOrTerminate: () => Promise.resolve("my-workflow"),
   readWorkflowNamesOrTerminate: () => Promise.resolve(["my-workflow"]),
 }));
-jest.mock("../../files/config-file.service");
-jest.mock("../../files/workflow-schema.service", () => ({
+jest.mock("../../data-access/config-file.service");
+jest.mock("../../data-access/workflow-schema.service", () => ({
   readWorkflowSchemaOrTerminate: () => Promise.resolve({}),
 }));
-jest.mock("../../files/state-file.service", () => ({
+jest.mock("../../data-access/state-file.service", () => ({
   readStateOrTerminate: () =>
     Promise.resolve({
       path: [0],
@@ -21,7 +21,7 @@ jest.mock("../../files/state-file.service", () => ({
     }),
   writeState: jest.fn(() => Promise.resolve()),
 }));
-jest.mock("../../files/environment-file.service", () => ({
+jest.mock("../../data-access/environment-file.service", () => ({
   readEnvironmentOrTerminate: () => Promise.resolve({}),
 }));
 jest.mock("../../validator", () => ({
@@ -62,7 +62,7 @@ describe("the execute command", () => {
   beforeEach(() => {
     logSpy = jest.spyOn(console, "log").mockImplementation(() => {});
     errorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
-    writeStateSpy = require("../../files/state-file.service").writeState;
+    writeStateSpy = require("../../data-access/state-file.service").writeState;
   });
 
   it("should run of a workflow with no inputs to completion", async () => {

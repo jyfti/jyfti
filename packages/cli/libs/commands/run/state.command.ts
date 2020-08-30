@@ -1,8 +1,8 @@
-import { readConfig } from "../../files/config-file.service";
+import { readConfig } from "../../data-access/config-file.service";
 import { promptWorkflow } from "../../inquirer.service";
-import { readStateOrTerminate } from "../../files/state-file.service";
+import { readStateOrTerminate } from "../../data-access/state-file.service";
 import { printJson } from "../../print.service";
-import { readWorkflowNamesOrTerminate } from "../../files/workflow-file.service";
+import { readWorkflowNamesOrTerminate } from "../../data-access/workflow-file.service";
 
 export async function state(name?: string): Promise<void> {
   const config = await readConfig();

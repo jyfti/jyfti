@@ -1,13 +1,13 @@
-import { readConfig } from "../../files/config-file.service";
+import { readConfig } from "../../data-access/config-file.service";
 import { promptWorkflow } from "../../inquirer.service";
-import { readStateOrTerminate } from "../../files/state-file.service";
+import { readStateOrTerminate } from "../../data-access/state-file.service";
 import { printJson } from "../../print.service";
 import { createEngine } from "@jyfti/engine";
 import {
   readWorkflowOrTerminate,
   readWorkflowNamesOrTerminate,
-} from "../../files/workflow-file.service";
-import { readEnvironmentOrTerminate } from "../../files/environment-file.service";
+} from "../../data-access/workflow-file.service";
+import { readEnvironmentOrTerminate } from "../../data-access/environment-file.service";
 
 export async function vars(name?: string): Promise<void> {
   const config = await readConfig();

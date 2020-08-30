@@ -2,7 +2,7 @@
 import { view } from "./view.command";
 import { printJson } from "../print.service";
 
-jest.mock("../files/config-file.service");
+jest.mock("../data-access/config-file.service");
 jest.mock("../inquirer.service", () => ({
   promptWorkflow: () =>
     Promise.resolve({
@@ -10,7 +10,7 @@ jest.mock("../inquirer.service", () => ({
       steps: [],
     }),
 }));
-jest.mock("../files/workflow-file.service", () => ({
+jest.mock("../data-access/workflow-file.service", () => ({
   readWorkflowOrTerminate: () =>
     Promise.resolve({
       name: "my-workflow",

@@ -1,7 +1,7 @@
-import { readConfig } from "../../files/config-file.service";
+import { readConfig } from "../../data-access/config-file.service";
 import { State } from "@jyfti/engine";
-import { readWorkflowNamesOrTerminate } from "../../files/workflow-file.service";
-import { readState } from "../../files/state-file.service";
+import { readWorkflowNamesOrTerminate } from "../../data-access/workflow-file.service";
+import { readState } from "../../data-access/state-file.service";
 import { printValue } from "../../print.service";
 
 export async function status(name?: string): Promise<void> {

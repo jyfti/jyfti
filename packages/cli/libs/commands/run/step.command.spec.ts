@@ -3,18 +3,18 @@ import { step } from "./step.command";
 import { printSuccess, printError } from "../../print.service";
 import { of, throwError } from "rxjs";
 
-jest.mock("../../files/config-file.service");
-jest.mock("../../files/state-file.service", () => ({
+jest.mock("../../data-access/config-file.service");
+jest.mock("../../data-access/state-file.service", () => ({
   readStateOrTerminate: () => Promise.resolve({}),
   writeState: jest.fn(() => Promise.resolve()),
 }));
-jest.mock("../../files/environment-file.service", () => ({
+jest.mock("../../data-access/environment-file.service", () => ({
   readEnvironmentOrTerminate: () => Promise.resolve({}),
 }));
 jest.mock("../../validator", () => ({
   validateEnvironmentOrTerminate: () => Promise.resolve(),
 }));
-jest.mock("../../files/workflow-file.service");
+jest.mock("../../data-access/workflow-file.service");
 jest.mock("../../inquirer.service");
 jest.mock("@jyfti/engine", () => {
   const engine = {
@@ -36,7 +36,7 @@ describe("the step command", () => {
   beforeEach(() => {
     logSpy = jest.spyOn(console, "log").mockImplementation(() => {});
     errorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
-    writeStateSpy = require("../../files/state-file.service").writeState;
+    writeStateSpy = require("../../data-access/state-file.service").writeState;
   });
 
   it("should execute the next step", async () => {

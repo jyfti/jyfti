@@ -1,12 +1,12 @@
-import { readConfig } from "../files/config-file.service";
+import { readConfig } from "../data-access/config-file.service";
 import { promptWorkflow } from "../inquirer.service";
 import { validateWorkflow } from "@jyfti/engine";
 import { printValidationErrors, printValue } from "../print.service";
 import {
   readWorkflowNamesOrTerminate,
   readWorkflowOrTerminate,
-} from "../files/workflow-file.service";
-import { readWorkflowSchemaOrTerminate } from "../files/workflow-schema.service";
+} from "../data-access/workflow-file.service";
+import { readWorkflowSchemaOrTerminate } from "../data-access/workflow-schema.service";
 import { Config } from "../types/config";
 
 export async function validate(

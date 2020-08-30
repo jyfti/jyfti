@@ -2,15 +2,15 @@
 import { vars } from "./vars.command";
 import { printJson } from "../../print.service";
 
-jest.mock("../../files/workflow-file.service", () => ({
+jest.mock("../../data-access/workflow-file.service", () => ({
   readWorkflowOrTerminate: () => Promise.resolve("my-workflow"),
   readWorkflowNamesOrTerminate: () => Promise.resolve(["my-workflow"]),
 }));
-jest.mock("../../files/config-file.service");
-jest.mock("../../files/state-file.service", () => ({
+jest.mock("../../data-access/config-file.service");
+jest.mock("../../data-access/state-file.service", () => ({
   readStateOrTerminate: () => Promise.resolve({}),
 }));
-jest.mock("../../files/environment-file.service", () => ({
+jest.mock("../../data-access/environment-file.service", () => ({
   readEnvironmentOrTerminate: () => Promise.resolve({}),
 }));
 jest.mock("../../inquirer.service", () => ({

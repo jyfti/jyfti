@@ -1,9 +1,9 @@
-import { readConfig } from "../../files/config-file.service";
+import { readConfig } from "../../data-access/config-file.service";
 import { printJson } from "../../print.service";
 import {
   readEnvironmentOrTerminate,
   readEnvironmentNames,
-} from "../../files/environment-file.service";
+} from "../../data-access/environment-file.service";
 import inquirer from "inquirer";
 
 export async function viewEnvironment(name?: string): Promise<void> {

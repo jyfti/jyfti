@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { init } from "./init.command";
 
-jest.mock("../files/config-file.service");
-jest.mock("../files/file.service");
+jest.mock("../data-access/config-file.service");
+jest.mock("../data-access/file.service");
 jest.mock("inquirer", () => ({
   prompt: () =>
     Promise.resolve({
@@ -13,7 +13,7 @@ jest.mock("inquirer", () => ({
 }));
 
 describe("the init command", () => {
-  const files = require("../files/file.service");
+  const files = require("../data-access/file.service");
 
   let logSpy: any;
   let errorSpy: any;

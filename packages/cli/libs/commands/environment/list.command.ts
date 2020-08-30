@@ -1,5 +1,5 @@
-import { readConfig } from "../../files/config-file.service";
-import { readEnvironmentNames } from "../../files/environment-file.service";
+import { readConfig } from "../../data-access/config-file.service";
+import { readEnvironmentNames } from "../../data-access/environment-file.service";
 
 export async function listEnvironments(): Promise<void> {
   const config = await readConfig();

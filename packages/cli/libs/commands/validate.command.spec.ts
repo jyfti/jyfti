@@ -2,13 +2,13 @@
 import { validate } from "./validate.command";
 import { printJson, printValue } from "../print.service";
 
-jest.mock("../files/config-file.service");
-jest.mock("../files/workflow-file.service", () => ({
+jest.mock("../data-access/config-file.service");
+jest.mock("../data-access/workflow-file.service", () => ({
   readWorkflowOrTerminate: () => Promise.resolve("my-workflow"),
   readWorkflowNamesOrTerminate: () =>
     Promise.resolve(["my-workflow", "my-other-workflow"]),
 }));
-jest.mock("../files/workflow-schema.service", () => ({
+jest.mock("../data-access/workflow-schema.service", () => ({
   readWorkflowSchemaOrTerminate: () => Promise.resolve({}),
 }));
 jest.mock("@jyfti/engine", () => ({

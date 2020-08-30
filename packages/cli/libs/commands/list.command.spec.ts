@@ -1,7 +1,7 @@
 import { list } from "./list.command";
 
-jest.mock("../files/config-file.service");
-jest.mock("../files/workflow-file.service", () => ({
+jest.mock("../data-access/config-file.service");
+jest.mock("../data-access/workflow-file.service", () => ({
   readWorkflowNamesOrTerminate: () =>
     Promise.resolve(["my-workflow", "my-other-workflow"]),
 }));

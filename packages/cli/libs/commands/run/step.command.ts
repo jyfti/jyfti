@@ -1,4 +1,4 @@
-import { readConfig } from "../../files/config-file.service";
+import { readConfig } from "../../data-access/config-file.service";
 import { createEngine, StepResult, State, Engine } from "@jyfti/engine";
 import { map, flatMap, tap } from "rxjs/operators";
 import { from, OperatorFunction } from "rxjs";
@@ -6,13 +6,13 @@ import { promptWorkflow } from "../../inquirer.service";
 import {
   readWorkflowNamesOrTerminate,
   readWorkflowOrTerminate,
-} from "../../files/workflow-file.service";
+} from "../../data-access/workflow-file.service";
 import {
   writeState,
   readStateOrTerminate,
-} from "../../files/state-file.service";
+} from "../../data-access/state-file.service";
 import { printStepResult, printError } from "../../print.service";
-import { readEnvironmentOrTerminate } from "../../files/environment-file.service";
+import { readEnvironmentOrTerminate } from "../../data-access/environment-file.service";
 import { validateEnvironmentOrTerminate } from "../../validator";
 import { Config } from "../../types/config";
 

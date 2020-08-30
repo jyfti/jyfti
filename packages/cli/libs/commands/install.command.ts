@@ -1,9 +1,9 @@
-import { readConfig } from "../files/config-file.service";
+import { readConfig } from "../data-access/config-file.service";
 
-import { readWorkflowSchemaOrTerminate } from "../files/workflow-schema.service";
-import { readWorkflowUrlOrTerminate } from "../files/workflow-file.service";
+import { readWorkflowSchemaOrTerminate } from "../data-access/workflow-schema.service";
+import { readWorkflowUrlOrTerminate } from "../data-access/workflow-file.service";
 import * as installer from "../install.service";
-import { extractWorkflowName } from "../files/workflow.util";
+import { extractWorkflowName } from "../data-access/workflow.util";
 
 export async function install(
   url: string,
