@@ -37,6 +37,9 @@ jobs:
       - name: Test
         run: npx lerna run test
 
+      - name: Prettier
+        run: npx lerna run prettier-check
+
       - name: Code coverage
         run: bash <(curl -s https://codecov.io/bash)
 
