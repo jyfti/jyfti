@@ -5,7 +5,7 @@ import { printValidationErrors, printValue } from "../print.service";
 import {
   readWorkflowNamesOrTerminate,
   readWorkflowOrTerminate,
-} from "../data-access/workflow-file.service";
+} from "../data-access/workflow.dao";
 import { readWorkflowSchemaOrTerminate } from "../data-access/workflow-schema.service";
 import { Config } from "../types/config";
 

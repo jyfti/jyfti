@@ -10,7 +10,7 @@ jest.mock("../inquirer.service", () => ({
       steps: [],
     }),
 }));
-jest.mock("../data-access/workflow-file.service", () => ({
+jest.mock("../data-access/workflow.dao", () => ({
   readWorkflowOrTerminate: () =>
     Promise.resolve({
       name: "my-workflow",

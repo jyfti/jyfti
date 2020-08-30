@@ -1,4 +1,4 @@
-import { readWorkflow, readWorkflowNames } from "./workflow-file.service";
+import { readWorkflow, readWorkflowNames } from "./workflow.dao";
 import { Config } from "../types/config";
 
 jest.mock("./file.service", () => ({

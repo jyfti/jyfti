@@ -2,7 +2,7 @@
 import { install } from "./install.command";
 
 jest.mock("../data-access/config.dao");
-jest.mock("../data-access/workflow-file.service", () => ({
+jest.mock("../data-access/workflow.dao", () => ({
   readWorkflowUrlOrTerminate: () => Promise.resolve({}),
 }));
 jest.mock("../data-access/workflow-schema.service", () => ({

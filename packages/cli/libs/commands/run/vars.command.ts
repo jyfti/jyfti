@@ -6,7 +6,7 @@ import { createEngine } from "@jyfti/engine";
 import {
   readWorkflowOrTerminate,
   readWorkflowNamesOrTerminate,
-} from "../../data-access/workflow-file.service";
+} from "../../data-access/workflow.dao";
 import { readEnvironmentOrTerminate } from "../../data-access/environment-file.service";
 
 export async function vars(name?: string): Promise<void> {

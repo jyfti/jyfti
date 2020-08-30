@@ -1,7 +1,7 @@
 import { list } from "./list.command";
 
 jest.mock("../data-access/config.dao");
-jest.mock("../data-access/workflow-file.service", () => ({
+jest.mock("../data-access/workflow.dao", () => ({
   readWorkflowNamesOrTerminate: () =>
     Promise.resolve(["my-workflow", "my-other-workflow"]),
 }));

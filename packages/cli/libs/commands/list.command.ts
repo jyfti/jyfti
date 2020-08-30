@@ -1,5 +1,5 @@
 import { readConfig } from "../data-access/config.dao";
-import { readWorkflowNamesOrTerminate } from "../data-access/workflow-file.service";
+import { readWorkflowNamesOrTerminate } from "../data-access/workflow.dao";
 
 export async function list(): Promise<void> {
   const config = await readConfig();

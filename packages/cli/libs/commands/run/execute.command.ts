@@ -12,7 +12,7 @@ import {
 import {
   readWorkflowOrTerminate,
   readWorkflowNamesOrTerminate,
-} from "../../data-access/workflow-file.service";
+} from "../../data-access/workflow.dao";
 import { writeState } from "../../data-access/state-file.service";
 import { readWorkflowSchemaOrTerminate } from "../../data-access/workflow-schema.service";
 import { readEnvironmentOrTerminate } from "../../data-access/environment-file.service";

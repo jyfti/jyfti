@@ -14,7 +14,7 @@ jest.mock("../../data-access/environment-file.service", () => ({
 jest.mock("../../validator", () => ({
   validateEnvironmentOrTerminate: () => Promise.resolve(),
 }));
-jest.mock("../../data-access/workflow-file.service");
+jest.mock("../../data-access/workflow.dao");
 jest.mock("../../inquirer.service");
 jest.mock("@jyfti/engine", () => {
   const engine = {

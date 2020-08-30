@@ -6,7 +6,7 @@ import { promptWorkflow } from "../../inquirer.service";
 import {
   readWorkflowNamesOrTerminate,
   readWorkflowOrTerminate,
-} from "../../data-access/workflow-file.service";
+} from "../../data-access/workflow.dao";
 import {
   writeState,
   readStateOrTerminate,

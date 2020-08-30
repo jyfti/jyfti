@@ -3,7 +3,7 @@ import { create } from "./create.command";
 import { printValue } from "../../print.service";
 import { Workflow } from "@jyfti/engine";
 
-jest.mock("../../data-access/workflow-file.service", () => ({
+jest.mock("../../data-access/workflow.dao", () => ({
   readWorkflowOrTerminate: () => Promise.resolve("my-workflow"),
   readWorkflowNamesOrTerminate: () => Promise.resolve(["my-workflow"]),
 }));

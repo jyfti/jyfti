@@ -2,7 +2,7 @@
 import { vars } from "./vars.command";
 import { printJson } from "../../print.service";
 
-jest.mock("../../data-access/workflow-file.service", () => ({
+jest.mock("../../data-access/workflow.dao", () => ({
   readWorkflowOrTerminate: () => Promise.resolve("my-workflow"),
   readWorkflowNamesOrTerminate: () => Promise.resolve(["my-workflow"]),
 }));

@@ -2,7 +2,7 @@
 import { generateWorkflow } from "./workflow.command";
 
 jest.mock("../../data-access/config.dao");
-jest.mock("../../data-access/workflow-file.service", () => ({
+jest.mock("../../data-access/workflow.dao", () => ({
   workflowExists: jest.fn(() => Promise.resolve(true)),
   writeWorkflow: () => Promise.resolve(),
 }));
@@ -22,7 +22,7 @@ describe("the generate workflow command", () => {
   });
 
   it("should fail if the workflow already exists", async () => {
-    require("../../data-access/workflow-file.service").workflowExists.mockImplementation(
+    require("../../data-access/workflow.dao").workflowExists.mockImplementation(
       () => Promise.resolve(true)
     );
     await generateWorkflow("my-workflow");
@@ -34,7 +34,7 @@ describe("the generate workflow command", () => {
   });
 
   it("should succeed if the workflow does not already exists", async () => {
-    require("../../data-access/workflow-file.service").workflowExists.mockImplementation(
+    require("../../data-access/workflow.dao").workflowExists.mockImplementation(
       () => Promise.resolve(false)
     );
     await generateWorkflow("my-workflow");
@@ -44,7 +44,7 @@ describe("the generate workflow command", () => {
   });
 
   it("should prompt for a workflow name if not provided", async () => {
-    require("../../data-access/workflow-file.service").workflowExists.mockImplementation(
+    require("../../data-access/workflow.dao").workflowExists.mockImplementation(
       () => Promise.resolve(false)
     );
     await generateWorkflow(undefined);

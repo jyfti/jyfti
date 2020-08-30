@@ -7,7 +7,7 @@ import { printStepResult, printError } from "../../print.service";
 import {
   readWorkflowOrTerminate,
   readWorkflowNamesOrTerminate,
-} from "../../data-access/workflow-file.service";
+} from "../../data-access/workflow.dao";
 import {
   writeState,
   readStateOrTerminate,

@@ -2,7 +2,7 @@ import { readConfig } from "../../data-access/config.dao";
 import { promptWorkflow } from "../../inquirer.service";
 import { readStateOrTerminate } from "../../data-access/state-file.service";
 import { printJson } from "../../print.service";
-import { readWorkflowNamesOrTerminate } from "../../data-access/workflow-file.service";
+import { readWorkflowNamesOrTerminate } from "../../data-access/workflow.dao";
 
 export async function state(name?: string): Promise<void> {
   const config = await readConfig();

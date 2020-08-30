@@ -4,7 +4,7 @@ import { Config } from "./types/config";
 import { Workflow, JsonSchema } from "@jyfti/engine";
 import { printError } from "./print.service";
 
-jest.mock("./data-access/workflow-file.service", () => ({
+jest.mock("./data-access/workflow.dao", () => ({
   workflowExists: () => Promise.resolve(true),
   writeWorkflow: jest.fn(() => Promise.resolve()),
 }));
@@ -35,8 +35,7 @@ describe("the installation of a workflow", () => {
   beforeEach(() => {
     logSpy = jest.spyOn(console, "log").mockImplementation(() => {});
     errorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
-    writeWorkflowSpy = require("./data-access/workflow-file.service")
-      .writeWorkflow;
+    writeWorkflowSpy = require("./data-access/workflow.dao").writeWorkflow;
   });
 
   afterEach(() => {

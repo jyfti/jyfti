@@ -1,7 +1,4 @@
-import {
-  readWorkflowNames,
-  readWorkflow,
-} from "./data-access/workflow-file.service";
+import { readWorkflowNames, readWorkflow } from "./data-access/workflow.dao";
 import { validateWorkflow } from "@jyfti/engine";
 import { Config } from "./types/config";
 import { readWorkflowSchemaOrTerminate } from "./data-access/workflow-schema.service";

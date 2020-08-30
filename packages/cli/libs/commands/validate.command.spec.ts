@@ -3,7 +3,7 @@ import { validate } from "./validate.command";
 import { printJson, printValue } from "../print.service";
 
 jest.mock("../data-access/config.dao");
-jest.mock("../data-access/workflow-file.service", () => ({
+jest.mock("../data-access/workflow.dao", () => ({
   readWorkflowOrTerminate: () => Promise.resolve("my-workflow"),
   readWorkflowNamesOrTerminate: () =>
     Promise.resolve(["my-workflow", "my-other-workflow"]),

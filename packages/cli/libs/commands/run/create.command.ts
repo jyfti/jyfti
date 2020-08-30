@@ -5,7 +5,7 @@ import { printJson, printValue } from "../../print.service";
 import {
   readWorkflowOrTerminate,
   readWorkflowNamesOrTerminate,
-} from "../../data-access/workflow-file.service";
+} from "../../data-access/workflow.dao";
 import { writeState } from "../../data-access/state-file.service";
 import { install } from "../../install.service";
 import { readWorkflowSchemaOrTerminate } from "../../data-access/workflow-schema.service";

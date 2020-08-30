@@ -3,7 +3,7 @@ import { printJson, printSuccess, printError } from "../../print.service";
 import { complete } from "./complete.command";
 import { of, throwError } from "rxjs";
 
-jest.mock("../../data-access/workflow-file.service", () => ({
+jest.mock("../../data-access/workflow.dao", () => ({
   readWorkflowOrTerminate: () => Promise.resolve("my-workflow"),
   readWorkflowNamesOrTerminate: () => Promise.resolve(["my-workflow"]),
 }));

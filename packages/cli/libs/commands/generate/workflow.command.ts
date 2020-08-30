@@ -1,9 +1,6 @@
 import { readConfig } from "../../data-access/config.dao";
 import { Workflow, RequestStep } from "@jyfti/engine";
-import {
-  workflowExists,
-  writeWorkflow,
-} from "../../data-access/workflow-file.service";
+import { workflowExists, writeWorkflow } from "../../data-access/workflow.dao";
 import { promptName } from "../../inquirer.service";
 
 export async function generateWorkflow(name?: string): Promise<void> {

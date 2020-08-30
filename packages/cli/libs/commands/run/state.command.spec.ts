@@ -11,7 +11,7 @@ jest.mock("../../data-access/state-file.service", () => ({
       evaluations: [],
     }),
 }));
-jest.mock("../../data-access/workflow-file.service", () => ({
+jest.mock("../../data-access/workflow.dao", () => ({
   readWorkflowNamesOrTerminate: () => Promise.resolve(["my-workflow"]),
 }));
 jest.mock("../../inquirer.service", () => ({

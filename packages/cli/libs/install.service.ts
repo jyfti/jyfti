@@ -2,10 +2,7 @@ import { Config } from "./types/config";
 import { Workflow, JsonSchema } from "@jyfti/engine";
 import { validateWorkflow } from "@jyfti/engine";
 import { printValidationErrors, printError } from "./print.service";
-import {
-  workflowExists,
-  writeWorkflow,
-} from "./data-access/workflow-file.service";
+import { workflowExists, writeWorkflow } from "./data-access/workflow.dao";
 import inquirer from "inquirer";
 
 export async function install(

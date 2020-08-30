@@ -3,7 +3,7 @@ import { promptWorkflow } from "../inquirer.service";
 import {
   readWorkflowOrTerminate,
   readWorkflowNamesOrTerminate,
-} from "../data-access/workflow-file.service";
+} from "../data-access/workflow.dao";
 import { printJson } from "../print.service";
 
 export async function view(name?: string): Promise<void> {
