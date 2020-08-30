@@ -1,6 +1,17 @@
 {
   "$schema": "https://raw.githubusercontent.com/jyfti/jyfti/master/workflow-schema.json",
   "name": "Retrieve the current status of the rate limit at GitHub",
+  "env": {
+    "github": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string"
+        }
+      },
+      "required": ["token"]
+    }
+  },
   "output": {
     "$eval": "rateLimit"
   },
