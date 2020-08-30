@@ -7,7 +7,10 @@ import {
 } from "./workflow.service";
 import { Workflow } from "@jyfti/engine";
 
-jest.mock("@jyfti/engine", () => require("../../__mocks__/@jyfti/validator"));
+jest.mock("@jyfti/engine", () => ({
+  validate: jest.fn(() => []),
+  validateSchemaMap: jest.fn(() => ({})),
+}));
 
 describe("interacting with workflows via http and files", () => {
   let mockExit: any;
@@ -20,37 +23,41 @@ describe("interacting with workflows via http and files", () => {
   });
 
   it("validates a workflow and proceeds if there are no errors", () => {
-    require("@jyfti/engine").__setResponse(true);
+    require("@jyfti/engine").validate.mockReturnValue([]);
     validateWorkflowOrTerminate({} as Workflow, {});
     expect(mockExit).toHaveBeenCalledTimes(0);
   });
 
   it("validates a workflow and terminates if there are errors", () => {
-    require("@jyfti/engine").__setResponse(false);
+    require("@jyfti/engine").validate.mockReturnValue(["error"]);
     validateWorkflowOrTerminate({} as Workflow, {});
     expect(mockExit).toHaveBeenCalledWith(1);
   });
 
   it("validates inputs and proceeds if there are no errors", () => {
-    require("@jyfti/engine").__setResponse(true);
+    require("@jyfti/engine").validateSchemaMap.mockReturnValue({});
     validateInputsOrTerminate({} as Workflow, {});
     expect(mockExit).toHaveBeenCalledTimes(0);
   });
 
   it("validates inputs and terminates if there are errors", () => {
-    require("@jyfti/engine").__setResponse(false);
+    require("@jyfti/engine").validateSchemaMap.mockReturnValue({
+      field1: ["error"],
+    });
     validateInputsOrTerminate({} as Workflow, {});
     expect(mockExit).toHaveBeenCalledWith(1);
   });
 
   it("validates an environment and proceeds if there are no errors", () => {
-    require("@jyfti/engine").__setResponse(true);
+    require("@jyfti/engine").validateSchemaMap.mockReturnValue({});
     validateEnvironmentOrTerminate({} as Workflow, {});
     expect(mockExit).toHaveBeenCalledTimes(0);
   });
 
   it("validates an environment and terminates if there are errors", () => {
-    require("@jyfti/engine").__setResponse(false);
+    require("@jyfti/engine").validateSchemaMap.mockReturnValue({
+      field1: ["error"],
+    });
     validateEnvironmentOrTerminate({} as Workflow, {});
     expect(mockExit).toHaveBeenCalledWith(1);
   });

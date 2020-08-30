@@ -8,12 +8,21 @@ jest.mock("../files/workflow-file.service", () => ({
   readWorkflowNamesOrTerminate: () =>
     Promise.resolve(["my-workflow", "my-other-workflow"]),
 }));
-jest.mock("@jyfti/engine", () => require("../../__mocks__/@jyfti/validator"));
+jest.mock("@jyfti/engine", () => ({
+  validate: jest.fn(() => []),
+}));
 jest.mock("../inquirer.service", () => ({
   promptWorkflow: () => Promise.resolve("my-workflow"),
 }));
 
 describe("the validate command", () => {
+  const error = {
+    keyword: "a",
+    dataPath: "b",
+    schemaPath: "c",
+    params: {},
+  };
+
   let logSpy: any;
   let errorSpy: any;
 
@@ -33,7 +42,7 @@ describe("the validate command", () => {
   });
 
   it("should validate a single valid workflow without output", async () => {
-    require("@jyfti/engine").__setResponse(true);
+    require("@jyfti/engine").validate.mockReturnValue([]);
     await validate("my-workflow", { all: false });
     expect(errorSpy).toHaveBeenCalledTimes(0);
     expect(logSpy).toHaveBeenCalledTimes(0);
@@ -41,8 +50,7 @@ describe("the validate command", () => {
   });
 
   it("should validate a single invalid workflow with errors", async () => {
-    const error = require("@jyfti/engine").error;
-    require("@jyfti/engine").__setResponse(false);
+    require("@jyfti/engine").validate.mockReturnValue([error]);
     await validate("my-workflow", { all: false });
     expect(errorSpy).toHaveBeenCalledTimes(0);
     expect(logSpy).toHaveBeenCalledWith(
@@ -52,7 +60,7 @@ describe("the validate command", () => {
   });
 
   it("should validate all workflows with option --all without output if all are valid", async () => {
-    require("@jyfti/engine").__setResponse(true);
+    require("@jyfti/engine").validate.mockReturnValue([]);
     await validate(undefined, { all: true });
     expect(errorSpy).toHaveBeenCalledTimes(0);
     expect(logSpy).toHaveBeenCalledTimes(0);
@@ -60,8 +68,7 @@ describe("the validate command", () => {
   });
 
   it("should validate all workflows with option --all and print errors", async () => {
-    const error = require("@jyfti/engine").error;
-    require("@jyfti/engine").__setResponse(false);
+    require("@jyfti/engine").validate.mockReturnValue([error]);
     await validate(undefined, { all: true });
     expect(errorSpy).toHaveBeenCalledTimes(0);
     expect(logSpy).toHaveBeenCalledWith(
