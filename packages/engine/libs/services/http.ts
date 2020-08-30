@@ -1,4 +1,4 @@
-import { from, Observable } from "rxjs";
+import { from, Observable, defer } from "rxjs";
 import { HttpRequest, Headers } from "../types";
 import bent from "bent";
 import { map, flatMap } from "rxjs/operators";
@@ -13,7 +13,7 @@ export function http(
   const body = requestInfo.body
     ? Buffer.from(JSON.stringify(requestInfo.body))
     : undefined;
-  return from(getStream(requestInfo.url, body, headers)).pipe(
+  return defer(() => from(getStream(requestInfo.url, body, headers))).pipe(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     flatMap((stream: any) => from<string>(stream.text())),
     map((body) => parseJsonOrString(body)),
@@ -21,7 +21,7 @@ export function http(
   );
 }
 
-export function parseJsonOrString(str: string): unknown {
+function parseJsonOrString(str: string): unknown {
   // TODO Look at response header for content type
   try {
     return JSON.parse(str);
