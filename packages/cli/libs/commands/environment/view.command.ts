@@ -3,7 +3,7 @@ import { printJson } from "../../print.service";
 import {
   readEnvironmentOrTerminate,
   readEnvironmentNames,
-} from "../../data-access/environment-file.service";
+} from "../../data-access/environment.dao";
 import inquirer from "inquirer";
 
 export async function viewEnvironment(name?: string): Promise<void> {

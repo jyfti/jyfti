@@ -2,7 +2,7 @@ import { viewEnvironment } from "./view.command";
 import { printJson } from "../../print.service";
 
 jest.mock("../../data-access/config.dao");
-jest.mock("../../data-access/environment-file.service", () => ({
+jest.mock("../../data-access/environment.dao", () => ({
   readEnvironmentOrTerminate: () => Promise.resolve({ a: "b" }),
   readEnvironmentNames: () => Promise.resolve(["my-environment"]),
 }));

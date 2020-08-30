@@ -10,7 +10,7 @@ jest.mock("../../data-access/config.dao");
 jest.mock("../../data-access/state.dao", () => ({
   readStateOrTerminate: () => Promise.resolve({}),
 }));
-jest.mock("../../data-access/environment-file.service", () => ({
+jest.mock("../../data-access/environment.dao", () => ({
   readEnvironmentOrTerminate: () => Promise.resolve({}),
 }));
 jest.mock("../../inquirer.service", () => ({

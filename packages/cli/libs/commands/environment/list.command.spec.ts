@@ -1,7 +1,7 @@
 import { listEnvironments } from "./list.command";
 
 jest.mock("../../data-access/config.dao");
-jest.mock("../../data-access/environment-file.service", () => ({
+jest.mock("../../data-access/environment.dao", () => ({
   readEnvironmentNames: () =>
     Promise.resolve(["default", "my-other-environment"]),
 }));

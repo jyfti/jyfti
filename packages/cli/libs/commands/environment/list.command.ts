@@ -1,5 +1,5 @@
 import { readConfig } from "../../data-access/config.dao";
-import { readEnvironmentNames } from "../../data-access/environment-file.service";
+import { readEnvironmentNames } from "../../data-access/environment.dao";
 
 export async function listEnvironments(): Promise<void> {
   const config = await readConfig();

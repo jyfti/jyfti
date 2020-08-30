@@ -2,7 +2,7 @@ import { Config } from "../types/config";
 import {
   readEnvironmentOrTerminate,
   readEnvironmentNames,
-} from "./environment-file.service";
+} from "./environment.dao";
 
 jest.mock("./file.service", () => ({
   readJson: jest.fn(() => Promise.resolve({})),

@@ -21,7 +21,7 @@ jest.mock("../../data-access/state.dao", () => ({
     }),
   writeState: jest.fn(() => Promise.resolve()),
 }));
-jest.mock("../../data-access/environment-file.service", () => ({
+jest.mock("../../data-access/environment.dao", () => ({
   readEnvironmentOrTerminate: () => Promise.resolve({}),
 }));
 jest.mock("../../validator", () => ({

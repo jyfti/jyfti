@@ -7,7 +7,7 @@ import {
   readWorkflowOrTerminate,
   readWorkflowNamesOrTerminate,
 } from "../../data-access/workflow.dao";
-import { readEnvironmentOrTerminate } from "../../data-access/environment-file.service";
+import { readEnvironmentOrTerminate } from "../../data-access/environment.dao";
 
 export async function vars(name?: string): Promise<void> {
   const config = await readConfig();

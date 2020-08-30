@@ -3,7 +3,7 @@ import { VariableMap } from "@jyfti/engine";
 import {
   environmentExists,
   writeEnvironment,
-} from "../../data-access/environment-file.service";
+} from "../../data-access/environment.dao";
 import { promptName } from "../../inquirer.service";
 
 export async function generateEnvironment(name?: string): Promise<void> {

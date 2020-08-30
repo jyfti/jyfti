@@ -9,7 +9,7 @@ import {
 import { writeState } from "../../data-access/state.dao";
 import { install } from "../../install.service";
 import { readWorkflowSchemaOrTerminate } from "../../data-access/schema.dao";
-import { readEnvironmentOrTerminate } from "../../data-access/environment-file.service";
+import { readEnvironmentOrTerminate } from "../../data-access/environment.dao";
 import {
   isUrl,
   extractWorkflowName,
