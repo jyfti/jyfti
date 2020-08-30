@@ -21,7 +21,9 @@ jest.mock("../../files/environment-file.service", () => ({
 jest.mock("../../files/workflow.service", () => ({
   validateEnvironmentOrTerminate: () => Promise.resolve(),
 }));
-jest.mock("../../inquirer.service");
+jest.mock("../../inquirer.service", () => ({
+  promptWorkflow: () => Promise.resolve("my-workflow"),
+}));
 jest.mock("@jyfti/engine", () => require("../../../__mocks__/@jyfti/engine"));
 
 describe("the complete command", () => {

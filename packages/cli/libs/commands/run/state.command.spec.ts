@@ -11,7 +11,9 @@ jest.mock("../../files/state-file.service", () => ({
       evaluations: [],
     }),
 }));
-jest.mock("../../inquirer.service");
+jest.mock("../../inquirer.service", () => ({
+  promptWorkflow: () => Promise.resolve("my-workflow"),
+}));
 
 describe("the state command", () => {
   let logSpy: any;

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { execute } from "./execute.command";
 import { printJson, printSuccess, printError } from "../../print.service";
+import { Workflow } from "@jyfti/engine";
 
 jest.mock("../../files/workflow-file.service", () => ({
   readWorkflowOrTerminate: () => Promise.resolve("my-workflow"),
@@ -24,7 +25,13 @@ jest.mock("../../files/workflow.service", () => ({
   validateWorkflowOrTerminate: () => Promise.resolve(),
   validateEnvironmentOrTerminate: () => Promise.resolve(),
 }));
-jest.mock("../../inquirer.service");
+jest.mock("../../inquirer.service", () => ({
+  promptWorkflow: () => Promise.resolve("my-workflow"),
+  promptWorkflowInputs: (workflow: Workflow) =>
+    Promise.resolve(
+      Object.keys(workflow.inputs || {}).map((_in, i) => "my-input-" + i)
+    ),
+}));
 jest.mock("@jyfti/engine", () => require("../../../__mocks__/@jyfti/engine"));
 
 describe("the execute command", () => {

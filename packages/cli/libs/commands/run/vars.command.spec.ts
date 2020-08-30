@@ -13,7 +13,9 @@ jest.mock("../../files/state-file.service", () => ({
 jest.mock("../../files/environment-file.service", () => ({
   readEnvironmentOrTerminate: () => Promise.resolve({}),
 }));
-jest.mock("../../inquirer.service");
+jest.mock("../../inquirer.service", () => ({
+  promptWorkflow: () => Promise.resolve("my-workflow")
+}));
 jest.mock("@jyfti/engine", () => require("../../../__mocks__/@jyfti/engine"));
 
 describe("the vars command", () => {

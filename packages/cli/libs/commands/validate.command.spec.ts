@@ -9,7 +9,9 @@ jest.mock("../files/workflow-file.service", () => ({
     Promise.resolve(["my-workflow", "my-other-workflow"]),
 }));
 jest.mock("@jyfti/engine", () => require("../../__mocks__/@jyfti/validator"));
-jest.mock("../inquirer.service");
+jest.mock("../inquirer.service", () => ({
+  promptWorkflow: () => Promise.resolve("my-workflow"),
+}));
 
 describe("the validate command", () => {
   let logSpy: any;
