@@ -21,7 +21,9 @@ jest.mock("../../files/workflow.service", () => ({
   validateWorkflowOrTerminate: () => Promise.resolve(),
   validateEnvironmentOrTerminate: () => Promise.resolve(),
 }));
-jest.mock("../../install.service");
+jest.mock("../../install.service", () => ({
+  install: jest.fn(() => Promise.resolve()),
+}));
 jest.mock("../../inquirer.service", () => ({
   promptWorkflow: () => Promise.resolve("my-workflow"),
   promptWorkflowInputs: (workflow: Workflow) =>
@@ -59,5 +61,6 @@ describe("the create command", () => {
     );
     expect(logSpy).toHaveBeenCalledWith(`Created state.`);
     expect(errorSpy).toHaveBeenCalledTimes(0);
+    expect(require("../../install.service").install).toHaveBeenCalledTimes(1);
   });
 });
