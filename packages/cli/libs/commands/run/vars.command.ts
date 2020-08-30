@@ -1,6 +1,6 @@
 import { readConfig } from "../../data-access/config.dao";
 import { promptWorkflow } from "../../inquirer.service";
-import { readStateOrTerminate } from "../../data-access/state-file.service";
+import { readStateOrTerminate } from "../../data-access/state.dao";
 import { printJson } from "../../print.service";
 import { createEngine } from "@jyfti/engine";
 import {

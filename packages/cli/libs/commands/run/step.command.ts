@@ -7,10 +7,7 @@ import {
   readWorkflowNamesOrTerminate,
   readWorkflowOrTerminate,
 } from "../../data-access/workflow.dao";
-import {
-  writeState,
-  readStateOrTerminate,
-} from "../../data-access/state-file.service";
+import { writeState, readStateOrTerminate } from "../../data-access/state.dao";
 import { printStepResult, printError } from "../../print.service";
 import { readEnvironmentOrTerminate } from "../../data-access/environment-file.service";
 import { validateEnvironmentOrTerminate } from "../../validator";

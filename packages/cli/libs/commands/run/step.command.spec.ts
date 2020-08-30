@@ -4,7 +4,7 @@ import { printSuccess, printError } from "../../print.service";
 import { of, throwError } from "rxjs";
 
 jest.mock("../../data-access/config.dao");
-jest.mock("../../data-access/state-file.service", () => ({
+jest.mock("../../data-access/state.dao", () => ({
   readStateOrTerminate: () => Promise.resolve({}),
   writeState: jest.fn(() => Promise.resolve()),
 }));
@@ -36,7 +36,7 @@ describe("the step command", () => {
   beforeEach(() => {
     logSpy = jest.spyOn(console, "log").mockImplementation(() => {});
     errorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
-    writeStateSpy = require("../../data-access/state-file.service").writeState;
+    writeStateSpy = require("../../data-access/state.dao").writeState;
   });
 
   it("should execute the next step", async () => {

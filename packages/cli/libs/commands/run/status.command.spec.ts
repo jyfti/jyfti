@@ -3,7 +3,7 @@ import { printValue } from "../../print.service";
 import { status } from "./status.command";
 
 jest.mock("../../data-access/config.dao");
-jest.mock("../../data-access/state-file.service", () => ({
+jest.mock("../../data-access/state.dao", () => ({
   readState: jest.fn(() => Promise.resolve({})),
 }));
 jest.mock("../../data-access/workflow.dao", () => ({
@@ -21,8 +21,8 @@ describe("the status command", () => {
   });
 
   it("should print the status 'Not running' for a workflow with an undefined state", async () => {
-    require("../../data-access/state-file.service").readState.mockImplementation(
-      () => Promise.reject()
+    require("../../data-access/state.dao").readState.mockImplementation(() =>
+      Promise.reject()
     );
     await status("my-workflow");
     expect(logSpy).toHaveBeenCalledWith(printValue("[Not running]"));
@@ -30,13 +30,12 @@ describe("the status command", () => {
   });
 
   it("should print the status 'Pending' for a pending workflow", async () => {
-    require("../../data-access/state-file.service").readState.mockImplementation(
-      () =>
-        Promise.resolve({
-          path: [0],
-          inputs: {},
-          evaluations: [],
-        })
+    require("../../data-access/state.dao").readState.mockImplementation(() =>
+      Promise.resolve({
+        path: [0],
+        inputs: {},
+        evaluations: [],
+      })
     );
     await status("my-workflow");
     expect(logSpy).toHaveBeenCalledWith(
@@ -46,13 +45,12 @@ describe("the status command", () => {
   });
 
   it("should print the status 'Completed' for a completed workflow", async () => {
-    require("../../data-access/state-file.service").readState.mockImplementation(
-      () =>
-        Promise.resolve({
-          path: [],
-          inputs: {},
-          evaluations: [],
-        })
+    require("../../data-access/state.dao").readState.mockImplementation(() =>
+      Promise.resolve({
+        path: [],
+        inputs: {},
+        evaluations: [],
+      })
     );
     await status("my-workflow");
     expect(logSpy).toHaveBeenCalledWith(printValue("[Completed]"));
@@ -60,13 +58,12 @@ describe("the status command", () => {
   });
 
   it("should print the status of all workflows if no name is given", async () => {
-    require("../../data-access/state-file.service").readState.mockImplementation(
-      () =>
-        Promise.resolve({
-          path: [],
-          inputs: {},
-          evaluations: [],
-        })
+    require("../../data-access/state.dao").readState.mockImplementation(() =>
+      Promise.resolve({
+        path: [],
+        inputs: {},
+        evaluations: [],
+      })
     );
     await status(undefined);
     expect(logSpy).toHaveBeenCalledWith(

@@ -2,7 +2,7 @@
 import { clean } from "./clean.command";
 
 jest.mock("../data-access/config.dao");
-jest.mock("../data-access/state-file.service");
+jest.mock("../data-access/state.dao");
 
 describe("the clean command", () => {
   let logSpy: any;

@@ -11,7 +11,7 @@ jest.mock("../../data-access/config.dao");
 jest.mock("../../data-access/schema.dao", () => ({
   readWorkflowSchemaOrTerminate: () => Promise.resolve({}),
 }));
-jest.mock("../../data-access/state-file.service", () => ({
+jest.mock("../../data-access/state.dao", () => ({
   readStateOrTerminate: () => Promise.resolve({}),
   writeState: jest.fn(() => Promise.resolve()),
 }));
@@ -51,7 +51,7 @@ describe("the create command", () => {
   beforeEach(() => {
     logSpy = jest.spyOn(console, "log").mockImplementation(() => {});
     errorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
-    writeStateSpy = require("../../data-access/state-file.service").writeState;
+    writeStateSpy = require("../../data-access/state.dao").writeState;
   });
 
   it("should create a new run of a workflow with no inputs", async () => {

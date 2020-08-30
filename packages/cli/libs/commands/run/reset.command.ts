@@ -1,6 +1,6 @@
 import { readConfig } from "../../data-access/config.dao";
 import { promptWorkflow } from "../../inquirer.service";
-import { deleteState } from "../../data-access/state-file.service";
+import { deleteState } from "../../data-access/state.dao";
 import { readWorkflowNamesOrTerminate } from "../../data-access/workflow.dao";
 
 export async function reset(name?: string): Promise<void> {

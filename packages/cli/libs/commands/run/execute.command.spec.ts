@@ -12,7 +12,7 @@ jest.mock("../../data-access/config.dao");
 jest.mock("../../data-access/schema.dao", () => ({
   readWorkflowSchemaOrTerminate: () => Promise.resolve({}),
 }));
-jest.mock("../../data-access/state-file.service", () => ({
+jest.mock("../../data-access/state.dao", () => ({
   readStateOrTerminate: () =>
     Promise.resolve({
       path: [0],
@@ -62,7 +62,7 @@ describe("the execute command", () => {
   beforeEach(() => {
     logSpy = jest.spyOn(console, "log").mockImplementation(() => {});
     errorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
-    writeStateSpy = require("../../data-access/state-file.service").writeState;
+    writeStateSpy = require("../../data-access/state.dao").writeState;
   });
 
   it("should run of a workflow with no inputs to completion", async () => {

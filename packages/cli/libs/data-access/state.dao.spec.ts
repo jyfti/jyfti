@@ -1,5 +1,5 @@
 import { Config } from "../types/config";
-import { readState, readStateOrTerminate } from "./state-file.service";
+import { readState, readStateOrTerminate } from "./state.dao";
 
 jest.mock("./file.service", () => ({
   readJson: jest.fn(() => Promise.resolve({})),
