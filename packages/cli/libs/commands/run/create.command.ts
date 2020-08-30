@@ -2,7 +2,10 @@ import { readConfig } from "../../files/config-file.service";
 import { createEngine } from "@jyfti/engine";
 import { promptWorkflow, promptWorkflowInputs } from "../../inquirer.service";
 import { printJson, printValue } from "../../print.service";
-import { readWorkflowOrTerminate } from "../../files/workflow.service";
+import {
+  readWorkflowOrTerminate,
+  readWorkflowNamesOrTerminate,
+} from "../../files/workflow-file.service";
 import { writeState } from "../../files/state-file.service";
 import { install } from "../../install.service";
 import { readWorkflowSchemaOrTerminate } from "../../files/workflow-schema.service";
@@ -12,7 +15,6 @@ import {
   extractWorkflowName,
   createInputs,
 } from "../../files/workflow.util";
-import { readWorkflowNamesOrTerminate } from "../../files/workflow-file.service";
 import {
   validateWorkflowOrTerminate,
   validateInputsOrTerminate,

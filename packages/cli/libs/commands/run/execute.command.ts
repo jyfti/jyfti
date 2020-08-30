@@ -9,7 +9,10 @@ import {
   printOutput,
   printError,
 } from "../../print.service";
-import { readWorkflowOrTerminate } from "../../files/workflow.service";
+import {
+  readWorkflowOrTerminate,
+  readWorkflowNamesOrTerminate,
+} from "../../files/workflow-file.service";
 import { writeState } from "../../files/state-file.service";
 import { readWorkflowSchemaOrTerminate } from "../../files/workflow-schema.service";
 import { readEnvironmentOrTerminate } from "../../files/environment-file.service";
@@ -19,7 +22,6 @@ import {
   createInputs,
 } from "../../files/workflow.util";
 import { Config } from "../../types/config";
-import { readWorkflowNamesOrTerminate } from "../../files/workflow-file.service";
 import {
   validateWorkflowOrTerminate,
   validateInputsOrTerminate,

@@ -10,14 +10,12 @@ jest.mock("../inquirer.service", () => ({
       steps: [],
     }),
 }));
-jest.mock("../files/workflow.service", () => ({
+jest.mock("../files/workflow-file.service", () => ({
   readWorkflowOrTerminate: () =>
     Promise.resolve({
       name: "my-workflow",
       steps: [],
     }),
-}));
-jest.mock("../files/workflow-file.service", () => ({
   readWorkflowNamesOrTerminate: () =>
     Promise.resolve(["my-workflow", "my-other-workflow"]),
 }));

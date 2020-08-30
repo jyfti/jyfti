@@ -2,8 +2,8 @@
 import { install } from "./install.command";
 
 jest.mock("../files/config-file.service");
-jest.mock("../files/workflow-http.service", () => ({
-  readWorkflowOrTerminate: () => Promise.resolve({}),
+jest.mock("../files/workflow-file.service", () => ({
+  readWorkflowUrlOrTerminate: () => Promise.resolve({}),
 }));
 jest.mock("../files/workflow-schema.service", () => ({
   readWorkflowSchemaOrTerminate: () => Promise.resolve({}),

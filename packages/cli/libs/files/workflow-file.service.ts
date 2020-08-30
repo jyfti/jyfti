@@ -3,6 +3,8 @@ import { Config } from "../types/config";
 import { Workflow } from "@jyfti/engine";
 import { readJson, fileExists, writeJson, listDirFiles } from "./file.service";
 import { printError } from "../print.service";
+import { isUrl } from "./workflow.util";
+import bent from "bent";
 
 function resolveWorkflow(config: Config, name: string) {
   return nodePath.resolve(config.sourceRoot, name + ".json");
@@ -49,13 +51,40 @@ function isWorkflow(object: unknown): object is Workflow {
   return typeof object === "object";
 }
 
-export async function readWorkflowOrTerminate(
+export function readWorkflowOrTerminate(
+  config: Config,
+  name: string
+): Promise<Workflow> {
+  const readWorkflowOrTerminate = isUrl(name)
+    ? readWorkflowUrlOrTerminate
+    : readWorkflowFileOrTerminate;
+  return readWorkflowOrTerminate(config, name);
+}
+
+async function readWorkflowFileOrTerminate(
   config: Config,
   name: string
 ): Promise<Workflow> {
   const workflow = await readWorkflow(config, name).catch(() => undefined);
   if (!workflow) {
     console.error(printError("Workflow does not exist."));
+    process.exit(1);
+  }
+  return workflow;
+}
+
+const getJson = bent("json");
+
+export async function readWorkflowUrlOrTerminate(
+  config: Config,
+  url: string
+): Promise<Workflow> {
+  const workflow = (await getJson(url).catch((err) => {
+    console.error(printError("Workflow could not be retrieved."));
+    console.error(err);
+    return undefined;
+  })) as Workflow | undefined;
+  if (!workflow) {
     process.exit(1);
   }
   return workflow;

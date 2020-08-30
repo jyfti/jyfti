@@ -1,8 +1,10 @@
 import { readConfig } from "../files/config-file.service";
 import { promptWorkflow } from "../inquirer.service";
-import { readWorkflowOrTerminate } from "../files/workflow.service";
+import {
+  readWorkflowOrTerminate,
+  readWorkflowNamesOrTerminate,
+} from "../files/workflow-file.service";
 import { printJson } from "../print.service";
-import { readWorkflowNamesOrTerminate } from "../files/workflow-file.service";
 
 export async function view(name?: string): Promise<void> {
   const config = await readConfig();

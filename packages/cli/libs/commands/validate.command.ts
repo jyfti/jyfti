@@ -3,8 +3,8 @@ import { promptWorkflow } from "../inquirer.service";
 import { validateWorkflow } from "@jyfti/engine";
 import { printValidationErrors, printValue } from "../print.service";
 import {
-  readWorkflowOrTerminate,
   readWorkflowNamesOrTerminate,
+  readWorkflowOrTerminate,
 } from "../files/workflow-file.service";
 import { readWorkflowSchemaOrTerminate } from "../files/workflow-schema.service";
 import { Config } from "../types/config";

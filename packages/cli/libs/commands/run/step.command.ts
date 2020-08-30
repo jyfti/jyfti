@@ -4,8 +4,8 @@ import { map, flatMap, tap } from "rxjs/operators";
 import { from, OperatorFunction } from "rxjs";
 import { promptWorkflow } from "../../inquirer.service";
 import {
-  readWorkflowOrTerminate,
   readWorkflowNamesOrTerminate,
+  readWorkflowOrTerminate,
 } from "../../files/workflow-file.service";
 import {
   writeState,

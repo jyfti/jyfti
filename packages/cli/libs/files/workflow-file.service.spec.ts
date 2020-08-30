@@ -1,8 +1,4 @@
-import {
-  readWorkflow,
-  readWorkflowOrTerminate,
-  readWorkflowNames,
-} from "./workflow-file.service";
+import { readWorkflow, readWorkflowNames } from "./workflow-file.service";
 import { Config } from "../types/config";
 
 jest.mock("./file.service", () => ({
@@ -20,22 +16,6 @@ describe("interacting with workflow files", () => {
 
   it("reads a workflow", async () => {
     expect(await readWorkflow(config, "my-workflow")).toEqual({});
-  });
-
-  it("reads a workflow and does not terminate if it exists", async () => {
-    expect(await readWorkflowOrTerminate(config, "my-workflow")).toEqual({});
-  });
-
-  it("reads a workflow and terminates if it does not exist", async () => {
-    const mockExit = jest.spyOn(process, "exit").mockImplementation(() => {
-      return undefined as never;
-    });
-    jest.spyOn(console, "error").mockImplementation(() => {});
-    require("./file.service").readJson.mockImplementation(() =>
-      Promise.reject()
-    );
-    await readWorkflowOrTerminate(config, "my-workflow");
-    expect(mockExit).toHaveBeenCalledWith(1);
   });
 
   it("reads the list of workflow files", async () => {
