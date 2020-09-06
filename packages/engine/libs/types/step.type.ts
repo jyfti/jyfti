@@ -9,21 +9,22 @@ export interface ForLoop {
   return: string;
 }
 
-export interface Step {
+export interface RequestStep {
   assignTo: string;
-}
-
-export interface RequestStep extends Step {
   request: HttpRequestTemplate;
 }
 
-export interface ExpressionStep extends Step {
+export interface ExpressionStep {
+  assignTo: string;
   expression: JsonExpression;
 }
 
-export interface ForStep extends Step {
+export interface ForStep {
+  assignTo: string;
   for: ForLoop;
 }
+
+export type Step = RequestStep | ExpressionStep | ForStep;
 
 export function isRequestStep(step: Step): step is RequestStep {
   return "request" in step;

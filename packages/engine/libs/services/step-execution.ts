@@ -13,7 +13,6 @@ import {
   HttpMethod,
   isRequestStep,
   isExpressionStep,
-  isForStep,
   ForStep,
   Headers,
 } from "../types";
@@ -29,12 +28,8 @@ export function executeStep(
     return executeRequestStep(step.request, variables);
   } else if (isExpressionStep(step)) {
     return executeExpressionStep(step.expression, variables);
-  } else if (isForStep(step)) {
-    return evaluateLoopReturn(localEvaluations, step);
   } else {
-    return throwError(
-      "Step does not contain any of 'request', 'expression' and 'for'."
-    );
+    return evaluateLoopReturn(localEvaluations, step);
   }
 }
 

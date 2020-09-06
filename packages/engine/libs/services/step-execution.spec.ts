@@ -1,23 +1,10 @@
 import { executeStep } from "./step-execution";
 import { cold } from "jest-marbles";
-import {
-  Step,
-  VariableMap,
-  RequestStep,
-  ExpressionStep,
-  ForStep,
-} from "../types";
+import { VariableMap, RequestStep, ExpressionStep, ForStep } from "../types";
 
 jest.mock("./http");
 
 describe("The execution of steps", () => {
-  it("should return an error if no known step type is given", () => {
-    const step: Step = {
-      assignTo: "myVar",
-    };
-    expect(executeStep(step, [], {})).toBeObservable(cold("#"));
-  });
-
   describe("a request step", () => {
     it("should return the http response", () => {
       const step: RequestStep = {
