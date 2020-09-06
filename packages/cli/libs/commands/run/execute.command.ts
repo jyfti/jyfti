@@ -1,7 +1,7 @@
 import { readConfig } from "../../data-access/config.dao";
 import { createEngine, StepResult, State, Engine } from "@jyfti/engine";
-import { last, flatMap, tap } from "rxjs/operators";
-import { from, OperatorFunction } from "rxjs";
+import { last, flatMap, tap, catchError } from "rxjs/operators";
+import { from, OperatorFunction, empty } from "rxjs";
 import { promptWorkflow, promptWorkflowInputs } from "../../inquirer.service";
 import {
   printStepResult,
@@ -59,14 +59,13 @@ export async function execute(
     if (cmd?.verbose) {
       console.log(printJson(initialState));
     }
-    engine
+    await engine
       .complete(initialState)
-      .pipe(process(engine, config, name, initialState, cmd?.verbose || false))
-      .subscribe(
-        () => {},
-        () => {},
-        () => {}
-      );
+      .pipe(
+        process(engine, config, name, initialState, cmd?.verbose || false),
+        catchError(() => empty())
+      )
+      .toPromise();
   }
 }
 

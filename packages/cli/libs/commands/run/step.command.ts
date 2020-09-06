@@ -1,7 +1,7 @@
 import { readConfig } from "../../data-access/config.dao";
 import { createEngine, StepResult, State, Engine } from "@jyfti/engine";
-import { map, flatMap, tap } from "rxjs/operators";
-import { from, OperatorFunction } from "rxjs";
+import { flatMap, tap, catchError } from "rxjs/operators";
+import { from, OperatorFunction, empty } from "rxjs";
 import { promptWorkflow } from "../../inquirer.service";
 import {
   readWorkflowNamesOrTerminate,
@@ -37,14 +37,13 @@ export async function step(
     if (engine.isComplete(state)) {
       console.log("Workflow execution already completed");
     } else {
-      engine
+      await engine
         .step(state)
-        .pipe(process(engine, config, name, state, cmd?.verbose || false))
-        .subscribe(
-          () => {},
-          () => {},
-          () => {}
-        );
+        .pipe(
+          process(engine, config, name, state, cmd?.verbose || false),
+          catchError(() => empty())
+        )
+        .toPromise();
     }
   }
 }
