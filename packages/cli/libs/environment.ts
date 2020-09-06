@@ -8,7 +8,7 @@ export function addEnvironmentSubCommands(command: commander.Command): void {
     .action(viewEnvironment);
 
   command
-    .command("list [name]")
+    .command("list")
     .description("list all environments")
     .action(listEnvironments);
 }

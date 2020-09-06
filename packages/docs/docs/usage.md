@@ -94,3 +94,35 @@ A call to `complete` runs it to completion.
 $ jyfti run complete retrieve-readme
 Completed 0
 ```
+
+## Environments
+
+Besides inputs, a workflow run accepts an environment.
+While inputs are passed as values, an environment is passed as a reference to an environment file.
+The environment files are stored in the environment directory defined via `envRoot` in the `jyfti.json`.
+
+You can list the existing environments.
+
+```bash
+$ jyfti environment list
+default
+prod
+local
+```
+
+Even if no environment files exists, there is always the default environment.
+This environment is also used each time an environment is not explicitly passed.
+
+```bash
+$ jyfti run retrieve-readme -e default
+```
+
+An environment is a JSON object where each key can be assigned an arbitrary json value.
+It can be viewed which prints the environment file.
+
+```bash
+$ jyfti environment view local
+{
+  "baseUrl": "http://localhost:8080/"
+}
+```
