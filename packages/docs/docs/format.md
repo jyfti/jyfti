@@ -31,7 +31,7 @@ A simple example is the `retrieve-readme` workflow.
       "assignTo": "readmeResponse",
       "request": {
         "method": "GET",
-        "url": "https://raw.githubusercontent.com/${org}/${repo}/master/README.md"
+        "url": "https://raw.githubusercontent.com/${inputs.org}/${inputs.repo}/master/README.md"
       }
     }
   ]
@@ -105,7 +105,7 @@ A request step defines a single http request.
   "assignTo": "readmeResponse",
   "request": {
     "method": "GET",
-    "url": "https://raw.githubusercontent.com/${org}/${repo}/master/README.md",
+    "url": "https://raw.githubusercontent.com/${inputs.org}/${inputs.repo}/master/README.md",
     "body": {
       "$eval": "${previousResponse.body}"
     },
