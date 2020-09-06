@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { step } from "./step.command";
-import { printSuccess, printError } from "../../print.service";
+import { printFailureResult, printStepResult } from "../../print.service";
 import { of, throwError } from "rxjs";
 
 jest.mock("../../data-access/config.dao");
@@ -50,7 +50,9 @@ describe("the step command", () => {
       })
     );
     await step("my-workflow", { verbose: false });
-    expect(logSpy).toHaveBeenCalledWith("Completed " + printSuccess("[0]"));
+    expect(logSpy).toHaveBeenCalledWith(
+      printStepResult(false, { path: [0], evaluation: null })
+    );
     expect(errorSpy).toHaveBeenCalledTimes(0);
     expect(writeStateSpy).toHaveBeenCalledTimes(1);
   });
@@ -71,7 +73,7 @@ describe("the step command", () => {
     await step("my-workflow", { verbose: false });
     expect(logSpy).toHaveBeenCalledTimes(0);
     expect(errorSpy).toHaveBeenCalledWith(
-      "Failed " + printError("Something went wrong.")
+      printFailureResult("Something went wrong.")
     );
     expect(writeStateSpy).toHaveBeenCalledTimes(0);
   });

@@ -8,7 +8,7 @@ import {
   readWorkflowOrTerminate,
 } from "../../data-access/workflow.dao";
 import { writeState, readStateOrTerminate } from "../../data-access/state.dao";
-import { printStepResult, printError } from "../../print.service";
+import { printStepResult, printFailureResult } from "../../print.service";
 import { readEnvironmentOrTerminate } from "../../data-access/environment.dao";
 import { validateEnvironmentOrTerminate } from "../../validator";
 import { Config } from "../../types/config";
@@ -59,7 +59,7 @@ function process(
     stepResult$.pipe(
       tap(
         (stepResult) => console.log(printStepResult(verbose, stepResult)),
-        (error) => console.error("Failed " + printError(error))
+        (error) => console.error(printFailureResult(error))
       ),
       engine.transitionFrom(state),
       flatMap((state) => from(writeState(config, name, state)))

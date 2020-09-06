@@ -75,6 +75,7 @@
     "inquirer": "^7.3.3",
     "json-e": "^4.1.0",
     "lodash": "^4.17.19",
+    "log-symbols": "^4.0.0",
     "rxjs": "^6.6.2"
   },
   "gitHead": "06d0940e018c15b33a70db6860ba7bb530c9815a"

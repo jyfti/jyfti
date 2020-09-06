@@ -3,7 +3,12 @@ import mock from "mock-fs";
 import { createProgram } from "./program";
 import { configName } from "./data-access/config.dao";
 import { fileExists } from "./data-access/file.service";
-import { printValue, printSuccess, printJson } from "./print.service";
+import {
+  printValue,
+  printSuccess,
+  printJson,
+  printStepResult,
+} from "./print.service";
 
 jest.mock("inquirer", () => ({
   prompt: jest.fn((questions: { name: string; default: string }[]) =>
@@ -129,7 +134,9 @@ describe("the commands in combination with each other", () => {
     );
 
     await program.parseAsync(command("run step retrieve-readme"));
-    expect(logSpy).lastCalledWith("Completed " + printSuccess("[0]"));
+    expect(logSpy).lastCalledWith(
+      printStepResult(false, { path: [0], evaluation: null })
+    );
 
     await program.parseAsync(command("run status retrieve-readme"));
     expect(logSpy).lastCalledWith(printSuccess("[Completed]"));

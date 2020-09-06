@@ -3,7 +3,7 @@ import { createEngine, StepResult, Engine, State } from "@jyfti/engine";
 import { last, flatMap, tap, catchError } from "rxjs/operators";
 import { from, OperatorFunction, empty } from "rxjs";
 import { promptWorkflow } from "../../inquirer.service";
-import { printStepResult, printError } from "../../print.service";
+import { printStepResult, printFailureResult } from "../../print.service";
 import {
   readWorkflowOrTerminate,
   readWorkflowNamesOrTerminate,
@@ -55,7 +55,7 @@ function process(
     stepResult$.pipe(
       tap(
         (stepResult) => console.log(printStepResult(verbose, stepResult)),
-        (error) => console.error("Failed " + printError(error))
+        (error) => console.error(printFailureResult(error))
       ),
       engine.transitionFrom(state),
       last(),

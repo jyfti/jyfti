@@ -1,6 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { execute } from "./execute.command";
-import { printJson, printSuccess, printError } from "../../print.service";
+import {
+  printJson,
+  printStepResult,
+  printFailureResult,
+} from "../../print.service";
 import { Workflow } from "@jyfti/engine";
 import { of, throwError } from "rxjs";
 
@@ -72,7 +76,7 @@ describe("the execute command", () => {
     expect(logSpy).toHaveBeenNthCalledWith(1, "Created state.");
     expect(logSpy).toHaveBeenNthCalledWith(
       2,
-      "Completed " + printSuccess("[]")
+      printStepResult(false, { path: [], evaluation: null })
     );
     expect(logSpy).toHaveBeenNthCalledWith(3, printJson(output));
     expect(errorSpy).toHaveBeenCalledTimes(0);
@@ -86,7 +90,7 @@ describe("the execute command", () => {
     expect(logSpy).toHaveBeenNthCalledWith(1, "Created state.");
     expect(logSpy).toHaveBeenNthCalledWith(
       2,
-      "Completed " + printSuccess("[]")
+      printStepResult(false, { path: [], evaluation: null })
     );
     expect(logSpy).toHaveBeenNthCalledWith(3, printJson(output));
     expect(errorSpy).toHaveBeenCalledTimes(0);
@@ -119,7 +123,7 @@ describe("the execute command", () => {
     expect(logSpy).toHaveBeenNthCalledWith(1, "Created state.");
     expect(errorSpy).toHaveBeenNthCalledWith(
       1,
-      "Failed " + printError("Something went wrong.")
+      printFailureResult("Something went wrong.")
     );
     expect(writeStateSpy).toHaveBeenCalledTimes(0);
   });

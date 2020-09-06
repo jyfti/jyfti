@@ -1,4 +1,5 @@
 import chalk from "chalk";
+import logSymbols from "log-symbols";
 import { ErrorObject } from "ajv";
 import { StepResult, Inputs } from "@jyfti/engine";
 
@@ -28,7 +29,11 @@ export function printStepResult(
 ): string {
   return verbose
     ? printJson(stepResult)
-    : "Completed " + printSuccess(JSON.stringify(stepResult.path, null, 0));
+    : logSymbols.success + " " + JSON.stringify(stepResult.path, null, 0);
+}
+
+export function printFailureResult(error: string | undefined): string {
+  return logSymbols.error + " " + printError(error);
 }
 
 export function printAllErrors(

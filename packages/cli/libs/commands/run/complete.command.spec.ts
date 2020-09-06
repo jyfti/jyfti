@@ -1,5 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { printJson, printSuccess, printError } from "../../print.service";
+import {
+  printJson,
+  printStepResult,
+  printFailureResult,
+} from "../../print.service";
 import { complete } from "./complete.command";
 import { of, throwError } from "rxjs";
 
@@ -57,7 +61,7 @@ describe("the complete command", () => {
     await complete("my-workflow");
     expect(logSpy).toHaveBeenNthCalledWith(
       1,
-      "Completed " + printSuccess("[]")
+      printStepResult(false, { path: [], evaluation: null })
     );
     expect(errorSpy).toHaveBeenCalledTimes(0);
     expect(writeStateSpy).toHaveBeenCalledTimes(1);
@@ -68,7 +72,7 @@ describe("the complete command", () => {
     await complete(undefined);
     expect(logSpy).toHaveBeenNthCalledWith(
       1,
-      "Completed " + printSuccess("[]")
+      printStepResult(false, { path: [], evaluation: null })
     );
     expect(errorSpy).toHaveBeenCalledTimes(0);
     expect(writeStateSpy).toHaveBeenCalledTimes(1);
@@ -90,7 +94,7 @@ describe("the complete command", () => {
     expect(logSpy).toHaveBeenCalledTimes(0);
     expect(errorSpy).toHaveBeenNthCalledWith(
       1,
-      "Failed " + printError("Something went wrong.")
+      printFailureResult("Something went wrong.")
     );
     expect(writeStateSpy).toHaveBeenCalledTimes(0);
   });

@@ -7,7 +7,7 @@ import {
   printStepResult,
   printJson,
   printOutput,
-  printError,
+  printFailureResult,
 } from "../../print.service";
 import {
   readWorkflowOrTerminate,
@@ -80,7 +80,7 @@ function process(
     stepResult$.pipe(
       tap(
         (stepResult) => console.log(printStepResult(verbose, stepResult)),
-        (error) => console.error("Failed " + printError(error))
+        (error) => console.error(printFailureResult(error))
       ),
       engine.transitionFrom(initialState),
       last(),
