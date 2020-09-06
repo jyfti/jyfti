@@ -1,7 +1,22 @@
 import { Path } from "./path.type";
 import { Evaluation } from "./evaluations.type";
 
-export interface StepResult {
+export interface StepSuccess {
   path: Path;
   evaluation: Evaluation;
+}
+
+export interface StepFailure {
+  path: Path;
+  error: string;
+}
+
+export type StepResult = StepSuccess | StepFailure;
+
+export function isSuccess(stepResult: StepResult): stepResult is StepSuccess {
+  return "evaluation" in stepResult;
+}
+
+export function isFailure(stepResult: StepResult): stepResult is StepFailure {
+  return "error" in stepResult;
 }

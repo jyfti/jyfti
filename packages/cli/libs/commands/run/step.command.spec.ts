@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { step } from "./step.command";
-import { printFailureResult, printStepResult } from "../../print.service";
-import { of, throwError } from "rxjs";
+import { printStepResult } from "../../print.service";
+import { of } from "rxjs";
 
 jest.mock("../../data-access/config.dao");
 jest.mock("../../data-access/state.dao", () => ({
@@ -27,6 +27,8 @@ jest.mock("@jyfti/engine", () => {
   return {
     engine,
     createEngine: () => engine,
+    isSuccess: jest.requireActual("@jyfti/engine").isSuccess,
+    isFailure: jest.requireActual("@jyfti/engine").isFailure,
   };
 });
 
@@ -51,7 +53,7 @@ describe("the step command", () => {
     );
     await step("my-workflow", { verbose: false });
     expect(logSpy).toHaveBeenCalledWith(
-      printStepResult(false, { path: [0], evaluation: null })
+      printStepResult({ path: [0], evaluation: null })
     );
     expect(errorSpy).toHaveBeenCalledTimes(0);
     expect(writeStateSpy).toHaveBeenCalledTimes(1);
@@ -68,13 +70,16 @@ describe("the step command", () => {
   it("should log a failed state if the engine returns an error", async () => {
     require("@jyfti/engine").engine.isComplete.mockReturnValue(false);
     require("@jyfti/engine").engine.step.mockReturnValue(
-      throwError("Something went wrong.")
+      of({
+        path: [0],
+        error: "Something went wrong.",
+      })
     );
     await step("my-workflow", { verbose: false });
-    expect(logSpy).toHaveBeenCalledTimes(0);
-    expect(errorSpy).toHaveBeenCalledWith(
-      printFailureResult("Something went wrong.")
+    expect(logSpy).toHaveBeenCalledWith(
+      printStepResult({ path: [0], error: "Something went wrong." })
     );
+    expect(errorSpy).toHaveBeenCalledTimes(0);
     expect(writeStateSpy).toHaveBeenCalledTimes(0);
   });
 });

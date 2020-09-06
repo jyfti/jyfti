@@ -1,11 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {
-  printJson,
-  printStepResult,
-  printFailureResult,
-} from "../../print.service";
+import { printStepResult } from "../../print.service";
 import { complete } from "./complete.command";
-import { of, throwError } from "rxjs";
+import { of } from "rxjs";
 
 jest.mock("../../data-access/workflow.dao", () => ({
   readWorkflowOrTerminate: () => Promise.resolve("my-workflow"),
@@ -40,6 +36,8 @@ jest.mock("@jyfti/engine", () => {
   return {
     engine,
     createEngine: () => engine,
+    isSuccess: jest.requireActual("@jyfti/engine").isSuccess,
+    isFailure: jest.requireActual("@jyfti/engine").isFailure,
   };
 });
 
@@ -61,7 +59,7 @@ describe("the complete command", () => {
     await complete("my-workflow");
     expect(logSpy).toHaveBeenNthCalledWith(
       1,
-      printStepResult(false, { path: [], evaluation: null })
+      printStepResult({ path: [], evaluation: null })
     );
     expect(errorSpy).toHaveBeenCalledTimes(0);
     expect(writeStateSpy).toHaveBeenCalledTimes(1);
@@ -72,30 +70,22 @@ describe("the complete command", () => {
     await complete(undefined);
     expect(logSpy).toHaveBeenNthCalledWith(
       1,
-      printStepResult(false, { path: [], evaluation: null })
+      printStepResult({ path: [], evaluation: null })
     );
-    expect(errorSpy).toHaveBeenCalledTimes(0);
-    expect(writeStateSpy).toHaveBeenCalledTimes(1);
-  });
-
-  it("should give more output in verbose mode", async () => {
-    require("@jyfti/engine").engine.complete.mockReturnValue(of(stepResult));
-    await complete("my-workflow", { verbose: true });
-    expect(logSpy).toHaveBeenNthCalledWith(1, printJson(stepResult));
     expect(errorSpy).toHaveBeenCalledTimes(0);
     expect(writeStateSpy).toHaveBeenCalledTimes(1);
   });
 
   it("should print an error if the engine reports an error", async () => {
     require("@jyfti/engine").engine.complete.mockReturnValue(
-      throwError("Something went wrong.")
+      of({ path: [0], error: "Something went wrong." })
     );
     await complete("my-workflow");
-    expect(logSpy).toHaveBeenCalledTimes(0);
-    expect(errorSpy).toHaveBeenNthCalledWith(
+    expect(logSpy).toHaveBeenNthCalledWith(
       1,
-      printFailureResult("Something went wrong.")
+      printStepResult({ path: [0], error: "Something went wrong." })
     );
+    expect(errorSpy).toHaveBeenCalledTimes(0);
     expect(writeStateSpy).toHaveBeenCalledTimes(0);
   });
 });

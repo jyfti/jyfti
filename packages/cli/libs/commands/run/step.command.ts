@@ -1,14 +1,20 @@
 import { readConfig } from "../../data-access/config.dao";
-import { createEngine, StepResult, State, Engine } from "@jyfti/engine";
+import {
+  createEngine,
+  StepResult,
+  State,
+  Engine,
+  isFailure,
+} from "@jyfti/engine";
 import { flatMap, tap, catchError } from "rxjs/operators";
-import { from, OperatorFunction, empty } from "rxjs";
+import { from, OperatorFunction, empty, throwError, of } from "rxjs";
 import { promptWorkflow } from "../../inquirer.service";
 import {
   readWorkflowNamesOrTerminate,
   readWorkflowOrTerminate,
 } from "../../data-access/workflow.dao";
 import { writeState, readStateOrTerminate } from "../../data-access/state.dao";
-import { printStepResult, printFailureResult } from "../../print.service";
+import { printStepResult } from "../../print.service";
 import { readEnvironmentOrTerminate } from "../../data-access/environment.dao";
 import { validateEnvironmentOrTerminate } from "../../validator";
 import { Config } from "../../types/config";
@@ -40,7 +46,7 @@ export async function step(
       await engine
         .step(state)
         .pipe(
-          process(engine, config, name, state, cmd?.verbose || false),
+          process(engine, config, name, state),
           catchError(() => empty())
         )
         .toPromise();
@@ -52,14 +58,13 @@ function process(
   engine: Engine,
   config: Config,
   name: string,
-  state: State,
-  verbose: boolean
+  state: State
 ): OperatorFunction<StepResult, void> {
   return (stepResult$) =>
     stepResult$.pipe(
-      tap(
-        (stepResult) => console.log(printStepResult(verbose, stepResult)),
-        (error) => console.error(printFailureResult(error))
+      tap((stepResult) => console.log(printStepResult(stepResult))),
+      flatMap((stepResult) =>
+        isFailure(stepResult) ? throwError(stepResult.error) : of(stepResult)
       ),
       engine.transitionFrom(state),
       flatMap((state) => from(writeState(config, name, state)))

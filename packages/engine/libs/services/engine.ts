@@ -8,6 +8,7 @@ import {
   Workflow,
   VariableMap,
   Environment,
+  isSuccess,
 } from "../types";
 import { createVariableMapFromState } from "./variable-map-creation";
 
@@ -73,11 +74,12 @@ export class Engine {
    * The behaviour is comparable to the "Step into" behaviour of common debuggers.
    *
    * @param state The state describing which step to execute.
-   * @returns A cold observable completing after a single step result or erroring.
+   * @returns A cold observable completing after a single step result.
    */
   step(state: State): Observable<StepResult> {
     return nextStep(this.workflow, state, this.environment).pipe(
-      map((evaluation) => ({ path: state.path, evaluation }))
+      map((evaluation) => ({ path: state.path, evaluation })),
+      catchError((error) => of({ path: state.path, error }))
     );
   }
 
@@ -118,10 +120,7 @@ export class Engine {
    */
   transitionFrom(state: State): OperatorFunction<StepResult, State> {
     return (stepResult$) =>
-      stepResult$.pipe(
-        scan(this.transition.bind(this), state),
-        catchError((err) => of({ ...state, error: err }))
-      );
+      stepResult$.pipe(scan(this.transition.bind(this), state));
   }
 
   /**
@@ -132,11 +131,18 @@ export class Engine {
    * @returns The next state
    */
   transition(state: State, stepResult: StepResult): State {
-    return nextState(
-      this.workflow,
-      state,
-      stepResult.evaluation,
-      this.environment
-    );
+    if (isSuccess(stepResult)) {
+      return nextState(
+        this.workflow,
+        state,
+        stepResult.evaluation,
+        this.environment
+      );
+    } else {
+      return {
+        ...state,
+        error: stepResult.error,
+      };
+    }
   }
 }
