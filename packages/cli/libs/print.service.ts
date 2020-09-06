@@ -1,7 +1,7 @@
 import chalk from "chalk";
 import logSymbols from "log-symbols";
 import { ErrorObject } from "ajv";
-import { StepResult, Inputs, isSuccess } from "@jyfti/engine";
+import { StepResult, Inputs, isSuccess, Step } from "@jyfti/engine";
 
 export function printOutput(output: unknown): string {
   return typeof output === "string" ? output : printJson(output);
@@ -23,14 +23,20 @@ export function printSuccess(message: string | undefined): string {
   return chalk.green(message);
 }
 
-export function printStepResult(stepResult: StepResult): string {
+export function printStepResult(step: Step, stepResult: StepResult): string {
   if (isSuccess(stepResult)) {
-    return logSymbols.success + " " + JSON.stringify(stepResult.path, null, 0);
+    return (
+      logSymbols.success +
+      " " +
+      JSON.stringify(stepResult.path, null, 0) +
+      (step.name ? " " + step.name : "")
+    );
   } else {
     return (
       logSymbols.error +
       " " +
       JSON.stringify(stepResult.path, null, 0) +
+      (step.name ? " " + step.name : "") +
       " " +
       printError(stepResult.error)
     );

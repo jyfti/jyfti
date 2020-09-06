@@ -44,6 +44,7 @@ jest.mock("@jyfti/engine", () => {
       stepResult$.pipe(require("rxjs/operators").map(() => ({})))
     ),
     getOutput: jest.fn(() => ({})),
+    resolveStep: () => ({}),
   };
   return {
     engine,
@@ -74,7 +75,10 @@ describe("the execute command", () => {
     expect(logSpy).toHaveBeenNthCalledWith(1, "Created state.");
     expect(logSpy).toHaveBeenNthCalledWith(
       2,
-      printStepResult({ path: [], evaluation: null })
+      printStepResult(
+        { assignTo: "a", expression: 1 },
+        { path: [], evaluation: null }
+      )
     );
     expect(logSpy).toHaveBeenNthCalledWith(3, printJson(output));
     expect(errorSpy).toHaveBeenCalledTimes(0);
@@ -88,7 +92,10 @@ describe("the execute command", () => {
     expect(logSpy).toHaveBeenNthCalledWith(1, "Created state.");
     expect(logSpy).toHaveBeenNthCalledWith(
       2,
-      printStepResult({ path: [], evaluation: null })
+      printStepResult(
+        { assignTo: "a", expression: 1 },
+        { path: [], evaluation: null }
+      )
     );
     expect(logSpy).toHaveBeenNthCalledWith(3, printJson(output));
     expect(errorSpy).toHaveBeenCalledTimes(0);
@@ -107,7 +114,10 @@ describe("the execute command", () => {
     await execute("my-workflow", [], { verbose: true });
     expect(logSpy).toHaveBeenNthCalledWith(1, "Created state.");
     expect(logSpy).toHaveBeenNthCalledWith(2, printJson(initialState));
-    expect(logSpy).toHaveBeenNthCalledWith(3, printStepResult(stepResult));
+    expect(logSpy).toHaveBeenNthCalledWith(
+      3,
+      printStepResult({ assignTo: "a", expression: 1 }, stepResult)
+    );
     expect(logSpy).toHaveBeenNthCalledWith(4, printJson(output));
     expect(errorSpy).toHaveBeenCalledTimes(0);
     expect(writeStateSpy).toHaveBeenCalledTimes(1);
@@ -121,7 +131,10 @@ describe("the execute command", () => {
     expect(logSpy).toHaveBeenNthCalledWith(1, "Created state.");
     expect(logSpy).toHaveBeenNthCalledWith(
       2,
-      printStepResult({ path: [0], error: "Something went wrong." })
+      printStepResult(
+        { assignTo: "a", expression: 1 },
+        { path: [0], error: "Something went wrong." }
+      )
     );
     expect(errorSpy).toHaveBeenCalledTimes(0);
     expect(writeStateSpy).toHaveBeenCalledTimes(0);

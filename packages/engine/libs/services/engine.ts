@@ -9,8 +9,11 @@ import {
   VariableMap,
   Environment,
   isSuccess,
+  Path,
+  Step,
 } from "../types";
 import { createVariableMapFromState } from "./variable-map-creation";
+import { resolveStep } from "./step-resolvement";
 
 /**
  * Creates an execution engine for a specific workflow in a specific environment.
@@ -112,6 +115,15 @@ export class Engine {
    */
   getVariableMap(state: State): VariableMap {
     return createVariableMapFromState(this.workflow, state, this.environment);
+  }
+
+  /**
+   * Resolves the step at the given path of the workflow.
+   *
+   * @param path The path
+   */
+  resolveStep(path: Path): Step {
+    return resolveStep(this.workflow, path);
   }
 
   /**

@@ -10,16 +10,19 @@ export interface ForLoop {
 }
 
 export interface RequestStep {
+  name?: string;
   assignTo: string;
   request: HttpRequestTemplate;
 }
 
 export interface ExpressionStep {
+  name?: string;
   assignTo: string;
   expression: JsonExpression;
 }
 
 export interface ForStep {
+  name?: string;
   assignTo: string;
   for: ForLoop;
 }

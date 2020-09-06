@@ -29,12 +29,14 @@
   },
   "steps": [
     {
+      "name": "Create header object",
       "assignTo": "headers",
       "expression": {
         "Authorization": "token ${env.github.token}"
       }
     },
     {
+      "name": "Request issues from GitHub",
       "assignTo": "issueResponse",
       "request": {
         "url": "https://api.github.com/repos/${inputs.org}/${inputs.repo}/issues",
@@ -44,6 +46,7 @@
       }
     },
     {
+      "name": "Extract comments urls from response",
       "assignTo": "commentsUrls",
       "expression": {
         "$map": {
@@ -55,12 +58,14 @@
       }
     },
     {
+      "name": "Request comments for each issue",
       "assignTo": "comments",
       "for": {
         "const": "commentsUrl",
         "in": { "$eval": "commentsUrls" },
         "do": [
           {
+            "name": "Request comments for issue",
             "assignTo": "comments",
             "request": {
               "url": "${commentsUrl}",
