@@ -2,7 +2,7 @@ import { Config } from "../types/config";
 import { readState, readStateOrTerminate } from "./state.dao";
 
 jest.mock("./file.service", () => ({
-  readJson: jest.fn(() => Promise.resolve({})),
+  readFile: jest.fn(() => Promise.resolve("{}")),
 }));
 
 describe("interacting with state files", () => {
@@ -26,7 +26,7 @@ describe("interacting with state files", () => {
       return undefined as never;
     });
     jest.spyOn(console, "error").mockImplementation(() => {});
-    require("./file.service").readJson.mockImplementation(() =>
+    require("./file.service").readFile.mockImplementation(() =>
       Promise.reject()
     );
     await readStateOrTerminate(config, "my-workflow");

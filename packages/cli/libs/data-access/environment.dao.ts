@@ -1,5 +1,5 @@
 import { Environment } from "@jyfti/engine";
-import { readJson, fileExists, writeJson, listDirFiles } from "./file.service";
+import { readFile, fileExists, writeJson, listDirFiles } from "./file.service";
 import { Config } from "../types/config";
 import * as nodePath from "path";
 import { printError } from "../print.service";
@@ -14,9 +14,14 @@ function readEnvironment(
   config: Config,
   name: string | undefined
 ): Promise<Environment> {
-  return readJson(
-    resolveEnvironment(config, name || defaultEnvironmentName)
-  ).then(toEnvironment);
+  return readFile(resolveEnvironment(config, name || defaultEnvironmentName))
+    .catch(() =>
+      !name || name === defaultEnvironmentName
+        ? Promise.resolve("{}")
+        : Promise.reject("The environment does not exist.")
+    )
+    .then(JSON.parse)
+    .then(toEnvironment);
 }
 
 function isEnvironment(object: unknown): object is Environment {
@@ -51,9 +56,6 @@ export async function readEnvironmentOrTerminate(
   try {
     return await readEnvironment(config, name);
   } catch (err) {
-    if (!name || name === defaultEnvironmentName) {
-      return Promise.resolve({});
-    }
     console.error(printError("The environment can not be read."));
     console.error(err?.stack);
     process.exit(1);

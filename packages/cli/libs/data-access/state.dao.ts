@@ -2,7 +2,7 @@ import * as fs from "fs";
 import * as nodePath from "path";
 import { Config } from "../types/config";
 import { State } from "@jyfti/engine";
-import { readJson, writeJson } from "./file.service";
+import { readFile, writeJson } from "./file.service";
 import { printError } from "../print.service";
 
 function resolveState(config: Config, name: string) {
@@ -10,7 +10,7 @@ function resolveState(config: Config, name: string) {
 }
 
 export function readState(config: Config, name: string): Promise<State> {
-  return readJson(resolveState(config, name)).then(toState);
+  return readFile(resolveState(config, name)).then(JSON.parse).then(toState);
 }
 
 function isState(object: unknown): object is State {

@@ -1,7 +1,7 @@
 import * as nodePath from "path";
 import { Config } from "../types/config";
 import { Workflow } from "@jyfti/engine";
-import { readJson, fileExists, writeJson, listDirFiles } from "./file.service";
+import { readFile, fileExists, writeJson, listDirFiles } from "./file.service";
 import { printError } from "../print.service";
 import { isUrl } from "./workflow.util";
 import bent from "bent";
@@ -37,7 +37,9 @@ export async function readWorkflow(
   config: Config,
   name: string
 ): Promise<Workflow> {
-  return await readJson(resolveWorkflow(config, name)).then(toWorkflow);
+  return await readFile(resolveWorkflow(config, name))
+    .then(JSON.parse)
+    .then(toWorkflow);
 }
 
 function isWorkflow(object: unknown): object is Workflow {

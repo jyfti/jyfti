@@ -1,6 +1,6 @@
 import { JsonSchema } from "@jyfti/engine";
 import { printError } from "../print.service";
-import { readJson } from "./file.service";
+import { readFile } from "./file.service";
 import { isUrl } from "./workflow.util";
 import bent from "bent";
 import { Config } from "../types/config";
@@ -20,7 +20,9 @@ export async function readWorkflowSchemaOrTerminate(
 }
 
 async function readWorkflowSchema(identifier: string): Promise<JsonSchema> {
-  const read = isUrl(identifier) ? getJson : readJson;
+  const read = isUrl(identifier)
+    ? getJson
+    : (name) => readFile(name).then(JSON.parse);
   const schema = await read(identifier);
   if (!isWorkflowSchema(schema)) {
     return Promise.reject(

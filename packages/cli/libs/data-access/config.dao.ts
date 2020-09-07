@@ -1,5 +1,5 @@
 import { Config } from "../types/config";
-import { readJson, ensureDirExists, writeJson } from "./file.service";
+import { readFile, ensureDirExists, writeJson } from "./file.service";
 
 export const configName = "jyfti.json";
 
@@ -12,8 +12,9 @@ export const defaultConfig: Config = {
 };
 
 export async function readConfig(): Promise<Config> {
-  const config = await readJson(configName)
-    .catch(() => ({}))
+  const config = await readFile(configName)
+    .catch(() => "{}")
+    .then(JSON.parse)
     .then(toPartialConfig);
   const configWithDefaults: Config = { ...defaultConfig, ...config };
   await ensureDirExists(configWithDefaults.outRoot);

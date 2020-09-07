@@ -2,7 +2,7 @@ import { readWorkflowSchemaOrTerminate } from "./schema.dao";
 import { Config } from "../types/config";
 
 jest.mock("./file.service", () => ({
-  readJson: jest.fn(() => Promise.resolve({})),
+  readFile: jest.fn(() => Promise.resolve("{}")),
 }));
 
 describe("interacting with workflow schemas", () => {
@@ -22,7 +22,7 @@ describe("interacting with workflow schemas", () => {
       return undefined as never;
     });
     jest.spyOn(console, "error").mockImplementation(() => {});
-    require("./file.service").readJson.mockImplementation(() =>
+    require("./file.service").readFile.mockImplementation(() =>
       Promise.reject()
     );
     await readWorkflowSchemaOrTerminate(config);

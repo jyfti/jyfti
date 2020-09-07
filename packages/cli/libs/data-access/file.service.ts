@@ -18,8 +18,8 @@ export function listDirFiles(path: string): Promise<string[]> {
   return fs.promises.readdir(path);
 }
 
-export function readJson(path: string): Promise<unknown> {
-  return fs.promises.readFile(path, "utf8").then(JSON.parse);
+export function readFile(path: string): Promise<string> {
+  return fs.promises.readFile(path, "utf8");
 }
 
 export function writeJson(path: string, json: unknown): Promise<void> {

@@ -5,7 +5,7 @@ import {
 } from "./environment.dao";
 
 jest.mock("./file.service", () => ({
-  readJson: jest.fn(() => Promise.resolve({})),
+  readFile: jest.fn(() => Promise.resolve("{}")),
   listDirFiles: jest.fn(() => Promise.resolve([])),
 }));
 
@@ -26,7 +26,7 @@ describe("interacting with environment files", () => {
       return undefined as never;
     });
     jest.spyOn(console, "error").mockImplementation(() => {});
-    require("./file.service").readJson.mockImplementation(() =>
+    require("./file.service").readFile.mockImplementation(() =>
       Promise.reject()
     );
     await readEnvironmentOrTerminate(config, "my-workflow");

@@ -2,7 +2,7 @@ import { readConfig, defaultConfig } from "./config.dao";
 
 jest.mock("./file.service", () => ({
   ensureDirExists: () => Promise.resolve(),
-  readJson: () => Promise.resolve({}),
+  readFile: () => Promise.resolve("{}"),
 }));
 
 describe("interacting with config files", () => {
