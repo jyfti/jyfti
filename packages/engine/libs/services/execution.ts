@@ -53,14 +53,29 @@ export function step(
   environment: Environment
 ): Observable<StepResult> {
   const step = resolveStep(workflow, state.path);
-  return executeStep(
-    step,
-    resolveEvaluation(state.evaluations, state.path),
-    createVariableMapFromState(workflow, state, environment)
-  ).pipe(
-    map((evaluation) => ({ name: step.name, path: state.path, evaluation })),
-    catchError((error) => of({ name: step.name, path: state.path, error }))
+  const localEvaluations = resolveEvaluation(state.evaluations, state.path);
+  const variables = createVariableMapFromState(workflow, state, environment);
+  const name = tryCatch(
+    () => stringOrElseUndefined(evaluate(variables, step.name)),
+    (err) => "<Name could not be evaluated> " + JSON.stringify(err)
   );
+  const path = state.path;
+  return executeStep(step, localEvaluations, variables).pipe(
+    map((evaluation) => ({ name, path, evaluation })),
+    catchError((error) => of({ name, path, error }))
+  );
+}
+
+function stringOrElseUndefined(object: unknown): string | undefined {
+  return typeof object === "string" ? object : undefined;
+}
+
+function tryCatch<T>(f: () => T, catcher: (err) => T): T {
+  try {
+    return f();
+  } catch (err) {
+    return catcher(err);
+  }
 }
 
 export function toOutput(

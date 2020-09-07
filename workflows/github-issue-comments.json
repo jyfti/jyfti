@@ -65,7 +65,7 @@
         "in": { "$eval": "commentsUrls" },
         "do": [
           {
-            "name": "Request comments for issue",
+            "name": "Request comments for comment url ${commentsUrl}",
             "assignTo": "comments",
             "request": {
               "url": "${commentsUrl}",
