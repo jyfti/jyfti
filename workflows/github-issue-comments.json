@@ -46,14 +46,15 @@
       }
     },
     {
-      "name": "Extract comments urls from response",
-      "assignTo": "commentsUrls",
+      "name": "Extract issues from response",
+      "assignTo": "issues",
       "expression": {
         "$map": {
           "$eval": "issueResponse.body"
         },
         "each(issue)": {
-          "$eval": "issue.comments_url"
+          "commentsUrl": { "$eval": "issue.comments_url" },
+          "title": { "$eval": "issue.title" }
         }
       }
     },
@@ -61,14 +62,14 @@
       "name": "Request comments for each issue",
       "assignTo": "comments",
       "for": {
-        "const": "commentsUrl",
-        "in": { "$eval": "commentsUrls" },
+        "const": "issue",
+        "in": { "$eval": "issues" },
         "do": [
           {
-            "name": "Request comments for comment url ${commentsUrl}",
+            "name": "Request comments for issue '${issue.title}'",
             "assignTo": "comments",
             "request": {
-              "url": "${commentsUrl}",
+              "url": "${issue.commentsUrl}",
               "headers": {
                 "$eval": "headers"
               }
