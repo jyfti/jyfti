@@ -9,28 +9,31 @@ function resolveState(config: Config, name: string) {
   return nodePath.resolve(config.outRoot, name + ".state.json");
 }
 
-export async function readState(config: Config, name: string): Promise<State> {
-  const state = await readJson(resolveState(config, name));
-  if (!isState(state)) {
-    return Promise.reject("The state file does not represent a valid state");
-  }
-  return state;
+export function readState(config: Config, name: string): Promise<State> {
+  return readJson(resolveState(config, name)).then(toState);
 }
 
 function isState(object: unknown): object is State {
   return typeof object === "object";
 }
 
+function toState(object: unknown): Promise<State> {
+  return isState(object)
+    ? Promise.resolve(object)
+    : Promise.reject("The state is not valid.");
+}
+
 export async function readStateOrTerminate(
   config: Config,
   name: string
 ): Promise<State> {
-  const state = await readState(config, name).catch(() => undefined);
-  if (!state) {
+  try {
+    return await readState(config, name);
+  } catch (err) {
     console.error(printError("Workflow execution is not running."));
+    console.error(err?.stack);
     process.exit(1);
   }
-  return state;
 }
 
 export function writeState(

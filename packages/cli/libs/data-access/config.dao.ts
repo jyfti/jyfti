@@ -12,10 +12,9 @@ export const defaultConfig: Config = {
 };
 
 export async function readConfig(): Promise<Config> {
-  const config = await readJson(configName).catch(() => ({}));
-  if (!isPartialConfig(config)) {
-    return Promise.reject("The config file is not a valid config");
-  }
+  const config = await readJson(configName)
+    .catch(() => ({}))
+    .then(toPartialConfig);
   const configWithDefaults: Config = { ...defaultConfig, ...config };
   await ensureDirExists(configWithDefaults.outRoot);
   await ensureDirExists(configWithDefaults.envRoot);
@@ -29,4 +28,10 @@ export function writeConfig(config: Config): Promise<void> {
 
 function isPartialConfig(object: unknown): object is Partial<Config> {
   return typeof object === "object";
+}
+
+function toPartialConfig(object: unknown): Promise<Partial<Config>> {
+  return isPartialConfig(object)
+    ? Promise.resolve(object)
+    : Promise.reject("The config is not valid.");
 }
