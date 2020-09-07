@@ -23,20 +23,20 @@ export function printSuccess(message: string | undefined): string {
   return chalk.green(message);
 }
 
-export function printStepResult(step: Step, stepResult: StepResult): string {
+export function printStepResult(stepResult: StepResult): string {
   if (isSuccess(stepResult)) {
     return (
       logSymbols.success +
       " " +
       JSON.stringify(stepResult.path, null, 0) +
-      (step.name ? " " + step.name : "")
+      (stepResult.name ? " " + stepResult.name : "")
     );
   } else {
     return (
       logSymbols.error +
       " " +
       JSON.stringify(stepResult.path, null, 0) +
-      (step.name ? " " + step.name : "") +
+      (stepResult.name ? " " + stepResult.name : "") +
       " " +
       printError(stepResult.error)
     );

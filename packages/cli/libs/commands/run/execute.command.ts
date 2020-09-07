@@ -78,11 +78,7 @@ function process(
 ): OperatorFunction<StepResult, void> {
   return (stepResult$) =>
     stepResult$.pipe(
-      tap((stepResult) =>
-        console.log(
-          printStepResult(engine.resolveStep(stepResult.path), stepResult)
-        )
-      ),
+      tap((stepResult) => console.log(printStepResult(stepResult))),
       flatMap((stepResult) =>
         isFailure(stepResult) ? throwError(stepResult.error) : of(stepResult)
       ),

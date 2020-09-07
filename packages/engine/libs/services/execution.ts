@@ -52,13 +52,14 @@ export function step(
   state: State,
   environment: Environment
 ): Observable<StepResult> {
+  const step = resolveStep(workflow, state.path);
   return executeStep(
-    resolveStep(workflow, state.path),
+    step,
     resolveEvaluation(state.evaluations, state.path),
     createVariableMapFromState(workflow, state, environment)
   ).pipe(
-    map((evaluation) => ({ path: state.path, evaluation })),
-    catchError((error) => of({ path: state.path, error }))
+    map((evaluation) => ({ name: step.name, path: state.path, evaluation })),
+    catchError((error) => of({ name: step.name, path: state.path, error }))
   );
 }
 

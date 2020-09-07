@@ -2,11 +2,13 @@ import { Path } from "./path.type";
 import { Evaluation } from "./evaluations.type";
 
 export interface StepSuccess {
+  name?: string;
   path: Path;
   evaluation: Evaluation;
 }
 
 export interface StepFailure {
+  name?: string;
   path: Path;
   error: string;
 }
