@@ -1,0 +1,36 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jyfti/jyfti/master/workflow-schema.json",
+  "name": "Retrieve the changelog of a GitHub repository",
+  "inputs": {
+    "org": {
+      "type": "string",
+      "description": "The GitHub organization",
+      "default": "jyfti"
+    },
+    "repo": {
+      "type": "string",
+      "description": "The GitHub repository",
+      "default": "jyfti"
+    }
+  },
+  "output": {
+    "$eval": "join(changes, '\n')"
+  },
+  "steps": [
+    {
+      "assignTo": "changelogResponse",
+      "request": {
+        "url": "https://changelogs.md/api/github/${inputs.org}/${inputs.repo}/"
+      }
+    },
+    {
+      "assignTo": "changes",
+      "expression": {
+        "$map": {
+          "$eval": "changelogResponse.body.contents"
+        },
+        "each(content)": "${content.version} ${content.body}"
+      }
+    }
+  ]
+}
