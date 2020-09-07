@@ -20,18 +20,17 @@ export async function readWorkflowNames(config: Config): Promise<string[]> {
 export async function readWorkflowNamesOrTerminate(
   config: Config
 ): Promise<string[]> {
-  const workflow = await readWorkflowNames(config).catch(() => undefined);
-  if (!workflow) {
+  try {
+    return await readWorkflowNames(config);
+  } catch (err) {
     console.error(
       printError(
-        "The workflow names can't be read from the source root '" +
-          config.sourceRoot +
-          "'"
+        `The workflow names can't be read from the source root '${config.sourceRoot}'`
       )
     );
+    console.error(err?.stack);
     process.exit(1);
   }
-  return workflow;
 }
 
 export async function readWorkflow(
