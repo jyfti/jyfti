@@ -23,15 +23,15 @@ async function readWorkflowSchema(identifier: string): Promise<JsonSchema> {
   const read = isUrl(identifier)
     ? getJson
     : (name) => readFile(name).then(JSON.parse);
-  const schema = await read(identifier);
-  if (!isWorkflowSchema(schema)) {
-    return Promise.reject(
-      "The workflow schema file does not represent a valid schema."
-    );
-  }
-  return schema;
+  return await read(identifier).then(toWorkflowSchema);
 }
 
 function isWorkflowSchema(object: unknown): object is JsonSchema {
   return typeof object === "object";
+}
+
+function toWorkflowSchema(object: unknown): Promise<JsonSchema> {
+  return isWorkflowSchema(object)
+    ? Promise.resolve(object)
+    : Promise.reject("The workflow schema is not valid.");
 }
