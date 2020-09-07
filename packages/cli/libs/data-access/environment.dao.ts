@@ -10,23 +10,23 @@ function resolveEnvironment(config: Config, name: string) {
   return nodePath.resolve(config.envRoot, name + ".json");
 }
 
-async function readEnvironment(
+function readEnvironment(
   config: Config,
   name: string | undefined
 ): Promise<Environment> {
-  const environment = await readJson(
+  return readJson(
     resolveEnvironment(config, name || defaultEnvironmentName)
-  );
-  if (!isEnvironment(environment)) {
-    return Promise.reject(
-      "The environment file does not represent a valid environment"
-    );
-  }
-  return environment;
+  ).then(toEnvironment);
 }
 
 function isEnvironment(object: unknown): object is Environment {
   return typeof object === "object";
+}
+
+function toEnvironment(object: unknown): Promise<Environment> {
+  return isEnvironment(object)
+    ? Promise.resolve(object)
+    : Promise.reject("The environment is not valid.");
 }
 
 export function environmentExists(
@@ -48,14 +48,16 @@ export async function readEnvironmentOrTerminate(
   config: Config,
   name: string | undefined
 ): Promise<Environment> {
-  const environment = await readEnvironment(config, name).catch(() =>
-    !name || name === defaultEnvironmentName ? {} : undefined
-  );
-  if (!environment) {
-    console.error(printError("Environment does not exist."));
+  try {
+    return await readEnvironment(config, name);
+  } catch (err) {
+    if (!name || name === defaultEnvironmentName) {
+      return Promise.resolve({});
+    }
+    console.error(printError("The environment can not be read."));
+    console.error(err?.stack);
     process.exit(1);
   }
-  return environment;
 }
 
 export async function readEnvironmentNames(config: Config): Promise<string[]> {
