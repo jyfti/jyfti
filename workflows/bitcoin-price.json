@@ -1,0 +1,20 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jyfti/jyfti/master/workflow-schema.json",
+  "name": "Retrieve the current bitcoin price",
+  "inputs": {
+    "currency": {
+      "type": "string",
+      "default": "USD",
+      "description": "The currency of the bitcoins to display"
+    }
+  },
+  "output": "${response.body.data.amount} ${response.body.data.currency}",
+  "steps": [
+    {
+      "assignTo": "response",
+      "request": {
+        "url": "https://api.coinbase.com/v2/prices/spot?currency=${inputs.currency}"
+      }
+    }
+  ]
+}
