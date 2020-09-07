@@ -69,17 +69,14 @@ describe("the step command", () => {
   });
 
   it("should log a failed state if the engine returns an error", async () => {
+    const stepResult = {
+      path: [0],
+      error: new Error("Something went wrong."),
+    };
     require("@jyfti/engine").engine.isComplete.mockReturnValue(false);
-    require("@jyfti/engine").engine.step.mockReturnValue(
-      of({
-        path: [0],
-        error: "Something went wrong.",
-      })
-    );
+    require("@jyfti/engine").engine.step.mockReturnValue(of(stepResult));
     await step("my-workflow", { verbose: false });
-    expect(logSpy).toHaveBeenCalledWith(
-      printStepResult({ path: [0], error: "Something went wrong." })
-    );
+    expect(logSpy).toHaveBeenCalledWith(printStepResult(stepResult));
     expect(errorSpy).toHaveBeenCalledTimes(0);
     expect(writeStateSpy).toHaveBeenCalledTimes(0);
   });

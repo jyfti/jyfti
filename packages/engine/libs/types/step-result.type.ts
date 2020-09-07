@@ -10,7 +10,7 @@ export interface StepSuccess {
 export interface StepFailure {
   name?: string;
   path: Path;
-  error: string;
+  error: Error;
 }
 
 export type StepResult = StepSuccess | StepFailure;

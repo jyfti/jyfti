@@ -38,8 +38,7 @@ function executeRequestStep(
   variables: VariableMap
 ): Observable<Evaluation> {
   return of(createHttpRequest(request, variables)).pipe(
-    flatMap((request) => http(request)),
-    catchError(() => throwError("The http request execution failed."))
+    flatMap((request) => http(request))
   );
 }
 
@@ -48,8 +47,7 @@ function executeExpressionStep(
   variables: VariableMap
 ): Observable<Evaluation> {
   return of(expression).pipe(
-    map((expression) => evaluate(variables, expression)),
-    catchError((error) => throwError(error.toString()))
+    map((expression) => evaluate(variables, expression))
   );
 }
 
@@ -62,12 +60,16 @@ function evaluateLoopReturn(
   }
   if (!isEvaluations(localEvaluations)) {
     return throwError(
-      "Expected an evaluation for each loop iteration, but got a single evaluation"
+      new Error(
+        "Expected an evaluation for each loop iteration, but got a single evaluation"
+      )
     );
   }
   if (!isNestedEvaluations(localEvaluations)) {
     return throwError(
-      "Expected each loop iteration to have a list of evaluations, but got a single evaluation for a loop iteration"
+      new Error(
+        "Expected each loop iteration to have a list of evaluations, but got a single evaluation for a loop iteration"
+      )
     );
   }
   const loopReturn: Evaluation[] = (localEvaluations || [])

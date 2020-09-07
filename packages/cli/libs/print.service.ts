@@ -38,7 +38,9 @@ export function printStepResult(stepResult: StepResult): string {
       JSON.stringify(stepResult.path, null, 0) +
       (stepResult.name ? " " + stepResult.name : "") +
       " " +
-      printError(stepResult.error)
+      printError(stepResult.error.message) +
+      "\n" +
+      stepResult.error.stack
     );
   }
 }

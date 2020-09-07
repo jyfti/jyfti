@@ -125,18 +125,14 @@ describe("the execute command", () => {
   });
 
   it("should print an error if the engine reports an error", async () => {
-    require("@jyfti/engine").engine.complete.mockReturnValue(
-      of({ path: [0], error: "Something went wrong." })
-    );
+    const stepResult = { path: [0], error: new Error("Something went wrong.") };
+    require("@jyfti/engine").engine.complete.mockReturnValue(of(stepResult));
     await execute("my-workflow");
     expect(logSpy).toHaveBeenNthCalledWith(
       1,
       logSymbols.success + " Initialized"
     );
-    expect(logSpy).toHaveBeenNthCalledWith(
-      2,
-      printStepResult({ path: [0], error: "Something went wrong." })
-    );
+    expect(logSpy).toHaveBeenNthCalledWith(2, printStepResult(stepResult));
     expect(errorSpy).toHaveBeenCalledTimes(0);
     expect(writeStateSpy).toHaveBeenCalledTimes(0);
   });
