@@ -13,7 +13,7 @@ export async function readWorkflowSchemaOrTerminate(
   try {
     return await readWorkflowSchema(config.schemaLocation);
   } catch (err) {
-    console.error(printError("The workflow schema can not be read"));
+    console.error(printError("The workflow schema can not be read."));
     console.error(err?.stack);
     process.exit(1);
   }
@@ -24,7 +24,7 @@ async function readWorkflowSchema(identifier: string): Promise<JsonSchema> {
   const schema = await read(identifier);
   if (!isWorkflowSchema(schema)) {
     return Promise.reject(
-      "The workflow schema file does not represent a valid schema"
+      "The workflow schema file does not represent a valid schema."
     );
   }
   return schema;

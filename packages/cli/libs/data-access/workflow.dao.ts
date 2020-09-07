@@ -37,13 +37,11 @@ export async function readWorkflow(
   config: Config,
   name: string
 ): Promise<Workflow> {
-  const workflow = await readJson(resolveWorkflow(config, name));
-  if (!isWorkflow(workflow)) {
-    return Promise.reject(
-      "The workflow file does not represent a valid workflow"
-    );
-  }
-  return workflow;
+  return await readJson(resolveWorkflow(config, name)).then((workflow) =>
+    isWorkflow(workflow)
+      ? workflow
+      : Promise.reject("The workflow file does not represent a valid workflow")
+  );
 }
 
 function isWorkflow(object: unknown): object is Workflow {
@@ -64,12 +62,13 @@ async function readWorkflowFileOrTerminate(
   config: Config,
   name: string
 ): Promise<Workflow> {
-  const workflow = await readWorkflow(config, name).catch(() => undefined);
-  if (!workflow) {
-    console.error(printError("Workflow does not exist."));
+  try {
+    return await readWorkflow(config, name);
+  } catch (err) {
+    console.error(printError("The workflow can not be read."));
+    console.error(err?.stack);
     process.exit(1);
   }
-  return workflow;
 }
 
 const getJson = bent("json");
