@@ -54,7 +54,7 @@ A step-by-step workflow run is created via the `create` subcommand.
 
 ```bash
 $ jyfti run create retrieve-readme jyfti jyfti
-Created state.
+Initialized
 ```
 
 The `create` subcommand validates the input and writes the initial state to disk.

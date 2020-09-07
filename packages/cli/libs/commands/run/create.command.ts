@@ -20,6 +20,7 @@ import {
   validateInputsOrTerminate,
   validateEnvironmentOrTerminate,
 } from "../../validator";
+import logSymbols from "log-symbols";
 
 export async function create(
   name?: string,
@@ -52,7 +53,7 @@ export async function create(
     validateInputsOrTerminate(workflow, inputs);
     const initialState = createEngine(workflow, environment).init(inputs);
     await writeState(config, name, initialState);
-    console.log("Created state.");
+    console.log(logSymbols.success + " Initialized");
     if (cmd?.verbose) {
       console.log(printJson(initialState));
     }

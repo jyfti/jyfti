@@ -2,6 +2,7 @@
 import { create } from "./create.command";
 import { printValue } from "../../print.service";
 import { Workflow } from "@jyfti/engine";
+import logSymbols from "log-symbols";
 
 jest.mock("../../data-access/workflow.dao", () => ({
   readWorkflowOrTerminate: () => Promise.resolve("my-workflow"),
@@ -56,14 +57,14 @@ describe("the create command", () => {
 
   it("should create a new run of a workflow with no inputs", async () => {
     await create("my-workflow");
-    expect(logSpy).toHaveBeenCalledWith("Created state.");
+    expect(logSpy).toHaveBeenCalledWith(logSymbols.success + " Initialized");
     expect(errorSpy).toHaveBeenCalledTimes(0);
     expect(writeStateSpy).toHaveBeenCalledTimes(1);
   });
 
   it("should prompt for a name of a workflow if not provided", async () => {
     await create(undefined);
-    expect(logSpy).toHaveBeenCalledWith("Created state.");
+    expect(logSpy).toHaveBeenCalledWith(logSymbols.success + " Initialized");
     expect(errorSpy).toHaveBeenCalledTimes(0);
     expect(writeStateSpy).toHaveBeenCalledTimes(1);
   });
@@ -73,7 +74,7 @@ describe("the create command", () => {
     expect(logSpy).toHaveBeenCalledWith(
       `Installed ${printValue("my-remote-workflow")} .`
     );
-    expect(logSpy).toHaveBeenCalledWith(`Created state.`);
+    expect(logSpy).toHaveBeenCalledWith(logSymbols.success + " Initialized");
     expect(errorSpy).toHaveBeenCalledTimes(0);
     expect(require("../../install.service").install).toHaveBeenCalledTimes(1);
   });

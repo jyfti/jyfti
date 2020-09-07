@@ -3,6 +3,7 @@ import { execute } from "./execute.command";
 import { printJson, printStepResult } from "../../print.service";
 import { Workflow } from "@jyfti/engine";
 import { of } from "rxjs";
+import logSymbols from "log-symbols";
 
 jest.mock("../../data-access/workflow.dao", () => ({
   readWorkflowOrTerminate: () => Promise.resolve("my-workflow"),
@@ -72,7 +73,10 @@ describe("the execute command", () => {
     require("@jyfti/engine").engine.complete.mockReturnValue(of(stepResult));
     require("@jyfti/engine").engine.getOutput.mockReturnValue(output);
     await execute("my-workflow");
-    expect(logSpy).toHaveBeenNthCalledWith(1, "Created state.");
+    expect(logSpy).toHaveBeenNthCalledWith(
+      1,
+      logSymbols.success + " Initialized"
+    );
     expect(logSpy).toHaveBeenNthCalledWith(
       2,
       printStepResult({ path: [], evaluation: null })
@@ -86,7 +90,10 @@ describe("the execute command", () => {
     require("@jyfti/engine").engine.complete.mockReturnValue(of(stepResult));
     require("@jyfti/engine").engine.getOutput.mockReturnValue(output);
     await execute(undefined);
-    expect(logSpy).toHaveBeenNthCalledWith(1, "Created state.");
+    expect(logSpy).toHaveBeenNthCalledWith(
+      1,
+      logSymbols.success + " Initialized"
+    );
     expect(logSpy).toHaveBeenNthCalledWith(
       2,
       printStepResult({ path: [], evaluation: null })
@@ -106,7 +113,10 @@ describe("the execute command", () => {
     require("@jyfti/engine").engine.init.mockReturnValue(initialState);
     require("@jyfti/engine").engine.getOutput.mockReturnValue(output);
     await execute("my-workflow", [], { verbose: true });
-    expect(logSpy).toHaveBeenNthCalledWith(1, "Created state.");
+    expect(logSpy).toHaveBeenNthCalledWith(
+      1,
+      logSymbols.success + " Initialized"
+    );
     expect(logSpy).toHaveBeenNthCalledWith(2, printJson(initialState));
     expect(logSpy).toHaveBeenNthCalledWith(3, printStepResult(stepResult));
     expect(logSpy).toHaveBeenNthCalledWith(4, printJson(output));
@@ -119,7 +129,10 @@ describe("the execute command", () => {
       of({ path: [0], error: "Something went wrong." })
     );
     await execute("my-workflow");
-    expect(logSpy).toHaveBeenNthCalledWith(1, "Created state.");
+    expect(logSpy).toHaveBeenNthCalledWith(
+      1,
+      logSymbols.success + " Initialized"
+    );
     expect(logSpy).toHaveBeenNthCalledWith(
       2,
       printStepResult({ path: [0], error: "Something went wrong." })

@@ -9,6 +9,7 @@ import {
   printJson,
   printStepResult,
 } from "./print.service";
+import logSymbols from "log-symbols";
 
 jest.mock("inquirer", () => ({
   prompt: jest.fn((questions: { name: string; default: string }[]) =>
@@ -111,7 +112,7 @@ describe("the commands in combination with each other", () => {
     expect(logSpy).lastCalledWith(printValue("[Not running]"));
 
     await program.parseAsync(command("run create retrieve-readme"));
-    expect(logSpy).lastCalledWith("Created state.");
+    expect(logSpy).lastCalledWith(logSymbols.success + " Initialized");
     expect(await fileExists("./out/retrieve-readme.state.json")).toBeTruthy();
 
     await program.parseAsync(command("run status retrieve-readme"));
