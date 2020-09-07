@@ -37,15 +37,17 @@ export async function readWorkflow(
   config: Config,
   name: string
 ): Promise<Workflow> {
-  return await readJson(resolveWorkflow(config, name)).then((workflow) =>
-    isWorkflow(workflow)
-      ? workflow
-      : Promise.reject("The workflow file does not represent a valid workflow")
-  );
+  return await readJson(resolveWorkflow(config, name)).then(toWorkflow);
 }
 
 function isWorkflow(object: unknown): object is Workflow {
   return typeof object === "object";
+}
+
+function toWorkflow(object: unknown): Promise<Workflow> {
+  return isWorkflow(object)
+    ? Promise.resolve(object)
+    : Promise.reject("The workflow is not a valid.");
 }
 
 export function readWorkflowOrTerminate(
@@ -77,15 +79,13 @@ export async function readWorkflowUrlOrTerminate(
   config: Config,
   url: string
 ): Promise<Workflow> {
-  const workflow = (await getJson(url).catch((err) => {
-    console.error(printError("Workflow could not be retrieved."));
-    console.error(err);
-    return undefined;
-  })) as Workflow | undefined;
-  if (!workflow) {
+  try {
+    return await getJson(url).then(toWorkflow);
+  } catch (err) {
+    console.error(printError("The workflow could not be retrieved."));
+    console.error(err?.stack);
     process.exit(1);
   }
-  return workflow;
 }
 
 export function workflowExists(config: Config, name: string): Promise<boolean> {
