@@ -1,7 +1,7 @@
 import { cold } from "jest-marbles";
 
 import { Workflow, ForStep, ExpressionStep } from "../types";
-import { nextStep } from "./execution";
+import { step } from "./execution";
 
 jest.mock("./http");
 
@@ -19,7 +19,7 @@ describe("the execution of workflows", () => {
         ],
       };
       expect(
-        nextStep(
+        step(
           workflow,
           {
             path: [0],
@@ -28,7 +28,7 @@ describe("the execution of workflows", () => {
           },
           {}
         )
-      ).toBeObservable(cold("(a|)", { a: 1 }));
+      ).toBeObservable(cold("(a|)", { a: { path: [0], evaluation: 1 } }));
     });
 
     it("should execute the second step considering the evaluation of the first step without evaluating it", () => {
@@ -48,7 +48,7 @@ describe("the execution of workflows", () => {
         ],
       };
       expect(
-        nextStep(
+        step(
           workflow,
           {
             path: [1],
@@ -57,7 +57,7 @@ describe("the execution of workflows", () => {
           },
           {}
         )
-      ).toBeObservable(cold("(a|)", { a: 42 }));
+      ).toBeObservable(cold("(a|)", { a: { path: [1], evaluation: 42 } }));
     });
 
     describe("with a single-step loop", () => {
@@ -83,7 +83,7 @@ describe("the execution of workflows", () => {
 
       it("should evaluate the return value with no loop iteration to an empty list", () => {
         expect(
-          nextStep(
+          step(
             workflow,
             {
               path: [0],
@@ -92,12 +92,12 @@ describe("the execution of workflows", () => {
             },
             {}
           )
-        ).toBeObservable(cold("(a|)", { a: [] }));
+        ).toBeObservable(cold("(a|)", { a: { path: [0], evaluation: [] } }));
       });
 
       it("should evaluate the return value with a single loop iteration to a single element list", () => {
         expect(
-          nextStep(
+          step(
             workflow,
             {
               path: [0],
@@ -106,12 +106,12 @@ describe("the execution of workflows", () => {
             },
             {}
           )
-        ).toBeObservable(cold("(a|)", { a: ["a"] }));
+        ).toBeObservable(cold("(a|)", { a: { path: [0], evaluation: ["a"] } }));
       });
 
       it("should evaluate the return value with multiple loop iterations to list of the size of the iterations", () => {
         expect(
-          nextStep(
+          step(
             workflow,
             {
               path: [0],
@@ -120,7 +120,9 @@ describe("the execution of workflows", () => {
             },
             {}
           )
-        ).toBeObservable(cold("(a|)", { a: ["a", "b", "c"] }));
+        ).toBeObservable(
+          cold("(a|)", { a: { path: [0], evaluation: ["a", "b", "c"] } })
+        );
       });
     });
 
@@ -157,7 +159,7 @@ describe("the execution of workflows", () => {
 
       it("should evaluate the return value with no loop iteration to an empty list", () => {
         expect(
-          nextStep(
+          step(
             workflow,
             {
               path: [0],
@@ -166,12 +168,12 @@ describe("the execution of workflows", () => {
             },
             {}
           )
-        ).toBeObservable(cold("(a|)", { a: [] }));
+        ).toBeObservable(cold("(a|)", { a: { path: [0], evaluation: [] } }));
       });
 
       it("should evaluate the return value with a single loop iteration to a single element list", () => {
         expect(
-          nextStep(
+          step(
             workflow,
             {
               path: [0],
@@ -180,12 +182,12 @@ describe("the execution of workflows", () => {
             },
             {}
           )
-        ).toBeObservable(cold("(a|)", { a: [30] }));
+        ).toBeObservable(cold("(a|)", { a: { path: [0], evaluation: [30] } }));
       });
 
       it("should evaluate the return value with multiple loop iterations to list of the size of the iterations", () => {
         expect(
-          nextStep(
+          step(
             workflow,
             {
               path: [0],
@@ -200,7 +202,9 @@ describe("the execution of workflows", () => {
             },
             {}
           )
-        ).toBeObservable(cold("(a|)", { a: [30, 30, 30] }));
+        ).toBeObservable(
+          cold("(a|)", { a: { path: [0], evaluation: [30, 30, 30] } })
+        );
       });
     });
   });

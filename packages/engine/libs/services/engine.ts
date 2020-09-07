@@ -1,6 +1,6 @@
-import { inputDefaults, nextStep, toOutput, nextState } from "./execution";
-import { Observable, empty, OperatorFunction, of } from "rxjs";
-import { flatMap, startWith, map, scan, catchError } from "rxjs/operators";
+import { inputDefaults, step, toOutput, nextState } from "./execution";
+import { Observable, empty, OperatorFunction } from "rxjs";
+import { flatMap, startWith, scan } from "rxjs/operators";
 import {
   StepResult,
   Inputs,
@@ -60,7 +60,7 @@ export class Engine {
    * @returns A cold observable of all step results after the state. Completes successfully iff the workflow is completing. Errors otherwise.
    */
   complete(state: State): Observable<StepResult> {
-    return this.step(state).pipe(
+    return step(this.workflow, state, this.environment).pipe(
       flatMap((stepResult) => {
         const nextState = this.transition(state, stepResult);
         const nextStepResults = this.isComplete(nextState)
@@ -80,10 +80,7 @@ export class Engine {
    * @returns A cold observable completing after a single step result.
    */
   step(state: State): Observable<StepResult> {
-    return nextStep(this.workflow, state, this.environment).pipe(
-      map((evaluation) => ({ path: state.path, evaluation })),
-      catchError((error) => of({ path: state.path, error }))
-    );
+    return step(this.workflow, state, this.environment);
   }
 
   /**

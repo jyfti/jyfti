@@ -1,12 +1,20 @@
-import { Observable } from "rxjs";
+import { Observable, of } from "rxjs";
 
-import { State, Workflow, Evaluation, Inputs, Environment } from "../types";
+import {
+  State,
+  Workflow,
+  Evaluation,
+  Inputs,
+  Environment,
+  StepResult,
+} from "../types";
 import { evaluate } from "./evaluation";
 import { createVariableMapFromState } from "./variable-map-creation";
 import { executeStep } from "./step-execution";
 import { advancePath } from "./path-advancement";
 import { resolveStep } from "./step-resolvement";
 import { addEvaluation, resolveEvaluation } from "./evaluation-resolvement";
+import { map, catchError } from "rxjs/operators";
 
 export function nextState(
   workflow: Workflow,
@@ -39,15 +47,18 @@ export function nextState(
   };
 }
 
-export function nextStep(
+export function step(
   workflow: Workflow,
   state: State,
   environment: Environment
-): Observable<Evaluation> {
+): Observable<StepResult> {
   return executeStep(
     resolveStep(workflow, state.path),
     resolveEvaluation(state.evaluations, state.path),
     createVariableMapFromState(workflow, state, environment)
+  ).pipe(
+    map((evaluation) => ({ path: state.path, evaluation })),
+    catchError((error) => of({ path: state.path, error }))
   );
 }
 
