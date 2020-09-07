@@ -10,14 +10,13 @@ const getJson = bent("json");
 export async function readWorkflowSchemaOrTerminate(
   config: Config
 ): Promise<JsonSchema> {
-  const schema = await readWorkflowSchema(config.schemaLocation).catch(
-    () => undefined
-  );
-  if (!schema) {
-    console.error(printError("Workflow schema can not be found."));
+  try {
+    return await readWorkflowSchema(config.schemaLocation);
+  } catch (err) {
+    console.error(printError("The workflow schema can not be read"));
+    console.error(err?.stack);
     process.exit(1);
   }
-  return schema;
 }
 
 async function readWorkflowSchema(identifier: string): Promise<JsonSchema> {
