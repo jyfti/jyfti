@@ -1,7 +1,7 @@
 import { readConfig } from "../../data-access/config.dao";
 import { State, Path } from "@jyfti/engine";
 import { readWorkflowNamesOrTerminate } from "../../data-access/workflow.dao";
-import { readState } from "../../data-access/state.dao";
+import { readState, stateExists } from "../../data-access/state.dao";
 import { printValue, printSuccess, printError } from "../../print.service";
 
 export async function status(name?: string): Promise<void> {
@@ -11,7 +11,11 @@ export async function status(name?: string): Promise<void> {
     : await readWorkflowNamesOrTerminate(config);
   const statusList = await Promise.all(
     workflowNames.map(async (workflowName) => {
-      const message = await printState(readState(config, workflowName));
+      const message = (await stateExists(config, workflowName))
+        ? await readState(config, workflowName)
+            .then(printState)
+            .catch(printError)
+        : printStatus("Not running");
       const namePrefix = name ? "" : workflowName + " ";
       return namePrefix + message;
     })
@@ -19,20 +23,16 @@ export async function status(name?: string): Promise<void> {
   console.log(statusList.join("\n"));
 }
 
-function printState(promisedState: Promise<State>): Promise<string> {
-  return promisedState
-    .then((state) =>
-      state.error
-        ? printStatus("Failed") +
-          " At step " +
-          printPath(state.path) +
-          " with error " +
-          state.error
-        : state.path.length != 0
-        ? printStatus("Pending") + " At step " + printPath(state.path)
-        : printStatus("Completed")
-    )
-    .catch(() => printStatus("Not running"));
+function printState(state: State): string {
+  return state.error
+    ? printStatus("Failed") +
+        " At step " +
+        printPath(state.path) +
+        " with error " +
+        state.error
+    : state.path.length != 0
+    ? printStatus("Pending") + " At step " + printPath(state.path)
+    : printStatus("Completed");
 }
 
 function printPath(path: Path): string {

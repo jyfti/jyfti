@@ -2,11 +2,15 @@ import * as fs from "fs";
 import * as nodePath from "path";
 import { Config } from "../types/config";
 import { State } from "@jyfti/engine";
-import { readFile, writeJson } from "./file.service";
+import { readFile, writeJson, fileExists } from "./file.service";
 import { printError } from "../print.service";
 
 function resolveState(config: Config, name: string) {
   return nodePath.resolve(config.outRoot, name + ".state.json");
+}
+
+export function stateExists(config: Config, name: string): Promise<boolean> {
+  return fileExists(resolveState(config, name));
 }
 
 export function readState(config: Config, name: string): Promise<State> {
