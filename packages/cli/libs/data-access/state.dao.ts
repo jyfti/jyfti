@@ -32,7 +32,14 @@ export async function readStateOrTerminate(
   name: string
 ): Promise<State> {
   try {
-    return await readState(config, name);
+    const content = await readFile(resolveState(config, name));
+    try {
+      return await toState(JSON.parse(content));
+    } catch (err) {
+      console.error(printError(err?.message));
+      console.error(err?.stack);
+      process.exit(1);
+    }
   } catch (err) {
     console.error(printError("Workflow execution is not running."));
     console.error(err?.stack);
