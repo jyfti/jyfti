@@ -5,8 +5,16 @@ import {
   State,
   Engine,
   isFailure,
+  isSuccess,
 } from "@jyfti/engine";
-import { last, tap, catchError, mergeMap } from "rxjs/operators";
+import {
+  last,
+  tap,
+  catchError,
+  mergeMap,
+  takeUntil,
+  takeWhile,
+} from "rxjs/operators";
 import { from, OperatorFunction, empty, throwError, of } from "rxjs";
 import { promptWorkflow, promptWorkflowInputs } from "../../inquirer.service";
 import { printStepResult, printJson, printOutput } from "../../print.service";
@@ -65,7 +73,7 @@ export async function execute(
       .complete(initialState)
       .pipe(
         process(engine, config, name, initialState),
-        catchError(() => empty())
+        catchError((err) => of(console.error("Unexpected Jyfti error", err)))
       )
       .toPromise();
   }
@@ -80,15 +88,15 @@ function process(
   return (stepResult$) =>
     stepResult$.pipe(
       tap((stepResult) => console.log(printStepResult(stepResult))),
-      mergeMap((stepResult) =>
-        isFailure(stepResult) ? throwError(stepResult.error) : of(stepResult)
-      ),
+      takeWhile(isSuccess, true),
       engine.transitionFrom(initialState),
       last(),
       tap((state) => {
-        const output = engine.getOutput(state);
-        if (output) {
-          console.log(printOutput(output));
+        if (!state.error) {
+          const output = engine.getOutput(state);
+          if (output) {
+            console.log(printOutput(output));
+          }
         }
       }),
       mergeMap((state) => from(writeState(config, name, state)))
