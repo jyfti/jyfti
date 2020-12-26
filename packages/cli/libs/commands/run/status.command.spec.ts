@@ -1,5 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { printValue, printSuccess, printError } from "../../print.service";
+import {
+  printValue,
+  printSuccess,
+  printError,
+  printJson,
+} from "../../print.service";
 import { status } from "./status.command";
 
 jest.mock("../../data-access/config.dao");
@@ -85,7 +90,7 @@ describe("the status command", () => {
         path: [0],
         inputs: {},
         evaluations: [],
-        error: "Something went wrong.",
+        error: { message: "Something went wrong." },
       })
     );
     await status("my-workflow");
@@ -93,7 +98,8 @@ describe("the status command", () => {
       printError("[Failed]") +
         " At step " +
         printValue("[0]") +
-        " with error Something went wrong."
+        "\n" +
+        printJson({ message: "Something went wrong." })
     );
     expect(errorSpy).toHaveBeenCalledTimes(0);
   });

@@ -134,6 +134,6 @@ describe("the execute command", () => {
     );
     expect(logSpy).toHaveBeenNthCalledWith(2, printStepResult(stepResult));
     expect(errorSpy).toHaveBeenCalledTimes(0);
-    expect(writeStateSpy).toHaveBeenCalledTimes(0);
+    expect(writeStateSpy).toHaveBeenCalledTimes(1);
   });
 });

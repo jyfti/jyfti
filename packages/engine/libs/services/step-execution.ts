@@ -1,5 +1,5 @@
 import { Observable, of, throwError } from "rxjs";
-import { catchError, flatMap, map } from "rxjs/operators";
+import { catchError, mergeMap, map } from "rxjs/operators";
 
 import { evaluate } from "./evaluation";
 import {
@@ -38,7 +38,7 @@ function executeRequestStep(
   variables: VariableMap
 ): Observable<Evaluation> {
   return of(createHttpRequest(request, variables)).pipe(
-    flatMap((request) => http(request))
+    mergeMap((request) => http(request))
   );
 }
 

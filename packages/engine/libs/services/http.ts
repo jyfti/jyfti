@@ -1,7 +1,7 @@
 import { from, Observable, defer } from "rxjs";
 import { HttpRequest, Headers } from "../types";
 import bent from "bent";
-import { map, flatMap } from "rxjs/operators";
+import { map, mergeMap } from "rxjs/operators";
 
 export const timeoutMillis = 10000;
 
@@ -15,7 +15,7 @@ export function http(
     : undefined;
   return defer(() => from(getStream(requestInfo.url, body, headers))).pipe(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    flatMap((stream: any) => from<string>(stream.text())),
+    mergeMap((stream: any) => from<string>(stream.text())),
     map((body) => parseJsonOrString(body)),
     map((body) => ({ request: requestInfo, body }))
   );
