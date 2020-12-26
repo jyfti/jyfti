@@ -1,7 +1,7 @@
 import chalk from "chalk";
 import logSymbols from "log-symbols";
 import { ErrorObject } from "ajv";
-import { StepResult, Inputs, isSuccess, Step } from "@jyfti/engine";
+import { StepResult, Inputs, isSuccess } from "@jyfti/engine";
 
 export function printOutput(output: unknown): string {
   return typeof output === "string" ? output : printJson(output);
