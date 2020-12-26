@@ -6,7 +6,7 @@ import {
   Engine,
   isFailure,
 } from "@jyfti/engine";
-import { last, flatMap, tap, catchError } from "rxjs/operators";
+import { last, tap, catchError, mergeMap } from "rxjs/operators";
 import { from, OperatorFunction, empty, throwError, of } from "rxjs";
 import { promptWorkflow, promptWorkflowInputs } from "../../inquirer.service";
 import { printStepResult, printJson, printOutput } from "../../print.service";
@@ -80,7 +80,7 @@ function process(
   return (stepResult$) =>
     stepResult$.pipe(
       tap((stepResult) => console.log(printStepResult(stepResult))),
-      flatMap((stepResult) =>
+      mergeMap((stepResult) =>
         isFailure(stepResult) ? throwError(stepResult.error) : of(stepResult)
       ),
       engine.transitionFrom(initialState),
@@ -91,6 +91,6 @@ function process(
           console.log(printOutput(output));
         }
       }),
-      flatMap((state) => from(writeState(config, name, state)))
+      mergeMap((state) => from(writeState(config, name, state)))
     );
 }

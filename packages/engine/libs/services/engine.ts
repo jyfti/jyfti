@@ -1,6 +1,6 @@
 import { inputDefaults, step, toOutput, nextState } from "./execution";
 import { Observable, empty, OperatorFunction } from "rxjs";
-import { flatMap, startWith, scan } from "rxjs/operators";
+import { mergeMap, startWith, scan } from "rxjs/operators";
 import {
   StepResult,
   Inputs,
@@ -61,7 +61,7 @@ export class Engine {
    */
   complete(state: State): Observable<StepResult> {
     return step(this.workflow, state, this.environment).pipe(
-      flatMap((stepResult) => {
+      mergeMap((stepResult) => {
         const nextState = this.transition(state, stepResult);
         const nextStepResults = this.isComplete(nextState)
           ? empty()
