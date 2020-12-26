@@ -112,7 +112,7 @@ config:
 # Records, feel free to edit them
 records:
   - delay: 0
-    content: "\e]0;~/jyfti\a\e[01;32mfboeller@fboeller\e[00m:\e[01;34m~/jyfti\e[00m$ "
+    content: "\e[01;32m$ \e[00m"
   - delay: 100
     content: j
   - delay: 100
@@ -148,7 +148,7 @@ records:
   - delay: 0
     content: "Successfully saved.\r\n"
   - delay: 0
-    content: "\e]0;~/jyfti\a\e[01;32mfboeller@fboeller\e[00m:\e[01;34m~/jyfti\e[00m$ "
+    content: "\e[01;32m$ \e[00m"
   - delay: 2000
     content: j
   - delay: 100
@@ -190,7 +190,7 @@ records:
   - delay: 200
     content: "\e[32m✔\e[39m [2] Send Slack message\r\n{\r\n  \"text\": \"*Open PRs:*\\n\\n#2: <https://github.com/jyfti/example-repo/pull/2|Add changelog>\\n#1: <https://github.com/jyfti/example-repo/pull/1|Add README>\"\r\n}\r\n\e[?25h"
   - delay: 200
-    content: "\e]0;~/jyfti\a\e[01;32mfboeller@fboeller\e[00m:\e[01;34m~/jyfti\e[00m$ "
+    content: "\e[01;32m$ \e[00m"
   - delay: 2000
     content: j
   - delay: 100
@@ -280,7 +280,9 @@ records:
   - delay: 1000
     content: "\r\n"
   - delay: 0
-    content: "\e[1;39m{\r\n  \e[0m\e[34;1m\"name\"\e[0m\e[1;39m: \e[0m\e[0;32m\"Retrieve PRs\"\e[0m\e[1;39m,\r\n  \e[0m\e[34;1m\"assignTo\"\e[0m\e[1;39m: \e[0m\e[0;32m\"pullResponse\"\e[0m\e[1;39m,\r\n  \e[0m\e[34;1m\"request\"\e[0m\e[1;39m: \e[0m\e[1;39m{\r\n    \e[0m\e[34;1m\"method\"\e[0m\e[1;39m: \e[0m\e[0;32m\"GET\"\e[0m\e[1;39m,\r\n    \e[0m\e[34;1m\"url\"\e[0m\e[1;39m: \e[0m\e[0;32m\"https://api.github.com/repos/${inputs.org}/${inputs.repo}/pulls\"\e[0m\e[1;39m\r\n  \e[1;39m}\e[0m\e[1;39m\r\n\e[1;39m}\e[0m\r\n\e]0;~/jyfti\a\e[01;32mfboeller@fboeller\e[00m:\e[01;34m~/jyfti\e[00m$ "
+    content: "\e[1;39m{\r\n  \e[0m\e[34;1m\"name\"\e[0m\e[1;39m: \e[0m\e[0;32m\"Retrieve PRs\"\e[0m\e[1;39m,\r\n  \e[0m\e[34;1m\"assignTo\"\e[0m\e[1;39m: \e[0m\e[0;32m\"pullResponse\"\e[0m\e[1;39m,\r\n  \e[0m\e[34;1m\"request\"\e[0m\e[1;39m: \e[0m\e[1;39m{\r\n    \e[0m\e[34;1m\"method\"\e[0m\e[1;39m: \e[0m\e[0;32m\"GET\"\e[0m\e[1;39m,\r\n    \e[0m\e[34;1m\"url\"\e[0m\e[1;39m: \e[0m\e[0;32m\"https://api.github.com/repos/${inputs.org}/${inputs.repo}/pulls\"\e[0m\e[1;39m\r\n  \e[1;39m}\e[0m\e[1;39m\r\n\e[1;39m}\e[0m\r\n"
+  - delay: 200
+    content: "\e[01;32m$ \e[00m"
   - delay: 2000
     content: 'jyfti view open-prs-to-slack | jq .steps[0]'
   - delay: 500
@@ -294,7 +296,7 @@ records:
   - delay: 0
     content: "\e[1;39m{\r\n  \e[0m\e[34;1m\"name\"\e[0m\e[1;39m: \e[0m\e[0;32m\"Extract PR summary\"\e[0m\e[1;39m,\r\n  \e[0m\e[34;1m\"assignTo\"\e[0m\e[1;39m: \e[0m\e[0;32m\"summaries\"\e[0m\e[1;39m,\r\n  \e[0m\e[34;1m\"expression\"\e[0m\e[1;39m: \e[0m\e[1;39m{\r\n    \e[0m\e[34;1m\"$map\"\e[0m\e[1;39m: \e[0m\e[1;39m{\r\n      \e[0m\e[34;1m\"$eval\"\e[0m\e[1;39m: \e[0m\e[0;32m\"pullResponse.body\"\e[0m\e[1;39m\r\n    \e[1;39m}\e[0m\e[1;39m,\r\n    \e[0m\e[34;1m\"each(x)\"\e[0m\e[1;39m: \e[0m\e[0;32m\"#${x.number}: <${x.html_url}|${x.title}>\"\e[0m\e[1;39m\r\n  \e[1;39m}\e[0m\e[1;39m\r\n\e[1;39m}\e[0m\r\n"
   - delay: 0
-    content: "\e]0;~/jyfti\a\e[01;32mfboeller@fboeller\e[00m:\e[01;34m~/jyfti\e[00m$ "
+    content: "\e[01;32m$ \e[00m"
   - delay: 2000
     content: 'jyfti view open-prs-to-slack | jq .steps[1]'
   - delay: 500
@@ -306,7 +308,9 @@ records:
   - delay: 1000
     content: "\r\n"
   - delay: 0
-    content: "\e[1;39m{\r\n  \e[0m\e[34;1m\"name\"\e[0m\e[1;39m: \e[0m\e[0;32m\"Send Slack message\"\e[0m\e[1;39m,\r\n  \e[0m\e[34;1m\"assignTo\"\e[0m\e[1;39m: \e[0m\e[0;32m\"slackResponse\"\e[0m\e[1;39m,\r\n  \e[0m\e[34;1m\"request\"\e[0m\e[1;39m: \e[0m\e[1;39m{\r\n    \e[0m\e[34;1m\"method\"\e[0m\e[1;39m: \e[0m\e[0;32m\"POST\"\e[0m\e[1;39m,\r\n    \e[0m\e[34;1m\"url\"\e[0m\e[1;39m: \e[0m\e[0;32m\"${env.slackWebhookUrl}\"\e[0m\e[1;39m,\r\n    \e[0m\e[34;1m\"body\"\e[0m\e[1;39m: \e[0m\e[1;39m{\r\n      \e[0m\e[34;1m\"text\"\e[0m\e[1;39m: \e[0m\e[0;32m\"*Open PRs:*\\n\\n${join(summaries, '\\n')}\"\e[0m\e[1;39m\r\n    \e[1;39m}\e[0m\e[1;39m\r\n  \e[1;39m}\e[0m\e[1;39m\r\n\e[1;39m}\e[0m\r\n\e]0;~/jyfti\a\e[01;32mfboeller@fboeller\e[00m:\e[01;34m~/jyfti\e[00m$ "
+    content: "\e[1;39m{\r\n  \e[0m\e[34;1m\"name\"\e[0m\e[1;39m: \e[0m\e[0;32m\"Send Slack message\"\e[0m\e[1;39m,\r\n  \e[0m\e[34;1m\"assignTo\"\e[0m\e[1;39m: \e[0m\e[0;32m\"slackResponse\"\e[0m\e[1;39m,\r\n  \e[0m\e[34;1m\"request\"\e[0m\e[1;39m: \e[0m\e[1;39m{\r\n    \e[0m\e[34;1m\"method\"\e[0m\e[1;39m: \e[0m\e[0;32m\"POST\"\e[0m\e[1;39m,\r\n    \e[0m\e[34;1m\"url\"\e[0m\e[1;39m: \e[0m\e[0;32m\"${env.slackWebhookUrl}\"\e[0m\e[1;39m,\r\n    \e[0m\e[34;1m\"body\"\e[0m\e[1;39m: \e[0m\e[1;39m{\r\n      \e[0m\e[34;1m\"text\"\e[0m\e[1;39m: \e[0m\e[0;32m\"*Open PRs:*\\n\\n${join(summaries, '\\n')}\"\e[0m\e[1;39m\r\n    \e[1;39m}\e[0m\e[1;39m\r\n  \e[1;39m}\e[0m\e[1;39m\r\n\e[1;39m}\e[0m\r\n"
+  - delay: 200
+    content: "\e[01;32m$ \e[00m"
   - delay: 2000
     content: j
   - delay: 100
@@ -370,7 +374,7 @@ records:
   - delay: 200
     content: "\e[?25h"
   - delay: 200
-    content: "\e]0;~/jyfti\a\e[01;32mfboeller@fboeller\e[00m:\e[01;34m~/jyfti\e[00m$ "
+    content: "\e[01;32m$ \e[00m"
   - delay: 2000
     content: j
   - delay: 100
@@ -466,7 +470,9 @@ records:
   - delay: 1000
     content: "\r\n"
   - delay: 200
-    content: "\e[1;39m{\r\n  \e[0m\e[34;1m\"org\"\e[0m\e[1;39m: \e[0m\e[0;32m\"jyfti\"\e[0m\e[1;39m,\r\n  \e[0m\e[34;1m\"repo\"\e[0m\e[1;39m: \e[0m\e[0;32m\"emxaple-repo\"\e[0m\e[1;39m\r\n\e[1;39m}\e[0m\r\n\e]0;~/jyfti\a\e[01;32mfboeller@fboeller\e[00m:\e[01;34m~/jyfti\e[00m$ "
+    content: "\e[1;39m{\r\n  \e[0m\e[34;1m\"org\"\e[0m\e[1;39m: \e[0m\e[0;32m\"jyfti\"\e[0m\e[1;39m,\r\n  \e[0m\e[34;1m\"repo\"\e[0m\e[1;39m: \e[0m\e[0;32m\"emxaple-repo\"\e[0m\e[1;39m\r\n\e[1;39m}\e[0m\r\n"
+  - delay: 200
+    content: "\e[01;32m$ \e[00m"
   - delay: 2000
     content: v
   - delay: 100
@@ -540,7 +546,9 @@ records:
   - delay: 1000
     content: "\r\e[?25l\e[?2004l\"out/open-prs-to-slack.state.json\""
   - delay: 200
-    content: " 692 lines, 40597 characters written\r\r\r\n\e[?2004l\e[?1l\e>\e[?25h\e[?1049l\e[23;0;0t\e]0;fboeller@fboeller: ~/jyfti\a\e[01;32mfboeller@fboeller\e[00m:\e[01;34m~/jyfti\e[00m$ "
+    content: " 692 lines, 40597 characters written\r\r\r\n"
+  - delay: 200
+    content: "\e[01;32m$ \e[00m"
   - delay: 2000
     content: j
   - delay: 100
@@ -590,7 +598,7 @@ records:
   - delay: 200
     content: "\e[32m✔\e[39m [2] Send Slack message\r\n\e[?25h"
   - delay: 200
-    content: "\e]0;~/jyfti\a\e[01;32mfboeller@fboeller\e[00m:\e[01;34m~/jyfti\e[00m$ "
+    content: "\e[01;32m$ \e[00m"
   - delay: 2000
     content: 'jyfti run https://raw.githubusercontent.com/jyfti/jyfti/master/workflows/bitcoin-price.json'
   - delay: 2000
@@ -610,6 +618,6 @@ records:
   - delay: 200
     content: "\e[32m✔\e[39m [0] Retrieve bitcoin price\r\n21093.84 EUR\r\n"
   - delay: 200
-    content: "\e]0;~/jyfti\a\e[01;32mfboeller@fboeller\e[00m:\e[01;34m~/jyfti\e[00m$ "
+    content: "\e[01;32m$ \e[00m"
   - delay: 5000
     content: "\r\n"
