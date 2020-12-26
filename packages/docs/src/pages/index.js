@@ -65,7 +65,7 @@ function Home() {
         <div className="container">
           <h1 className="hero__title">{siteConfig.title}</h1>
           <p className="hero__subtitle">{siteConfig.tagline}</p>
-          <img src="/static/img/terminalizer.gif"></img>
+          <img src={useBaseUrl("/img/terminalizer.gif")}></img>
           <div className={styles.buttons}>
             <Link
               className={clsx(
