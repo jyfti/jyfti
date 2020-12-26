@@ -32,8 +32,8 @@
       }
     },
     {
-      "name": "Extract titles",
-      "assignTo": "titles",
+      "name": "Extract PR summary",
+      "assignTo": "summaries",
       "expression": {
         "$map": {
           "$eval": "pullResponse.body"
@@ -48,7 +48,7 @@
         "method": "POST",
         "url": "${env.slackWebhookUrl}",
         "body": {
-          "text": "*Open PRs:*\n\n${join(titles, '\n')}"
+          "text": "*Open PRs:*\n\n${join(summaries, '\n')}"
         }
       }
     }
