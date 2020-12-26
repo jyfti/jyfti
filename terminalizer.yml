@@ -18,12 +18,12 @@ config:
   # Explicitly set the number of columns
   # or use `auto` to take the current
   # number of columns of your shell
-  cols: 181
+  cols: 120
   
   # Explicitly set the number of rows
   # or use `auto` to take the current
   # number of rows of your shell
-  rows: 32
+  rows: 20
   
   # Amount of times to repeat GIF
   # If value is -1, play once
@@ -50,7 +50,7 @@ config:
   # Don't forget to add a backgroundColor style with a null as type
   frameBox:
     type: floating
-    title: Terminalizer
+    title: Jyfti CLI
     style:
       border: 0px black solid
       # boxShadow: none
@@ -79,7 +79,7 @@ config:
   fontFamily: "Monaco, Lucida Console, Ubuntu Mono, Monospace"
   
   # The size of the font
-  fontSize: 12
+  fontSize: 14
   
   # The height of lines
   lineHeight: 1
