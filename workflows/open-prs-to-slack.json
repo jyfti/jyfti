@@ -16,7 +16,7 @@
     "repo": {
       "type": "string",
       "description": "The GitHub repository",
-      "default": "jyfti"
+      "default": "example-repo"
     }
   },
   "output": {
@@ -38,9 +38,7 @@
         "$map": {
           "$eval": "pullResponse.body"
         },
-        "each(x)": {
-          "$eval": "x.title"
-        }
+        "each(x)": "#${x.number}: <${x.html_url}|${x.title}>"
       }
     },
     {
@@ -50,7 +48,7 @@
         "method": "POST",
         "url": "${env.slackWebhookUrl}",
         "body": {
-          "text": "${join(titles, '\n')}"
+          "text": "*Open PRs:*\n\n${join(titles, '\n')}"
         }
       }
     }
