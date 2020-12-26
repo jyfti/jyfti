@@ -1,0 +1,615 @@
+# The configurations that used for the recording, feel free to edit them
+config:
+
+  # Specify a command to be executed
+  # like `/bin/bash -l`, `ls`, or any other commands
+  # the default is bash for Linux
+  # or powershell.exe for Windows
+  command: bash -l
+  
+  # Specify the current working directory path
+  # the default is the current working directory path
+  cwd: /home/fboeller/jyfti
+  
+  # Export additional ENV variables
+  env:
+    recording: true
+  
+  # Explicitly set the number of columns
+  # or use `auto` to take the current
+  # number of columns of your shell
+  cols: 181
+  
+  # Explicitly set the number of rows
+  # or use `auto` to take the current
+  # number of rows of your shell
+  rows: 32
+  
+  # Amount of times to repeat GIF
+  # If value is -1, play once
+  # If value is 0, loop indefinitely
+  # If value is a positive number, loop n times
+  repeat: 0
+  
+  # Quality
+  # 1 - 100
+  quality: 100
+  
+  # Delay between frames in ms
+  # If the value is `auto` use the actual recording delays
+  frameDelay: auto
+  
+  # Maximum delay between frames in ms
+  # Ignored if the `frameDelay` isn't set to `auto`
+  # Set to `auto` to prevent limiting the max idle time
+  maxIdleTime: 2000
+  
+  # The surrounding frame box
+  # The `type` can be null, window, floating, or solid`
+  # To hide the title use the value null
+  # Don't forget to add a backgroundColor style with a null as type
+  frameBox:
+    type: floating
+    title: Terminalizer
+    style:
+      border: 0px black solid
+      # boxShadow: none
+      # margin: 0px
+  
+  # Add a watermark image to the rendered gif
+  # You need to specify an absolute path for
+  # the image on your machine or a URL, and you can also
+  # add your own CSS styles
+  watermark:
+    imagePath: null
+    style:
+      position: absolute
+      right: 15px
+      bottom: 15px
+      width: 100px
+      opacity: 0.9
+  
+  # Cursor style can be one of
+  # `block`, `underline`, or `bar`
+  cursorStyle: block
+  
+  # Font family
+  # You can use any font that is installed on your machine
+  # in CSS-like syntax
+  fontFamily: "Monaco, Lucida Console, Ubuntu Mono, Monospace"
+  
+  # The size of the font
+  fontSize: 12
+  
+  # The height of lines
+  lineHeight: 1
+  
+  # The spacing between letters
+  letterSpacing: 0
+  
+  # Theme
+  theme:
+    background: "transparent"
+    foreground: "#afafaf"
+    cursor: "#c7c7c7"
+    black: "#232628"
+    red: "#fc4384"
+    green: "#b3e33b"
+    yellow: "#ffa727"
+    blue: "#75dff2"
+    magenta: "#ae89fe"
+    cyan: "#708387"
+    white: "#d5d5d0"
+    brightBlack: "#626566"
+    brightRed: "#ff7fac"
+    brightGreen: "#c8ed71"
+    brightYellow: "#ebdf86"
+    brightBlue: "#75dff2"
+    brightMagenta: "#ae89fe"
+    brightCyan: "#b1c6ca"
+    brightWhite: "#f9f9f4"
+  
+# Records, feel free to edit them
+records:
+  - delay: 0
+    content: "\e]0;~/jyfti\a\e[01;32mfboeller@fboeller\e[00m:\e[01;34m~/jyfti\e[00m$ "
+  - delay: 100
+    content: j
+  - delay: 100
+    content: 'y'
+  - delay: 100
+    content: f
+  - delay: 100
+    content: t
+  - delay: 100
+    content: i
+  - delay: 100
+    content: ' '
+  - delay: 100
+    content: i
+  - delay: 100
+    content: 'n'
+  - delay: 100
+    content: 's'
+  - delay: 100
+    content: 't'
+  - delay: 100
+    content: 'a'
+  - delay: 100
+    content: 'l'
+  - delay: 100
+    content: 'l'
+  - delay: 100
+    content: ' '
+  - delay: 500
+    content: 'https://raw.githubusercontent.com/jyfti/jyfti/master/workflows/open-prs-to-slack.json'
+  - delay: 1000
+    content: "\r\n"
+  - delay: 0
+    content: "Successfully saved.\r\n"
+  - delay: 0
+    content: "\e]0;~/jyfti\a\e[01;32mfboeller@fboeller\e[00m:\e[01;34m~/jyfti\e[00m$ "
+  - delay: 2000
+    content: j
+  - delay: 100
+    content: 'y'
+  - delay: 100
+    content: f
+  - delay: 100
+    content: t
+  - delay: 100
+    content: i
+  - delay: 100
+    content: ' '
+  - delay: 100
+    content: r
+  - delay: 100
+    content: u
+  - delay: 100
+    content: 'n'
+  - delay: 1000
+    content: "\r\n"
+  - delay: 0
+    content: "\e[?25l\e[32m?\e[39m \e[1mWhich workflow do you want to start?\e[22m\e[0m \e[0m\e[2m(Use arrow keys)\e[22m\r\n\e[36m❯ open-prs-to-slack\e[39m \e[20D\e[20C"
+  - delay: 2000
+    content: "\e[2K\e[1A\e[2K\e[G\e[32m?\e[39m \e[1mWhich workflow do you want to start?\e[22m\e[0m \e[0m\e[36mopen-prs-to-slack\e[39m\e[56D\e[56C\r\n\e[?25h"
+  - delay: 200
+    content: "\e[32m?\e[39m \e[1mThe GitHub organization\e[22m\e[0m \e[0m\e[2m(jyfti) \e[22m\e[34D\e[34C"
+  - delay: 2000
+    content: "\e[2K\e[G\e[32m?\e[39m \e[1mThe GitHub organization\e[22m\e[0m \e[0m\e[36mjyfti\e[39m\e[31D\e[31C\r\n"
+  - delay: 200
+    content: "\e[32m?\e[39m \e[1mThe GitHub repository\e[22m\e[0m \e[0m\e[2m(example-repo) \e[22m\e[39D\e[39C"
+  - delay: 2000
+    content: "\e[2K\e[G\e[32m?\e[39m \e[1mThe GitHub repository\e[22m\e[0m \e[0m\e[36mexample-repo\e[39m\e[36D\e[36C\r\n"
+  - delay: 200
+    content: "\e[32m✔\e[39m Initialized\r\n"
+  - delay: 200
+    content: "\e[32m✔\e[39m [0] Retrieve PRs\r\n"
+  - delay: 200
+    content: "\e[32m✔\e[39m [1] Extract PR summary\r\n"
+  - delay: 200
+    content: "\e[32m✔\e[39m [2] Send Slack message\r\n{\r\n  \"text\": \"*Open PRs:*\\n\\n#2: <https://github.com/jyfti/example-repo/pull/2|Add changelog>\\n#1: <https://github.com/jyfti/example-repo/pull/1|Add README>\"\r\n}\r\n\e[?25h"
+  - delay: 200
+    content: "\e]0;~/jyfti\a\e[01;32mfboeller@fboeller\e[00m:\e[01;34m~/jyfti\e[00m$ "
+  - delay: 2000
+    content: j
+  - delay: 100
+    content: 'y'
+  - delay: 100
+    content: f
+  - delay: 100
+    content: t
+  - delay: 100
+    content: i
+  - delay: 100
+    content: ' '
+  - delay: 100
+    content: v
+  - delay: 100
+    content: i
+  - delay: 100
+    content: e
+  - delay: 100
+    content: w
+  - delay: 100
+    content: ' '
+  - delay: 100
+    content: o
+  - delay: 100
+    content: p
+  - delay: 100
+    content: e
+  - delay: 100
+    content: 'n'
+  - delay: 100
+    content: '-'
+  - delay: 100
+    content: p
+  - delay: 100
+    content: r
+  - delay: 100
+    content: s
+  - delay: 100
+    content: '-'
+  - delay: 100
+    content: t
+  - delay: 100
+    content: o
+  - delay: 100
+    content: '-'
+  - delay: 100
+    content: s
+  - delay: 100
+    content: l
+  - delay: 100
+    content: a
+  - delay: 100
+    content: c
+  - delay: 100
+    content: k
+  - delay: 100
+    content: ' '
+  - delay: 100
+    content: '|'
+  - delay: 100
+    content: ' '
+  - delay: 100
+    content: j
+  - delay: 100
+    content: q
+  - delay: 100
+    content: ' '
+  - delay: 100
+    content: .
+  - delay: 100
+    content: s
+  - delay: 100
+    content: t
+  - delay: 100
+    content: e
+  - delay: 100
+    content: p
+  - delay: 100
+    content: s
+  - delay: 100
+    content: '['
+  - delay: 100
+    content: '0'
+  - delay: 100
+    content: ']'
+  - delay: 1000
+    content: "\r\n"
+  - delay: 0
+    content: "\e[1;39m{\r\n  \e[0m\e[34;1m\"name\"\e[0m\e[1;39m: \e[0m\e[0;32m\"Retrieve PRs\"\e[0m\e[1;39m,\r\n  \e[0m\e[34;1m\"assignTo\"\e[0m\e[1;39m: \e[0m\e[0;32m\"pullResponse\"\e[0m\e[1;39m,\r\n  \e[0m\e[34;1m\"request\"\e[0m\e[1;39m: \e[0m\e[1;39m{\r\n    \e[0m\e[34;1m\"method\"\e[0m\e[1;39m: \e[0m\e[0;32m\"GET\"\e[0m\e[1;39m,\r\n    \e[0m\e[34;1m\"url\"\e[0m\e[1;39m: \e[0m\e[0;32m\"https://api.github.com/repos/${inputs.org}/${inputs.repo}/pulls\"\e[0m\e[1;39m\r\n  \e[1;39m}\e[0m\e[1;39m\r\n\e[1;39m}\e[0m\r\n\e]0;~/jyfti\a\e[01;32mfboeller@fboeller\e[00m:\e[01;34m~/jyfti\e[00m$ "
+  - delay: 2000
+    content: 'jyfti view open-prs-to-slack | jq .steps[0]'
+  - delay: 500
+    content: "\b"
+  - delay: 500
+    content: "\b\e[1P]\b"
+  - delay: 500
+    content: "1]\b"
+  - delay: 1000
+    content: "\r\n"
+  - delay: 0
+    content: "\e[1;39m{\r\n  \e[0m\e[34;1m\"name\"\e[0m\e[1;39m: \e[0m\e[0;32m\"Extract PR summary\"\e[0m\e[1;39m,\r\n  \e[0m\e[34;1m\"assignTo\"\e[0m\e[1;39m: \e[0m\e[0;32m\"summaries\"\e[0m\e[1;39m,\r\n  \e[0m\e[34;1m\"expression\"\e[0m\e[1;39m: \e[0m\e[1;39m{\r\n    \e[0m\e[34;1m\"$map\"\e[0m\e[1;39m: \e[0m\e[1;39m{\r\n      \e[0m\e[34;1m\"$eval\"\e[0m\e[1;39m: \e[0m\e[0;32m\"pullResponse.body\"\e[0m\e[1;39m\r\n    \e[1;39m}\e[0m\e[1;39m,\r\n    \e[0m\e[34;1m\"each(x)\"\e[0m\e[1;39m: \e[0m\e[0;32m\"#${x.number}: <${x.html_url}|${x.title}>\"\e[0m\e[1;39m\r\n  \e[1;39m}\e[0m\e[1;39m\r\n\e[1;39m}\e[0m\r\n"
+  - delay: 0
+    content: "\e]0;~/jyfti\a\e[01;32mfboeller@fboeller\e[00m:\e[01;34m~/jyfti\e[00m$ "
+  - delay: 2000
+    content: 'jyfti view open-prs-to-slack | jq .steps[1]'
+  - delay: 500
+    content: "\b"
+  - delay: 500
+    content: "\b\e[1P]\b"
+  - delay: 500
+    content: "2]\b"
+  - delay: 1000
+    content: "\r\n"
+  - delay: 0
+    content: "\e[1;39m{\r\n  \e[0m\e[34;1m\"name\"\e[0m\e[1;39m: \e[0m\e[0;32m\"Send Slack message\"\e[0m\e[1;39m,\r\n  \e[0m\e[34;1m\"assignTo\"\e[0m\e[1;39m: \e[0m\e[0;32m\"slackResponse\"\e[0m\e[1;39m,\r\n  \e[0m\e[34;1m\"request\"\e[0m\e[1;39m: \e[0m\e[1;39m{\r\n    \e[0m\e[34;1m\"method\"\e[0m\e[1;39m: \e[0m\e[0;32m\"POST\"\e[0m\e[1;39m,\r\n    \e[0m\e[34;1m\"url\"\e[0m\e[1;39m: \e[0m\e[0;32m\"${env.slackWebhookUrl}\"\e[0m\e[1;39m,\r\n    \e[0m\e[34;1m\"body\"\e[0m\e[1;39m: \e[0m\e[1;39m{\r\n      \e[0m\e[34;1m\"text\"\e[0m\e[1;39m: \e[0m\e[0;32m\"*Open PRs:*\\n\\n${join(summaries, '\\n')}\"\e[0m\e[1;39m\r\n    \e[1;39m}\e[0m\e[1;39m\r\n  \e[1;39m}\e[0m\e[1;39m\r\n\e[1;39m}\e[0m\r\n\e]0;~/jyfti\a\e[01;32mfboeller@fboeller\e[00m:\e[01;34m~/jyfti\e[00m$ "
+  - delay: 2000
+    content: j
+  - delay: 100
+    content: 'y'
+  - delay: 100
+    content: f
+  - delay: 100
+    content: t
+  - delay: 100
+    content: i
+  - delay: 100
+    content: ' '
+  - delay: 100
+    content: r
+  - delay: 100
+    content: u
+  - delay: 100
+    content: 'n'
+  - delay: 1000
+    content: "\r\n"
+  - delay: 0
+    content: "\e[?25l\e[32m?\e[39m \e[1mWhich workflow do you want to start?\e[22m\e[0m \e[0m\e[2m(Use arrow keys)\e[22m\r\n\e[36m❯ open-prs-to-slack\e[39m \e[20D\e[20C"
+  - delay: 2000
+    content: "\e[2K\e[1A\e[2K\e[G\e[32m?\e[39m \e[1mWhich workflow do you want to start?\e[22m\e[0m \e[0m\e[36mopen-prs-to-slack\e[39m\e[56D\e[56C\r\n\e[?25h"
+  - delay: 200
+    content: "\e[32m?\e[39m \e[1mThe GitHub organization\e[22m\e[0m \e[0m\e[2m(jyfti) \e[22m\e[34D\e[34C"
+  - delay: 2000
+    content: "\e[2K\e[G\e[32m?\e[39m \e[1mThe GitHub organization\e[22m\e[0m \e[0m\e[36mjyfti\e[39m\e[31D\e[31C\r\n"
+  - delay: 200
+    content: "\e[32m?\e[39m \e[1mThe GitHub repository\e[22m\e[0m \e[0m\e[2m(example-repo) \e[22m\e[39D\e[39C"
+  - delay: 2000
+    content: "\e[2K\e[G\e[32m?\e[39m \e[1mThe GitHub repository\e[22m\e[0m \e[0me\e[25D\e[25C"
+  - delay: 500
+    content: "\e[2K\e[G\e[32m?\e[39m \e[1mThe GitHub repository\e[22m\e[0m \e[0mem\e[26D\e[26C"
+  - delay: 500
+    content: "\e[2K\e[G\e[32m?\e[39m \e[1mThe GitHub repository\e[22m\e[0m \e[0memx\e[27D\e[27C"
+  - delay: 500
+    content: "\e[2K\e[G\e[32m?\e[39m \e[1mThe GitHub repository\e[22m\e[0m \e[0memxa\e[28D\e[28C"
+  - delay: 100
+    content: "\e[2K\e[G\e[32m?\e[39m \e[1mThe GitHub repository\e[22m\e[0m \e[0memxap\e[29D\e[29C"
+  - delay: 100
+    content: "\e[2K\e[G\e[32m?\e[39m \e[1mThe GitHub repository\e[22m\e[0m \e[0memxapl\e[30D\e[30C"
+  - delay: 100
+    content: "\e[2K\e[G\e[32m?\e[39m \e[1mThe GitHub repository\e[22m\e[0m \e[0memxaple\e[31D\e[31C"
+  - delay: 100
+    content: "\e[2K\e[G\e[32m?\e[39m \e[1mThe GitHub repository\e[22m\e[0m \e[0memxaple-\e[32D\e[32C"
+  - delay: 100
+    content: "\e[2K\e[G\e[32m?\e[39m \e[1mThe GitHub repository\e[22m\e[0m \e[0memxaple-r\e[33D\e[33C"
+  - delay: 100
+    content: "\e[2K\e[G\e[32m?\e[39m \e[1mThe GitHub repository\e[22m\e[0m \e[0memxaple-re\e[34D\e[34C"
+  - delay: 100
+    content: "\e[2K\e[G\e[32m?\e[39m \e[1mThe GitHub repository\e[22m\e[0m \e[0memxaple-rep\e[35D\e[35C"
+  - delay: 100
+    content: "\e[2K\e[G\e[32m?\e[39m \e[1mThe GitHub repository\e[22m\e[0m \e[0memxaple-repo\e[36D\e[36C"
+  - delay: 2000
+    content: "\e[2K\e[G\e[32m?\e[39m \e[1mThe GitHub repository\e[22m\e[0m \e[0m\e[36memxaple-repo\e[39m\e[36D\e[36C\r\n"
+  - delay: 200
+    content: "\e[32m✔\e[39m Initialized\r\n"
+  - delay: 200
+    content: "\e[31m✖\e[39m [0] Retrieve PRs \e[31mNot Found\e[39m\r\n{\r\n  \"name\": \"StatusError\",\r\n  \"message\": \"Not Found\",\r\n  \"statusCode\": 404,\r\n  \"headers\": {\r\n    \"date\": \"Sat, 26 Dec 2020 16:10:47 GMT\",\r\n    \"content-type\": \"application/json; charset=utf-8\",\r\n    \"server\": \"GitHub.com\",\r\n    \"status\": \"404 Not Found\",\r\n    \"access-control-allow-origin\": \"*\",\r\n    \"content-encoding\": \"gzip\",\r\n    \"content-length\": \"113\",\r\n  }\r\n}\r\n"
+  - delay: 200
+    content: "\e[?25h"
+  - delay: 200
+    content: "\e]0;~/jyfti\a\e[01;32mfboeller@fboeller\e[00m:\e[01;34m~/jyfti\e[00m$ "
+  - delay: 2000
+    content: j
+  - delay: 100
+    content: 'y'
+  - delay: 100
+    content: f
+  - delay: 100
+    content: t
+  - delay: 100
+    content: i
+  - delay: 100
+    content: ' '
+  - delay: 100
+    content: r
+  - delay: 100
+    content: u
+  - delay: 100
+    content: 'n'
+  - delay: 100
+    content: ' '
+  - delay: 100
+    content: s
+  - delay: 100
+    content: t
+  - delay: 100
+    content: a
+  - delay: 100
+    content: t
+  - delay: 100
+    content: e
+  - delay: 100
+    content: ' '
+  - delay: 100
+    content: o
+  - delay: 100
+    content: p
+  - delay: 100
+    content: e
+  - delay: 100
+    content: 'n'
+  - delay: 100
+    content: '-'
+  - delay: 100
+    content: p
+  - delay: 100
+    content: r
+  - delay: 100
+    content: s
+  - delay: 100
+    content: '-'
+  - delay: 100
+    content: t
+  - delay: 100
+    content: o
+  - delay: 100
+    content: '-'
+  - delay: 100
+    content: s
+  - delay: 100
+    content: l
+  - delay: 100
+    content: a
+  - delay: 100
+    content: c
+  - delay: 100
+    content: k
+  - delay: 100
+    content: ' '
+  - delay: 100
+    content: '|'
+  - delay: 100
+    content: ' '
+  - delay: 100
+    content: j
+  - delay: 100
+    content: q
+  - delay: 100
+    content: ' '
+  - delay: 100
+    content: .
+  - delay: 100
+    content: i
+  - delay: 100
+    content: 'n'
+  - delay: 100
+    content: p
+  - delay: 100
+    content: u
+  - delay: 100
+    content: t
+  - delay: 100
+    content: s
+  - delay: 1000
+    content: "\r\n"
+  - delay: 200
+    content: "\e[1;39m{\r\n  \e[0m\e[34;1m\"org\"\e[0m\e[1;39m: \e[0m\e[0;32m\"jyfti\"\e[0m\e[1;39m,\r\n  \e[0m\e[34;1m\"repo\"\e[0m\e[1;39m: \e[0m\e[0;32m\"emxaple-repo\"\e[0m\e[1;39m\r\n\e[1;39m}\e[0m\r\n\e]0;~/jyfti\a\e[01;32mfboeller@fboeller\e[00m:\e[01;34m~/jyfti\e[00m$ "
+  - delay: 2000
+    content: v
+  - delay: 100
+    content: i
+  - delay: 100
+    content: ' '
+  - delay: 100
+    content: o
+  - delay: 100
+    content: ut/
+  - delay: 100
+    content: 'open-prs-to-slack.state.json'
+  - delay: 2000
+    content: "\r\n"
+  - delay: 1000
+    content: "\r\n\e[?2004h\e[?1049h\e[22;0;0t\e[?1h\e=\e[?2004h\e[1;26r\e[?12h\e[?12l\e[27m\e[23m\e[29m\e[m\e[H\e[2J\e[?25l\e[26;1H\"out/open-prs-to-slack.state.json\" [Incomplete last line] 692 lines, 40596 characters\e[1;1H{\r\n  \"path\": [],\r\n  \"inputs\": {\r\n    \"org\": \"jyfti\",\r\n    \"repo\": \"emxaple-repo\"\r\n  },\r\n  \"evaluations\": [\r\n    {\e[9;7H\"request\": {\e[10;9H\"url\": \"https://api.github.com/repos/jyfti/example-repo/pulls\",\e[11;9H\"method\": \"GET\",\e[12;9H\"body\": null,\e[13;9H\"headers\": null\e[14;7H},\e[15;7H\"body\": [\e[16;9H{\e[17;11H\"url\": \"https://api.github.com/repos/jyfti/example-repo/pulls/2\",\e[18;11H\"id\": 545689772,\e[19;11H\"node_id\": \"MDExOlB1bGxSZXF1ZXN0NTQ1Njg5Nzcy\",\e[20;11H\"html_url\": \"https://github.com/jyfti/example-repo/pull/2\",\e[21;11H\"diff_url\": \"https://github.com/jyfti/example-repo/pull/2.diff\",\e[22;11H\"patch_url\": \"https://github.com/jyfti/example-repo/pull/2.patch\",\e[23;11H\"issue_url\": \"https://api.github.com/repos/jyfti/example-repo/issues/2\",\e[24;11H\"number\": 2,\e[25;11H\"state\": \"open\",\e[1;1H\e[?25h"
+  - delay: 1000
+    content: "\r\n"
+  - delay: 100
+    content: "\r\n"
+  - delay: 100
+    content: "\r\n"
+  - delay: 100
+    content: "\r\n"
+  - delay: 100
+    content: ' '
+  - delay: 100
+    content: ' '
+  - delay: 100
+    content: ' '
+  - delay: 100
+    content: ' '
+  - delay: 100
+    content: '"'
+  - delay: 100
+    content: r
+  - delay: 100
+    content: e
+  - delay: 100
+    content: p
+  - delay: 100
+    content: o
+  - delay: 100
+    content: '"'
+  - delay: 100
+    content: ':'
+  - delay: 100
+    content: ' '
+  - delay: 100
+    content: '"'
+  - delay: 100
+    content: e
+  - delay: 1000
+    content: "\e[?25lxaple-repo\"\e[5;26H\e[K\e[5;15H\e[?25h"
+  - delay: 1000
+    content: x
+  - delay: 200
+    content: a
+  - delay: 200
+    content: "\e[?2004l"
+  - delay: 200
+    content: "\e[?25lmple-repo\"\e[5;18H\e[?25h"
+  - delay: 1000
+    content: "\e[?2004h\b"
+  - delay: 1000
+    content: "\e[?25l\e[26;1H\e[K\e[26;1H:\e[?2004h\e[?25h"
+  - delay: 200
+    content: w
+  - delay: 200
+    content: q
+  - delay: 1000
+    content: "\r\e[?25l\e[?2004l\"out/open-prs-to-slack.state.json\""
+  - delay: 200
+    content: " 692 lines, 40597 characters written\r\r\r\n\e[?2004l\e[?1l\e>\e[?25h\e[?1049l\e[23;0;0t\e]0;fboeller@fboeller: ~/jyfti\a\e[01;32mfboeller@fboeller\e[00m:\e[01;34m~/jyfti\e[00m$ "
+  - delay: 2000
+    content: j
+  - delay: 100
+    content: 'y'
+  - delay: 100
+    content: f
+  - delay: 100
+    content: t
+  - delay: 100
+    content: i
+  - delay: 100
+    content: ' '
+  - delay: 100
+    content: r
+  - delay: 100
+    content: u
+  - delay: 100
+    content: 'n'
+  - delay: 100
+    content: ' '
+  - delay: 100
+    content: c
+  - delay: 100
+    content: o
+  - delay: 100
+    content: m
+  - delay: 100
+    content: p
+  - delay: 100
+    content: l
+  - delay: 100
+    content: e
+  - delay: 100
+    content: t
+  - delay: 100
+    content: e
+  - delay: 2000
+    content: "\r\n"
+  - delay: 200
+    content: "\e[?25l\e[32m?\e[39m \e[1mWhich workflow do you want to complete?\e[22m\e[0m \e[0m\e[2m(Use arrow keys)\e[22m\r\n\e[36m❯ open-prs-to-slack\e[39m \e[20D\e[20C"
+  - delay: 2000
+    content: "\e[2K\e[1A\e[2K\e[G\e[32m?\e[39m \e[1mWhich workflow do you want to complete?\e[22m\e[0m \e[0m\e[36mopen-prs-to-slack\e[39m\e[59D\e[59C\r\n\e[?25h"
+  - delay: 200
+    content: "\e[32m✔\e[39m [0] Retrieve PRs\r\n"
+  - delay: 200
+    content: "\e[32m✔\e[39m [1] Extract PR summary\r\n"
+  - delay: 200
+    content: "\e[32m✔\e[39m [2] Send Slack message\r\n\e[?25h"
+  - delay: 200
+    content: "\e]0;~/jyfti\a\e[01;32mfboeller@fboeller\e[00m:\e[01;34m~/jyfti\e[00m$ "
+  - delay: 2000
+    content: 'jyfti run https://raw.githubusercontent.com/jyfti/jyfti/master/workflows/bitcoin-price.json'
+  - delay: 2000
+    content: "\r\n"
+  - delay: 200
+    content: "\e[32m?\e[39m \e[1mThe currency of the bitcoins to display\e[22m\e[0m \e[0m\e[2m(USD) \e[22m\e[48D\e[48C"
+  - delay: 2000
+    content: "\e[2K\e[G\e[32m?\e[39m \e[1mThe currency of the bitcoins to display\e[22m\e[0m \e[0mE\e[43D\e[43C"
+  - delay: 200
+    content: "\e[2K\e[G\e[32m?\e[39m \e[1mThe currency of the bitcoins to display\e[22m\e[0m \e[0mEU\e[44D\e[44C"
+  - delay: 200
+    content: "\e[2K\e[G\e[32m?\e[39m \e[1mThe currency of the bitcoins to display\e[22m\e[0m \e[0mEUR\e[45D\e[45C"
+  - delay: 1000
+    content: "\e[2K\e[G\e[32m?\e[39m \e[1mThe currency of the bitcoins to display\e[22m\e[0m \e[0m\e[36mEUR\e[39m\e[45D\e[45C\r\n"
+  - delay: 200
+    content: "\e[32m✔\e[39m Initialized\r\n"
+  - delay: 200
+    content: "\e[32m✔\e[39m [0] Retrieve bitcoin price\r\n21093.84 EUR\r\n"
+  - delay: 200
+    content: "\e]0;~/jyfti\a\e[01;32mfboeller@fboeller\e[00m:\e[01;34m~/jyfti\e[00m$ "
+  - delay: 5000
+    content: "\r\n"
