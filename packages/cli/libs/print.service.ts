@@ -40,7 +40,7 @@ export function printStepResult(stepResult: StepResult): string {
       " " +
       printError(stepResult.error.message) +
       "\n" +
-      stepResult.error.stack
+      printJson(stepResult.error)
     );
   }
 }
