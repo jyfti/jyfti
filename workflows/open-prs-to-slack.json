@@ -20,7 +20,7 @@
     }
   },
   "output": {
-    "$eval": "slackResponse"
+    "$eval": "slackResponse.request.body"
   },
   "steps": [
     {

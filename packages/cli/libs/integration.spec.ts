@@ -136,7 +136,11 @@ describe("the commands in combination with each other", () => {
 
     await program.parseAsync(command("run step retrieve-readme"));
     expect(logSpy).lastCalledWith(
-      printStepResult({ path: [0], evaluation: null })
+      printStepResult({
+        path: [0],
+        evaluation: null,
+        name: "Retrieve README.md",
+      })
     );
 
     await program.parseAsync(command("run status retrieve-readme"));
