@@ -11,6 +11,7 @@
   "output": "${response.body.data.amount} ${response.body.data.currency}",
   "steps": [
     {
+      "name": "Retrieve bitcoin price",
       "assignTo": "response",
       "request": {
         "url": "https://api.coinbase.com/v2/prices/spot?currency=${inputs.currency}"

@@ -29,6 +29,7 @@
   },
   "steps": [
     {
+      "name": "Retrieve GitHub issues",
       "assignTo": "issueResponse",
       "request": {
         "method": "GET",
@@ -39,6 +40,7 @@
       }
     },
     {
+      "name": "Extract titles",
       "assignTo": "titles",
       "expression": {
         "$map": {

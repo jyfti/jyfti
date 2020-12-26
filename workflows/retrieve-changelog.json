@@ -18,12 +18,14 @@
   },
   "steps": [
     {
+      "name": "Retrieve changelogs",
       "assignTo": "changelogResponse",
       "request": {
         "url": "https://changelogs.md/api/github/${inputs.org}/${inputs.repo}/"
       }
     },
     {
+      "name": "Extract changes",
       "assignTo": "changes",
       "expression": {
         "$map": {

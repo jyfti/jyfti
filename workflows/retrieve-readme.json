@@ -18,6 +18,7 @@
   },
   "steps": [
     {
+      "name": "Retrieve README.md",
       "assignTo": "readmeResponse",
       "request": {
         "method": "GET",

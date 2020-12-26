@@ -17,6 +17,7 @@
   },
   "steps": [
     {
+      "name": "Retrieve rate limit",
       "assignTo": "rateLimit",
       "request": {
         "url": "https://api.github.com/rate_limit",

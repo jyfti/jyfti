@@ -19,12 +19,14 @@
   },
   "steps": [
     {
+      "name": "Retrieve code coverage",
       "assignTo": "repoResponse",
       "request": {
         "url": "https://codecov.io/api/gh/${inputs.org}"
       }
     },
     {
+      "name": "Extract coverages",
       "assignTo": "coverages",
       "expression": {
         "$map": {
@@ -34,6 +36,7 @@
       }
     },
     {
+      "name": "Send Slack message",
       "assignTo": "slackResponse",
       "request": {
         "method": "POST",

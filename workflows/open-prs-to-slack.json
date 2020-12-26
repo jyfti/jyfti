@@ -24,6 +24,7 @@
   },
   "steps": [
     {
+      "name": "Retrieve PRs",
       "assignTo": "pullResponse",
       "request": {
         "method": "GET",
@@ -31,6 +32,7 @@
       }
     },
     {
+      "name": "Extract titles",
       "assignTo": "titles",
       "expression": {
         "$map": {
@@ -42,6 +44,7 @@
       }
     },
     {
+      "name": "Send Slack message",
       "assignTo": "slackResponse",
       "request": {
         "method": "POST",
