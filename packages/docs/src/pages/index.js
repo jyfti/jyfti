@@ -11,8 +11,8 @@ const features = [
     title: <>Json-based</>,
     description: (
       <>
-        Workflows are just JSON files. They can be checked into source control
-        and compared via diffing tools.
+        Workflows are standalone JSON files. Thus, they can be put into Git and
+        parsed by programs.
       </>
     ),
   },
@@ -20,9 +20,8 @@ const features = [
     title: <>Execute anywhere</>,
     description: (
       <>
-        Jyfti is stateless by default. This allows local execution, easy sharing
-        of workflows and reproduction of issues in other environments like CI
-        servers.
+        The Jyfti CLI reads and writes on the file system. This allows Jyfti to
+        be executed on a CI server as well as on a local computer.
       </>
     ),
   },
@@ -31,8 +30,8 @@ const features = [
     description: (
       <>
         Unsure what's going on in your workflow? Jyfti can execute workflows
-        step-by-step giving you the ability to debug a workflow and giving a CI
-        server the ability to stay in control.
+        step-by-step with intermediary states. Copy these states from CI and you
+        can reproduce an issue locally.
       </>
     ),
   },
