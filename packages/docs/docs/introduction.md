@@ -5,7 +5,7 @@ title: Introduction
 
 ![License](https://img.shields.io/github/license/jyfti/jyfti) ![Build](https://img.shields.io/github/workflow/status/jyfti/jyfti/CI) ![Code Coverage](https://img.shields.io/codecov/c/github/jyfti/jyfti) ![Version](https://img.shields.io/npm/v/@jyfti/cli)
 
-Jyfti is a project for building, running and sharing workflows easily.
+Jyfti is a workflow engine for software engineers.
 
 - **Json-based** — Workflows are standalone JSON files. Thus, they can be put into Git and parsed by programs.
 

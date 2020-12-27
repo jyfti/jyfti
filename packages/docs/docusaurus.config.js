@@ -1,6 +1,6 @@
 module.exports = {
   title: "Jyfti",
-  tagline: "Building, running and sharing workflows easily",
+  tagline: "The workflow engine for software engineers",
   url: "https://jyfti.github.io",
   baseUrl: "/jyfti/",
   onBrokenLinks: "throw",
