@@ -12,6 +12,8 @@
 
 - **Step-by-step execution** — Unsure what's going on in your workflow? Jyfti can execute workflows step-by-step with intermediary states. Copy these states from CI and you can reproduce an issue locally.
 
+![Usage example](./packages/docs/static/img/terminalizer.gif)
+
 ## Quickstart
 
 ```
