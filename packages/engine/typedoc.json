@@ -1,0 +1,10 @@
+{
+  "inputFiles": [
+    "./libs/services/engine.ts",
+    "./libs/services/validator.ts",
+    "./libs/types"
+  ],
+  "exclude": "**/*+(index.ts|.spec.ts|__mocks__)",
+  "mode": "modules",
+  "out": "docs"
+}

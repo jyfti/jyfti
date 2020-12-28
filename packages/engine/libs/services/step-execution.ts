@@ -1,5 +1,5 @@
 import { Observable, of, throwError } from "rxjs";
-import { catchError, mergeMap, map } from "rxjs/operators";
+import { mergeMap, map } from "rxjs/operators";
 
 import { evaluate } from "./evaluation";
 import {
