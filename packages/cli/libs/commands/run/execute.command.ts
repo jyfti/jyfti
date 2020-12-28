@@ -4,18 +4,10 @@ import {
   StepResult,
   State,
   Engine,
-  isFailure,
   isSuccess,
 } from "@jyfti/engine";
-import {
-  last,
-  tap,
-  catchError,
-  mergeMap,
-  takeUntil,
-  takeWhile,
-} from "rxjs/operators";
-import { from, OperatorFunction, empty, throwError, of } from "rxjs";
+import { last, tap, catchError, mergeMap, takeWhile } from "rxjs/operators";
+import { from, OperatorFunction, of } from "rxjs";
 import { promptWorkflow, promptWorkflowInputs } from "../../inquirer.service";
 import { printStepResult, printJson, printOutput } from "../../print.service";
 import {
