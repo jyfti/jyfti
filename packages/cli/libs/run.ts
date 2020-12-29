@@ -22,6 +22,12 @@ export function addRunSubCommands(command: commander.Command): void {
       "the name of the environment",
       "default"
     )
+    .option(
+      "--env-var [assignment]",
+      "an assignment to an individual variable of the expected environment",
+      parseAssignment,
+      {}
+    )
     .action(create);
 
   command
@@ -51,6 +57,12 @@ export function addRunSubCommands(command: commander.Command): void {
       "the name of the environment",
       "default"
     )
+    .option(
+      "--env-var [assignment]",
+      "an assignment to an individual variable of the expected environment",
+      parseAssignment,
+      {}
+    )
     .action(step);
 
   command
@@ -61,6 +73,12 @@ export function addRunSubCommands(command: commander.Command): void {
       "-e --environment <environment>",
       "the name of the environment",
       "default"
+    )
+    .option(
+      "--env-var [assignment]",
+      "an assignment to an individual variable of the expected environment",
+      parseAssignment,
+      {}
     )
     .action(complete);
 

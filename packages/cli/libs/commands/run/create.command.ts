@@ -1,5 +1,5 @@
 import { readConfig } from "../../data-access/config.dao";
-import { createEngine } from "@jyfti/engine";
+import { createEngine, Environment } from "@jyfti/engine";
 import { promptWorkflow, promptWorkflowInputs } from "../../inquirer.service";
 import { printJson, printValue } from "../../print.service";
 import {
@@ -21,11 +21,17 @@ import {
   validateEnvironmentOrTerminate,
 } from "../../validator";
 import logSymbols from "log-symbols";
+import { mergeEnvironments } from "../../data-access/environment.util";
 
 export async function create(
   name?: string,
   inputList?: string[],
-  cmd?: { yes?: boolean; environment?: string; verbose?: boolean }
+  cmd?: {
+    yes?: boolean;
+    environment?: string;
+    envVar?: Environment;
+    verbose?: boolean;
+  }
 ): Promise<void> {
   const config = await readConfig();
   if (!name) {
@@ -41,10 +47,10 @@ export async function create(
       await install(config, workflow, schema, name, cmd?.yes || false);
       console.log(`Installed ${printValue(name)} .`);
     }
-    const environment = await readEnvironmentOrTerminate(
-      config,
-      cmd?.environment
-    );
+    const environment = mergeEnvironments([
+      await readEnvironmentOrTerminate(config, cmd?.environment),
+      cmd?.envVar || {},
+    ]);
     validateEnvironmentOrTerminate(workflow, environment);
     if ((inputList || []).length === 0) {
       inputList = await promptWorkflowInputs(workflow);

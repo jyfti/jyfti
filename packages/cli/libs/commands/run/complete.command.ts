@@ -5,9 +5,10 @@ import {
   Engine,
   State,
   isFailure,
+  Environment,
 } from "@jyfti/engine";
 import { last, mergeMap, tap, catchError } from "rxjs/operators";
-import { from, OperatorFunction, empty, throwError, of } from "rxjs";
+import { from, OperatorFunction, throwError, of, EMPTY } from "rxjs";
 import { promptWorkflow } from "../../inquirer.service";
 import { printStepResult } from "../../print.service";
 import {
@@ -18,10 +19,11 @@ import { writeState, readStateOrTerminate } from "../../data-access/state.dao";
 import { readEnvironmentOrTerminate } from "../../data-access/environment.dao";
 import { validateEnvironmentOrTerminate } from "../../validator";
 import { Config } from "../../types/config";
+import { mergeEnvironments } from "../../data-access/environment.util";
 
 export async function complete(
   name?: string,
-  cmd?: { environment?: string; verbose?: boolean }
+  cmd?: { environment?: string; envVar?: Environment; verbose?: boolean }
 ): Promise<void> {
   const config = await readConfig();
   if (!name) {
@@ -34,17 +36,17 @@ export async function complete(
   if (name) {
     const workflow = await readWorkflowOrTerminate(config, name);
     const state = await readStateOrTerminate(config, name);
-    const environment = await readEnvironmentOrTerminate(
-      config,
-      cmd?.environment
-    );
+    const environment = mergeEnvironments([
+      await readEnvironmentOrTerminate(config, cmd?.environment),
+      cmd?.envVar || {},
+    ]);
     validateEnvironmentOrTerminate(workflow, environment);
     const engine = createEngine(workflow, environment);
     await engine
       .complete(state)
       .pipe(
         process(engine, config, name, state),
-        catchError(() => empty())
+        catchError(() => EMPTY)
       )
       .toPromise();
   }
