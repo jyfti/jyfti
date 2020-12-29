@@ -1,6 +1,6 @@
 {
   "name": "@jyfti/docs",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Jyfti is a project for building, running and sharing workflows easily. Jyfti Docs is the documentation hosted on GitHub pages.",
   "repository": {
     "type": "git",
