@@ -46,7 +46,6 @@ describe("environment utility functions", () => {
     });
   });
 
-  // TODO Nested environments should not be overridden, but the merging should recursively continue
   it("merges environments and prefers later environments", () => {
     expect(
       mergeEnvironments([
@@ -55,5 +54,11 @@ describe("environment utility functions", () => {
         { a: "a3" },
       ])
     ).toEqual({ a: "a3", b: "b2", c: "c1" });
+  });
+
+  it("merges nested environments without overriding", () => {
+    expect(
+      mergeEnvironments([{ a: { b: "b1", c: "c1" } }, { a: { b: "b2" } }])
+    ).toEqual({ a: { b: "b2", c: "c1" } });
   });
 });

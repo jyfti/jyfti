@@ -1,4 +1,5 @@
 import { Environment } from "@jyfti/engine";
+import { merge } from "lodash/fp";
 
 export function parseAssignment(
   assignmentStr: string,
@@ -16,10 +17,7 @@ export function parseAssignment(
 }
 
 export function mergeEnvironments(environments: Environment[]): Environment {
-  return environments.reduce(
-    (acc, environment) => ({ ...acc, ...environment }),
-    {}
-  );
+  return environments.reduce((acc, environment) => merge(acc, environment), {});
 }
 
 export function extractEnvironment(
