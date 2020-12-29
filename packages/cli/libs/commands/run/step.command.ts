@@ -5,6 +5,7 @@ import {
   State,
   Engine,
   isFailure,
+  Environment,
 } from "@jyfti/engine";
 import { mergeMap, tap, catchError } from "rxjs/operators";
 import { from, OperatorFunction, empty, throwError, of } from "rxjs";
@@ -18,10 +19,11 @@ import { printStepResult } from "../../print.service";
 import { readEnvironmentOrTerminate } from "../../data-access/environment.dao";
 import { validateEnvironmentOrTerminate } from "../../validator";
 import { Config } from "../../types/config";
+import { mergeEnvironments } from "../../data-access/environment.util";
 
 export async function step(
   name?: string,
-  cmd?: { environment?: string; verbose?: boolean }
+  cmd?: { environment?: string; envVar?: Environment; verbose?: boolean }
 ): Promise<void> {
   const config = await readConfig();
   if (!name) {
@@ -34,10 +36,10 @@ export async function step(
   if (name) {
     const workflow = await readWorkflowOrTerminate(config, name);
     const state = await readStateOrTerminate(config, name);
-    const environment = await readEnvironmentOrTerminate(
-      config,
-      cmd?.environment
-    );
+    const environment = mergeEnvironments([
+      await readEnvironmentOrTerminate(config, cmd?.environment),
+      cmd?.envVar || {},
+    ]);
     validateEnvironmentOrTerminate(workflow, environment);
     const engine = createEngine(workflow, environment);
     if (engine.isComplete(state)) {

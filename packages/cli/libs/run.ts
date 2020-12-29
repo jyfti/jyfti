@@ -9,6 +9,7 @@ import {
   reset,
   create,
 } from "./commands";
+import { parseAssignment } from "./data-access/environment.util";
 
 export function addRunSubCommands(command: commander.Command): void {
   command
@@ -20,6 +21,12 @@ export function addRunSubCommands(command: commander.Command): void {
       "-e --environment <environment>",
       "the name of the environment",
       "default"
+    )
+    .option(
+      "--env-var [assignment]",
+      "an assignment to an individual variable of the expected environment",
+      parseAssignment,
+      {}
     )
     .action(create);
 
@@ -33,6 +40,12 @@ export function addRunSubCommands(command: commander.Command): void {
       "the name of the environment",
       "default"
     )
+    .option(
+      "--env-var [assignment]",
+      "an assignment to an individual variable of the expected environment",
+      parseAssignment,
+      {}
+    )
     .action(execute);
 
   command
@@ -44,6 +57,12 @@ export function addRunSubCommands(command: commander.Command): void {
       "the name of the environment",
       "default"
     )
+    .option(
+      "--env-var [assignment]",
+      "an assignment to an individual variable of the expected environment",
+      parseAssignment,
+      {}
+    )
     .action(step);
 
   command
@@ -54,6 +73,12 @@ export function addRunSubCommands(command: commander.Command): void {
       "-e --environment <environment>",
       "the name of the environment",
       "default"
+    )
+    .option(
+      "--env-var [assignment]",
+      "an assignment to an individual variable of the expected environment",
+      parseAssignment,
+      {}
     )
     .action(complete);
 

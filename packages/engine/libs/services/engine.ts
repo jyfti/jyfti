@@ -1,5 +1,5 @@
 import { inputDefaults, step, toOutput, nextState } from "./execution";
-import { Observable, empty, OperatorFunction } from "rxjs";
+import { Observable, OperatorFunction, EMPTY } from "rxjs";
 import { mergeMap, startWith, scan } from "rxjs/operators";
 import {
   StepResult,
@@ -63,9 +63,10 @@ export class Engine {
     return step(this.workflow, state, this.environment).pipe(
       mergeMap((stepResult) => {
         const nextState = this.transition(state, stepResult);
-        const nextStepResults = this.isComplete(nextState)
-          ? empty()
-          : this.complete(nextState);
+        const nextStepResults =
+          this.isComplete(nextState) || this.isError(nextState)
+            ? EMPTY
+            : this.complete(nextState);
         return nextStepResults.pipe(startWith(stepResult));
       })
     );
@@ -91,6 +92,18 @@ export class Engine {
    */
   isComplete(state: State): boolean {
     return state.path.length == 0;
+  }
+
+  /**
+   * Returns if the workflow has errored with this state.
+   * If true, then a subsequent step re-executes the previous step again.
+   *
+   * Note that a call to complete stops after an error occurred.
+   *
+   * @param state The state
+   */
+  isError(state: State): boolean {
+    return !!state.error;
   }
 
   /**

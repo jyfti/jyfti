@@ -32,6 +32,7 @@ jest.mock("@jyfti/engine", () => {
     transitionFrom: jest.fn(() => (stepResult$) =>
       stepResult$.pipe(require("rxjs/operators").map(() => ({})))
     ),
+    getOutput: () => ({}),
     resolveStep: () => ({}),
   };
   return {
@@ -83,6 +84,6 @@ describe("the complete command", () => {
     await complete("my-workflow");
     expect(logSpy).toHaveBeenNthCalledWith(1, printStepResult(stepResult));
     expect(errorSpy).toHaveBeenCalledTimes(0);
-    expect(writeStateSpy).toHaveBeenCalledTimes(0);
+    expect(writeStateSpy).toHaveBeenCalledTimes(1);
   });
 });
