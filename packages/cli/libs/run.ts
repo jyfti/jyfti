@@ -30,12 +30,12 @@ export function addRunSubCommands(command: commander.Command): void {
     .option("-v --verbose", "print step results")
     .option("-y --yes", "automatically answer confirmation questions with yes")
     .option(
-      "--environment <environment>",
+      "-e --environment <environment>",
       "the name of the environment",
       "default"
     )
     .option(
-      "-e --env-var [assignment]",
+      "--env-var [assignment]",
       "an assignment to an individual variable of the expected environment",
       parseAssignment,
       {}
