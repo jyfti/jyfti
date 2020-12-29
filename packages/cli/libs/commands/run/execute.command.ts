@@ -5,6 +5,7 @@ import {
   State,
   Engine,
   isSuccess,
+  Environment,
 } from "@jyfti/engine";
 import { last, tap, catchError, mergeMap, takeWhile } from "rxjs/operators";
 import { from, OperatorFunction, of } from "rxjs";
@@ -29,16 +30,12 @@ import {
   validateEnvironmentOrTerminate,
 } from "../../validator";
 import logSymbols from "log-symbols";
-import { Assignment } from "../../types/assignment.type";
-import {
-  extractEnvironments,
-  mergeEnvironments,
-} from "../../data-access/environment.util";
+import { mergeEnvironments } from "../../data-access/environment.util";
 
 export async function execute(
   name?: string,
   inputList?: string[],
-  cmd?: { environment?: string; verbose?: boolean; envVar?: Assignment[] }
+  cmd?: { environment?: string; verbose?: boolean; envVar?: Environment }
 ): Promise<void> {
   const config = await readConfig();
   if (!name) {
@@ -52,7 +49,7 @@ export async function execute(
     name = isUrl(name) ? extractWorkflowName(name) : name;
     const environment = mergeEnvironments([
       await readEnvironmentOrTerminate(config, cmd?.environment),
-      ...extractEnvironments(cmd?.envVar || []),
+      cmd?.envVar || {},
     ]);
     validateEnvironmentOrTerminate(workflow, environment);
     if ((inputList || []).length === 0) {

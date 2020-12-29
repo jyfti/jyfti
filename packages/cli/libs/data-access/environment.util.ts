@@ -1,5 +1,19 @@
 import { Environment } from "@jyfti/engine";
-import { Assignment } from "../types/assignment.type";
+
+export function parseAssignment(
+  assignmentStr: string,
+  previous: Environment
+): Environment {
+  const [accessorString, environmentVariable] = assignmentStr.split("=", 2);
+  const accessor = accessorString.split(".");
+  const value = process.env[environmentVariable];
+  if (!value) {
+    throw new Error(
+      `The environment variable ${environmentVariable} is not set`
+    );
+  }
+  return mergeEnvironments([previous, extractEnvironment(accessor, value)]);
+}
 
 export function mergeEnvironments(environments: Environment[]): Environment {
   return environments.reduce(
@@ -8,16 +22,15 @@ export function mergeEnvironments(environments: Environment[]): Environment {
   );
 }
 
-export function extractEnvironments(assignments: Assignment[]): Environment[] {
-  return assignments.map(extractEnvironment);
-}
-
-function extractEnvironment(assignment: Assignment): Environment {
-  const rightmostAccessorIndex = assignment.accessor.length - 1;
+export function extractEnvironment(
+  accessor: string[],
+  value: string
+): Environment {
+  const rightmostAccessorIndex = accessor.length - 1;
   const rightmostObj: Environment = {
-    [assignment.accessor[rightmostAccessorIndex]]: assignment.value,
+    [accessor[rightmostAccessorIndex]]: value,
   };
-  return assignment.accessor
+  return accessor
     .slice(0, rightmostAccessorIndex)
     .reduceRight((acc, part) => ({ [part]: acc }), rightmostObj);
 }

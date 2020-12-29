@@ -9,7 +9,7 @@ import {
   reset,
   create,
 } from "./commands";
-import { Assignment } from "./types/assignment.type";
+import { parseAssignment } from "./data-access/environment.util";
 
 export function addRunSubCommands(command: commander.Command): void {
   command
@@ -23,21 +23,6 @@ export function addRunSubCommands(command: commander.Command): void {
       "default"
     )
     .action(create);
-
-  function parseAssignment(
-    assignmentStr: string,
-    previous: Assignment[]
-  ): Assignment[] {
-    const [accessorString, environmentVariable] = assignmentStr.split("=", 2);
-    const accessor = accessorString.split(".");
-    const value = process.env[environmentVariable];
-    if (!value) {
-      throw new Error(
-        `The environment variable ${environmentVariable} is not set`
-      );
-    }
-    return [...previous, { accessor, value }];
-  }
 
   command
     .command("execute [name] [inputs...]", { isDefault: true })
@@ -53,7 +38,7 @@ export function addRunSubCommands(command: commander.Command): void {
       "-e --env-var [assignment]",
       "an assignment to an individual variable of the expected environment",
       parseAssignment,
-      []
+      {}
     )
     .action(execute);
 
