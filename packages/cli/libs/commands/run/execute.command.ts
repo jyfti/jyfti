@@ -29,11 +29,16 @@ import {
   validateEnvironmentOrTerminate,
 } from "../../validator";
 import logSymbols from "log-symbols";
+import { Assignment } from "../../types/assignment.type";
+import {
+  extractEnvironments,
+  mergeEnvironments,
+} from "../../data-access/environment.util";
 
 export async function execute(
   name?: string,
   inputList?: string[],
-  cmd?: { environment?: string; verbose?: boolean }
+  cmd?: { environment?: string; verbose?: boolean; envVar?: Assignment[] }
 ): Promise<void> {
   const config = await readConfig();
   if (!name) {
@@ -45,10 +50,10 @@ export async function execute(
     const schema = await readWorkflowSchemaOrTerminate(config);
     validateWorkflowOrTerminate(workflow, schema);
     name = isUrl(name) ? extractWorkflowName(name) : name;
-    const environment = await readEnvironmentOrTerminate(
-      config,
-      cmd?.environment
-    );
+    const environment = mergeEnvironments([
+      await readEnvironmentOrTerminate(config, cmd?.environment),
+      ...extractEnvironments(cmd?.envVar || []),
+    ]);
     validateEnvironmentOrTerminate(workflow, environment);
     if ((inputList || []).length === 0) {
       inputList = await promptWorkflowInputs(workflow);

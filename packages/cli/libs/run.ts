@@ -9,6 +9,7 @@ import {
   reset,
   create,
 } from "./commands";
+import { Assignment } from "./types/assignment.type";
 
 export function addRunSubCommands(command: commander.Command): void {
   command
@@ -23,15 +24,36 @@ export function addRunSubCommands(command: commander.Command): void {
     )
     .action(create);
 
+  function parseAssignment(
+    assignmentStr: string,
+    previous: Assignment[]
+  ): Assignment[] {
+    const [accessorString, environmentVariable] = assignmentStr.split("=", 2);
+    const accessor = accessorString.split(".");
+    const value = process.env[environmentVariable];
+    if (!value) {
+      throw new Error(
+        `The environment variable ${environmentVariable} is not set`
+      );
+    }
+    return [...previous, { accessor, value }];
+  }
+
   command
     .command("execute [name] [inputs...]", { isDefault: true })
     .description("execute a run of this workflow")
     .option("-v --verbose", "print step results")
     .option("-y --yes", "automatically answer confirmation questions with yes")
     .option(
-      "-e --environment <environment>",
+      "--environment <environment>",
       "the name of the environment",
       "default"
+    )
+    .option(
+      "-e --env-var [assignment]",
+      "an assignment to an individual variable of the expected environment",
+      parseAssignment,
+      []
     )
     .action(execute);
 
