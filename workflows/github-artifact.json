@@ -1,0 +1,56 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jyfti/jyfti/master/workflow-schema.json",
+  "name": "Read a GitHub artifact",
+  "env": {
+    "github": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string"
+        }
+      },
+      "required": ["token"]
+    }
+  },
+  "inputs": {
+    "org": {
+      "type": "string",
+      "description": "The GitHub organization",
+      "default": "jyfti"
+    },
+    "repo": {
+      "type": "string",
+      "description": "The GitHub repository",
+      "default": "example-repo"
+    },
+    "artifactId": {
+      "type": "string",
+      "description": "The GitHub artifact id"
+    }
+  },
+  "output": {
+    "$eval": "slackResponse.request.body"
+  },
+  "steps": [
+    {
+      "name": "Retrieve artifact redirect URL",
+      "assignTo": "artifactResponse",
+      "request": {
+        "url": "https://api.github.com/repos/${inputs.org}/${inputs.repo}/actions/artifacts/${inputs.artifactId}/zip",
+        "headers": {
+          "Authorization": "token ${env.github.token}"
+        }
+      }
+    },
+    {
+      "name": "Follow redirect URL",
+      "assignTo": "artifact",
+      "request": {
+        "url": "${artifactResponse.headers.location}",
+        "headers": {
+          "Authorization": "token ${env.github.token}"
+        }
+      }
+    }
+  ]
+}
