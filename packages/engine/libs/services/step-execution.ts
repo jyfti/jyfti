@@ -37,7 +37,8 @@ function executeRequestStep(
   request: HttpRequestTemplate,
   variables: VariableMap
 ): Observable<Evaluation> {
-  return of(createHttpRequest(request, variables)).pipe(
+  return of({}).pipe(
+    map(() => createHttpRequest(request, variables)),
     mergeMap((request) => http(request))
   );
 }
