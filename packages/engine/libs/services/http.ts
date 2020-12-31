@@ -28,7 +28,11 @@ export const acceptedStatusCodes = [
 
 export function http(
   requestInfo: HttpRequest<unknown>
-): Observable<{ request: HttpRequest<unknown>; body: unknown }> {
+): Observable<{
+  request: HttpRequest<unknown>;
+  body: unknown;
+  statusCode: number;
+}> {
   const getStream = bent(requestInfo.method, acceptedStatusCodes);
   const headers = addDefaultHeaders(requestInfo.headers || {});
   const body = requestInfo.body
@@ -36,9 +40,13 @@ export function http(
     : undefined;
   return defer(() => from(getStream(requestInfo.url, body, headers))).pipe(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    mergeMap((stream: any) => from<string>(stream.text())),
-    map((body) => parseJsonOrString(body)),
-    map((body) => ({ request: requestInfo, body }))
+    mergeMap((stream: any) =>
+      from<string>(stream.text()).pipe(
+        map((body) => parseJsonOrString(body)),
+        map((body) => ({ body, statusCode: stream.statusCode }))
+      )
+    ),
+    map(({ body, statusCode }) => ({ request: requestInfo, body, statusCode }))
   );
 }
 
