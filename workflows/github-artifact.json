@@ -52,6 +52,11 @@
         },
         "writeTo": "artifact.zip"
       }
+    },
+    {
+      "name": "Unzip artifact",
+      "assignTo": "unzip",
+      "shell": "unzip -o artifact.zip"
     }
   ]
 }

@@ -21,13 +21,19 @@ export interface ExpressionStep {
   expression: JsonExpression;
 }
 
+export interface ShellStep {
+  name?: JsonExpression;
+  assignTo: string;
+  shell: JsonExpression;
+}
+
 export interface ForStep {
   name?: JsonExpression;
   assignTo: string;
   for: ForLoop;
 }
 
-export type Step = RequestStep | ExpressionStep | ForStep;
+export type Step = RequestStep | ExpressionStep | ShellStep | ForStep;
 
 export function isRequestStep(step: Step): step is RequestStep {
   return "request" in step;
@@ -35,6 +41,10 @@ export function isRequestStep(step: Step): step is RequestStep {
 
 export function isExpressionStep(step: Step): step is ExpressionStep {
   return "expression" in step;
+}
+
+export function isShellStep(step: Step): step is ShellStep {
+  return "shell" in step;
 }
 
 export function isForStep(step: Step): step is ForStep {

@@ -10,9 +10,11 @@ import {
   isRequestStep,
   isExpressionStep,
   ForStep,
+  isShellStep,
 } from "../types";
 import { toVariableMap } from "./variable-map-creation";
 import { executeRequestStep } from "./request-step-execution";
+import { executeShellStep } from "./shell-step-execution";
 
 export function executeStep(
   step: Step,
@@ -24,6 +26,8 @@ export function executeStep(
     return executeRequestStep(step.request, variables, outRoot);
   } else if (isExpressionStep(step)) {
     return executeExpressionStep(step.expression, variables);
+  } else if (isShellStep(step)) {
+    return executeShellStep(step.shell, variables, outRoot);
   } else {
     return evaluateLoopReturn(localEvaluations, step);
   }
