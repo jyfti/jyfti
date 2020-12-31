@@ -1,8 +1,7 @@
 import { from, Observable, defer } from "rxjs";
 import { HttpRequest, Headers } from "../types";
 import bent from "bent";
-import { map, mergeMap, tap } from "rxjs/operators";
-import { fstat } from "fs";
+import { map } from "rxjs/operators";
 
 export const timeoutMillis = 10000;
 
@@ -31,7 +30,7 @@ export function http(
   requestInfo: HttpRequest<unknown>
 ): Observable<{
   request: HttpRequest<unknown>;
-  body: Observable<unknown>;
+  body: Observable<Buffer>;
   statusCode: number;
   headers: Record<string, string>;
 }> {
@@ -44,20 +43,11 @@ export function http(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     map((stream: any) => ({
       request: requestInfo,
-      body: from<string>(stream.text()).pipe(map(parseJsonOrString)),
+      body: from(stream.arrayBuffer()) as Observable<Buffer>,
       statusCode: stream.statusCode,
       headers: stream.headers,
     }))
   );
-}
-
-function parseJsonOrString(str: string): unknown {
-  // TODO Look at response header for content type
-  try {
-    return JSON.parse(str);
-  } catch {
-    return str;
-  }
 }
 
 function addDefaultHeaders(headers: Headers): Headers {

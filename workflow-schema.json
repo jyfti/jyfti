@@ -100,7 +100,10 @@
               "type": "string"
             },
             "body": { "$ref": "#/definitions/jsone" },
-            "headers": { "$ref": "#/definitions/jsone" }
+            "headers": { "$ref": "#/definitions/jsone" },
+            "writeTo": {
+              "type": "string"
+            }
           },
           "additionalProperties": false,
           "required": ["url"]

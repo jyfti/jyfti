@@ -1,17 +1,20 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { of } from "rxjs";
 import { http } from "./http";
 
 jest.mock("bent", () =>
   jest.fn(() => () =>
-    Promise.resolve({ text: () => Promise.resolve("content") })
+    Promise.resolve({
+      arrayBuffer: () => Promise.resolve(Buffer.from("content")),
+    })
   )
 );
 
 describe("sending http requests", () => {
-  it("should return text as text", (done) => {
+  it("should return the body as buffer", (done) => {
     require("bent").mockReturnValue(() =>
-      Promise.resolve({ text: () => Promise.resolve("content") })
+      Promise.resolve({
+        arrayBuffer: () => Promise.resolve(Buffer.from("content")),
+      })
     );
     http({ method: "GET", url: "myUrl", body: {} }).subscribe((response) => {
       expect(response).toHaveProperty("request", {
@@ -20,25 +23,7 @@ describe("sending http requests", () => {
         body: {},
       });
       response.body.subscribe(
-        (body) => expect(body).toEqual("content"),
-        fail,
-        () => done()
-      );
-    }, fail);
-  });
-
-  it("should return json as json", (done) => {
-    require("bent").mockReturnValue(() =>
-      Promise.resolve({ text: () => Promise.resolve("[{}, 1]") })
-    );
-    http({ method: "GET", url: "myUrl", body: {} }).subscribe((response) => {
-      expect(response).toHaveProperty("request", {
-        method: "GET",
-        url: "myUrl",
-        body: {},
-      });
-      response.body.subscribe(
-        (body) => expect(body).toEqual([{}, 1]),
+        (body) => expect(body).toEqual(Buffer.from("content")),
         fail,
         () => done()
       );
@@ -47,7 +32,9 @@ describe("sending http requests", () => {
 
   it("should return an error if body can not be read", (done) => {
     require("bent").mockReturnValue(() =>
-      Promise.resolve({ text: () => Promise.reject("Body can not be read") })
+      Promise.resolve({
+        arrayBuffer: () => Promise.reject("Body can not be read"),
+      })
     );
     http({ method: "GET", url: "myUrl", body: {} }).subscribe((response) => {
       response.body.subscribe(fail, (err) => {

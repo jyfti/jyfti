@@ -9,7 +9,13 @@ describe("The execution of steps", () => {
     it("should return the http response", () => {
       const step: RequestStep = {
         assignTo: "myVar",
-        request: { method: "GET", url: "abc", body: null, headers: null },
+        request: {
+          method: "GET",
+          url: "abc",
+          body: null,
+          headers: null,
+          writeTo: null,
+        },
       };
       expect(executeStep(step, [], {})).toBeObservable(
         cold("(a|)", { a: { request: step.request, body: { field: "value" } } })

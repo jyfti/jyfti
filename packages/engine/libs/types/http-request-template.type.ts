@@ -5,4 +5,5 @@ export interface HttpRequestTemplate {
   url: JsonExpression;
   body?: JsonExpression;
   headers?: JsonExpression;
+  writeTo?: JsonExpression;
 }

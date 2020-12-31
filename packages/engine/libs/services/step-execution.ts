@@ -1,5 +1,5 @@
-import { Observable, of, throwError } from "rxjs";
-import { mergeMap, map } from "rxjs/operators";
+import { from, Observable, of, throwError } from "rxjs";
+import { mergeMap, map, mapTo } from "rxjs/operators";
 
 import { evaluate } from "./evaluation";
 import {
@@ -18,6 +18,7 @@ import {
 } from "../types";
 import { toVariableMap } from "./variable-map-creation";
 import { http } from "./http";
+import * as fs from "fs";
 
 export function executeStep(
   step: Step,
@@ -39,11 +40,33 @@ function executeRequestStep(
 ): Observable<Evaluation> {
   return of({}).pipe(
     map(() => createHttpRequest(request, variables)),
-    mergeMap((request) => http(request)),
-    mergeMap((response) =>
-      response.body.pipe(map((body) => ({ ...response, body })))
+    mergeMap((request) =>
+      http(request).pipe(
+        mergeMap((response) =>
+          response.body.pipe(
+            mergeMap((body) =>
+              request.writeTo
+                ? from(
+                    fs.promises.writeFile(request.writeTo, body, "utf8")
+                  ).pipe(mapTo("Written to " + request.writeTo))
+                : of(parseJsonOrString(body))
+            ),
+            map((body) => ({ ...response, body }))
+          )
+        )
+      )
     )
   );
+}
+
+function parseJsonOrString(buffer: Buffer): unknown {
+  // TODO Look at response header for content type
+  const str = buffer.toString("utf8");
+  try {
+    return JSON.parse(str);
+  } catch {
+    return str;
+  }
 }
 
 function executeExpressionStep(
@@ -92,6 +115,10 @@ function createHttpRequest(
   if (!isString(url)) {
     throw new Error("The url needs to evaluate to a string.");
   }
+  const writeTo = evaluate(variables, template.writeTo);
+  if (!isWriteTo(writeTo)) {
+    throw new Error("The field 'writeTo' needs to evaluate to a string.");
+  }
   const headers = evaluate(variables, template.headers);
   if (!isHeaders(headers)) {
     throw new Error(
@@ -103,7 +130,12 @@ function createHttpRequest(
     method: evaluate(variables, template.method) as HttpMethod,
     body: evaluate(variables, template.body),
     headers,
+    writeTo,
   };
+}
+
+function isWriteTo(object: unknown): object is string | undefined {
+  return !object || isString(object);
 }
 
 function isEvaluations(
