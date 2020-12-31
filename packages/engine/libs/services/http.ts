@@ -5,10 +5,31 @@ import { map, mergeMap } from "rxjs/operators";
 
 export const timeoutMillis = 10000;
 
+export const acceptedStatusCodes = [
+  200,
+  201,
+  202,
+  203,
+  204,
+  205,
+  206,
+  207,
+  208,
+  300,
+  301,
+  302,
+  303,
+  304,
+  305,
+  306,
+  307,
+  308,
+];
+
 export function http(
   requestInfo: HttpRequest<unknown>
 ): Observable<{ request: HttpRequest<unknown>; body: unknown }> {
-  const getStream = bent(requestInfo.method);
+  const getStream = bent(requestInfo.method, acceptedStatusCodes);
   const headers = addDefaultHeaders(requestInfo.headers || {});
   const body = requestInfo.body
     ? Buffer.from(JSON.stringify(requestInfo.body))
