@@ -29,7 +29,7 @@
     }
   },
   "output": {
-    "$eval": "artifact"
+    "$eval": "unzip"
   },
   "steps": [
     {
@@ -57,6 +57,11 @@
       "name": "Unzip artifact",
       "assignTo": "unzip",
       "shell": "unzip -o artifact.zip"
+    },
+    {
+      "name": "Remove zip file",
+      "assignTo": "rmzip",
+      "shell": "rm artifact.zip"
     }
   ]
 }
