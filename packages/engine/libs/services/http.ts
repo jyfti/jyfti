@@ -43,10 +43,10 @@ export function http(
     mergeMap((stream: any) =>
       from<string>(stream.text()).pipe(
         map((body) => parseJsonOrString(body)),
-        map((body) => ({ body, statusCode: stream.statusCode }))
+        map((body) => ({ body, statusCode: stream.statusCode, headers: stream.headers }))
       )
     ),
-    map(({ body, statusCode }) => ({ request: requestInfo, body, statusCode }))
+    map(({ body, statusCode, headers }) => ({ request: requestInfo, body, statusCode, headers }))
   );
 }
 

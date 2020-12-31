@@ -29,7 +29,7 @@
     }
   },
   "output": {
-    "$eval": "slackResponse.request.body"
+    "$eval": "artifact"
   },
   "steps": [
     {
