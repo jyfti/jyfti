@@ -39,7 +39,10 @@ function executeRequestStep(
 ): Observable<Evaluation> {
   return of({}).pipe(
     map(() => createHttpRequest(request, variables)),
-    mergeMap((request) => http(request))
+    mergeMap((request) => http(request)),
+    mergeMap((response) =>
+      response.body.pipe(map((body) => ({ ...response, body })))
+    )
   );
 }
 
