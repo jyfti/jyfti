@@ -16,7 +16,7 @@ describe("a request step", () => {
         writeTo: null,
       },
     };
-    expect(executeStep(step, [], {})).toBeObservable(
+    expect(executeStep(step, [], {}, "")).toBeObservable(
       cold("(a|)", { a: { request: step.request, body: { field: "value" } } })
     );
   });

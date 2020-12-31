@@ -17,10 +17,11 @@ import { executeRequestStep } from "./request-step-execution";
 export function executeStep(
   step: Step,
   localEvaluations: Evaluation | Evaluations,
-  variables: VariableMap
+  variables: VariableMap,
+  outRoot: string
 ): Observable<Evaluation> {
   if (isRequestStep(step)) {
-    return executeRequestStep(step.request, variables);
+    return executeRequestStep(step.request, variables, outRoot);
   } else if (isExpressionStep(step)) {
     return executeExpressionStep(step.expression, variables);
   } else {

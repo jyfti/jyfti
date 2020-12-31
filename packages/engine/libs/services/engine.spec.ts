@@ -49,7 +49,7 @@ describe("Engine", () => {
         } as ForStep,
       ],
     };
-    const engine = new Engine(workflow, {});
+    const engine = new Engine(workflow, {}, "");
     expect(engine.complete(engine.init({}))).toBeObservable(
       cold("(abcdefghi|)", {
         a: { path: [0], evaluation: 5 },
@@ -106,7 +106,7 @@ describe("Engine", () => {
         } as ForStep,
       ],
     };
-    const engine = new Engine(workflow, {});
+    const engine = new Engine(workflow, {}, "");
     const stepResult$: Observable<StepResult> = of(
       {
         path: [0],

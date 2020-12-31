@@ -1,5 +1,6 @@
 import { http } from "./http";
 import * as fs from "fs";
+import * as nodePath from "path";
 import { of, from, Observable } from "rxjs";
 import { map, mergeMap, mapTo } from "rxjs/operators";
 import { evaluate } from "./evaluation";
@@ -14,7 +15,8 @@ import {
 
 export function executeRequestStep(
   request: HttpRequestTemplate,
-  variables: VariableMap
+  variables: VariableMap,
+  outRoot: string
 ): Observable<Evaluation> {
   return of({}).pipe(
     map(() => createHttpRequest(request, variables)),
@@ -25,7 +27,11 @@ export function executeRequestStep(
             mergeMap((body) =>
               request.writeTo
                 ? from(
-                    fs.promises.writeFile(request.writeTo, body, "utf8")
+                    fs.promises.writeFile(
+                      nodePath.resolve(outRoot, request.writeTo),
+                      body,
+                      "utf8"
+                    )
                   ).pipe(mapTo("Written to " + request.writeTo))
                 : of(parseJsonOrString(body))
             ),

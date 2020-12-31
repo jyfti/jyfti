@@ -22,7 +22,7 @@ export async function vars(name?: string): Promise<void> {
     const workflow = await readWorkflowOrTerminate(config, name);
     const state = await readStateOrTerminate(config, name);
     const environment = await readEnvironmentOrTerminate(config, undefined);
-    const engine = createEngine(workflow, environment);
+    const engine = createEngine(workflow, environment, config.outRoot);
     console.log(printJson(engine.getVariableMap(state)));
   }
 }

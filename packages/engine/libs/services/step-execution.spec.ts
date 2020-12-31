@@ -14,7 +14,7 @@ describe("The execution of steps", () => {
       const variables: VariableMap = {
         listVar: ["a", "b"],
       };
-      expect(executeStep(step, [], variables)).toBeObservable(
+      expect(executeStep(step, [], variables, "")).toBeObservable(
         cold("(a|)", { a: ["a", "b"] })
       );
     });
@@ -27,7 +27,7 @@ describe("The execution of steps", () => {
       const variables: VariableMap = {
         listVar: ["a", "b"],
       };
-      expect(executeStep(step, [], variables)).toBeObservable(cold("#"));
+      expect(executeStep(step, [], variables, "")).toBeObservable(cold("#"));
     });
   });
   describe("a loop return evaluation step", () => {
@@ -50,9 +50,14 @@ describe("The execution of steps", () => {
 
     it("should return the collection of all inner variable values of the return variable", () => {
       expect(
-        executeStep(step, [[2], [2], [2], [2], [2]], {
-          listVar: ["a", "b", "c", "d", "e"],
-        })
+        executeStep(
+          step,
+          [[2], [2], [2], [2], [2]],
+          {
+            listVar: ["a", "b", "c", "d", "e"],
+          },
+          ""
+        )
       ).toBeObservable(cold("(a|)", { a: [2, 2, 2, 2, 2] }));
     });
 
@@ -63,7 +68,8 @@ describe("The execution of steps", () => {
           { not: "an array" },
           {
             listVar: ["a", "b", "c", "d", "e"],
-          }
+          },
+          ""
         )
       ).toBeObservable(cold("#"));
     });
