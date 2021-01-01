@@ -1,4 +1,4 @@
-import inquirer, { Answers } from "inquirer";
+import inquirer from "inquirer";
 import { Workflow } from "@jyfti/engine";
 
 export async function promptName(entity: string): Promise<string> {
