@@ -37,8 +37,9 @@ export async function promptWorkflowInputs(
     Object.keys(inputs).map((fieldName) => ({
       name: fieldName,
       message: inputs[fieldName]?.description,
-      type: "string",
+      type: inputs[fieldName]?.enum ? "list" : "string",
       default: inputs[fieldName]?.default,
+      choices: inputs[fieldName]?.enum,
     }))
   );
   return Object.keys(inputs).map((fieldName) => answers[fieldName]);

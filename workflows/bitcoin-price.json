@@ -5,7 +5,8 @@
     "currency": {
       "type": "string",
       "default": "USD",
-      "description": "The currency of the bitcoins to display"
+      "description": "The currency of the bitcoins to display",
+      "enum": ["USD", "EUR"]
     }
   },
   "output": "${response.body.data.amount} ${response.body.data.currency}",
