@@ -23,9 +23,9 @@
       "description": "The GitHub repository",
       "default": "example-repo"
     },
-    "artifactId": {
+    "runId": {
       "type": "string",
-      "description": "The GitHub artifact id"
+      "description": "The GitHub workflow run id"
     }
   },
   "output": {
@@ -33,18 +33,28 @@
   },
   "steps": [
     {
-      "name": "Retrieve artifact redirect URL",
-      "assignTo": "artifactResponse",
+      "name": "Retrieve artifacts",
+      "assignTo": "artifactsResponse",
       "request": {
-        "url": "https://api.github.com/repos/${inputs.org}/${inputs.repo}/actions/artifacts/${inputs.artifactId}/zip",
+        "url": "https://api.github.com/repos/${inputs.org}/${inputs.repo}/actions/runs/${inputs.runId}/artifacts",
         "headers": {
           "Authorization": "token ${env.github.token}"
         }
       }
     },
     {
-      "name": "Follow redirect URL",
-      "assignTo": "artifact",
+      "name": "Retrieve artifact download url",
+      "assignTo": "artifactResponse",
+      "request": {
+        "url": "${find(artifactsResponse.body.artifacts, 'name', 'jyfti-states').archive_download_url}",
+        "headers": {
+          "Authorization": "token ${env.github.token}"
+        }
+      }
+    },
+    {
+      "name": "Download artifact",
+      "assignTo": "artifactZipResponse",
       "request": {
         "url": "${artifactResponse.headers.location}",
         "headers": {

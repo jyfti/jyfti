@@ -5,6 +5,12 @@ export const functions = {
   str: (obj: Record<string, unknown> | undefined | null): string =>
     obj ? obj.toString() : "null",
   join: (array: unknown[], sep?: string): string => array.join(sep),
+  find: (
+    array: Record<string, unknown>[],
+    property: string,
+    expected: unknown
+  ): unknown =>
+    array.find((element) => element && element[property] === expected),
 };
 
 export function evaluate(
