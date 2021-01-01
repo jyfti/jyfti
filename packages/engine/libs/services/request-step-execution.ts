@@ -24,23 +24,25 @@ export function executeRequestStep(
       http(request).pipe(
         mergeMap((response) =>
           response.body.pipe(
-            mergeMap((body) =>
-              request.writeTo
-                ? from(
-                    fs.promises.writeFile(
-                      nodePath.resolve(outRoot, request.writeTo),
-                      body,
-                      "utf8"
-                    )
-                  ).pipe(mapTo("Written to " + request.writeTo))
-                : of(parseJsonOrString(body))
-            ),
+            mergeMap((body) => processBody(body, request.writeTo, outRoot)),
             map((body) => ({ ...response, body }))
           )
         )
       )
     )
   );
+}
+
+function processBody(
+  body: Buffer,
+  fileName: string | undefined,
+  outRoot: string
+): Observable<unknown> {
+  return fileName
+    ? from(
+        fs.promises.writeFile(nodePath.resolve(outRoot, fileName), body, "utf8")
+      ).pipe(mapTo("Written to " + fileName))
+    : of(parseJsonOrString(body));
 }
 
 function parseJsonOrString(buffer: Buffer): unknown {
