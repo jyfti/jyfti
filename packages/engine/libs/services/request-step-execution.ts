@@ -1,6 +1,4 @@
 import { http } from "./http";
-import * as fs from "fs";
-import * as nodePath from "path";
 import { of, from, Observable } from "rxjs";
 import { map, mergeMap, mapTo } from "rxjs/operators";
 import { evaluate } from "./evaluation";
@@ -12,6 +10,7 @@ import {
   VariableMap,
   Headers,
 } from "../types";
+import { writeFile } from "./file.service";
 
 export function executeRequestStep(
   request: HttpRequestTemplate,
@@ -40,9 +39,7 @@ function processBody(
   outRoot: string
 ): Observable<unknown> {
   return fileName
-    ? from(
-        fs.promises.writeFile(nodePath.resolve(outRoot, fileName), body, "utf8")
-      ).pipe(mapTo("Written to " + fileName))
+    ? writeFile(outRoot, fileName, body).pipe(mapTo("Written to " + fileName))
     : of(parseJsonOrString(body));
 }
 
