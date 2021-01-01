@@ -44,10 +44,7 @@ export async function runStep(
   } else {
     return await engine
       .step(state)
-      .pipe(
-        process(engine, config, name, state),
-        catchError((err) => of(console.error("Unexpected Jyfti error", err)))
-      )
+      .pipe(process(engine, config, name, state))
       .toPromise();
   }
 }
@@ -62,10 +59,7 @@ export function runToCompletion(
   const engine = createEngine(workflow, environment, config.outRoot);
   return engine
     .complete(state)
-    .pipe(
-      process(engine, config, name, state),
-      catchError((err) => of(console.error("Unexpected Jyfti error", err)))
-    )
+    .pipe(process(engine, config, name, state))
     .toPromise();
 }
 
@@ -88,6 +82,7 @@ function process(
           }
         }
       }),
-      mergeMap((state) => from(writeState(config, name, state)))
+      mergeMap((state) => from(writeState(config, name, state))),
+      catchError((err) => of(console.error("Unexpected Jyfti error", err)))
     );
 }
