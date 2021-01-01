@@ -3,14 +3,13 @@ import {
   Engine,
   Environment,
   Inputs,
-  isSuccess,
   State,
   StepResult,
   Workflow,
 } from "@jyfti/engine";
 import logSymbols from "log-symbols";
 import { OperatorFunction, from, of } from "rxjs";
-import { catchError, last, mergeMap, takeWhile, tap } from "rxjs/operators";
+import { catchError, last, mergeMap, tap } from "rxjs/operators";
 import { writeState } from "./data-access/state.dao";
 import { printStepResult, printOutput, printJson } from "./print.service";
 import { Config } from "./types/config";
@@ -58,7 +57,6 @@ function process(
   return (stepResult$) =>
     stepResult$.pipe(
       tap((stepResult) => console.log(printStepResult(stepResult))),
-      takeWhile(isSuccess, true),
       engine.transitionFrom(state),
       last(),
       tap((state) => {
