@@ -1,7 +1,7 @@
-import { Workflow } from "@jyfti/engine";
+import { State, Workflow } from "@jyfti/engine";
 import logSymbols from "log-symbols";
 import { of } from "rxjs";
-import { initAndRunToCompletion } from "./cli-engine";
+import { initAndRunToCompletion, runStep } from "./cli-engine";
 import { defaultConfig } from "./data-access/config.dao";
 import { printJson, printStepResult } from "./print.service";
 
@@ -9,6 +9,8 @@ import { printJson, printStepResult } from "./print.service";
 jest.mock("@jyfti/engine", () => {
   const engine = {
     init: jest.fn(() => ({})),
+    isComplete: jest.fn(() => true),
+    step: jest.fn(() => require("rxjs").empty()),
     complete: jest.fn(() => require("rxjs").empty()),
     transitionFrom: jest.fn(() => (stepResult$) =>
       stepResult$.pipe(require("rxjs/operators").map(() => ({})))
@@ -109,6 +111,73 @@ describe("initializing and running to completion", () => {
       logSymbols.success + " Initialized"
     );
     expect(logSpy).toHaveBeenNthCalledWith(2, printStepResult(stepResult));
+    expect(errorSpy).toHaveBeenCalledTimes(0);
+    expect(writeStateSpy).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe("executing a step", () => {
+  let logSpy: any;
+  let errorSpy: any;
+  let writeStateSpy: any;
+
+  beforeEach(() => {
+    logSpy = jest.spyOn(console, "log").mockImplementation(() => {});
+    errorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
+    writeStateSpy = require("./data-access/state.dao").writeState;
+  });
+
+  it("should execute the next step", async () => {
+    require("@jyfti/engine").engine.isComplete.mockReturnValue(false);
+    require("@jyfti/engine").engine.step.mockReturnValue(
+      of({
+        path: [0],
+        evaluation: "a",
+      })
+    );
+    await runStep(
+      ("my-workflow" as any) as Workflow,
+      {},
+      defaultConfig,
+      "my-workflow",
+      ({} as any) as State
+    );
+    expect(logSpy).toHaveBeenCalledWith(
+      printStepResult({ path: [0], evaluation: null })
+    );
+    expect(errorSpy).toHaveBeenCalledTimes(0);
+    expect(writeStateSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it("should return if already completed", async () => {
+    require("@jyfti/engine").engine.isComplete.mockReturnValue(true);
+    await runStep(
+      ("my-workflow" as any) as Workflow,
+      {},
+      defaultConfig,
+      "my-workflow",
+      ({} as any) as State
+    );
+    expect(logSpy).toHaveBeenCalledWith("Workflow execution already completed");
+    expect(errorSpy).toHaveBeenCalledTimes(0);
+    expect(writeStateSpy).toHaveBeenCalledTimes(0);
+  });
+
+  it("should log a failed state if the engine returns an error", async () => {
+    const stepResult = {
+      path: [0],
+      error: new Error("Something went wrong."),
+    };
+    require("@jyfti/engine").engine.isComplete.mockReturnValue(false);
+    require("@jyfti/engine").engine.step.mockReturnValue(of(stepResult));
+    await runStep(
+      ("my-workflow" as any) as Workflow,
+      {},
+      defaultConfig,
+      "my-workflow",
+      ({} as any) as State
+    );
+    expect(logSpy).toHaveBeenCalledWith(printStepResult(stepResult));
     expect(errorSpy).toHaveBeenCalledTimes(0);
     expect(writeStateSpy).toHaveBeenCalledTimes(1);
   });

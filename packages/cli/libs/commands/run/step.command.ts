@@ -1,25 +1,15 @@
 import { readConfig } from "../../data-access/config.dao";
-import {
-  createEngine,
-  StepResult,
-  State,
-  Engine,
-  isFailure,
-  Environment,
-} from "@jyfti/engine";
-import { mergeMap, tap, catchError } from "rxjs/operators";
-import { from, OperatorFunction, empty, throwError, of } from "rxjs";
+import { Environment } from "@jyfti/engine";
 import { promptWorkflow } from "../../inquirer.service";
 import {
   readWorkflowNamesOrTerminate,
   readWorkflowOrTerminate,
 } from "../../data-access/workflow.dao";
-import { writeState, readStateOrTerminate } from "../../data-access/state.dao";
-import { printStepResult } from "../../print.service";
+import { readStateOrTerminate } from "../../data-access/state.dao";
 import { readEnvironmentOrTerminate } from "../../data-access/environment.dao";
 import { validateEnvironmentOrTerminate } from "../../validator";
-import { Config } from "../../types/config";
 import { mergeEnvironments } from "../../data-access/environment.util";
+import { runStep } from "../../cli-engine";
 
 export async function step(
   name?: string,
@@ -41,34 +31,6 @@ export async function step(
       cmd?.envVar || {},
     ]);
     validateEnvironmentOrTerminate(workflow, environment);
-    const engine = createEngine(workflow, environment, config.outRoot);
-    if (engine.isComplete(state)) {
-      console.log("Workflow execution already completed");
-    } else {
-      await engine
-        .step(state)
-        .pipe(
-          process(engine, config, name, state),
-          catchError(() => empty())
-        )
-        .toPromise();
-    }
+    return await runStep(workflow, environment, config, name, state);
   }
-}
-
-function process(
-  engine: Engine,
-  config: Config,
-  name: string,
-  state: State
-): OperatorFunction<StepResult, void> {
-  return (stepResult$) =>
-    stepResult$.pipe(
-      tap((stepResult) => console.log(printStepResult(stepResult))),
-      mergeMap((stepResult) =>
-        isFailure(stepResult) ? throwError(stepResult.error) : of(stepResult)
-      ),
-      engine.transitionFrom(state),
-      mergeMap((state) => from(writeState(config, name, state)))
-    );
 }

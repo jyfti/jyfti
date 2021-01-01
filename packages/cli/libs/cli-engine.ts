@@ -31,6 +31,27 @@ export function initAndRunToCompletion(
   return runToCompletion(workflow, environment, config, name, initialState);
 }
 
+export async function runStep(
+  workflow: Workflow,
+  environment: Environment,
+  config: Config,
+  name: string,
+  state: State
+): Promise<void> {
+  const engine = createEngine(workflow, environment, config.outRoot);
+  if (engine.isComplete(state)) {
+    console.log("Workflow execution already completed");
+  } else {
+    return await engine
+      .step(state)
+      .pipe(
+        process(engine, config, name, state),
+        catchError((err) => of(console.error("Unexpected Jyfti error", err)))
+      )
+      .toPromise();
+  }
+}
+
 export function runToCompletion(
   workflow: Workflow,
   environment: Environment,
@@ -60,7 +81,7 @@ function process(
       engine.transitionFrom(state),
       last(),
       tap((state) => {
-        if (!state.error) {
+        if (engine.isComplete(state)) {
           const output = engine.getOutput(state);
           if (output) {
             console.log(printOutput(output));
