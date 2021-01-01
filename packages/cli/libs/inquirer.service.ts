@@ -1,4 +1,4 @@
-import inquirer from "inquirer";
+import inquirer, { Answers } from "inquirer";
 import { Workflow } from "@jyfti/engine";
 
 export async function promptName(entity: string): Promise<string> {
@@ -34,13 +34,22 @@ export async function promptWorkflowInputs(
   const inputs = workflow?.inputs || {};
   // TODO This implicitly relies on a specific structure in the schema
   const answers = await inquirer.prompt(
-    Object.keys(inputs).map((fieldName) => ({
-      name: fieldName,
-      message: inputs[fieldName]?.description,
-      type: inputs[fieldName]?.enum ? "list" : "string",
-      default: inputs[fieldName]?.default,
-      choices: inputs[fieldName]?.enum,
-    }))
+    Object.keys(inputs).map((fieldName) =>
+      jsonSchemaToInquirer(fieldName, inputs[fieldName])
+    )
   );
   return Object.keys(inputs).map((fieldName) => answers[fieldName]);
+}
+
+function jsonSchemaToInquirer(
+  fieldName: string,
+  schema: Record<string, unknown>
+): unknown {
+  return {
+    name: fieldName,
+    message: schema?.description as string,
+    type: schema?.enum ? "list" : "string",
+    default: schema?.default,
+    choices: schema?.enum,
+  };
 }
