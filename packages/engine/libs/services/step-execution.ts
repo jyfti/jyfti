@@ -1,45 +1,36 @@
 import { Observable, of, throwError } from "rxjs";
-import { mergeMap, map } from "rxjs/operators";
-
+import { map } from "rxjs/operators";
 import { evaluate } from "./evaluation";
 import {
   Step,
   Evaluation,
   Evaluations,
   VariableMap,
-  HttpRequestTemplate,
   JsonExpression,
-  HttpRequest,
-  HttpMethod,
   isRequestStep,
   isExpressionStep,
   ForStep,
-  Headers,
+  isShellStep,
 } from "../types";
 import { toVariableMap } from "./variable-map-creation";
-import { http } from "./http";
+import { executeRequestStep } from "./request-step-execution";
+import { executeShellStep } from "./shell-step-execution";
 
 export function executeStep(
   step: Step,
   localEvaluations: Evaluation | Evaluations,
-  variables: VariableMap
+  variables: VariableMap,
+  outRoot: string
 ): Observable<Evaluation> {
   if (isRequestStep(step)) {
-    return executeRequestStep(step.request, variables);
+    return executeRequestStep(step.request, variables, outRoot);
   } else if (isExpressionStep(step)) {
     return executeExpressionStep(step.expression, variables);
+  } else if (isShellStep(step)) {
+    return executeShellStep(step.shell, variables, outRoot);
   } else {
     return evaluateLoopReturn(localEvaluations, step);
   }
-}
-
-function executeRequestStep(
-  request: HttpRequestTemplate,
-  variables: VariableMap
-): Observable<Evaluation> {
-  return of(createHttpRequest(request, variables)).pipe(
-    mergeMap((request) => http(request))
-  );
 }
 
 function executeExpressionStep(
@@ -80,28 +71,6 @@ function evaluateLoopReturn(
   return of(loopReturn);
 }
 
-function createHttpRequest(
-  template: HttpRequestTemplate,
-  variables: VariableMap
-): HttpRequest<unknown> {
-  const url = evaluate(variables, template.url);
-  if (!isString(url)) {
-    throw new Error("The url needs to evaluate to a string.");
-  }
-  const headers = evaluate(variables, template.headers);
-  if (!isHeaders(headers)) {
-    throw new Error(
-      "The headers need to evaluate to an object mapping header names to strings."
-    );
-  }
-  return {
-    url,
-    method: evaluate(variables, template.method) as HttpMethod,
-    body: evaluate(variables, template.body),
-    headers,
-  };
-}
-
 function isEvaluations(
   object: Evaluation | Evaluation[]
 ): object is Evaluation[] {
@@ -110,13 +79,4 @@ function isEvaluations(
 
 function isNestedEvaluations(object: Evaluation[]): object is Evaluation[][] {
   return object.every((evaluation) => isEvaluations(evaluation));
-}
-
-function isString(object: unknown): object is string {
-  return typeof object === "string";
-}
-
-function isHeaders(object: unknown): object is Headers {
-  // TODO Improve check
-  return typeof object === "object";
 }

@@ -23,9 +23,10 @@ import { resolveStep } from "./step-resolvement";
  */
 export function createEngine(
   workflow: Workflow,
-  environment: Environment
+  environment: Environment,
+  outRoot: string
 ): Engine {
-  return new Engine(workflow, environment);
+  return new Engine(workflow, environment, outRoot);
 }
 
 export class Engine {
@@ -34,10 +35,12 @@ export class Engine {
    *
    * @param workflow The workflow
    * @param environment The environment
+   * @param outRoot The directory where the state of the workflow is stored
    */
   constructor(
     private readonly workflow: Workflow,
-    private readonly environment: Environment
+    private readonly environment: Environment,
+    private readonly outRoot: string
   ) {}
 
   /**
@@ -60,7 +63,7 @@ export class Engine {
    * @returns A cold observable of all step results after the state. Completes successfully iff the workflow is completing. Errors otherwise.
    */
   complete(state: State): Observable<StepResult> {
-    return step(this.workflow, state, this.environment).pipe(
+    return step(this.workflow, state, this.environment, this.outRoot).pipe(
       mergeMap((stepResult) => {
         const nextState = this.transition(state, stepResult);
         const nextStepResults =
@@ -81,7 +84,7 @@ export class Engine {
    * @returns A cold observable completing after a single step result.
    */
   step(state: State): Observable<StepResult> {
-    return step(this.workflow, state, this.environment);
+    return step(this.workflow, state, this.environment, this.outRoot);
   }
 
   /**

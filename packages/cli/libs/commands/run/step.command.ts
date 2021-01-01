@@ -41,7 +41,7 @@ export async function step(
       cmd?.envVar || {},
     ]);
     validateEnvironmentOrTerminate(workflow, environment);
-    const engine = createEngine(workflow, environment);
+    const engine = createEngine(workflow, environment, config.outRoot);
     if (engine.isComplete(state)) {
       console.log("Workflow execution already completed");
     } else {

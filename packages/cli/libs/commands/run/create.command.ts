@@ -57,7 +57,11 @@ export async function create(
     }
     const inputs = createInputs(workflow, inputList || []);
     validateInputsOrTerminate(workflow, inputs);
-    const initialState = createEngine(workflow, environment).init(inputs);
+    const initialState = createEngine(
+      workflow,
+      environment,
+      config.outRoot
+    ).init(inputs);
     await writeState(config, name, initialState);
     console.log(logSymbols.success + " Initialized");
     if (cmd?.verbose) {

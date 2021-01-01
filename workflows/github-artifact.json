@@ -1,0 +1,77 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jyfti/jyfti/master/workflow-schema.json",
+  "name": "Read a GitHub artifact",
+  "env": {
+    "github": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string"
+        }
+      },
+      "required": ["token"]
+    }
+  },
+  "inputs": {
+    "org": {
+      "type": "string",
+      "description": "The GitHub organization",
+      "default": "jyfti"
+    },
+    "repo": {
+      "type": "string",
+      "description": "The GitHub repository",
+      "default": "example-repo"
+    },
+    "runId": {
+      "type": "string",
+      "description": "The GitHub workflow run id"
+    }
+  },
+  "output": {
+    "$eval": "unzip"
+  },
+  "steps": [
+    {
+      "name": "Retrieve artifacts",
+      "assignTo": "artifactsResponse",
+      "request": {
+        "url": "https://api.github.com/repos/${inputs.org}/${inputs.repo}/actions/runs/${inputs.runId}/artifacts",
+        "headers": {
+          "Authorization": "token ${env.github.token}"
+        }
+      }
+    },
+    {
+      "name": "Retrieve artifact download url",
+      "assignTo": "artifactResponse",
+      "request": {
+        "url": "${find(artifactsResponse.body.artifacts, 'name', 'jyfti-states').archive_download_url}",
+        "headers": {
+          "Authorization": "token ${env.github.token}"
+        }
+      }
+    },
+    {
+      "name": "Download artifact",
+      "assignTo": "artifactZipResponse",
+      "request": {
+        "url": "${artifactResponse.headers.location}",
+        "headers": {
+          "Authorization": "token ${env.github.token}"
+        },
+        "writeTo": "artifact.zip"
+      }
+    },
+    {
+      "name": "Unzip artifact",
+      "assignTo": "unzip",
+      "shell": "unzip -o artifact.zip"
+    },
+    {
+      "name": "Remove zip file",
+      "assignTo": "rmzip",
+      "shell": "rm artifact.zip"
+    }
+  ]
+}

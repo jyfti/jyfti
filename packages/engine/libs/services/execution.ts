@@ -50,7 +50,8 @@ export function nextState(
 export function step(
   workflow: Workflow,
   state: State,
-  environment: Environment
+  environment: Environment,
+  outRoot: string
 ): Observable<StepResult> {
   const step = resolveStep(workflow, state.path);
   const localEvaluations = resolveEvaluation(state.evaluations, state.path);
@@ -60,7 +61,7 @@ export function step(
     (err) => "<Name could not be evaluated> " + JSON.stringify(err)
   );
   const path = state.path;
-  return executeStep(step, localEvaluations, variables).pipe(
+  return executeStep(step, localEvaluations, variables, outRoot).pipe(
     map((evaluation) => ({ name, path, evaluation })),
     catchError((error) => of({ name, path, error }))
   );

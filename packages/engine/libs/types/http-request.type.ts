@@ -7,4 +7,5 @@ export interface HttpRequest<T> {
   method: HttpMethod;
   body?: T;
   headers?: Headers;
+  writeTo?: string;
 }

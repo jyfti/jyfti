@@ -41,7 +41,7 @@ export async function complete(
       cmd?.envVar || {},
     ]);
     validateEnvironmentOrTerminate(workflow, environment);
-    const engine = createEngine(workflow, environment);
+    const engine = createEngine(workflow, environment, config.outRoot);
     await engine
       .complete(state)
       .pipe(

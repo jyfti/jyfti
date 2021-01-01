@@ -33,6 +33,7 @@
     "step": {
       "oneOf": [
         { "$ref": "#/definitions/expressionStep" },
+        { "$ref": "#/definitions/shellStep" },
         { "$ref": "#/definitions/requestStep" },
         { "$ref": "#/definitions/forStep" }
       ]
@@ -48,6 +49,21 @@
         "expression": { "$ref": "#/definitions/jsone" }
       },
       "required": ["assignTo", "expression"],
+      "additionalProperties": false
+    },
+    "shellStep": {
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "assignTo": {
+          "type": "string"
+        },
+        "shell": {
+          "type": "string"
+        }
+      },
+      "required": ["assignTo", "shell"],
       "additionalProperties": false
     },
     "forStep": {
@@ -100,7 +116,10 @@
               "type": "string"
             },
             "body": { "$ref": "#/definitions/jsone" },
-            "headers": { "$ref": "#/definitions/jsone" }
+            "headers": { "$ref": "#/definitions/jsone" },
+            "writeTo": {
+              "type": "string"
+            }
           },
           "additionalProperties": false,
           "required": ["url"]
