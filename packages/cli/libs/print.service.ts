@@ -1,7 +1,7 @@
 import chalk from "chalk";
 import logSymbols from "log-symbols";
 import { ErrorObject } from "ajv";
-import { StepResult, Inputs, isSuccess } from "@jyfti/engine";
+import { StepResult, Inputs, isSuccess, isFailure } from "@jyfti/engine";
 
 export function printOutput(output: unknown): string {
   return typeof output === "string" ? output : printJson(output);
@@ -31,7 +31,7 @@ export function printStepResult(stepResult: StepResult): string {
       JSON.stringify(stepResult.path, null, 0) +
       (stepResult.name ? " " + stepResult.name : "")
     );
-  } else {
+  } else if (isFailure(stepResult)) {
     return (
       logSymbols.error +
       " " +
@@ -41,6 +41,15 @@ export function printStepResult(stepResult: StepResult): string {
       printError(stepResult.error.message) +
       "\n" +
       printJson(stepResult.error)
+    );
+  } else {
+    return (
+      logSymbols.info +
+      " " +
+      JSON.stringify(stepResult.path, null, 0) +
+      (stepResult.name ? " " + stepResult.name : "") +
+      " " +
+      "Requiring input..."
     );
   }
 }

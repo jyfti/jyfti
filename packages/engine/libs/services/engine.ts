@@ -11,6 +11,7 @@ import {
   isSuccess,
   Path,
   Step,
+  isFailure,
 } from "../types";
 import { createVariableMapFromState } from "./variable-map-creation";
 import { resolveStep } from "./step-resolvement";
@@ -67,7 +68,9 @@ export class Engine {
       mergeMap((stepResult) => {
         const nextState = this.transition(state, stepResult);
         const nextStepResults =
-          this.isComplete(nextState) || this.isError(nextState)
+          this.isComplete(nextState) ||
+          this.isError(nextState) ||
+          this.isWaiting(nextState)
             ? EMPTY
             : this.complete(nextState);
         return nextStepResults.pipe(startWith(stepResult));
@@ -107,6 +110,18 @@ export class Engine {
    */
   isError(state: State): boolean {
     return !!state.error;
+  }
+
+  /**
+   * Returns if the workflow is requiring input to continue.
+   * If true, then a subsequent step re-executes the previous step again.
+   *
+   * Note that a call to complete stops if a step is requiring input.
+   *
+   * @param state The state
+   */
+  isWaiting(state: State): boolean {
+    return !!state.require;
   }
 
   /**
@@ -163,10 +178,15 @@ export class Engine {
         stepResult.evaluation,
         this.environment
       );
-    } else {
+    } else if (isFailure(stepResult)) {
       return {
         ...state,
         error: stepResult.error,
+      };
+    } else {
+      return {
+        ...state,
+        require: stepResult.require,
       };
     }
   }

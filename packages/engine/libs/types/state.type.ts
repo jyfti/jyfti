@@ -7,4 +7,5 @@ export interface State {
   inputs: Inputs;
   evaluations: Evaluations;
   error?: unknown;
+  require?: unknown;
 }

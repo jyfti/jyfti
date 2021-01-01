@@ -13,7 +13,13 @@ export interface StepFailure {
   error: Error;
 }
 
-export type StepResult = StepSuccess | StepFailure;
+export interface StepRequire {
+  name?: string;
+  path: Path;
+  require: unknown;
+}
+
+export type StepResult = StepSuccess | StepFailure | StepRequire;
 
 export function isSuccess(stepResult: StepResult): stepResult is StepSuccess {
   return "evaluation" in stepResult;
@@ -21,4 +27,8 @@ export function isSuccess(stepResult: StepResult): stepResult is StepSuccess {
 
 export function isFailure(stepResult: StepResult): stepResult is StepFailure {
   return "error" in stepResult;
+}
+
+export function isRequire(stepResult: StepResult): stepResult is StepRequire {
+  return "require" in stepResult;
 }
