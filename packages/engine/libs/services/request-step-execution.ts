@@ -22,12 +22,13 @@ export function executeRequestStep(
     map(() => createHttpRequest(request, variables)),
     mergeMap((request) =>
       http(request).pipe(
-        mergeMap((response) =>
-          response.body.pipe(
-            mergeMap((body) => processBody(body, request.writeTo, outRoot)),
-            map((body) => ({ ...response, body }))
-          )
-        )
+        map((response) => ({ response, writeTo: request.writeTo }))
+      )
+    ),
+    mergeMap(({ response, writeTo }) =>
+      response.body.pipe(
+        mergeMap((body) => processBody(body, writeTo, outRoot)),
+        map((body) => ({ ...response, body }))
       )
     )
   );
