@@ -1,4 +1,4 @@
-import { from, Observable, of } from "rxjs";
+import { defer, Observable, of } from "rxjs";
 import { mergeMap } from "rxjs/operators";
 import { Evaluation, JsonExpression, VariableMap } from "../types";
 import { evaluate } from "./evaluation";
@@ -15,7 +15,7 @@ export function executeShellStep(
       if (!isString(command)) {
         throw new Error("The command needs to evaluate to a string.");
       }
-      return from(execCommand(command, outRoot));
+      return defer(() => execCommand(command, outRoot));
     })
   );
 }
