@@ -1,5 +1,5 @@
 import { http } from "./http";
-import { of, from, Observable } from "rxjs";
+import { of, Observable } from "rxjs";
 import { map, mergeMap, mapTo } from "rxjs/operators";
 import { evaluate } from "./evaluation";
 import {
