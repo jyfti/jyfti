@@ -12,6 +12,7 @@ import {
   Path,
   Step,
   isFailure,
+  isRequire,
 } from "../types";
 import { createVariableMapFromState } from "./variable-map-creation";
 import { resolveStep } from "./step-resolvement";
@@ -109,7 +110,7 @@ export class Engine {
    * @param state The state
    */
   isError(state: State): boolean {
-    return !!state.error;
+    return !!state.lastStep && isFailure(state.lastStep);
   }
 
   /**
@@ -121,7 +122,7 @@ export class Engine {
    * @param state The state
    */
   isWaiting(state: State): boolean {
-    return !!state.require;
+    return !!state.lastStep && isRequire(state.lastStep);
   }
 
   /**
@@ -171,23 +172,12 @@ export class Engine {
    * @returns The next state
    */
   transition(state: State, stepResult: StepResult): State {
-    if (isSuccess(stepResult)) {
-      return nextState(
-        this.workflow,
-        state,
-        stepResult.evaluation,
-        this.environment
-      );
-    } else if (isFailure(stepResult)) {
-      return {
-        ...state,
-        error: stepResult.error,
-      };
-    } else {
-      return {
-        ...state,
-        require: stepResult.require,
-      };
-    }
+    const newState = isSuccess(stepResult)
+      ? nextState(this.workflow, state, stepResult.evaluation, this.environment)
+      : state;
+    return {
+      ...newState,
+      lastStep: stepResult,
+    };
   }
 }

@@ -135,26 +135,46 @@ describe("Engine", () => {
           evaluations: ["a"],
           inputs: state.inputs,
           path: [1],
+          lastStep: {
+            evaluation: "a",
+            path: [0],
+          },
         },
         b: {
           evaluations: ["a", "b"],
           inputs: state.inputs,
           path: [2, 0, 0],
+          lastStep: {
+            evaluation: "b",
+            path: [1],
+          },
         },
         c: {
           evaluations: ["a", "b", [["c"]]],
           inputs: state.inputs,
           path: [2, 0, 1],
+          lastStep: {
+            evaluation: "c",
+            path: [2, 0, 0],
+          },
         },
         d: {
           evaluations: ["a", "b", [["c", "d"]]],
           inputs: state.inputs,
           path: [2],
+          lastStep: {
+            evaluation: "d",
+            path: [2, 0, 1],
+          },
         },
         e: {
           evaluations: ["a", "b", ["c"]],
           inputs: state.inputs,
           path: [],
+          lastStep: {
+            evaluation: ["c"],
+            path: [2],
+          },
         },
       })
     );
