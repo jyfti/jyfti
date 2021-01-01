@@ -44,7 +44,11 @@ export async function runStep(
   } else {
     return await engine
       .step(state)
-      .pipe(step(engine, config, name, state))
+      .pipe(
+        tap((stepResult) => console.log(printStepResult(stepResult))),
+        engine.transitionFrom(state),
+        finish(engine, config, name)
+      )
       .toPromise();
   }
 }
@@ -59,44 +63,21 @@ export function runToCompletion(
   const engine = createEngine(workflow, environment, config.outRoot);
   return engine
     .complete(state)
-    .pipe(complete(engine, config, name, state))
+    .pipe(
+      tap((stepResult) => console.log(printStepResult(stepResult))),
+      engine.transitionFrom(state),
+      finish(engine, config, name)
+    )
     .toPromise();
 }
 
-function complete(
+function finish(
   engine: Engine,
   config: Config,
-  name: string,
-  state: State
-): OperatorFunction<StepResult, void> {
+  name: string
+): OperatorFunction<State, void> {
   return (stepResult$) =>
     stepResult$.pipe(
-      tap((stepResult) => console.log(printStepResult(stepResult))),
-      engine.transitionFrom(state),
-      last(),
-      tap((state) => {
-        if (engine.isComplete(state)) {
-          const output = engine.getOutput(state);
-          if (output) {
-            console.log(printOutput(output));
-          }
-        }
-      }),
-      mergeMap((state) => from(writeState(config, name, state))),
-      catchError((err) => of(console.error("Unexpected Jyfti error", err)))
-    );
-}
-
-function step(
-  engine: Engine,
-  config: Config,
-  name: string,
-  state: State
-): OperatorFunction<StepResult, void> {
-  return (stepResult$) =>
-    stepResult$.pipe(
-      tap((stepResult) => console.log(printStepResult(stepResult))),
-      engine.transitionFrom(state),
       last(),
       tap((state) => {
         if (engine.isComplete(state)) {
