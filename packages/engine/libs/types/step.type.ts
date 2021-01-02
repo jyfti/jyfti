@@ -13,28 +13,28 @@ export interface ForLoop {
 export interface RequestStep {
   name?: JsonExpression;
   assignTo: string;
-  require?: Record<string, JsonSchema>;
+  require?: JsonExpression;
   request: HttpRequestTemplate;
 }
 
 export interface ExpressionStep {
   name?: JsonExpression;
   assignTo: string;
-  require?: Record<string, JsonSchema>;
+  require?: JsonExpression;
   expression: JsonExpression;
 }
 
 export interface ShellStep {
   name?: JsonExpression;
   assignTo: string;
-  require?: Record<string, JsonSchema>;
+  require?: JsonExpression;
   shell: JsonExpression;
 }
 
 export interface ForStep {
   name?: JsonExpression;
   assignTo: string;
-  require?: Record<string, JsonSchema>;
+  require?: JsonExpression;
   for: ForLoop;
 }
 

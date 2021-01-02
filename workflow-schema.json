@@ -47,10 +47,7 @@
           "type": "string"
         },
         "require": {
-          "type": "object",
-          "additionalProperties": {
-            "$ref": "http://json-schema.org/draft-07/schema#"
-          }
+          "$ref": "#/definitions/jsone"
         },
         "expression": { "$ref": "#/definitions/jsone" }
       },
@@ -66,10 +63,7 @@
           "type": "string"
         },
         "require": {
-          "type": "object",
-          "additionalProperties": {
-            "$ref": "http://json-schema.org/draft-07/schema#"
-          }
+          "$ref": "#/definitions/jsone"
         },
         "shell": {
           "type": "string"
@@ -87,10 +81,7 @@
           "type": "string"
         },
         "require": {
-          "type": "object",
-          "additionalProperties": {
-            "$ref": "http://json-schema.org/draft-07/schema#"
-          }
+          "$ref": "#/definitions/jsone"
         },
         "for": {
           "type": "object",
@@ -125,10 +116,7 @@
           "type": "string"
         },
         "require": {
-          "type": "object",
-          "additionalProperties": {
-            "$ref": "http://json-schema.org/draft-07/schema#"
-          }
+          "$ref": "#/definitions/jsone"
         },
         "request": {
           "type": "object",

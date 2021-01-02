@@ -7,6 +7,7 @@ import {
   Inputs,
   Environment,
   StepResult,
+  JsonSchema,
 } from "../types";
 import { evaluate } from "./evaluation";
 import { createVariableMapFromState } from "./variable-map-creation";
@@ -62,16 +63,25 @@ export function step(
     (err) => "<Name could not be evaluated> " + JSON.stringify(err)
   );
   const path = state.path;
-  if (step.require && hasErrors(validateInputs(state.inputs, step.require))) {
-    return of({
-      path,
-      require: step.require,
-    });
+  const require = evaluate(variables, step.require);
+  if (
+    require &&
+    isJsonSchemaMap(require) &&
+    hasErrors(validateInputs(state.inputs, require))
+  ) {
+    return of({ path, require });
   }
   return executeStep(step, localEvaluations, variables, outRoot).pipe(
     map((evaluation) => ({ name, path, evaluation })),
     catchError((error) => of({ name, path, error }))
   );
+}
+
+function isJsonSchemaMap(
+  object: unknown
+): object is Record<string, JsonSchema> {
+  // TODO Improve
+  return typeof object === "object";
 }
 
 function stringOrElseUndefined(object: unknown): string | undefined {

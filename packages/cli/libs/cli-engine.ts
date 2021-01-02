@@ -75,7 +75,10 @@ function complete(engine: Engine, state: State): Observable<State> {
     mergeMap((state) =>
       state.lastStep && isRequire(state.lastStep)
         ? from(promptInputs(state.lastStep.require)).pipe(
-            map((inputs) => ({ ...state, inputs })),
+            map((inputs) => ({
+              ...state,
+              inputs: { ...state.inputs, ...inputs },
+            })),
             mergeMap((state) => complete(engine, state))
           )
         : of(state)
