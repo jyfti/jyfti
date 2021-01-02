@@ -15,6 +15,7 @@ import { advancePath } from "./path-advancement";
 import { resolveStep } from "./step-resolvement";
 import { addEvaluation, resolveEvaluation } from "./evaluation-resolvement";
 import { map, catchError } from "rxjs/operators";
+import { hasErrors, validateInputs } from "./validator";
 
 export function nextState(
   workflow: Workflow,
@@ -61,6 +62,12 @@ export function step(
     (err) => "<Name could not be evaluated> " + JSON.stringify(err)
   );
   const path = state.path;
+  if (step.require && hasErrors(validateInputs(state.inputs, step.require))) {
+    return of({
+      path,
+      require: step.require,
+    });
+  }
   return executeStep(step, localEvaluations, variables, outRoot).pipe(
     map((evaluation) => ({ name, path, evaluation })),
     catchError((error) => of({ name, path, error }))

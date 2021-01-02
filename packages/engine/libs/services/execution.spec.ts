@@ -62,6 +62,72 @@ describe("the execution of workflows", () => {
       ).toBeObservable(cold("(a|)", { a: { path: [1], evaluation: 42 } }));
     });
 
+    it("should not execute a step if it requires input", () => {
+      const workflow: Workflow = {
+        name: "MyWorkflow",
+        inputs: {},
+        steps: [
+          {
+            assignTo: "outVar",
+            require: {
+              someVar: {
+                type: "string",
+              },
+            },
+            expression: 1,
+          } as ExpressionStep,
+        ],
+      };
+      expect(
+        step(
+          workflow,
+          {
+            path: [0],
+            inputs: {},
+            evaluations: [],
+          },
+          {},
+          ""
+        )
+      ).toBeObservable(
+        cold("(a|)", {
+          a: { path: [0], require: { someVar: { type: "string" } } },
+        })
+      );
+    });
+
+    it("should execute a step if it requires input and that input is given", () => {
+      const workflow: Workflow = {
+        name: "MyWorkflow",
+        inputs: {},
+        steps: [
+          {
+            assignTo: "outVar",
+            require: {
+              someVar: {
+                type: "string",
+              },
+            },
+            expression: 1,
+          } as ExpressionStep,
+        ],
+      };
+      expect(
+        step(
+          workflow,
+          {
+            path: [0],
+            inputs: {
+              someVar: "abc",
+            },
+            evaluations: [],
+          },
+          {},
+          ""
+        )
+      ).toBeObservable(cold("(a|)", { a: { path: [0], evaluation: 1 } }));
+    });
+
     describe("with a single-step loop", () => {
       const workflow: Workflow = {
         name: "MyWorkflow",

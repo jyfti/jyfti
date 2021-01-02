@@ -1,6 +1,10 @@
 import Ajv, { ErrorObject } from "ajv";
 import { JsonSchema } from "../types";
 
+export function hasErrors(result: Record<string, ErrorObject[]>): boolean {
+  return Object.keys(result).length !== 0;
+}
+
 export function validateWorkflow(
   workflow: unknown,
   schema: JsonSchema

@@ -1,5 +1,6 @@
 import { Path } from "./path.type";
 import { Evaluation } from "./evaluations.type";
+import { JsonSchema } from "./json-schema.type";
 
 export interface StepSuccess {
   name?: string;
@@ -16,7 +17,7 @@ export interface StepFailure {
 export interface StepRequire {
   name?: string;
   path: Path;
-  require: unknown;
+  require: Record<string, JsonSchema>;
 }
 
 export type StepResult = StepSuccess | StepFailure | StepRequire;

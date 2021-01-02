@@ -4,7 +4,6 @@ import {
   Environment,
   Inputs,
   State,
-  StepResult,
   Workflow,
 } from "@jyfti/engine";
 import logSymbols from "log-symbols";
