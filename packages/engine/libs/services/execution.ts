@@ -64,12 +64,27 @@ export function step(
   );
   const path = state.path;
   const require = evaluate(variables, step.require);
-  if (
-    require &&
-    isJsonSchemaMap(require) &&
-    hasErrors(validateInputs(state.inputs, require))
-  ) {
-    return of({ path, require });
+  if (require && isJsonSchemaMap(require)) {
+    const missingInputs = Object.keys(require).filter(
+      (input) => !Object.keys(state.inputs).includes(input)
+    );
+    if (missingInputs.length !== 0) {
+      return of({
+        path,
+        require: missingInputs.reduce(
+          (acc, input) => ({ ...acc, [input]: require[input] }),
+          {}
+        ),
+      });
+    }
+    const requireValidation = validateInputs(state.inputs, require);
+    if (hasErrors(requireValidation)) {
+      return of({
+        name,
+        path,
+        error: new Error("Required inputs are given, but wrongly typed"), // TODO Improve message with actual errors
+      });
+    }
   }
   return executeStep(step, localEvaluations, variables, outRoot).pipe(
     map((evaluation) => ({ name, path, evaluation })),

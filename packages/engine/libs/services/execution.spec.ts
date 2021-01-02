@@ -128,6 +128,45 @@ describe("the execution of workflows", () => {
       ).toBeObservable(cold("(a|)", { a: { path: [0], evaluation: 1 } }));
     });
 
+    it("should return precisely the missing required inputs", () => {
+      const workflow: Workflow = {
+        name: "MyWorkflow",
+        inputs: {},
+        steps: [
+          {
+            assignTo: "outVar",
+            require: {
+              someVar1: {
+                type: "string",
+              },
+              someVar2: {
+                type: "array",
+              },
+            },
+            expression: 1,
+          } as ExpressionStep,
+        ],
+      };
+      expect(
+        step(
+          workflow,
+          {
+            path: [0],
+            inputs: {
+              someVar1: "abc",
+            },
+            evaluations: [],
+          },
+          {},
+          ""
+        )
+      ).toBeObservable(
+        cold("(a|)", {
+          a: { path: [0], require: { someVar2: { type: "array" } } },
+        })
+      );
+    });
+
     describe("with a single-step loop", () => {
       const workflow: Workflow = {
         name: "MyWorkflow",
