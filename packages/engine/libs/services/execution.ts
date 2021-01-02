@@ -89,6 +89,7 @@ export function checkRequire(
     );
     if (missingInputs.length !== 0) {
       return {
+        name,
         path,
         require: missingInputs.reduce(
           (acc, input) => ({ ...acc, [input]: require[input] }),

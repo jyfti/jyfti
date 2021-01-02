@@ -1,7 +1,7 @@
 import { cold } from "jest-marbles";
 
 import { Workflow, ForStep, ExpressionStep } from "../types";
-import { step } from "./execution";
+import { checkRequire, step } from "./execution";
 
 jest.mock("./http");
 
@@ -60,111 +60,6 @@ describe("the execution of workflows", () => {
           ""
         )
       ).toBeObservable(cold("(a|)", { a: { path: [1], evaluation: 42 } }));
-    });
-
-    it("should not execute a step if it requires input", () => {
-      const workflow: Workflow = {
-        name: "MyWorkflow",
-        inputs: {},
-        steps: [
-          {
-            assignTo: "outVar",
-            require: {
-              someVar: {
-                type: "string",
-              },
-            },
-            expression: 1,
-          } as ExpressionStep,
-        ],
-      };
-      expect(
-        step(
-          workflow,
-          {
-            path: [0],
-            inputs: {},
-            evaluations: [],
-          },
-          {},
-          ""
-        )
-      ).toBeObservable(
-        cold("(a|)", {
-          a: { path: [0], require: { someVar: { type: "string" } } },
-        })
-      );
-    });
-
-    it("should execute a step if it requires input and that input is given", () => {
-      const workflow: Workflow = {
-        name: "MyWorkflow",
-        inputs: {},
-        steps: [
-          {
-            assignTo: "outVar",
-            require: {
-              someVar: {
-                type: "string",
-              },
-            },
-            expression: 1,
-          } as ExpressionStep,
-        ],
-      };
-      expect(
-        step(
-          workflow,
-          {
-            path: [0],
-            inputs: {
-              someVar: "abc",
-            },
-            evaluations: [],
-          },
-          {},
-          ""
-        )
-      ).toBeObservable(cold("(a|)", { a: { path: [0], evaluation: 1 } }));
-    });
-
-    it("should return precisely the missing required inputs", () => {
-      const workflow: Workflow = {
-        name: "MyWorkflow",
-        inputs: {},
-        steps: [
-          {
-            assignTo: "outVar",
-            require: {
-              someVar1: {
-                type: "string",
-              },
-              someVar2: {
-                type: "array",
-              },
-            },
-            expression: 1,
-          } as ExpressionStep,
-        ],
-      };
-      expect(
-        step(
-          workflow,
-          {
-            path: [0],
-            inputs: {
-              someVar1: "abc",
-            },
-            evaluations: [],
-          },
-          {},
-          ""
-        )
-      ).toBeObservable(
-        cold("(a|)", {
-          a: { path: [0], require: { someVar2: { type: "array" } } },
-        })
-      );
     });
 
     describe("with a single-step loop", () => {
@@ -319,6 +214,93 @@ describe("the execution of workflows", () => {
           cold("(a|)", { a: { path: [0], evaluation: [30, 30, 30] } })
         );
       });
+    });
+  });
+});
+
+describe("the pre-execution check of the require condition", () => {
+  it("should return a require step if input is missing", () => {
+    expect(
+      checkRequire(
+        {
+          someVar: {
+            type: "string",
+          },
+        },
+        {},
+        [0],
+        ""
+      )
+    ).toEqual({
+      path: [0],
+      name: "",
+      require: { someVar: { type: "string" } },
+    });
+  });
+
+  it("should return undefined if it requires input and that input is given", () => {
+    expect(
+      checkRequire(
+        {
+          someVar: {
+            type: "string",
+          },
+        },
+        {
+          someVar: "abc",
+        },
+        [0],
+        ""
+      )
+    ).toEqual(undefined);
+  });
+
+  it("should return precisely the missing required inputs", () => {
+    expect(
+      checkRequire(
+        {
+          someVar1: {
+            type: "string",
+          },
+          someVar2: {
+            type: "array",
+          },
+        },
+        {
+          someVar1: "abc",
+        },
+        [0],
+        ""
+      )
+    ).toEqual({
+      path: [0],
+      name: "",
+      require: { someVar2: { type: "array" } },
+    });
+  });
+
+  it("should return a step failure if an input exists but it does not satisfy the schema", () => {
+    expect(
+      checkRequire(
+        {
+          someVar1: {
+            type: "string",
+          },
+          someVar2: {
+            type: "array",
+          },
+        },
+        {
+          someVar1: "abc",
+          someVar2: "def",
+        },
+        [0],
+        ""
+      )
+    ).toEqual({
+      name: "",
+      path: [0],
+      error: new Error("Required inputs are given, but wrongly typed"),
     });
   });
 });
