@@ -47,9 +47,7 @@ export function printStepResult(stepResult: StepResult): string {
       logSymbols.info +
       " " +
       JSON.stringify(stepResult.path, null, 0) +
-      (stepResult.name ? " " + stepResult.name : "") +
-      " " +
-      "Requiring input..."
+      (stepResult.name ? " " + stepResult.name : "")
     );
   }
 }
