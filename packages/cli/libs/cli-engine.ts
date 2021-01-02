@@ -3,13 +3,15 @@ import {
   Engine,
   Environment,
   Inputs,
+  isRequire,
   State,
   Workflow,
 } from "@jyfti/engine";
 import logSymbols from "log-symbols";
 import { OperatorFunction, from, of } from "rxjs";
-import { catchError, last, mergeMap, tap } from "rxjs/operators";
+import { catchError, last, map, mergeMap, tap } from "rxjs/operators";
 import { writeState } from "./data-access/state.dao";
+import { promptInputs } from "./inquirer.service";
 import { printStepResult, printOutput, printJson } from "./print.service";
 import { Config } from "./types/config";
 
@@ -65,6 +67,16 @@ export function runToCompletion(
     .pipe(
       tap((stepResult) => console.log(printStepResult(stepResult))),
       engine.transitionFrom(state),
+      mergeMap((state) =>
+        state.lastStep && isRequire(state.lastStep)
+          ? from(promptInputs(state.lastStep.require)).pipe(
+              map((inputs) => ({ ...state, inputs })),
+              mergeMap((state) => engine.complete(state)),
+              tap((stepResult) => console.log(printStepResult(stepResult))),
+              engine.transitionFrom(state)
+            )
+          : of(state)
+      ),
       finish(engine, config, name)
     )
     .toPromise();
