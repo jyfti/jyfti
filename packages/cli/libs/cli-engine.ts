@@ -8,7 +8,7 @@ import {
   Workflow,
 } from "@jyfti/engine";
 import logSymbols from "log-symbols";
-import { OperatorFunction, from, of } from "rxjs";
+import { OperatorFunction, from, of, Observable } from "rxjs";
 import { catchError, last, map, mergeMap, tap } from "rxjs/operators";
 import { writeState } from "./data-access/state.dao";
 import { promptInputs } from "./inquirer.service";
@@ -62,24 +62,25 @@ export function runToCompletion(
   state: State
 ): Promise<void> {
   const engine = createEngine(workflow, environment, config.outRoot);
-  return engine
-    .complete(state)
-    .pipe(
-      tap((stepResult) => console.log(printStepResult(stepResult))),
-      engine.transitionFrom(state),
-      mergeMap((state) =>
-        state.lastStep && isRequire(state.lastStep)
-          ? from(promptInputs(state.lastStep.require)).pipe(
-              map((inputs) => ({ ...state, inputs })),
-              mergeMap((state) => engine.complete(state)),
-              tap((stepResult) => console.log(printStepResult(stepResult))),
-              engine.transitionFrom(state)
-            )
-          : of(state)
-      ),
-      finish(engine, config, name)
+  return complete(engine, state).pipe(finish(engine, config, name)).toPromise();
+}
+
+/**
+ * Runs to completion, inquiring inputs if the engine encounters requires inputs for a step.
+ */
+function complete(engine: Engine, state: State): Observable<State> {
+  return engine.complete(state).pipe(
+    tap((stepResult) => console.log(printStepResult(stepResult))),
+    engine.transitionFrom(state),
+    mergeMap((state) =>
+      state.lastStep && isRequire(state.lastStep)
+        ? from(promptInputs(state.lastStep.require)).pipe(
+            map((inputs) => ({ ...state, inputs })),
+            mergeMap((state) => complete(engine, state))
+          )
+        : of(state)
     )
-    .toPromise();
+  );
 }
 
 function finish(
