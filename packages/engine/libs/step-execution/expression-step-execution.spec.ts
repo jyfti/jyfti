@@ -1,32 +1,27 @@
 import { cold } from "jest-marbles";
-import { ExpressionStep } from "../types/step.type";
+import { JsonExpression } from "../types/step.type";
 import { VariableMap } from "../types/variable-map.type";
-import { executeStep } from "./step-execution";
+import { executeExpressionStep } from "./expression-step-execution";
 
 describe("an expression step", () => {
   it("should evaluate an expression", () => {
-    const step: ExpressionStep = {
-      assignTo: "myVar",
-      expression: {
-        $eval: "listVar",
-      },
+    const expression: JsonExpression = {
+      $eval: "listVar",
     };
     const variables: VariableMap = {
       listVar: ["a", "b"],
     };
-    expect(executeStep(step, [], variables, "")).toBeObservable(
+    expect(executeExpressionStep(expression, variables)).toBeObservable(
       cold("(a|)", { a: ["a", "b"] })
     );
   });
 
   it("should return an error if the evaluation fails", () => {
-    const step: ExpressionStep = {
-      assignTo: "myVar",
-      expression: "${listVar}",
-    };
     const variables: VariableMap = {
       listVar: ["a", "b"],
     };
-    expect(executeStep(step, [], variables, "")).toBeObservable(cold("#"));
+    expect(executeExpressionStep("${listVar}", variables)).toBeObservable(
+      cold("#")
+    );
   });
 });
