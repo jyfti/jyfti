@@ -3,8 +3,8 @@ import { cold } from "jest-marbles";
 import { HttpRequestTemplate } from "../types";
 import { executeRequestStep } from "./request-step-execution";
 
-jest.mock("./http");
-jest.mock("./file.service", () => ({
+jest.mock("../services/http");
+jest.mock("../services/file.service", () => ({
   writeFile: jest.fn(() => require("rxjs").of({})),
 }));
 
@@ -33,7 +33,9 @@ describe("a request step", () => {
     executeRequestStep(request, {}, "./out").subscribe(
       (result) => {
         expect(result).toEqual({ request, body: "Written to file.json" });
-        expect(require("./file.service").writeFile).toHaveBeenCalledWith(
+        expect(
+          require("../services/file.service").writeFile
+        ).toHaveBeenCalledWith(
           "./out",
           "file.json",
           Buffer.from(JSON.stringify({ field: "value" }))

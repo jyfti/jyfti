@@ -1,7 +1,7 @@
-import { http } from "./http";
+import { http } from "../services/http";
 import { of, Observable } from "rxjs";
 import { map, mergeMap, mapTo } from "rxjs/operators";
-import { evaluate } from "./evaluation";
+import { evaluate } from "../services/evaluation";
 import {
   Evaluation,
   HttpMethod,
@@ -10,7 +10,7 @@ import {
   VariableMap,
   Headers,
 } from "../types";
-import { writeFile } from "./file.service";
+import { writeFile } from "../services/file.service";
 
 export function executeRequestStep(
   request: HttpRequestTemplate,

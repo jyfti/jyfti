@@ -1,7 +1,7 @@
 import { defer, Observable, of } from "rxjs";
 import { mergeMap } from "rxjs/operators";
 import { Evaluation, JsonExpression, VariableMap } from "../types";
-import { evaluate } from "./evaluation";
+import { evaluate } from "../services/evaluation";
 import { exec } from "child_process";
 
 export function executeShellStep(

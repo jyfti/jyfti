@@ -14,7 +14,7 @@ import {
 } from "../types";
 import { evaluate } from "./evaluation";
 import { createVariableMapFromState } from "./variable-map-creation";
-import { executeStep } from "./step-execution";
+import { executeStep } from "../step-execution/step-execution";
 import { advancePath } from "./path-advancement";
 import { resolveStep } from "./step-resolvement";
 import { addEvaluation, resolveEvaluation } from "./evaluation-resolvement";

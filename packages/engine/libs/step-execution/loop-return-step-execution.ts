@@ -1,7 +1,7 @@
 import { Observable, of, throwError } from "rxjs";
 import { Evaluation, Evaluations } from "../types/evaluations.type";
 import { ForStep } from "../types/step.type";
-import { toVariableMap } from "./variable-map-creation";
+import { toVariableMap } from "../services/variable-map-creation";
 
 export function evaluateLoopReturn(
   localEvaluations: Evaluation | Evaluations,
