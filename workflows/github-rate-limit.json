@@ -13,7 +13,7 @@
     }
   },
   "output": {
-    "$eval": "rateLimit"
+    "$eval": "rateLimit.body"
   },
   "steps": [
     {
