@@ -40,10 +40,10 @@ export async function runStep(
   name: string,
   state: State
 ): Promise<void> {
-  const engine = createEngine(workflow, environment, config.outRoot);
   if (isComplete(state)) {
     console.log("Workflow execution already completed");
   } else {
+    const engine = createEngine(workflow, environment, config.outRoot);
     return await engine
       .step(state)
       .pipe(
