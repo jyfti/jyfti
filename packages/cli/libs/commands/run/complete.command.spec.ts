@@ -25,13 +25,13 @@ jest.mock("../../inquirer.service", () => ({
   promptWorkflow: jest.fn(() => Promise.resolve("my-workflow")),
 }));
 jest.mock("../../cli-engine", () => ({
-  runToCompletion: jest.fn(() => Promise.resolve()),
+  runToCompletion: jest.fn(() => Promise.resolve(true)),
 }));
 
 describe("the complete command", () => {
   it("should prompt for workflow name and continue", async () => {
     const runToCompletion = require("../../cli-engine").runToCompletion;
-    runToCompletion.mockReturnValue(Promise.resolve());
+    runToCompletion.mockReturnValue(Promise.resolve(true));
     await complete(undefined);
     expect(
       require("../../inquirer.service").promptWorkflow

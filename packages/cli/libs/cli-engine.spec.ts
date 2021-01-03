@@ -23,6 +23,7 @@ jest.mock("@jyfti/engine", () => {
     isSuccess: jest.requireActual("@jyfti/engine").isSuccess,
     isFailure: jest.requireActual("@jyfti/engine").isFailure,
     isComplete: jest.fn(() => true),
+    isError: jest.fn(() => false),
   };
 });
 jest.mock("./data-access/state.dao", () => ({

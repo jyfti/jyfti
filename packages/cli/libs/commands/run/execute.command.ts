@@ -45,7 +45,7 @@ export async function execute(
     }
     const inputs = createInputs(workflow, inputList || []);
     validateInputsOrTerminate(workflow, inputs);
-    await initAndRunToCompletion(
+    const isSuccess = await initAndRunToCompletion(
       workflow,
       environment,
       config,
@@ -53,5 +53,8 @@ export async function execute(
       name,
       cmd?.verbose
     );
+    if (!isSuccess) {
+      process.exit(1);
+    }
   }
 }

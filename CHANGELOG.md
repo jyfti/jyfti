@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- If the workflow execution fails, the CLI now returns a non-zero exit code.
+
 ## [0.2.0] - 2020-01-03
 
 ### Added

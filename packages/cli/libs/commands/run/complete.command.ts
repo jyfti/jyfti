@@ -31,6 +31,15 @@ export async function complete(
       cmd?.envVar || {},
     ]);
     validateEnvironmentOrTerminate(workflow, environment);
-    await runToCompletion(workflow, environment, config, name, state);
+    const isSuccess = await runToCompletion(
+      workflow,
+      environment,
+      config,
+      name,
+      state
+    );
+    if (!isSuccess) {
+      process.exit(1);
+    }
   }
 }

@@ -31,6 +31,9 @@ export async function step(
       cmd?.envVar || {},
     ]);
     validateEnvironmentOrTerminate(workflow, environment);
-    return await runStep(workflow, environment, config, name, state);
+    const isSuccess = await runStep(workflow, environment, config, name, state);
+    if (!isSuccess) {
+      process.exit(1);
+    }
   }
 }

@@ -20,13 +20,13 @@ jest.mock("../../inquirer.service", () => ({
   promptWorkflow: jest.fn(() => Promise.resolve("my-workflow")),
 }));
 jest.mock("../../cli-engine", () => ({
-  runStep: jest.fn(() => Promise.resolve()),
+  runStep: jest.fn(() => Promise.resolve(true)),
 }));
 
 describe("the step command", () => {
   it("should prompt for workflow name and continue", async () => {
     const runStep = require("../../cli-engine").runStep;
-    runStep.mockReturnValue(Promise.resolve());
+    runStep.mockReturnValue(Promise.resolve(true));
     await step(undefined);
     expect(
       require("../../inquirer.service").promptWorkflow

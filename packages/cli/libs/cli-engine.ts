@@ -1,3 +1,4 @@
+import { isError, isFailure } from "@jyfti/engine";
 import {
   createEngine,
   Engine,
@@ -10,7 +11,7 @@ import {
 } from "@jyfti/engine";
 import logSymbols from "log-symbols";
 import { OperatorFunction, from, of, Observable } from "rxjs";
-import { catchError, last, map, mergeMap, tap } from "rxjs/operators";
+import { catchError, last, map, mapTo, mergeMap, tap } from "rxjs/operators";
 import { writeState } from "./data-access/state.dao";
 import { promptInputs } from "./inquirer.service";
 import { printStepResult, printOutput, printJson } from "./print.service";
@@ -23,7 +24,7 @@ export function initAndRunToCompletion(
   inputs: Inputs,
   name: string,
   verbose?: boolean
-): Promise<void> {
+): Promise<boolean> {
   const engine = createEngine(workflow, environment, config.outRoot);
   const initialState = engine.init(inputs);
   console.log(logSymbols.success + " Initialized");
@@ -39,9 +40,10 @@ export async function runStep(
   config: Config,
   name: string,
   state: State
-): Promise<void> {
+): Promise<boolean> {
   if (isComplete(state)) {
     console.log("Workflow execution already completed");
+    return Promise.resolve(true);
   } else {
     const engine = createEngine(workflow, environment, config.outRoot);
     return await engine
@@ -61,7 +63,7 @@ export function runToCompletion(
   config: Config,
   name: string,
   state: State
-): Promise<void> {
+): Promise<boolean> {
   const engine = createEngine(workflow, environment, config.outRoot);
   return complete(engine, state).pipe(finish(engine, config, name)).toPromise();
 }
@@ -91,7 +93,7 @@ function finish(
   engine: Engine,
   config: Config,
   name: string
-): OperatorFunction<State, void> {
+): OperatorFunction<State, boolean> {
   return (stepResult$) =>
     stepResult$.pipe(
       last(),
@@ -103,7 +105,11 @@ function finish(
           }
         }
       }),
-      mergeMap((state) => from(writeState(config, name, state))),
-      catchError((err) => of(console.error("Unexpected Jyfti error", err)))
+      mergeMap((state) =>
+        from(writeState(config, name, state)).pipe(mapTo(state))
+      ),
+      map((state) => !isError(state)),
+      tap({ error: (err) => console.error("Unexpected Jyfti error", err) }),
+      catchError(() => of(false))
     );
 }

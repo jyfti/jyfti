@@ -34,13 +34,13 @@ jest.mock("../../inquirer.service", () => ({
     ),
 }));
 jest.mock("../../cli-engine", () => ({
-  initAndRunToCompletion: jest.fn(() => Promise.resolve()),
+  initAndRunToCompletion: jest.fn(() => Promise.resolve(true)),
 }));
 
 describe("the execute command", () => {
   it("should prompt for workflow name and continue", async () => {
     require("../../cli-engine").initAndRunToCompletion.mockReturnValue(
-      Promise.resolve()
+      Promise.resolve(true)
     );
     await execute(undefined);
     expect(
