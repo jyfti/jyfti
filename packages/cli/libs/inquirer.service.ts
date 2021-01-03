@@ -1,5 +1,5 @@
 import inquirer from "inquirer";
-import { Workflow } from "@jyfti/engine";
+import { JsonSchema, Workflow } from "@jyfti/engine";
 
 export async function promptName(entity: string): Promise<string> {
   const answers = await inquirer.prompt([
@@ -32,13 +32,19 @@ export async function promptWorkflowInputs(
   workflow: Workflow
 ): Promise<string[]> {
   const inputs = workflow?.inputs || {};
+  const answers = await promptInputs(inputs);
+  return Object.keys(inputs).map((fieldName) => answers[fieldName]);
+}
+
+export function promptInputs(
+  inputs: Record<string, JsonSchema>
+): Promise<Record<string, string>> {
   // TODO This implicitly relies on a specific structure in the schema
-  const answers = await inquirer.prompt(
+  return inquirer.prompt(
     Object.keys(inputs).map((fieldName) =>
       jsonSchemaToInquirer(fieldName, inputs[fieldName])
     )
   );
-  return Object.keys(inputs).map((fieldName) => answers[fieldName]);
 }
 
 function jsonSchemaToInquirer(

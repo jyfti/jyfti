@@ -14,6 +14,7 @@ import {
 } from "../types";
 import { createVariableMapFromState } from "./variable-map-creation";
 import { resolveStep } from "./step-resolvement";
+import { isComplete, isError, isWaiting } from "./state";
 
 /**
  * Creates an execution engine for a specific workflow in a specific environment.
@@ -67,7 +68,7 @@ export class Engine {
       mergeMap((stepResult) => {
         const nextState = this.transition(state, stepResult);
         const nextStepResults =
-          this.isComplete(nextState) || this.isError(nextState)
+          isComplete(nextState) || isError(nextState) || isWaiting(nextState)
             ? EMPTY
             : this.complete(nextState);
         return nextStepResults.pipe(startWith(stepResult));
@@ -85,28 +86,6 @@ export class Engine {
    */
   step(state: State): Observable<StepResult> {
     return step(this.workflow, state, this.environment, this.outRoot);
-  }
-
-  /**
-   * Returns if the workflow is completed with this state.
-   * If true, then no more steps can be made from this state.
-   *
-   * @param state The state
-   */
-  isComplete(state: State): boolean {
-    return state.path.length == 0;
-  }
-
-  /**
-   * Returns if the workflow has errored with this state.
-   * If true, then a subsequent step re-executes the previous step again.
-   *
-   * Note that a call to complete stops after an error occurred.
-   *
-   * @param state The state
-   */
-  isError(state: State): boolean {
-    return !!state.error;
   }
 
   /**
@@ -156,18 +135,12 @@ export class Engine {
    * @returns The next state
    */
   transition(state: State, stepResult: StepResult): State {
-    if (isSuccess(stepResult)) {
-      return nextState(
-        this.workflow,
-        state,
-        stepResult.evaluation,
-        this.environment
-      );
-    } else {
-      return {
-        ...state,
-        error: stepResult.error,
-      };
-    }
+    const newState = isSuccess(stepResult)
+      ? nextState(this.workflow, state, stepResult.evaluation, this.environment)
+      : state;
+    return {
+      ...newState,
+      lastStep: stepResult,
+    };
   }
 }

@@ -1,4 +1,5 @@
 import { HttpRequestTemplate } from "./http-request-template.type";
+import { JsonSchema } from "./json-schema.type";
 
 export type JsonExpression = unknown;
 
@@ -12,24 +13,28 @@ export interface ForLoop {
 export interface RequestStep {
   name?: JsonExpression;
   assignTo: string;
+  require?: JsonExpression;
   request: HttpRequestTemplate;
 }
 
 export interface ExpressionStep {
   name?: JsonExpression;
   assignTo: string;
+  require?: JsonExpression;
   expression: JsonExpression;
 }
 
 export interface ShellStep {
   name?: JsonExpression;
   assignTo: string;
+  require?: JsonExpression;
   shell: JsonExpression;
 }
 
 export interface ForStep {
   name?: JsonExpression;
   assignTo: string;
+  require?: JsonExpression;
   for: ForLoop;
 }
 

@@ -46,6 +46,9 @@
         "assignTo": {
           "type": "string"
         },
+        "require": {
+          "$ref": "#/definitions/jsone"
+        },
         "expression": { "$ref": "#/definitions/jsone" }
       },
       "required": ["assignTo", "expression"],
@@ -58,6 +61,9 @@
         },
         "assignTo": {
           "type": "string"
+        },
+        "require": {
+          "$ref": "#/definitions/jsone"
         },
         "shell": {
           "type": "string"
@@ -73,6 +79,9 @@
         },
         "assignTo": {
           "type": "string"
+        },
+        "require": {
+          "$ref": "#/definitions/jsone"
         },
         "for": {
           "type": "object",
@@ -105,6 +114,9 @@
         },
         "assignTo": {
           "type": "string"
+        },
+        "require": {
+          "$ref": "#/definitions/jsone"
         },
         "request": {
           "type": "object",

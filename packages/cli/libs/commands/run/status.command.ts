@@ -1,5 +1,5 @@
 import { readConfig } from "../../data-access/config.dao";
-import { State, Path } from "@jyfti/engine";
+import { State, Path, isFailure } from "@jyfti/engine";
 import { readWorkflowNamesOrTerminate } from "../../data-access/workflow.dao";
 import { readState, stateExists } from "../../data-access/state.dao";
 import {
@@ -29,12 +29,12 @@ export async function status(name?: string): Promise<void> {
 }
 
 function printState(state: State): string {
-  return state.error
+  return !!state.lastStep && isFailure(state.lastStep)
     ? printStatus("Failed") +
         " At step " +
         printPath(state.path) +
         "\n" +
-        printJson(state.error)
+        printJson(state.lastStep.error)
     : state.path.length != 0
     ? printStatus("Pending") + " At step " + printPath(state.path)
     : printStatus("Completed");

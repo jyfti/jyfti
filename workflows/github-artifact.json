@@ -22,10 +22,6 @@
       "type": "string",
       "description": "The GitHub repository",
       "default": "example-repo"
-    },
-    "runId": {
-      "type": "string",
-      "description": "The GitHub workflow run id"
     }
   },
   "output": {
@@ -33,8 +29,30 @@
   },
   "steps": [
     {
+      "name": "Retrieve workflow runs",
+      "assignTo": "workflowRunsResponse",
+      "request": {
+        "url": "https://api.github.com/repos/${inputs.org}/${inputs.repo}/actions/runs",
+        "headers": {
+          "Authorization": "token ${env.github.token}"
+        }
+      }
+    },
+    {
       "name": "Retrieve artifacts",
       "assignTo": "artifactsResponse",
+      "require": {
+        "runId": {
+          "type": "string",
+          "description": "The GitHub workflow run id",
+          "enum": {
+            "$map": {
+              "$eval": "workflowRunsResponse.body.workflow_runs"
+            },
+            "each(x)": "${x.id}"
+          }
+        }
+      },
       "request": {
         "url": "https://api.github.com/repos/${inputs.org}/${inputs.repo}/actions/runs/${inputs.runId}/artifacts",
         "headers": {

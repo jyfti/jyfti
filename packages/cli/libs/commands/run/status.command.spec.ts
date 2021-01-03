@@ -90,7 +90,11 @@ describe("the status command", () => {
         path: [0],
         inputs: {},
         evaluations: [],
-        error: { message: "Something went wrong." },
+        lastStep: {
+          error: {
+            message: "Something went wrong.",
+          },
+        },
       })
     );
     await status("my-workflow");
