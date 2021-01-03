@@ -3,7 +3,6 @@ import { Observable, of } from "rxjs";
 import {
   State,
   Workflow,
-  Evaluation,
   Inputs,
   Environment,
   StepResult,
@@ -15,42 +14,10 @@ import {
 import { evaluate } from "./evaluation";
 import { createVariableMapFromState } from "./variable-map-creation";
 import { executeStep } from "../step-execution/step-execution";
-import { advancePath } from "./path-advancement";
 import { resolveStep } from "./step-resolvement";
-import { addEvaluation, resolveEvaluation } from "./evaluation-resolvement";
+import { resolveEvaluation } from "./evaluation-resolvement";
 import { map, catchError } from "rxjs/operators";
 import { hasErrors, validateInputs } from "./validator";
-
-export function nextState(
-  workflow: Workflow,
-  state: State,
-  evaluation: Evaluation,
-  environment: Environment
-): State {
-  const nextEvaluations = addEvaluation(
-    state.path,
-    state.evaluations,
-    evaluation
-  );
-  const nextPath = advancePath(
-    workflow,
-    state.path,
-    createVariableMapFromState(
-      workflow,
-      {
-        path: state.path,
-        inputs: state.inputs,
-        evaluations: nextEvaluations,
-      },
-      environment
-    )
-  );
-  return {
-    path: nextPath,
-    inputs: state.inputs,
-    evaluations: nextEvaluations,
-  };
-}
 
 export function step(
   workflow: Workflow,

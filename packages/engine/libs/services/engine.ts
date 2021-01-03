@@ -1,4 +1,4 @@
-import { inputDefaults, step, toOutput, nextState } from "./execution";
+import { inputDefaults, step, toOutput } from "./execution";
 import { Observable, OperatorFunction, EMPTY } from "rxjs";
 import { mergeMap, startWith, scan } from "rxjs/operators";
 import {
@@ -15,6 +15,7 @@ import {
 import { createVariableMapFromState } from "./variable-map-creation";
 import { resolveStep } from "./step-resolvement";
 import { isComplete, isError, isWaiting } from "./state";
+import { nextState } from "./next-state";
 
 /**
  * Creates an execution engine for a specific workflow in a specific environment.
