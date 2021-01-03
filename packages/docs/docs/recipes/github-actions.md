@@ -75,3 +75,51 @@ It is possible to pass nested fields like `--env-var github.token=GITHUB_TOKEN`.
 ```
 
 If there exists an environment file, then the passed environment variables overwrite the specific values of that file.
+
+## Local execution
+
+If a Jyfti workflow has failed, you can inspect and re-execute it locally from the point where it failed.
+You can use the `github-artifact` workflow to copy the remote workflow state into your local state directory. 
+
+```
+$ jyfti run https://raw.githubusercontent.com/jyfti/jyfti/master/workflows/github-artifact.json
+? The GitHub organization jyfti
+? The GitHub repository example-repo
+✔ Initialized
+✔ [0] Retrieve workflow runs
+ℹ [1] Retrieve artifacts
+? The GitHub workflow run id 459006661
+✔ [1] Retrieve artifacts
+✔ [2] Retrieve artifact download url
+✔ [3] Download artifact
+✔ [4] Unzip artifact
+✔ [5] Remove zip file
+Archive:  artifact.zip
+  inflating: open-prs-to-slack.state.json
+```
+
+Then, you can proceed with the now local workflow state.
+
+```
+$ jyfti run status open-prs-to-slack
+$ jyfti run state open-prs-to-slack
+$ jyfti run complete open-prs-to-slack
+```
+
+Note that this only copies the workflow state and not the workflow itself.
+It is recommended to store the workflows in git.
+
+If your CI environment passes environment variables to the Jyfti workflow, then you can either pass the environment variables locally as well or store them in your local environment file.
+
+## Only save failures
+
+If a Jyfti workflow succeeds, you might not be interested in the workflow state and therefore don't store it.
+You can do so via an if-condition in the GitHub Actions workflow.
+
+```yaml
+- uses: actions/upload-artifact@v2
+  if: ${{ failure() }}
+  with:
+    name: jyfti-states
+    path: ./out
+```
