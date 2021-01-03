@@ -6,6 +6,7 @@ import {
   isRequire,
   State,
   Workflow,
+  isComplete,
 } from "@jyfti/engine";
 import logSymbols from "log-symbols";
 import { OperatorFunction, from, of, Observable } from "rxjs";
@@ -40,7 +41,7 @@ export async function runStep(
   state: State
 ): Promise<void> {
   const engine = createEngine(workflow, environment, config.outRoot);
-  if (engine.isComplete(state)) {
+  if (isComplete(state)) {
     console.log("Workflow execution already completed");
   } else {
     return await engine
@@ -95,7 +96,7 @@ function finish(
     stepResult$.pipe(
       last(),
       tap((state) => {
-        if (engine.isComplete(state)) {
+        if (isComplete(state)) {
           const output = engine.getOutput(state);
           if (output) {
             console.log(printOutput(output));

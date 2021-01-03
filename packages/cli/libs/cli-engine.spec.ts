@@ -9,7 +9,6 @@ import { printJson, printStepResult } from "./print.service";
 jest.mock("@jyfti/engine", () => {
   const engine = {
     init: jest.fn(() => ({})),
-    isComplete: jest.fn(() => true),
     step: jest.fn(() => require("rxjs").empty()),
     complete: jest.fn(() => require("rxjs").empty()),
     transitionFrom: jest.fn(() => (stepResult$) =>
@@ -23,6 +22,7 @@ jest.mock("@jyfti/engine", () => {
     createEngine: () => engine,
     isSuccess: jest.requireActual("@jyfti/engine").isSuccess,
     isFailure: jest.requireActual("@jyfti/engine").isFailure,
+    isComplete: jest.fn(() => true),
   };
 });
 jest.mock("./data-access/state.dao", () => ({
@@ -128,7 +128,7 @@ describe("executing a step", () => {
   });
 
   it("should execute the next step", async () => {
-    require("@jyfti/engine").engine.isComplete.mockReturnValue(false);
+    require("@jyfti/engine").isComplete.mockReturnValue(false);
     require("@jyfti/engine").engine.step.mockReturnValue(
       of({
         path: [0],
@@ -150,7 +150,7 @@ describe("executing a step", () => {
   });
 
   it("should return if already completed", async () => {
-    require("@jyfti/engine").engine.isComplete.mockReturnValue(true);
+    require("@jyfti/engine").isComplete.mockReturnValue(true);
     await runStep(
       ("my-workflow" as any) as Workflow,
       {},
@@ -168,7 +168,7 @@ describe("executing a step", () => {
       path: [0],
       error: new Error("Something went wrong."),
     };
-    require("@jyfti/engine").engine.isComplete.mockReturnValue(false);
+    require("@jyfti/engine").isComplete.mockReturnValue(false);
     require("@jyfti/engine").engine.step.mockReturnValue(of(stepResult));
     await runStep(
       ("my-workflow" as any) as Workflow,
