@@ -1,6 +1,6 @@
 {
   "name": "@jyfti/cli",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Jyfti is a project for building, running and sharing workflows easily. The Jyfti CLI is the terminal interface to the Jyfti engine.",
   "main": "./build/index.js",
   "typings": "build/index.d.ts",
