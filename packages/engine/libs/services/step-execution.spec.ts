@@ -1,77 +1,29 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 import { executeStep } from "./step-execution";
-import { cold } from "jest-marbles";
-import { VariableMap, ExpressionStep, ForStep } from "../types";
+import { ExpressionStep } from "../types";
+import { of } from "rxjs";
+
+jest.mock("./expression-step-execution", () => ({
+  executeExpressionStep: jest.fn(),
+}));
 
 describe("The execution of steps", () => {
-  describe("an expression step", () => {
-    it("should evaluate an expression", () => {
-      const step: ExpressionStep = {
-        assignTo: "myVar",
-        expression: {
-          $eval: "listVar",
-        },
-      };
-      const variables: VariableMap = {
-        listVar: ["a", "b"],
-      };
-      expect(executeStep(step, [], variables, "")).toBeObservable(
-        cold("(a|)", { a: ["a", "b"] })
-      );
-    });
-
-    it("should return an error if the evaluation fails", () => {
-      const step: ExpressionStep = {
-        assignTo: "myVar",
-        expression: "${listVar}",
-      };
-      const variables: VariableMap = {
-        listVar: ["a", "b"],
-      };
-      expect(executeStep(step, [], variables, "")).toBeObservable(cold("#"));
-    });
-  });
-  describe("a loop return evaluation step", () => {
-    const step: ForStep = {
-      assignTo: "myVar",
-      for: {
-        const: "loopVar",
-        in: {
-          $eval: "listVar",
-        },
-        do: [
-          {
-            assignTo: "innerVar",
-            expression: 2,
-          } as ExpressionStep,
-        ],
-        return: "innerVar",
+  it("should execute an expression step", (done) => {
+    const expected = {};
+    const executeExpressionStep = require("./expression-step-execution")
+      .executeExpressionStep;
+    executeExpressionStep.mockReturnValue(of(expected));
+    executeStep(
+      { assignTo: "myVar", expression: "" } as ExpressionStep,
+      {},
+      {},
+      "./out"
+    ).subscribe(
+      () => {
+        expect(executeExpressionStep).toHaveBeenCalledTimes(1);
       },
-    };
-
-    it("should return the collection of all inner variable values of the return variable", () => {
-      expect(
-        executeStep(
-          step,
-          [[2], [2], [2], [2], [2]],
-          {
-            listVar: ["a", "b", "c", "d", "e"],
-          },
-          ""
-        )
-      ).toBeObservable(cold("(a|)", { a: [2, 2, 2, 2, 2] }));
-    });
-
-    it("should return an error if the local evaluations aren't an array", () => {
-      expect(
-        executeStep(
-          step,
-          { not: "an array" },
-          {
-            listVar: ["a", "b", "c", "d", "e"],
-          },
-          ""
-        )
-      ).toBeObservable(cold("#"));
-    });
+      fail,
+      done
+    );
   });
 });
